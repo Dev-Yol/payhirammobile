@@ -140,7 +140,7 @@ class Groups extends Component{
                 textAlign:'right',
                 width: '60%'
               }}>
-                {Currency.display((item.request.amount + item.peer.charge).toFixed(2), item.request.currency)}
+                {/*Currency.display((item.request.amount + item.peer.charge).toFixed(2), item.request.currency)*/}
               </Text>
             </View>
             <View style={{
