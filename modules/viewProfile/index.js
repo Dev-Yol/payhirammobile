@@ -51,14 +51,15 @@ class ViewProfile extends Component {
         }
         return (
             <>
+                <View style={[styles.headerButton ,{zIndex:1000}]}>
+                    <TouchableOpacity onPress={this.goBack}>
+                        <FontAwesomeIcon icon={faChevronLeft} color={Color.white} size={BasicStyles.iconSize} />
+                    </TouchableOpacity>
+                </View>
                 <ScrollView >
                     <View style={styles.container}>
                         <View style={styles.headerContainer}>
-                            <View style={styles.headerButton}>
-                                <TouchableOpacity onPress={this.goBack}>
-                                    <FontAwesomeIcon icon={faChevronLeft} color={Color.white} size={BasicStyles.iconSize} />
-                                </TouchableOpacity>
-                            </View>
+
                             <View style={styles.imageContainer}>
                             </View>
                             <View style={styles.sectionHeadingStyle}>
