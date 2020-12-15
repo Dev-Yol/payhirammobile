@@ -185,7 +185,8 @@ class Groups extends Component{
     const { user } = this.props.state;
     return (
       <View style={{
-        width: '100%'
+        width: '100%',
+        marginTop: 60
       }}>
         {
           data != null && user != null && (
