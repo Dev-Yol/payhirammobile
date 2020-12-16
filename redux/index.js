@@ -32,6 +32,7 @@ const types = {
   SET_THEME: 'SET_THEME',
   SET_REQUEST_INPUT: 'SET_REQUEST_INPUT',
   SET_VALIDATE_OTP: 'SET_VALIDATE_OTP',
+  VIEW_MENU: 'VIEW_MENU'
 };
 
 export const actions = {
@@ -116,6 +117,9 @@ export const actions = {
   setIsValidOtp(isValidOtp) {
     return { type: types.SET_VALIDATE_OTP, isValidOtp };
   },
+  viewMenu(isViewing){
+    return {thype: types.VIEW_MENU, isViewing}
+  }
 };
 
 const initialState = {
@@ -141,6 +145,7 @@ const initialState = {
   qrCodeModal: false,
   requestInput: null,
   isValidOtp: false,
+  isViewing: false
 };
 
 storeData = async (key, value) => {
@@ -419,6 +424,12 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         isValidOtp,
+      };
+    case types.VIEW_MENU:
+      console.log('VIEWING MENU', isViewing);
+      return {
+        ...state,
+        isViewing,
       };
     default:
       return { ...state, nav: state.nav };
