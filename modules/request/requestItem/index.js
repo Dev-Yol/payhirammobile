@@ -2,13 +2,73 @@ import React, {Component} from 'react';
 import { View, Text, ScrollView, TextInput, TouchableOpacity, TouchableHighlight } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faCircle, faEllipsisH } from '@fortawesome/free-solid-svg-icons';
-import { BasicStyles, Color } from 'common';
+import { Routes, BasicStyles, Color } from 'common';
 import { UserImage, Rating } from 'components';
+import ConfirmationModal from 'components/Modal/ConfirmationModal.js';
+import { connect } from 'react-redux';
+import Api from 'services/api/index.js';
 
 class RequestItem extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      isConfirmationModal: false,
+      isConfirm: false
+    }
+  }
+  confirm = () => {
+    this.setState({isConfirmationModal: true})
+  }
+
+  closeModal = () => {
+    this.setState({isConfirmationModal: false})
+  }
+
+  componentDidMount() {
+    this.retrieve()
+    const params = this.props.navigation.state.params;
+    console.log('params', params)
+  }
+
+  retrieve = () => {
+    const { user, searchParameter } = this.props.state;
+    if (user == null) {
+      return;
+    }
+    const params = this.props.navigation.state.params;
+    let parameter = {
+      account_id: user.id,
+      offset: (this.state.active - 1) * this.state.limit,
+      limit: this.state.limit,
+      sort: {
+        column: 'created_at',
+        value: 'desc',
+      },
+      value: searchParameter == null ? '%' : searchParameter.value + '%',
+      column: searchParameter == null ? 'created_at' : searchParameter.column,
+      type: user.account_type,
+      route_params: params
+    };
+    this.setState({ isLoading: true });
+    Api.request(
+      Routes.requestRetrieve,
+      parameter,
+      (response) => {
+        this.setState({
+          isLoading: false
+        });
+        console.log('response', response.data)
+      },
+      (error) => {
+        this.setState({ isLoading: false });
+      },
+    );
+  };
+
   render() {
+    const { isConfirmationModal } = this.state;
     return (
-      <View>
+      <View style={{marginTop: 60}}>
         <ScrollView showsHorizontalScrollIndicator={false}>
           <View style={{alignItems: 'center', margin: 10}}>
             <View style={[{width: '100%'}]}>
@@ -47,12 +107,25 @@ class RequestItem extends Component {
               <TouchableHighlight underlayColor={Color.gray} style={[{backgroundColor: Color.primary, width: '35%', alignItems: 'center', justifyContent: 'center', height: 40, borderRadius: 5,}]}>
                 <Text style={{ color: Color.white}}>View Profile</Text>
               </TouchableHighlight>
-              <TouchableHighlight underlayColor={Color.gray} style={[{backgroundColor: Color.secondary, width: '35%', marginLeft: 5, alignItems: 'center', justifyContent: 'center', height: 40, borderRadius: 5,}]}>
+              <TouchableHighlight onPress={() => {this.confirm()}} underlayColor={Color.gray} style={[{backgroundColor: Color.secondary, width: '35%', marginLeft: 5, alignItems: 'center', justifyContent: 'center', height: 40, borderRadius: 5,}]}>
                 <Text style={{ color: Color.white}}>Accept</Text>
               </TouchableHighlight>
+              {isConfirmationModal ?
+              <ConfirmationModal
+                visible={isConfirmationModal}
+                title={'Confirmation Message'}
+                message={'Are you sure you want to accept this request?'}
+                onCLose={() => {
+                  this.closeModal()
+                }}
+                onConfirm={() => {
+                  this.closeModal()
+                  this.props.navigation.navigate("transactionsStack")
+                }}
+              /> : null }
             </View>
           </View>
-          <View>
+          {/* <View>
             <View style={{flexDirection: 'row', paddingHorizontal:10, alignItems: 'center'}}>
               <UserImage user={""} style={[{flex: 1}]} />
               <Text style={[{fontWeight: 'bold', margin: 2, flex: 4}]}>Kennette Canales</Text>
@@ -71,11 +144,21 @@ class RequestItem extends Component {
                 <Text style={{ color: Color.white}}>Accept</Text>
               </TouchableHighlight>
             </View>
-          </View>     
+          </View>      */}
         </ScrollView>
       </View>
     );
   }
 }
+const mapStateToProps = state => ({ state: state });
 
-export default RequestItem;
+const mapDispatchToProps = dispatch => {
+  const { actions } = require('@redux');
+  return {
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(RequestItem);
