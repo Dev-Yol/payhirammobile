@@ -27,11 +27,11 @@ export default {
   floatingButton: {
     alignItems: 'center',
     justifyContent: 'center',
-    width: 70,
+    width: 60,
     position: 'absolute',
     bottom: 10,
     right: 10,
-    height: 50,
+    height: 60,
     backgroundColor: Color.secondary,
     borderRadius: 100,
     color: Color.white

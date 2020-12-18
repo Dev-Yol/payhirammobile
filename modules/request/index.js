@@ -765,7 +765,7 @@ class Requests extends Component {
             style={{
               color: Color.white
             }}
-            size={20}
+            size={16}
           />
         </TouchableOpacity>
         {isLoading ? <Spinner mode="overlay" /> : null}
