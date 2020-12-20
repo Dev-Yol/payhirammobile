@@ -35,19 +35,19 @@ class HeaderOptions extends Component {
           }}>
             <UserImage  user={messengerGroup.title} color={Color.white}/>
             <Text style={{
-              color: Color.white,
+              color: Color.primary,
               lineHeight: 30,
               paddingLeft: 1,
               width: '30%'
             }}>{messengerGroup.title.username.length > 10 ? messengerGroup.title.username.substr(0, 10) + '...' : messengerGroup.title.username}</Text>
             <Text style={{
-              color: Color.white,
+              color: Color.primary,
               lineHeight: 30,
               textAlign: 'right',
               width: '67%',
               marginLeft: -1
             }}>
-              {Currency.display((messengerGroup.request.amount + messengerGroup.peer.charge).toFixed(2), messengerGroup.request.currency)}
+              {/*Currency.display((messengerGroup.request.amount + messengerGroup.peer.charge).toFixed(2), messengerGroup.request.currency)*/}
             </Text>
           </View>
         )}

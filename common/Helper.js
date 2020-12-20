@@ -161,6 +161,15 @@ export default {
       colors: [Color.primary, Color.lightGray],
     },
   ],
+  MessengerMenu: [{
+    title: 'Add / View Requirements',
+    payload: 'same_page',
+    payload_value: 'requirements'
+  }, {
+    title: 'Details',
+    payload: 'redirect',
+    payload_value: 'RequestItem'
+  }],
   payments: [
     {
       title: 'UnionBank of the Philippines',
