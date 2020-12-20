@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import Style from './Style.js';
 import {
   TextInput,
@@ -10,8 +10,8 @@ import {
   BackHandler,
   ToastAndroid,
 } from 'react-native';
-import { Picker, FlatList, TouchableOpacity } from 'react-native';
-import { Routes, Color, Helper, BasicStyles } from 'common';
+import {Picker, FlatList, TouchableOpacity} from 'react-native';
+import {Routes, Color, Helper, BasicStyles} from 'common';
 import {
   Spinner,
   Rating,
@@ -22,13 +22,13 @@ import {
 } from 'components';
 import Api from 'services/api/index.js';
 import Currency from 'services/Currency.js';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import Config from 'src/config.js';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faStar, faPlus, faSearch } from '@fortawesome/free-solid-svg-icons';
-import { Dimensions } from 'react-native';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import {faStar, faPlus, faSearch} from '@fortawesome/free-solid-svg-icons';
+import {Dimensions} from 'react-native';
 import RequestOptions from './RequestOptions.js';
-import BottomSheet from './bottomsheet/BottomSheet'
+import BottomSheet from './bottomsheet/BottomSheet';
 const height = Math.round(Dimensions.get('window').height);
 class Requests extends Component {
   constructor(props) {
@@ -72,7 +72,7 @@ class Requests extends Component {
   }
 
   handleBackPress = () => {
-    const { user } = this.props.state;
+    const {user} = this.props.state;
     console.log('back button');
     if (user) {
       return true;
@@ -86,11 +86,11 @@ class Requests extends Component {
   };
 
   setRetrieveParameter = (flag) => {
-    const { setSearchParameter } = this.props;
-    const { user, searchParameter } = this.props.state;
+    const {setSearchParameter} = this.props;
+    const {user, searchParameter} = this.props.state;
     if (flag == false) {
       setSearchParameter(null);
-      this.setState({ activePage: 0 });
+      this.setState({activePage: 0});
       setTimeout(() => {
         this.retrieve();
       }, 100);
@@ -99,7 +99,7 @@ class Requests extends Component {
         column: 'account_id',
         value: user.id,
       };
-      this.setState({ activePage: 1 });
+      this.setState({activePage: 1});
       setSearchParameter(searchParameter);
       setTimeout(() => {
         this.retrieve();
@@ -108,8 +108,8 @@ class Requests extends Component {
   };
 
   retrieve = (flag = true) => {
-    const { user, searchParameter } = this.props.state;
-    const { setUserLedger } = this.props;
+    const {user, searchParameter} = this.props.state;
+    const {setUserLedger} = this.props;
     if (user == null) {
       return;
     }
@@ -125,7 +125,7 @@ class Requests extends Component {
       column: searchParameter == null ? 'created_at' : searchParameter.column,
       type: user.account_type,
     };
-    this.setState({ isLoading: true });
+    this.setState({isLoading: true});
     Api.request(
       Routes.requestRetrieve,
       parameter,
@@ -136,14 +136,14 @@ class Requests extends Component {
         });
         setUserLedger(response.ledger);
         if (flag == true) {
-          const { setRequests } = this.props;
+          const {setRequests} = this.props;
           if (response.data != null) {
             setRequests(response.data);
           } else {
             setRequests(null);
           }
         } else {
-          const { updateRequests } = this.props;
+          const {updateRequests} = this.props;
           // scroll to bottom
           if (response.data != null) {
             updateRequests(response.data);
@@ -151,13 +151,13 @@ class Requests extends Component {
         }
       },
       (error) => {
-        this.setState({ isLoading: false });
+        this.setState({isLoading: false});
       },
     );
   };
 
   onRefresh = () => {
-    const { setSearchParameter } = this.props;
+    const {setSearchParameter} = this.props;
     setSearchParameter(null);
     setTimeout(() => {
       this.retrieve();
@@ -165,7 +165,7 @@ class Requests extends Component {
   };
 
   search = () => {
-    const { setSearchParameter } = this.props;
+    const {setSearchParameter} = this.props;
     let parameter = {
       column: this.state.searchType,
       value: this.state.searchValue,
@@ -175,20 +175,20 @@ class Requests extends Component {
   };
 
   bookmark = (item) => {
-    const { user } = this.props.state;
+    const {user} = this.props.state;
     let parameter = {
       account_id: user.id,
       request_id: item.id,
     };
-    this.setState({ isLoading: true });
+    this.setState({isLoading: true});
     Api.request(Routes.bookmarkCreate, parameter, (response) => {
       this.retrieve();
     });
   };
 
   retrieveThread = (id) => {
-    const { user } = this.props.state;
-    const { setMessengerGroup } = this.props;
+    const {user} = this.props.state;
+    const {setMessengerGroup} = this.props;
     let parameter = {
       condition: [
         {
@@ -203,7 +203,7 @@ class Requests extends Component {
       Routes.customMessengerGroupRetrieveByParams,
       parameter,
       (response) => {
-        this.setState({ isLoading: true });
+        this.setState({isLoading: true});
         if (response.data != null) {
           setMessengerGroup(response.data);
           this.props.navigation.navigate('messagesStack');
@@ -213,12 +213,12 @@ class Requests extends Component {
   };
 
   acceptPeer = (item, request) => {
-    const { user } = this.props.state;
+    const {user} = this.props.state;
     let parameter = {
       id: item.id,
       status: 'approved',
     };
-    this.setState({ isLoading: true });
+    this.setState({isLoading: true});
     Api.request(Routes.requestPeerUpdate, parameter, (response) => {
       if (response.data) {
         // create a thread
@@ -246,22 +246,22 @@ class Requests extends Component {
       connectSelected: item,
     });
     setTimeout(() => {
-      this.setState({ connectModal: true });
+      this.setState({connectModal: true});
     }, 500);
   };
 
   connectAction = (flag) => {
     if (flag == false) {
-      this.setState({ connectModal: false, connectSelected: null });
+      this.setState({connectModal: false, connectSelected: null});
     } else {
       // process charges
-      this.setState({ connectModal: false, connectSelected: null });
+      this.setState({connectModal: false, connectSelected: null});
       this.retrieve();
     }
   };
 
   _search = () => {
-    const { searchParameter } = this.props.state;
+    const {searchParameter} = this.props.state;
     return (
       <View>
         <View
@@ -272,19 +272,19 @@ class Requests extends Component {
           }}>
           <Picker
             selectedValue={this.state.searchType}
-            onValueChange={(searchType) => this.setState({ searchType })}
+            onValueChange={(searchType) => this.setState({searchType})}
             style={[
               BasicStyles.pickerStyleCreate,
               {
                 width: '40%',
-                transform: [{ scaleX: 0.77 }, { scaleY: 0.77 }],
+                transform: [{scaleX: 0.77}, {scaleY: 0.77}],
                 textAlign: 'left',
                 left: -15,
                 marginRight: 0,
                 paddingRight: 0,
               },
             ]}
-            itemStyle={{ fontSize: 11 }}>
+            itemStyle={{fontSize: 11}}>
             {this.state.filterOptions.map((item, index) => {
               return (
                 <Picker.Item
@@ -303,7 +303,7 @@ class Requests extends Component {
               paddingLeft: 0,
               left: -30,
             }}
-            onChangeText={(searchValue) => this.setState({ searchValue })}
+            onChangeText={(searchValue) => this.setState({searchValue})}
             value={this.state.searchValue}
             placeholder={'Find something here...'}
           />
@@ -329,7 +329,7 @@ class Requests extends Component {
   };
 
   _peers = (peers, request) => {
-    const { user } = this.props.state;
+    const {user} = this.props.state;
     return (
       <View>
         <View
@@ -381,7 +381,7 @@ class Requests extends Component {
                           this.acceptPeer(item, request);
                         }}
                         underlayColor={Color.gray}
-                        style={[Style.btn, { backgroundColor: Color.warning }]}>
+                        style={[Style.btn, {backgroundColor: Color.warning}]}>
                         <Text
                           style={{
                             color: Color.white,
@@ -402,7 +402,7 @@ class Requests extends Component {
                           this.viewThread(item);
                         }}
                         underlayColor={Color.gray}
-                        style={[Style.btn, { backgroundColor: Color.secondary }]}>
+                        style={[Style.btn, {backgroundColor: Color.secondary}]}>
                         <Text
                           style={{
                             color: Color.white,
@@ -422,8 +422,8 @@ class Requests extends Component {
   };
 
   _footer = (item) => {
-    const { isBookmark } = this.state;
-    const { user } = this.props.state;
+    const {isBookmark} = this.state;
+    const {user} = this.props.state;
     return (
       <View>
         <View
@@ -440,7 +440,7 @@ class Requests extends Component {
                 onPress={() => {
                   this.bookmark(item);
                 }}
-                style={[Style.btn, { backgroundColor: Color.primary }]}
+                style={[Style.btn, {backgroundColor: Color.primary}]}
                 underlayColor={Color.gray}>
                 <View
                   style={{
@@ -475,7 +475,7 @@ class Requests extends Component {
                   this.connectRequest(item);
                 }}
                 underlayColor={Color.gray}
-                style={[Style.btn, { backgroundColor: Color.primary }]}>
+                style={[Style.btn, {backgroundColor: Color.primary}]}>
                 <Text
                   style={{
                     color: Color.white,
@@ -516,7 +516,7 @@ class Requests extends Component {
   };
 
   _subHeader = (item) => {
-    const { user } = this.props.state;
+    const {user} = this.props.state;
     return (
       <View>
         <Text
@@ -530,7 +530,7 @@ class Requests extends Component {
             {item.coupon.type === 'percentage'
               ? item.coupon.amount + '% '
               : Currency.display(item.coupon.amount, item.coupon.currency) +
-              ' '}
+                ' '}
             Discount({item.coupon.code})
           </Text>
         )}
@@ -558,7 +558,7 @@ class Requests extends Component {
   _header = (item, type) => {
     return (
       <View>
-        <View style={{ flexDirection: 'row', marginTop: 10 }}>
+        <View style={{flexDirection: 'row', marginTop: 10}}>
           <UserImage user={item.account} />
           <Text
             style={{
@@ -605,8 +605,8 @@ class Requests extends Component {
   };
 
   _flatList = () => {
-    const { selected } = this.state;
-    const { user, requests } = this.props.state;
+    const {selected} = this.state;
+    const {user, requests} = this.props.state;
     return (
       <View
         style={{
@@ -617,19 +617,24 @@ class Requests extends Component {
             data={requests}
             extraData={selected}
             ItemSeparatorComponent={this.FlatListItemSeparator}
-            renderItem={({ item, index }) => (
+            renderItem={({item, index}) => (
               <View>
-                <TouchableOpacity onPress={() => this.redirect("requestItemStack")}>
-                {this._header(item, 'amount')}
-                {this._subHeader(item)}
-                {this._body(item)}
-                <View>
-                  <Rating ratings={item.rating}></Rating>
-                </View>
-                {item.account_id != user.id && this._footer(item)}
-                {item.account_id == user.id &&
+                <TouchableOpacity
+                  onPress={() =>
+                    this.props.navigation.navigate('reviewsStack', {
+                      requestDetails: item,
+                    })
+                  }>
+                  {this._header(item, 'amount')}
+                  {this._subHeader(item)}
+                  {this._body(item)}
+                  <View>
+                    <Rating ratings={item.rating}></Rating>
+                  </View>
+                  {item.account_id != user.id && this._footer(item)}
+                  {/*item.account_id == user.id &&
                   item.peers.peers != null &&
-                  this._peers(item.peers, item)}
+                this._peers(item.peers, item)*/}
                 </TouchableOpacity>
               </View>
             )}
@@ -647,7 +652,7 @@ class Requests extends Component {
       connectSelected,
       isRequestOptions,
     } = this.state;
-    const { requests } = this.props.state;
+    const {requests} = this.props.state;
     return (
       <View style={Style.MainContainer}>
         {isRequestOptions && (
@@ -671,7 +676,7 @@ class Requests extends Component {
             let totalHeight = event.nativeEvent.contentSize.height - 20;
             if (event.nativeEvent.contentOffset.y <= 0) {
               if (this.state.isLoading == false) {
-                this.setState({ active: 1 });
+                this.setState({active: 1});
                 setTimeout(() => {
                   this.retrieve();
                 }, 10);
@@ -684,7 +689,7 @@ class Requests extends Component {
                 this.state.active < totalPage - 1
                   ? this.state.active + 1
                   : this.state.active;
-              this.setState({ active: newPage });
+              this.setState({active: newPage});
               setTimeout(() => {
                 if (prevActive < newPage) {
                   this.retrieve(false);
@@ -763,7 +768,7 @@ class Requests extends Component {
           <FontAwesomeIcon
             icon={faPlus}
             style={{
-              color: Color.white
+              color: Color.white,
             }}
             size={16}
           />
@@ -779,21 +784,22 @@ class Requests extends Component {
           }}
           data={connectSelected}
           action={(flag) => this.connectAction(flag)}></CustomModal> */}
-        <BottomSheet visible={connectModal} closeModal={() =>
-          this.setState({
-            connectModal: false
-          })
-        }>
-        </BottomSheet>
+        <BottomSheet
+          visible={connectModal}
+          closeModal={() =>
+            this.setState({
+              connectModal: false,
+            })
+          }></BottomSheet>
       </View>
     );
   }
 }
 
-const mapStateToProps = (state) => ({ state: state });
+const mapStateToProps = (state) => ({state: state});
 
 const mapDispatchToProps = (dispatch) => {
-  const { actions } = require('@redux');
+  const {actions} = require('@redux');
   return {
     setRequests: (requests) => dispatch(actions.setRequests(requests)),
     updateRequests: (requests) => dispatch(actions.updateRequests(requests)),

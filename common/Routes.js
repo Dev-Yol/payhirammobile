@@ -54,5 +54,6 @@ export default {
   productsRetrieve: apiUrl + 'products/retrieve',
   productsRetrieveBasic: apiUrl + 'products/retrieve_basic',
   accountUpdateEmail: apiUrl + 'accounts/update_email',
-  
+  circleRetrieve: apiUrl + 'my_circle/retrieve',
+  circleCreate: apiUrl + 'my_circle/create',
 };

@@ -1,16 +1,12 @@
 import React, {Component} from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  TextInput,
-} from 'react-native';
+import {View, Text, Image, TouchableOpacity, TextInput} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faStar as Solid} from '@fortawesome/free-solid-svg-icons';
 import {faStar as Regular} from '@fortawesome/free-regular-svg-icons';
-
+import {connect} from 'react-redux';
+import Api from 'services/api/index.js';
+import {Routes} from 'common';
+import {Spinner} from 'components';
 import styles from 'modules/reviews/Styles.js';
 import SubmitReview from './SubmitReviewButton';
 
@@ -19,8 +15,38 @@ class Reviews extends Component {
     super(props);
     this.state = {
       selectedStar: 0,
+      isLoading: false,
+      comment: '',
     };
   }
+
+  rate = () => {
+    const {requestDetails} = this.props.navigation.state.params;
+    const {user} = this.props.state;
+    let parameters = {
+      account_id: user.account_information.account_id,
+      payload: 'account',
+      payload_value: requestDetails.account_id,
+      payload_1: 'request',
+      payload_value_1: requestDetails.id,
+      comments: this.state.comment,
+      value: this.state.selectedStar,
+      status: 'full',
+    };
+    this.setState({isLoading: true});
+    Api.request(
+      Routes.ratingsCreate,
+      parameters,
+      (response) => {
+        this.setState({isLoading: false}, () => {
+          this.props.navigation.pop();
+        });
+      },
+      (error) => {
+        this.setState({isLoading: false});
+      },
+    );
+  };
 
   renderStars = () => {
     const starsNumber = [1, 2, 3, 4, 5];
@@ -61,9 +87,14 @@ class Reviews extends Component {
     });
   };
 
+  handleComment = (value) => {
+    this.setState({comment: value});
+  };
+
   render() {
     return (
       <View style={styles.ReviewsContainer}>
+        {this.state.isLoading ? <Spinner mode="overlay" /> : null}
         <View style={styles.AvatarContainer}>
           <Image
             source={{
@@ -87,7 +118,10 @@ class Reviews extends Component {
           </Text>
         </View>
         <View style={styles.CommentContainer}>
-          <TextInput style={styles.CommentTextStyle} />
+          <TextInput
+            style={styles.CommentTextStyle}
+            onChangeText={this.handleComment}
+          />
         </View>
         <View style={styles.ButtonContainer}>
           <SubmitReview
@@ -97,7 +131,9 @@ class Reviews extends Component {
             fontSize={16}
             textColor="#FFFFFF"
             buttonText="Submit"
-            onPress={() => {}}
+            onPress={() => {
+              this.rate();
+            }}
           />
         </View>
       </View>
@@ -105,4 +141,11 @@ class Reviews extends Component {
   }
 }
 
-export default Reviews;
+const mapStateToProps = (state) => ({state: state});
+
+const mapDispatchToProps = (dispatch) => {
+  const {actions} = require('@redux');
+  return {};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Reviews);
