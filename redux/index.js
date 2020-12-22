@@ -118,7 +118,7 @@ export const actions = {
     return { type: types.SET_VALIDATE_OTP, isValidOtp };
   },
   viewMenu(isViewing){
-    return {thype: types.VIEW_MENU, isViewing}
+    return {type: types.VIEW_MENU, isViewing}
   }
 };
 
@@ -168,6 +168,7 @@ const reducer = (state = initialState, action) => {
   const { theme } = action;
   const { requestInput } = action;
   const { isValidOtp } = action;
+  const { isViewing } = action;
   switch (type) {
     case types.LOGOUT:
       AsyncStorage.clear();
@@ -426,7 +427,6 @@ const reducer = (state = initialState, action) => {
         isValidOtp,
       };
     case types.VIEW_MENU:
-      console.log('VIEWING MENU', isViewing);
       return {
         ...state,
         isViewing,
