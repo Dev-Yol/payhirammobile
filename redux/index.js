@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import Data from 'services/Data';
-import {Helper} from 'common';
+import {Helper, Color} from 'common';
 import {Routes} from 'common';
 import Api from '../services/api';
 
@@ -401,9 +401,11 @@ const reducer = (state = initialState, action) => {
       storeData('primary', theme.primary);
       storeData('secondary', theme.secondary);
       storeData('tertiary', theme.tertiary);
+      storeData('fourth', theme.fourth);
       Color.setPrimary(theme.primary);
       Color.setSecondary(theme.secondary);
       Color.setTertiary(theme.tertiary);
+      Color.setFourth(theme.fourth);
       return {
         ...state,
         theme,
