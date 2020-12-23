@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 import { connect } from 'react-redux'
 import ThemeSettingTile from 'modules/display/ThemeSettingTile.js';
+import { H1 } from 'native-base';
 
 const dummyThemeData = [
   {
@@ -30,12 +31,14 @@ class Display extends Component {
 
   selectHandler = (index) => {
     let _theme = dummyThemeData[index].colors
-    this.props.setTheme({
+    const {setTheme} = this.props;
+    setTheme({
       primary: _theme[0],
       secondary: _theme[1],
       tertiary: _theme[2],
+      fourth: _theme[3]
     });
-    this.setState({ selectedTile: index });
+    this.setState({selectedTile: index});
   };
 
   displayThemeTiles = () => {
@@ -58,16 +61,16 @@ class Display extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
-  state
-})
+const mapStateToProps = state => ({state: state});
 
-const mapDispatchToProps = (dispatch) => {
-  const { actions } = require('@redux');
+const mapDispatchToProps = dispatch => {
+  const {actions} = require('@redux');
   return {
-    setTheme: (theme) => dispatch(actions.setTheme(theme)),
+    setTheme: (theme) => dispatch(actions.setTheme(theme))
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Display)
-
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Display);
