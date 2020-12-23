@@ -4,11 +4,12 @@ let tertiary = '#F2C94C'
 let fourth = '#000000'
 export default {
   primaryDark: '#3F0050',
-  primary: '#3F0050',
+  primary: primary,
   danger: '#ff0000',
   warning: '#ffc107',
   warning: '#F2994A',
-  secondary: '#22B173',
+  secondary: secondary,
+  tertiary: tertiary,
   white: '#ffffff',
   gray: '#cccccc',
   lightGray: '#eeeeee',

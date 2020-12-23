@@ -404,7 +404,7 @@ const reducer = (state = initialState, action) => {
       storeData('fourth', theme.fourth);
       Color.setPrimary(theme.primary);
       Color.setSecondary(theme.secondary);
-      Color.setTertiary(theme.tertiary);
+      Color.setTertiary(theme.tertiary);  
       Color.setFourth(theme.fourth);
       return {
         ...state,

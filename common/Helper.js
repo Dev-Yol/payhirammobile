@@ -161,6 +161,61 @@ export default {
       colors: [Color.primary, Color.lightGray],
     },
   ],
+  MessengerMenu: [{
+      title: 'Add / View Requirements',
+      payload: 'same_page',
+      payload_value: 'requirements'
+    },
+    {
+      title: 'Details',
+      payload: 'redirect',
+      payload_value: 'RequestItem'
+    },
+    {
+      title: 'Transfer funds',
+      payload: 'redirect',
+      payload_value: 'TransferFunds'
+    },
+    {
+      title: 'Rate',
+      payload: 'redirect',
+      payload_value: 'reviewsStack'
+    },
+    {
+      title: 'Close',
+      payload: 'same_page',
+      payload_value: 'close'
+    }
+  ],
+  requirementsMenu: [
+    {
+      title: 'On App Signature',
+      payload: 'same_page',
+      payload_value: 'signature',
+      button: {
+        title: 'Add',
+        color: Color.success
+      }
+    },
+    {
+      title: 'Receiver Picture',
+      payload: 'redirect',
+      payload_value: 'receiver_picture',
+      button: {
+        title: 'Add',
+        color: Color.success
+      }
+    },
+    {
+      title: 'Valid ID',
+      payload: 'redirect',
+      payload_value: 'valid_id',
+      button: {
+        title: 'Delete',
+        color: Color.danger
+      }
+    }
+  ],
   payments: [
     {
       title: 'UnionBank of the Philippines',
