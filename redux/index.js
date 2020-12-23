@@ -146,6 +146,7 @@ const initialState = {
   requestInput: null,
   isValidOtp: false,
   isViewing: false
+  
 };
 
 storeData = async (key, value) => {
