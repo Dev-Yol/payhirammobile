@@ -726,7 +726,7 @@ class Messages extends Component{
               this.scrollView.scrollToEnd({animated: true});
           }}
           style={[Style.ScrollView, {
-            height: isViewing ? '50%' : '100%'
+            height: isViewing ? '40%' : '100%'
           }]}
           onScroll={(event) => {
             if(event.nativeEvent.contentOffset.y <= 0) {
@@ -752,7 +752,15 @@ class Messages extends Component{
         </ScrollView>
         {isViewing &&
           <View
-            style={{height: '50%', paddingBottom: 51, paddingTop: 0, borderTopWidth: 1, borderTopColor: Color.gray}}
+            style={
+              {
+                height: '60%', 
+                paddingBottom: 51, 
+                paddingTop: 0, 
+                borderTopWidth: 1, 
+                borderTopColor: Color.gray
+              }
+            }
           >
             <View style={Style.settingsTitles}>
               <Text> {this.state.settingsBreadCrumbs.join(' > ')} </Text>
@@ -776,7 +784,7 @@ class Messages extends Component{
           borderTopWidth: 1,
           backgroundColor: Color.white
         }}>
-          {messengerGroup != null && messengerGroup.request.status < 2 && (this._footer())}
+          {messengerGroup != null && messengerGroup.request.status < 2 && !isViewing && (this._footer())}
         </View>
         <ImageModal
           visible={isImageModal}

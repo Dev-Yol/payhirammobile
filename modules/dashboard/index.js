@@ -21,6 +21,8 @@ import DashboardSubheader from './DashboardSubheader.js';
 import TransactionCard from './TransactionCard.js';
 import QRCodeModal from 'components/Modal/QRCode';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { faStar as faStarRegular } from '@fortawesome/free-regular-svg-icons';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 const width = Math.round(Dimensions.get('window').width);
 const height = Math.round(Dimensions.get('window').height);
 class Dashboard extends Component {
@@ -29,6 +31,7 @@ class Dashboard extends Component {
     this.state = {
       isLoading: false,
       selected: null,
+      showRatings: true
     };
   }
 
@@ -614,6 +617,41 @@ class Dashboard extends Component {
       </View>
     );
   };
+  submitRating = (index) => {
+    this.setState({
+      showRatings: false,
+      ratingIndex: index
+    })
+  }
+
+  rating = () => {
+    let stars = []
+    for(let i = 0; i < 5; i++) {
+      stars.push(
+        <TouchableOpacity onPress={() => this.submitRating(i)}>
+          <FontAwesomeIcon
+          icon={ i <= this.state.ratingIndex ? faStar : faStarRegular}
+          size={40}
+          style={{
+            color: Color.warning
+          }}
+          key={i}
+          />
+        </TouchableOpacity>
+      )
+    }
+    return(
+      <View style={{
+          alignItems: 'center',
+          justifyContent: 'center',
+          flexDirection: 'row' 
+        }}>
+        {
+          stars
+        }
+      </View>
+    );
+  }
 
   render() {
     // const {isLoading} = this.state;
@@ -666,23 +704,59 @@ class Dashboard extends Component {
     //     </View>
     //   </ScrollView>
     // );
+    const { showRatings } = this.state;
     return (
-      <ScrollView>
-        <View style={[styles.MainContainer, {marginTop: 60}]}>
-          <BalanceCard
-            cardColor="#22B173"
-            availableBalance={'PHP 25,000.00'}
-            currentBalance={'PHP 52,000.00'}
-          />
-          <DashboardSubheader nav={(route) => this.redirect(route)}/>
-          {/*Iterate through list of transactions here*/}
-          <TransactionCard />
-          <TransactionCard />
-          <TransactionCard />
-          <TransactionCard />
-          <QRCodeModal redirect={this.redirect} />
-        </View>
-      </ScrollView>
+      <View>
+        <ScrollView>
+          <View style={[styles.MainContainer, {marginTop: 60}]}>
+            <BalanceCard
+              cardColor="#22B173"
+              availableBalance={'PHP 25,000.00'}
+              currentBalance={'PHP 52,000.00'}
+            />
+            <DashboardSubheader nav={(route) => this.redirect(route)}/>
+            {/*Iterate through list of transactions here*/}
+            <TransactionCard />
+            <TransactionCard />
+            <TransactionCard />
+            <TransactionCard />
+            <QRCodeModal redirect={this.redirect} />
+          </View>
+        </ScrollView>
+        {
+          showRatings && (
+            <View style={{
+              position: 'absolute',
+              bottom: 0,
+              left: 0,
+              height: 125,
+              borderTopLeftRadius: 15,
+              borderTopRightRadius: 15,
+              backgroundColor: Color.primary,
+              width: '100%',
+              zIndex: 10
+            }}>
+              <View style={{
+                width: '100%',
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}>
+                <Text style={{
+                  color: Color.secondary,
+                  fontWeight: 'bold',
+                  fontSize: 16,
+                  paddingTop: 15,
+                  paddingBottom: 15
+                }}>RATE YOUR EXPERIENCE</Text>
+              </View>
+
+              <View>
+                {this.rating()}
+              </View>
+            </View>
+          )
+        }
+      </View>
     );
   }
 }
