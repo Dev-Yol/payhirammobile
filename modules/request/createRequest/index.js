@@ -9,10 +9,14 @@ import {Spinner} from 'components';
 
 import FulfillmentCard from 'modules/generic/FulfilmentCard';
 import BalanceCard from 'modules/generic/BalanceCard';
-import CustomButton from './CustomButton';
+import Button from 'components/Form/Button';
+import TextInputWithLabel from 'components/Form/TextInputWithLabel';
+import LocationTextInput from 'components/Form/LocationTextInput';
+import PickerWithLabel from 'components/Form/PickerWithLabel';
 import styles from './Styles';
-import {BasicStyles, Routes, Helper} from 'common';
+import {BasicStyles, Routes, Helper, Color} from 'common';
 import DateTime from 'components/DateTime';
+import Currency from 'services/Currency';
 
 const width = Math.round(Dimensions.get('window').width);
 const height = Math.round(Dimensions.get('window').height);
@@ -25,8 +29,8 @@ class CreateRequest extends Component {
       date: '',
       time: '',
       fulfillmentType: null,
-      amount: '0',
-      maximumProcessingCharge: '',
+      amount: 0,
+      maximumProcessingCharge: null,
       details: '',
       money_type: '',
       isLoading: false,
@@ -134,6 +138,17 @@ class CreateRequest extends Component {
               </Text>
             </View>
 
+
+            <LocationTextInput 
+              variable={this.state.amount}
+              label={'Select Location'}
+              onError={false}
+              required={true}
+              route={'addLocationStack'}
+              navigation={this.props.navigation}
+            />
+
+
             <View style={styles.SelectFulfillmentContainer}>
               <Text
                 style={[
@@ -157,133 +172,37 @@ class CreateRequest extends Component {
               </ScrollView>
             </View>
 
-            {
-              /*
-                <View style={styles.SelectFulfillmentContainer}>
-                <Text
-                  style={[
-                    styles.SelectFulfillmentTextStyle,
-                    {fontSize: BasicStyles.standardFontSize},
-                  ]}>
-                  I need
-                </Text>
-                <FontAwesomeIcon
-                  icon={faAsterisk}
-                  size={7}
-                  style={{paddingLeft: 15, color: '#FF2020'}}
-                />
-              </View>
-              <CustomButton
-                buttonColor="#22b173"
-                fontColor="#fffff"
-                buttonText="Cash"
-                width="100%"
-              />
-              */
-            }
 
-            <View style={styles.SelectFulfillmentContainer}>
-              <Text
-                style={[
-                  styles.SelectFulfillmentTextStyle,
-                  {fontSize: BasicStyles.standardFontSize},
-                ]}>
-                Select Currency
-              </Text>
-              <FontAwesomeIcon
-                icon={faAsterisk}
-                size={7}
-                style={{paddingLeft: 15, color: '#FF2020'}}
-              />
-            </View>
-            <View style={styles.TextInputContainer}>
-              <Picker
-                selectedValue={this.state.language}
-                style={{
-                  fontSize: BasicStyles.standardFontSize,
-                  height: 60,
-                  width: '90%',
-                  borderRadius: 5,
-                  borderColor: '#EOEOEO',
-                  borderWidth: 1,
-                }}
-                onValueChange={(itemValue, itemIndex) =>
-                  this.setState({currency: itemValue})
-                }>
-                <Picker.Item
-                  label="Philippine Peso - PHP"
-                  value="Philippine Peso - PHP"
-                />
-                <Picker.Item label="US Dollar - USD" value="US Dollar - USD" />
-              </Picker>
-            </View>
-            <View style={styles.SelectFulfillmentContainer}>
-              <Text
-                style={[
-                  styles.SelectFulfillmentTextStyle,
-                  {fontSize: BasicStyles.standardFontSize},
-                ]}>
-                Amount
-              </Text>
-              <FontAwesomeIcon
-                icon={faAsterisk}
-                size={7}
-                style={{paddingLeft: 15, color: '#FF2020'}}
-              />
-            </View>
-            <View style={styles.TextInputContainer}>
-              <TextInput
-                value={this.state.amount}
-                onChangeText={(amount) => {
-                  this.handleAmountChange(amount);
-                }}
-              />
-            </View>
-            <View style={styles.SelectFulfillmentContainer}>
-              <Text
-                style={[
-                  styles.SelectFulfillmentTextStyle,
-                  {fontSize: BasicStyles.standardFontSize},
-                ]}>
-                Maximum processing charge
-              </Text>
-              <FontAwesomeIcon
-                icon={faAsterisk}
-                size={7}
-                style={{paddingLeft: 15, color: '#FF2020'}}
-              />
-            </View>
-            <View style={styles.TextInputContainer}>
-              <TextInput
-                placeholder="Optional"
-                style={{textAlign: 'justify'}}
-                onChangeText={(maximumProcessingCharge) => {
-                  this.handleMaxProcessingChargeChange(maximumProcessingCharge);
-                }}
-              />
-            </View>
-            <View style={styles.SelectFulfillmentContainer}>
-              <Text
-                style={[
-                  styles.SelectFulfillmentTextStyle,
-                  {fontSize: BasicStyles.standardFontSize},
-                ]}>
-                Location
-              </Text>
-              <FontAwesomeIcon
-                icon={faAsterisk}
-                size={7}
-                style={{paddingLeft: 15, color: '#FF2020'}}
-              />
-            </View>
-            <View style={styles.TextInputContainer}>
-              <TextInput
-                placeholder="Please type meetup address"
-                onFocus={() => {
-                  this.redirect('addLocationStack');
-                }}
-              />
-            </View>
+            <PickerWithLabel 
+              label={'Select Currency'}
+              data={Helper.currency}
+              placeholder={'Click to select'}
+              onChange={(value) => this.setState({
+                currency: value
+              })}
+              required={true}
+              onError={false}
+            />
+
+
+            <TextInputWithLabel 
+              variable={this.state.amount}
+              onChange={(value) => this.handleAmountChange(value)}
+              label={'Amount'}
+              onError={false}
+              required={true}
+            />
+
+            <TextInputWithLabel 
+              variable={this.state.maximumProcessingCharge}
+              onChange={(value) => this.handleMaxProcessingChargeChange(value)}
+              label={'Maximum processing charge'}
+              onError={false}
+              required={false}
+              placeholder={'Optional'}
+            />
+
+
             <View style={styles.SelectFulfillmentContainer}>
               <Text
                 style={[
@@ -303,30 +222,20 @@ class CreateRequest extends Component {
               placeholder="Select date and time"
               type="date"
             />
-            <View style={[styles.SelectFulfillmentContainer, {paddingTop: 0}]}>
-              <Text
-                style={[
-                  styles.SelectFulfillmentTextStyle,
-                  {fontSize: BasicStyles.standardFontSize},
-                ]}>
-                Details
-              </Text>
-              <FontAwesomeIcon
-                icon={faAsterisk}
-                size={7}
-                style={{paddingLeft: 15, color: '#FF2020'}}
-              />
-            </View>
-            <View style={[styles.TextInputContainer, {height: 120}]}>
-              <TextInput
-                value={this.state.details}
-                placeholder="Add details here"
-                placeholderTextColor="#000000"
-                onChangeText={(details) => {
-                  this.handleDetailsChange(details);
-                }}
-              />
-            </View>
+
+
+            <TextInputWithLabel 
+              variable={this.state.details}
+              onChange={(value) => this.handleDetailsChange(value)}
+              label={'Details'}
+              onError={false}
+              required={true}
+              placeholder={'Add details here'}
+              multiline={true}
+              numberOfLines={5}
+            />
+
+
             <View style={styles.AmountContainer}>
               <View style={styles.AmountTextContainer}>
                 <Text
@@ -343,14 +252,9 @@ class CreateRequest extends Component {
                     styles.AmountDetailsStyle,
                     {fontSize: BasicStyles.standardFontSize},
                   ]}>
-                  PHP
-                </Text>
-                <Text
-                  style={[
-                    styles.AmountDetailsStyle,
-                    {fontSize: BasicStyles.standardFontSize},
-                  ]}>
-                  0.00
+                  {
+                    Currency.display(0.00, 'PHP')
+                  }
                 </Text>
               </View>
             </View>
@@ -369,16 +273,19 @@ class CreateRequest extends Component {
                   <Text style={styles.AmountTextStyle}>Total</Text>
                 </View>
                 <View style={styles.AmountDetailsContainer}>
-                  <Text style={styles.AmountDetailsStyle}>PHP</Text>
-                  <Text style={styles.AmountDetailsStyle}>0.00</Text>
+                  <Text style={styles.AmountDetailsStyle}>
+                  {
+                    Currency.display(0.00, 'PHP')
+                  }
+                  </Text>
                 </View>
               </View>
-              <CustomButton
-                onPress={this.createRequest}
-                buttonColor="#3F0050"
-                fontColor="#fffff"
-                buttonText="Post"
-                width="100%"
+              <Button
+                onClick={() => this.createRequest()}
+                title={'Post'}
+                style={{
+                  backgroundColor: Color.secondary
+                }}
               />
             </View>
           </View>

@@ -39,12 +39,6 @@ export default {
     },
     
   ],
-  currency: [
-    {
-      title: 'Philippine Peso',
-      value: 'PHP',
-    },
-  ],
   currency: [{
     title: 'Philippine Peso',
     value: 'PHP'

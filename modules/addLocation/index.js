@@ -1,9 +1,14 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, Dimensions, ScrollView} from 'react-native';
 import {connect} from 'react-redux';
-
 import AddressTile from 'modules/addLocation/AddressTile.js';
 import styles from 'modules/addLocation/Style.js';
+import Button from 'components/Form/Button';
+import { Color } from 'common';
+
+const width = Math.round(Dimensions.get('window').width);
+const height = Math.round(Dimensions.get('window').height);
+
 const dummyData = [
   {
     addressType: 'Home',
@@ -60,16 +65,31 @@ class AddLocation extends Component {
 
   render() {
     return (
-      <View style={styles.AddLocationContainer}>
-        {this.renderAddresses()}
-
-        <TouchableOpacity
-          style={styles.ButtonContainer}
-          onPress={() => {
-            this.redirect('locationWithMapStack');
+      <View style={{
+        flex: 1
+      }}>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <View style={{
+            height: height + 25
           }}>
-          <Text style={styles.ButtonTextStyle}>Add Address</Text>
-        </TouchableOpacity>
+          
+            {this.renderAddresses()}
+
+          </View>
+        </ScrollView>
+
+        <Button
+          onClick={() => this.redirect('locationWithMapStack')}
+          title={'Add Address'}
+          style={{
+            backgroundColor: Color.secondary,
+            position: 'absolute',
+            bottom: 0,
+            left: '5%',
+            right: '5%',
+            width: '90%'
+          }}
+        />
       </View>
     );
   }

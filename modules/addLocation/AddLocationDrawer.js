@@ -5,7 +5,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faChevronLeft} from '@fortawesome/free-solid-svg-icons';
 import AddLocation from 'modules/addLocation';
 import {connect} from 'react-redux';
-import LocationWithMap from 'components/Location/LocationWithMap.js';
+import { BasicStyles } from 'common';
 class HeaderOptions extends Component {
   constructor(props) {
     super(props);
@@ -59,16 +59,7 @@ const AddLocationStack = createStackNavigator({
     navigationOptions: ({navigation}) => ({
       title: 'ADDRESS',
       headerLeft: <HeaderOptions navigationProps={navigation} />,
-      headerStyle: {
-        backgroundColor: 'white',
-        height: 80,
-        elevation: 0,
-      },
-      headerTintColor: '#4c4c4c',
-      headerTitleStyle: {
-        fontSize: 15,
-        fontWeight: 'bold',
-      },
+      ...BasicStyles.headerDrawerStyle
     }),
   },
 });
