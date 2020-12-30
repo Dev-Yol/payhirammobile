@@ -1,41 +1,36 @@
 import {StyleSheet} from 'react-native';
-import { BasicStyles } from 'common';
+import { BasicStyles, Color } from 'common';
 
 const styles = StyleSheet.create({
   CardContainer: {
-    marginTop: '2%',
-    height: 190,
-    width: '100%',
+    width: '90%',
     borderRadius: 10,
     justifyContent: 'flex-start',
+    backgroundColor: Color.secondary,
+    marginLeft: '5%',
+    marginRight: '5%',
+    marginTop: 25
   },
   AvailableBalanceTextStyle: {
     textAlign: 'center',
     fontSize: BasicStyles.standardFontSize,
     color: '#FFFFFF',
-    paddingTop: 10,
-  },
-  AvailableBalanceContainer: {
+    paddingTop: 40,
   },
   BalanceTextStyle: {
     textAlign: 'center',
     fontSize: 30,
     color: '#FFFFFF',
     fontWeight: 'bold',
-  },
-  BalanceContainer: {
-    paddingTop: 40,
+    paddingTop: 10,
     paddingBottom: 40
   },
   CurrentBalanceTextStyle: {
     textAlign: 'left',
     fontSize: BasicStyles.standardFontSize,
     color: '#FFFFFF',
-    paddingBottom: 10
-  },
-  CurrentBalanceContainer: {
-    paddingBottom: '10%',
-    paddingLeft: 18,
+    paddingBottom: 10,
+    paddingLeft: 10
   }
 });
 

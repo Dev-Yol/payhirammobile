@@ -1,6 +1,5 @@
 import React from 'react';
 import { Text, TouchableOpacity, TouchableWithoutFeedback, ScrollView, View } from 'react-native';
-import BalanceCard from 'modules/generic/BalanceCard';
 import Modal from 'react-native-modal';
 import Style from '../Style'
 import Content from './BottomSheetContent';

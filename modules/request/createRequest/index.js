@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Text, View, StyleSheet, ScrollView, TextInput} from 'react-native';
+import {Text, View, StyleSheet, ScrollView, TextInput, Dimensions} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faStar, faAsterisk} from '@fortawesome/free-solid-svg-icons';
 import {Picker} from '@react-native-community/picker';
@@ -7,12 +7,16 @@ import {connect} from 'react-redux';
 import Api from 'services/api/index.js';
 import {Spinner} from 'components';
 
-import FulfillmentCard from 'modules/request/createRequest/FulfillmentCard';
+import FulfillmentCard from 'modules/generic/FulfilmentCard';
 import BalanceCard from 'modules/generic/BalanceCard';
 import CustomButton from './CustomButton';
 import styles from './Styles';
 import {BasicStyles, Routes, Helper} from 'common';
 import DateTime from 'components/DateTime';
+
+const width = Math.round(Dimensions.get('window').width);
+const height = Math.round(Dimensions.get('window').height);
+
 class CreateRequest extends Component {
   constructor(props) {
     super(props);
@@ -20,7 +24,7 @@ class CreateRequest extends Component {
       currency: 'PHP',
       date: '',
       time: '',
-      fulfillmentType: '',
+      fulfillmentType: null,
       amount: '0',
       maximumProcessingCharge: '',
       details: '',
@@ -39,28 +43,10 @@ class CreateRequest extends Component {
     });
   };
 
-  renderFulfillmentTypes = () => {
-    const fulfullmentTypes = Helper.fulfillmentTypes;
-    return fulfullmentTypes.map((fulfillment, index) => {
-      return (
-        <FulfillmentCard
-          key={index}
-          index={fulfillment.value}
-          cardColor="#22B173"
-          fulfillmentType={fulfillment.label}
-          fulfillmentDescription={fulfillment.description}
-          handleSelect={this.handleSelectFulfillment}
-        />
-      );
-    });
-  };
 
-  handleSelectFulfillment = (value) => {
-    const fulfullmentTypes = Helper.fulfillmentTypes;
-    const type = fulfullmentTypes.filter((type) => type.value === value);
+  handleSelectFulfillment = (item) => {
     this.setState({
-      fulfillmentType: type[0].value,
-      money_type: type[0].money_type,
+      fulfillmentType: item
     });
   };
 
@@ -125,20 +111,29 @@ class CreateRequest extends Component {
 
   render() {
     return (
-      <View style={{height: '100%', width: '100%', alignItems: 'center'}}>
-        <View style={styles.CreateRequestContainer}>
-          {this.state.isLoading ? <Spinner mode="overlay" /> : null}
-          <ScrollView>
-            <BalanceCard
-              cardColor="#22B173"
-              availableBalance={'PHP 25,000.00'}
-              currentBalance={'PHP 52,000.00'}
-            />
-            <View style={styles.FillInDetailsContainer}>
-              <Text style={styles.FillInDetailsTextStyle}>
+      <View style={{
+        flex: 1
+      }}>
+        {this.state.isLoading ? <Spinner mode="overlay" /> : null}
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <BalanceCard
+            data={{
+              amount: 500,
+              currency: 'PHP',
+              current_amount: 2500
+            }}
+          />
+          <View style={{
+            ...BasicStyles.standardContainer
+          }}>
+            <View>
+              <Text style={{
+                fontWeight: 'bold'
+              }}>
                 Fill in the details
               </Text>
             </View>
+
             <View style={styles.SelectFulfillmentContainer}>
               <Text
                 style={[
@@ -153,33 +148,40 @@ class CreateRequest extends Component {
                 style={{paddingLeft: 15, color: '#FF2020'}}
               />
             </View>
+
             <View style={{height: 200, width: '100%'}}>
               <ScrollView
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}>
-                {this.renderFulfillmentTypes()}
+                <FulfillmentCard onSelect={(item) => this.handleSelectFulfillment(item)}/>
               </ScrollView>
             </View>
-            <View style={styles.SelectFulfillmentContainer}>
-              <Text
-                style={[
-                  styles.SelectFulfillmentTextStyle,
-                  {fontSize: BasicStyles.standardFontSize},
-                ]}>
-                I need
-              </Text>
-              <FontAwesomeIcon
-                icon={faAsterisk}
-                size={7}
-                style={{paddingLeft: 15, color: '#FF2020'}}
+
+            {
+              /*
+                <View style={styles.SelectFulfillmentContainer}>
+                <Text
+                  style={[
+                    styles.SelectFulfillmentTextStyle,
+                    {fontSize: BasicStyles.standardFontSize},
+                  ]}>
+                  I need
+                </Text>
+                <FontAwesomeIcon
+                  icon={faAsterisk}
+                  size={7}
+                  style={{paddingLeft: 15, color: '#FF2020'}}
+                />
+              </View>
+              <CustomButton
+                buttonColor="#22b173"
+                fontColor="#fffff"
+                buttonText="Cash"
+                width="100%"
               />
-            </View>
-            <CustomButton
-              buttonColor="#22b173"
-              fontColor="#fffff"
-              buttonText="Cash"
-              width="100%"
-            />
+              */
+            }
+
             <View style={styles.SelectFulfillmentContainer}>
               <Text
                 style={[
@@ -379,8 +381,8 @@ class CreateRequest extends Component {
                 width="100%"
               />
             </View>
-          </ScrollView>
-        </View>
+          </View>
+        </ScrollView>
       </View>
     );
   }

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import styles from './BalanceCardStyle';
+import Currency from 'services/Currency';
 
 class BalanceCard extends Component {
   constructor(props) {
@@ -8,24 +9,19 @@ class BalanceCard extends Component {
   }
 
   render() {
+    const { data } = this.props;
     return (
       <View
-        style={[styles.CardContainer, { backgroundColor: this.props.cardColor ,...this.props.styles}, ]}>
-        <View style={styles.AvailableBalanceContainer}>
-          <Text style={styles.AvailableBalanceTextStyle}>
-            Available Balance
-          </Text>
-        </View>
-        <View style={styles.BalanceContainer}>
-          <Text style={styles.BalanceTextStyle}>
-            {this.props.availableBalance}
-          </Text>
-        </View>
-        <View style={styles.CurrentBalanceContainer}>
-          <Text style={styles.CurrentBalanceTextStyle}>
-            Current Balance: {this.props.currentBalance}
-          </Text>
-        </View>
+        style={styles.CardContainer}>
+        <Text style={styles.AvailableBalanceTextStyle}>
+          Available Balance
+        </Text>
+        <Text style={styles.BalanceTextStyle}>
+          {Currency.display(data.amount, data.currency)}
+        </Text>
+        <Text style={styles.CurrentBalanceTextStyle}>
+          Current Balance: {Currency.display(data.current_amount, data.currency)}
+        </Text>
       </View>
     );
   }

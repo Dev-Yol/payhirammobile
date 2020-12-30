@@ -28,13 +28,11 @@ class BottomSheetContent extends Component {
                 height: '100%',
             }]}>
                 <BalanceCard
-                    cardColor="#22B173"
-                    styles={{
-                        marginTop: 0,
-                        width: '100%'
-                    }}
-                    availableBalance={'PHP 25,000.00'}
-                    currentBalance={'PHP 52,000.00'}
+                  data={{
+                    amount: 500,
+                    currency: 'PHP',
+                    current_amount: 2500
+                  }}
                 />
                 <ScrollView>
                     <View

@@ -61,10 +61,7 @@ const CreateRequestStack = createStackNavigator({
       title: 'Create Request',
       drawerLabel: 'Create Request',
       headerLeft: <HeaderOptions navigationProps={navigation} />,
-      headerStyle: {
-        backgroundColor: 'white',
-      },
-      headerTintColor: '#4c4c4c',
+      ...BasicStyles.headerDrawerStyle
     }),
   },
 });
