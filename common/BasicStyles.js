@@ -132,5 +132,39 @@ export default {
     borderRadius: 15
   },
   profileIconSize: 30,
-  standardFontSize: 11
+  standardFontSize: 12,
+  standardTitleFontSize: 16,
+  standardTitle2FontSize: 14,
+  standardSubTitleFontSize: 14,
+  standardHeaderFontSize: 18,
+  headerDrawerStyle: {
+    headerStyle: {
+      elevation: 10,
+      backgroundColor: Color.white,
+      height: 60,
+      justifyContent: 'center',
+      alignItems: 'center',
+      fontSize: 18
+    },
+    headerTitleContainerStyle: {
+      backgroundColor: Color.white,
+      justifyContent: 'center',
+      alignItems: 'center',
+      paddingRight: 64
+    },
+    headerTitleStyle: {
+      fontWeight: 'bold',
+    },  
+  },
+  standardDivider: {
+    width: '90%',
+    height: 0.5,
+    marginLeft: '5%',
+    marginRight: '5%',
+  },
+  standardContainer: {
+    width: '90%',
+    marginRight: '5%',
+    marginLeft: '5%'
+  }
 }

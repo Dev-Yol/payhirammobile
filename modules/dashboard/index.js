@@ -8,6 +8,7 @@ import {
   ScrollView,
   FlatList,
   StyleSheet,
+  TouchableOpacity
 } from 'react-native';
 import {Routes, Color, Helper, BasicStyles} from 'common';
 import {Spinner, Empty, SystemNotification} from 'components';
@@ -16,15 +17,30 @@ import Currency from 'services/Currency.js';
 import {NavigationActions} from 'react-navigation';
 import {connect} from 'react-redux';
 import {Dimensions} from 'react-native';
-import BalanceCard from './BalanceCard.js';
-import DashboardSubheader from './DashboardSubheader.js';
-import TransactionCard from './TransactionCard.js';
+import BalanceCard from 'modules/generic/BalanceCard.js';
+import TransactionCard from 'modules/generic/TransactionCard.js';
 import QRCodeModal from 'components/Modal/QRCode';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { faStar as faStarRegular } from '@fortawesome/free-regular-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 const width = Math.round(Dimensions.get('window').width);
 const height = Math.round(Dimensions.get('window').height);
+
+const transactionData = [{
+  id: 1,
+  amount: 500,
+  via: '****5678',
+  description: 'This is a test',
+  date: 'August 9, 2020 5:00 PM',
+  currency: 'PHP'
+}, {
+  id: 2,
+  amount: 600,
+  via: '****5678',
+  description: 'This is a test',
+  date: 'August 9, 2020 5:00 PM',
+  currency: 'PHP'
+}]
+
 class Dashboard extends Component {
   constructor(props) {
     super(props);
@@ -111,512 +127,6 @@ class Dashboard extends Component {
     //
   };
 
-  _accountBalance = () => {
-    const {userLedger} = this.props.state;
-    return (
-      <View
-        style={[
-          Style.Card,
-          {
-            backgroundColor: Color.primary,
-            width: '100%',
-          },
-        ]}>
-        <Text
-          style={[
-            Style.titleText,
-            {
-              paddingTop: 10,
-            },
-          ]}>
-          Account Balance
-        </Text>
-        <Text
-          style={[
-            Style.numberText,
-            {
-              paddingTop: 20,
-              paddingBottom: 20,
-            },
-          ]}>
-          {Currency.display(userLedger.amount, userLedger.currency)}
-        </Text>
-        <View
-          style={{
-            flexDirection: 'row',
-            marginBottom: 10,
-          }}>
-          <View
-            style={{
-              width: '50%',
-            }}>
-            <TouchableHighlight
-              onPress={() => {
-                this.withdrawal();
-              }}
-              style={[Style.btn, {backgroundColor: Color.secondary}]}
-              underlayColor={Color.gray}>
-              <Text
-                style={{
-                  color: Color.white,
-                }}>
-                Withdrawal
-              </Text>
-            </TouchableHighlight>
-          </View>
-
-          <View
-            style={{
-              width: '50%',
-            }}>
-            <TouchableHighlight
-              onPress={() => {
-                this.deposit();
-              }}
-              underlayColor={Color.gray}
-              style={[Style.btn, {backgroundColor: Color.warning}]}>
-              <Text
-                style={{
-                  color: Color.white,
-                }}>
-                Deposit
-              </Text>
-            </TouchableHighlight>
-          </View>
-        </View>
-      </View>
-    );
-  };
-
-  _requests = () => {
-    const {ledger} = this.props.state;
-    return (
-      <View
-        style={[
-          Style.Card,
-          {
-            backgroundColor: Color.secondary,
-            marginTop: 10,
-            width: '100%',
-          },
-        ]}>
-        <Text
-          style={[
-            Style.titleText,
-            {
-              paddingTop: 10,
-            },
-          ]}>
-          Requested Amount
-        </Text>
-        <Text
-          style={[
-            Style.numberText,
-            {
-              paddingTop: 20,
-              paddingBottom: 20,
-            },
-          ]}>
-          {Currency.display(ledger.ledger.total_requests, 'PHP')}
-        </Text>
-        <View
-          style={{
-            flexDirection: 'row',
-            marginBottom: 10,
-          }}>
-          <View
-            style={{
-              width: '100%',
-            }}>
-            <TouchableHighlight
-              onPress={() => {
-                this.redirectDrawer('Requests');
-              }}
-              style={[
-                Style.btn,
-                {
-                  backgroundColor: Color.primary,
-                  width: '40%',
-                  marginLeft: '30%',
-                },
-              ]}
-              underlayColor={Color.gray}>
-              <Text
-                style={{
-                  color: Color.white,
-                }}>
-                View Requests
-              </Text>
-            </TouchableHighlight>
-          </View>
-        </View>
-      </View>
-    );
-  };
-
-  _myTotalRequest = () => {
-    const {ledger} = this.props.state;
-    return (
-      <View
-        style={[
-          Style.Card,
-          {
-            backgroundColor: Color.warning,
-            marginTop: 10,
-            width: '100%',
-          },
-        ]}>
-        <Text
-          style={[
-            Style.titleText,
-            {
-              paddingTop: 10,
-            },
-          ]}>
-          My Pending Requests
-        </Text>
-        <Text
-          style={[
-            Style.numberText,
-            {
-              paddingTop: 20,
-              paddingBottom: 20,
-            },
-          ]}>
-          {Currency.display(
-            ledger.ledger.personal_total_requests,
-            ledger.ledger.currency,
-          )}
-        </Text>
-        <View
-          style={{
-            flexDirection: 'row',
-            marginBottom: 10,
-          }}>
-          <View
-            style={{
-              width: '100%',
-            }}>
-            <TouchableHighlight
-              onPress={() => {
-                this.redirectDrawer('Requests');
-              }}
-              style={[
-                Style.btn,
-                {
-                  backgroundColor: Color.primary,
-                  width: '40%',
-                  marginLeft: '30%',
-                },
-              ]}
-              underlayColor={Color.gray}>
-              <Text
-                style={{
-                  color: Color.white,
-                }}>
-                View Requests
-              </Text>
-            </TouchableHighlight>
-          </View>
-        </View>
-      </View>
-    );
-  };
-
-  _availableFunds = () => {
-    const {ledger} = this.props.state;
-    return (
-      <View
-        style={[
-          Style.Card,
-          {
-            backgroundColor: Color.warning,
-            marginTop: 10,
-          },
-        ]}>
-        <Text
-          style={[
-            Style.titleText,
-            {
-              paddingTop: 10,
-            },
-          ]}>
-          Available Funds
-        </Text>
-        <Text
-          style={[
-            Style.numberText,
-            {
-              paddingTop: 20,
-              paddingBottom: 20,
-            },
-          ]}>
-          {Currency.display(ledger.ledger.available, ledger.ledger.currency)}
-        </Text>
-        <View
-          style={{
-            flexDirection: 'row',
-            marginBottom: 10,
-          }}>
-          <View
-            style={{
-              width: '100%',
-            }}></View>
-        </View>
-      </View>
-    );
-  };
-
-  _approvedRequest = () => {
-    const {ledger} = this.props.state;
-    return (
-      <View
-        style={[
-          Style.Card,
-          {
-            backgroundColor: Color.gray,
-            marginTop: 10,
-          },
-        ]}>
-        <Text
-          style={[
-            Style.titleText,
-            {
-              paddingTop: 10,
-            },
-          ]}>
-          Approved Requests
-        </Text>
-        <Text
-          style={[
-            Style.numberText,
-            {
-              paddingTop: 20,
-              paddingBottom: 20,
-            },
-          ]}>
-          {Currency.display(ledger.ledger.approved, ledger.ledger.currency)}
-        </Text>
-        <View
-          style={{
-            flexDirection: 'row',
-            marginBottom: 10,
-          }}>
-          <View
-            style={{
-              width: '100%',
-            }}></View>
-        </View>
-      </View>
-    );
-  };
-
-  _pendingWithdrawal = () => {
-    const {ledger} = this.props.state;
-    return (
-      <ScrollView horizontal={true} style={Style.ScrollView}>
-        <View
-          style={{
-            flexDirection: 'row',
-          }}>
-          {ledger.ledger.withdrawal.map((item, index) => {
-            return (
-              <TouchableHighlight
-                style={{
-                  width: width * 0.75,
-                  borderRadius: 5,
-                  borderColor: Color.primary,
-                  borderWidth: 1,
-                  marginRight: 10,
-                  padding: 5,
-                  backgroundColor: Color.white,
-                  paddingBottom: 20,
-                  paddingTop: 20,
-                }}
-                onPress={() => {
-                  console.log('hi');
-                }}
-                underlayColor={Color.gray}>
-                <View>
-                  <Text
-                    style={[
-                      Style.normalText,
-                      {
-                        textAlign: 'center',
-                      },
-                    ]}>
-                    {item.created_at_human}
-                  </Text>
-                  <Text
-                    style={[
-                      Style.normalText,
-                      {
-                        textAlign: 'center',
-                        fontWeight: 'bold',
-                        color: Color.danger,
-                      },
-                    ]}>
-                    {Currency.display(
-                      (parseFloat(item.amount) + parseFloat(item.charge)) * -1,
-                      item.currency,
-                    )}
-                  </Text>
-                  <Text
-                    style={[
-                      Style.normalText,
-                      {
-                        textAlign: 'center',
-                      },
-                    ]}>
-                    Withdrawal via {item.bank}/{item.account_number}/
-                    {item.account_name}
-                  </Text>
-                  <Text
-                    style={[
-                      Style.normalText,
-                      {
-                        textAlign: 'center',
-                        color: Color.danger,
-                      },
-                    ]}>
-                    Processing of the withdrawal will take up to 7 working days!
-                  </Text>
-                  <Text
-                    style={[
-                      Style.normalText,
-                      {
-                        textAlign: 'center',
-                      },
-                    ]}>
-                    Transaction ID: {item.code}
-                  </Text>
-                </View>
-              </TouchableHighlight>
-            );
-          })}
-        </View>
-      </ScrollView>
-    );
-  };
-
-  _summary = () => {
-    const {ledger} = this.props.state;
-    const {selected} = this.state;
-    return (
-      <View
-        style={{
-          width: '100%',
-        }}>
-        <View
-          style={{
-            alignItems: 'center',
-            borderBottomColor: Color.gray,
-            borderBottomWidth: 0.5,
-            marginTop: 10,
-          }}>
-          <Text
-            style={{
-              fontWeight: 'bold',
-              paddingTop: 5,
-              color: Color.primary,
-              paddingBottom: 20,
-            }}>
-            Ledger Summary
-          </Text>
-        </View>
-        {ledger.data == null && <Empty />}
-        <FlatList
-          data={ledger.data}
-          extraData={selected}
-          ItemSeparatorComponent={this.FlatListItemSeparator}
-          renderItem={({item, index}) => (
-            <View>
-              <TouchableHighlight
-                onPress={() => {
-                  this.viewLedger(item);
-                }}
-                underlayColor={Color.gray}>
-                <View
-                  style={[
-                    Style.TextContainer,
-                    {
-                      backgroundColor: Color.white,
-                    },
-                  ]}>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                    }}>
-                    <Text
-                      style={[
-                        Style.titleTextSummary,
-                        {
-                          paddingTop: 10,
-                          width: '60%',
-                        },
-                      ]}>
-                      {item.created_at_human}
-                    </Text>
-                    <Text
-                      style={[
-                        Style.titleTextSummary,
-                        {
-                          paddingTop: 10,
-                          width: '40%',
-                          fontWeight: 'bold',
-                          color: item.amount > 0 ? Color.primary : Color.danger,
-                          textAlign: 'right',
-                        },
-                      ]}>
-                      {Currency.display(item.amount, item.currency)}
-                    </Text>
-                  </View>
-                  <Text style={Style.normalText}>{item.description}</Text>
-
-                  <Text
-                    style={[
-                      Style.normalText,
-                      {
-                        paddingBottom: 10,
-                      },
-                    ]}>
-                    Transaction ID: {item.payload_value}
-                  </Text>
-                </View>
-              </TouchableHighlight>
-            </View>
-          )}
-          keyExtractor={(item, index) => index.toString()}
-        />
-        <View
-          style={{
-            flexDirection: 'row',
-            width: '100%',
-            marginBottom: 100,
-          }}>
-          <TouchableHighlight
-            style={{
-              height: 50,
-              backgroundColor: Color.primary,
-              width: '60%',
-              marginBottom: 50,
-              alignItems: 'center',
-              justifyContent: 'center',
-              marginLeft: '20%',
-            }}
-            onPress={() => this.redirect('transactionsStack')}
-            underlayColor={Color.gray}>
-            <Text
-              style={{
-                color: Color.white,
-              }}>
-              View more
-            </Text>
-          </TouchableHighlight>
-        </View>
-      </View>
-    );
-  };
   submitRating = (index) => {
     this.setState({
       showRatings: false,
@@ -653,73 +163,70 @@ class Dashboard extends Component {
     );
   }
 
+  renderTransactionHeader(){
+    return(
+      <View style={{
+        flexDirection: 'row',
+        paddingBottom: 15,
+        paddingTop: 15,
+        borderBottomWidth: 1,
+        borderBottomColor: Color.lightGray,
+        marginBottom: 25,
+        ...BasicStyles.standardContainer
+      }}>
+        <Text style={{
+          fontSize: BasicStyles.standardFontSize,
+          fontWeight: 'bold',
+          width: '70%'
+        }}>
+          Transaction History
+        </Text>
+        <TouchableOpacity
+          style={{
+            width: '30%'
+          }}
+          onPress={() => {this.redirect("transactionsStack")
+        }}>
+          <Text style={{
+            width: '100%',
+            textAlign: 'right',
+            color: Color.secondary,
+            fontWeight: 'bold'
+          }}>View More</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
   render() {
-    // const {isLoading} = this.state;
-    // const {userLedger, ledger} = this.props.state;
-    // return (
-    //   <ScrollView
-    //     style={Style.ScrollView}
-    //     onScroll={(event) => {
-    //       if (event.nativeEvent.contentOffset.y <= 0) {
-    //         if (this.state.isLoading == false) {
-    //           this.retrieveSummaryLedger();
-    //         }
-    //       }
-    //     }}>
-    //     {isLoading ? <Spinner mode="overlay" /> : null}
-    //     <SystemNotification></SystemNotification>
-    //     <View
-    //       style={[
-    //         Style.MainContainer,
-    //         {
-    //           minHeight: height,
-    //         },
-    //       ]}>
-    //       <View style={Style.MainContainer}>
-    //         {userLedger != null && this._accountBalance()}
-    //         {ledger != null && this._myTotalRequest()}
-    //         {ledger != null && <Card />}
-    //         {/*ledger != null && (this._approvedRequest()) */}
-    //         {/*ledger != null && (this._availableFunds()) */}
-    //         {ledger != null && ledger.ledger.withdrawal != null && (
-    //           <View
-    //             style={{
-    //               width: '100%',
-    //             }}>
-    //             <Text
-    //               style={{
-    //                 fontWeight: 'bold',
-    //                 paddingTop: 20,
-    //                 paddingBottom: 10,
-    //                 textAlign: 'center',
-    //                 color: Color.primary,
-    //               }}>
-    //               Pending transactions
-    //             </Text>
-    //             {this._pendingWithdrawal()}
-    //           </View>
-    //         )}
-    //         {ledger != null && this._summary()}
-    //       </View>
-    //     </View>
-    //   </ScrollView>
-    // );
     const { showRatings } = this.state;
     return (
       <View>
         <ScrollView>
-          <View style={[styles.MainContainer, {marginTop: 60}]}>
+          <View style={[styles.MainContainer, {marginTop: 60, height: height}]}>
             <BalanceCard
               cardColor="#22B173"
               availableBalance={'PHP 25,000.00'}
               currentBalance={'PHP 52,000.00'}
             />
-            <DashboardSubheader nav={(route) => this.redirect(route)}/>
-            {/*Iterate through list of transactions here*/}
-            <TransactionCard />
-            <TransactionCard />
-            <TransactionCard />
-            <TransactionCard />
+
+            {
+              this.renderTransactionHeader()
+            }
+
+            {
+              transactionData && (
+                <View style={BasicStyles.standardContainer}>
+                  {
+                    transactionData.map((item, index) => (
+                      <TransactionCard data={item} key={index}/>
+                    ))
+                  }
+                </View>
+              )
+            }
+
+            
             <QRCodeModal redirect={this.redirect} />
           </View>
         </ScrollView>

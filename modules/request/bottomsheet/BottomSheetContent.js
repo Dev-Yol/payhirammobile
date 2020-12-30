@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faAsterisk } from '@fortawesome/free-solid-svg-icons';
 import { Picker } from '@react-native-community/picker';
 import { connect } from 'react-redux';
-import BalanceCard from 'modules/dashboard/BalanceCard';
+import BalanceCard from 'modules/generic/BalanceCard';
 import styles from '../createRequest/Styles';
 import { BasicStyles, Color } from 'common'
 

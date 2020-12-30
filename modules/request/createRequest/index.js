@@ -8,7 +8,7 @@ import Api from 'services/api/index.js';
 import {Spinner} from 'components';
 
 import FulfillmentCard from 'modules/request/createRequest/FulfillmentCard';
-import BalanceCard from 'modules/dashboard/BalanceCard';
+import BalanceCard from 'modules/generic/BalanceCard';
 import CustomButton from './CustomButton';
 import styles from './Styles';
 import {BasicStyles, Routes, Helper} from 'common';

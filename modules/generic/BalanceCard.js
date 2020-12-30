@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import styles from './Styles';
+import styles from './BalanceCardStyle';
 
 class BalanceCard extends Component {
   constructor(props) {

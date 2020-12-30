@@ -1,4 +1,5 @@
 import {StyleSheet} from 'react-native';
+import { BasicStyles } from 'common';
 
 const styles = StyleSheet.create({
   CardContainer: {
@@ -10,7 +11,7 @@ const styles = StyleSheet.create({
   },
   AvailableBalanceTextStyle: {
     textAlign: 'left',
-    fontSize: 13,
+    fontSize: BasicStyles.standardFontSize,
     color: '#FFFFFF',
   },
   AvailableBalanceContainer: {
@@ -29,7 +30,7 @@ const styles = StyleSheet.create({
   },
   CurrentBalanceTextStyle: {
     textAlign: 'left',
-    fontSize: 13,
+    fontSize: BasicStyles.standardFontSize,
     color: '#FFFFFF',
   },
   CurrentBalanceContainer: {
@@ -49,15 +50,15 @@ const styles = StyleSheet.create({
   TransactionHistoryContainer: {},
   TransactionHistoryTextStyle: {
     fontWeight: 'bold',
-    fontSize: 13,
+    fontSize: BasicStyles.standardFontSize,
   },
   ViewMoreContainer: {},
   ViewMoreTextStyle: {
     fontWeight: 'bold',
-    fontSize: 13,
+    fontSize: BasicStyles.standardFontSize,
   },
   TransactionCardContainer: {
-    marginTop: 17,
+    fontSize: BasicStyles.standardFontSize,
     width: '95%',
     height: 100,
     flexDirection: 'row',
@@ -78,7 +79,7 @@ const styles = StyleSheet.create({
     paddingLeft: '3%',
   },
   DescriptionTextStyle: {
-    fontSize: 13,
+    fontSize: BasicStyles.standardFontSize,
   },
   DescriptionContainer: {
     paddingLeft: '3%',
@@ -96,7 +97,7 @@ const styles = StyleSheet.create({
     paddingRight: '3%',
   },
   AmountTextStyle: {
-    fontSize: 18,
+    fontSize: BasicStyles.standardFontSize,
     fontWeight: 'bold',
     color: '#22B173',
   },
