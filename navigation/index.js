@@ -8,7 +8,6 @@ import MessagesStack from 'components/Messenger/MessagesDrawer.js';
 import LedgerStack from 'modules/dashboard/LedgerDrawer.js';
 import CreateBorrowRequestStack from 'modules/request/CreateBorrowDrawer.js';
 import LocationStack from 'components/Location/Drawer.js';
-import RequestStack from 'modules/request/requestUpdated/requestDrawer.js';
 import DashboardStack from 'modules/dashboard/DashboardDrawer.js';
 import CreateRequestStack from '../modules/request/createRequest/CreateRequestDrawer';
 import AccountSettingsStack from 'modules/accountSettings/AccountSettingsDrawer.js';
@@ -84,7 +83,6 @@ const PrimaryNav = createStackNavigator(
     createRequestStack: {screen: CreateRequestStack},
     locationStack: {screen: LocationStack},
     createBorrowStack: {screen: CreateBorrowRequestStack},
-    requestStack: {screen: RequestStack},
     dashboardStack: {screen: DashboardStack},
     accountSettingsStack: {screen: AccountSettingsStack},
     settingsStack: {screen: SettingsStack},

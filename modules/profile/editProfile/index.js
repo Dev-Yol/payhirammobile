@@ -45,7 +45,7 @@ class EditProfile extends Component {
       },
     ];
     return (
-      <View style={{marginTop: 60}}>
+      <View>
         <ScrollView showsHorizontalScrollIndicator={false}>
           <View
             style={{

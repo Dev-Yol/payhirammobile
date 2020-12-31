@@ -32,11 +32,7 @@ export default {
     {
       title: 'Settings',
       route: 'Settings',
-    },
-    {
-      title: 'Terms and Conditions',
-      route: 'TermsAndConditions',
-    },
+    }
     
   ],
   currency: [{

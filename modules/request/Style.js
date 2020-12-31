@@ -42,7 +42,8 @@ export default {
   bottomSheetContent: {
     height: height - (height * 0.2),
     backgroundColor: Color.white,
-    borderRadius: 10,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
   },
   bottomSheet: {
     justifyContent: 'flex-end',

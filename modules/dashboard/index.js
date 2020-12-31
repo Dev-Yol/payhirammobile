@@ -202,7 +202,8 @@ class Dashboard extends Component {
     const { showRatings } = this.state;
     return (
       <View>
-        <ScrollView>
+        <ScrollView 
+        showsVerticalScrollIndicator={false}>
           <View style={[styles.MainContainer, {marginTop: 60, height: height}]}>
             <BalanceCard
               data={{
