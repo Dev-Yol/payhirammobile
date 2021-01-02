@@ -25,21 +25,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 const width = Math.round(Dimensions.get('window').width);
 const height = Math.round(Dimensions.get('window').height);
 
-const transactionData = [{
-  id: 1,
-  amount: 500,
-  via: '****5678',
-  description: 'This is a test',
-  date: 'August 9, 2020 5:00 PM',
-  currency: 'PHP'
-}, {
-  id: 2,
-  amount: 600,
-  via: '****5678',
-  description: 'This is a test',
-  date: 'August 9, 2020 5:00 PM',
-  currency: 'PHP'
-}]
+const transactionData = []
 
 class Dashboard extends Component {
   constructor(props) {
@@ -47,16 +33,18 @@ class Dashboard extends Component {
     this.state = {
       isLoading: false,
       selected: null,
-      showRatings: true
+      showRatings: true,
+      history: []
     };
   }
 
-  // componentDidMount() {
-  // const {user} = this.props.state;
-  // if (user != null) {
-  //   this.retrieveSummaryLedger();
-  // }
-  // }
+  componentDidMount() {
+    const {user} = this.props.state;
+    if (user != null) {
+      this.retrieveSummaryLedger();
+      this.retrieveLedgerHistory();
+    }
+  }
 
   redirect = (route) => {
     this.props.navigation.navigate(route);
@@ -71,31 +59,52 @@ class Dashboard extends Component {
 
   retrieveSummaryLedger = () => {
     const {user} = this.props.state;
-    const {setLedger, setUserLedger} = this.props;
+    const { setLedger } = this.props;
     if (user == null) {
       return;
     }
     let parameter = {
       account_id: user.id,
-      offset: 0,
-      limit: 5,
-      sort: {
-        column: 'created_at',
-        value: 'desc',
-      },
-      value: '%',
-      column: 'created_at',
+      account_code: user.code
     };
     this.setState({isLoading: true});
-    Api.request(Routes.ledgerSummaryRetrieve, parameter, (response) => {
+    console.log('parameter', parameter)
+    Api.request(Routes.ledgerSummary, parameter, (response) => {
+      console.log('response', response)
       this.setState({isLoading: false});
       if (response != null) {
-        setLedger(response);
-        setUserLedger(response.ledger.ledger);
+        setLedger(response.data[0]);
       } else {
         setLedger(null);
-        setUserLedger(null);
       }
+    }, error => {
+      console.log('response', error)
+      this.setState({isLoading: false});
+    });
+  };
+
+
+  retrieveLedgerHistory = () => {
+    const {user} = this.props.state;
+    if (user == null) {
+      return;
+    }
+    let parameter = {
+      account_id: user.id,
+      account_code: user.code
+    };
+    Api.request(Routes.ledgerHistory, parameter, (response) => {
+      if (response != null) {
+        this.setState({
+          history: response.data
+        })
+      } else {
+        this.setState({
+          history: []
+        })
+      }
+    }, error => {
+      console.log('response', error)
     });
   };
 
@@ -199,29 +208,30 @@ class Dashboard extends Component {
   }
 
   render() {
-    const { showRatings } = this.state;
+    const { showRatings, isLoading, history } = this.state;
+    const { ledger } = this.props.state;
     return (
       <View>
         <ScrollView 
         showsVerticalScrollIndicator={false}>
           <View style={[styles.MainContainer, {marginTop: 60, height: height}]}>
-            <BalanceCard
-              data={{
-                amount: 500,
-                currency: 'PHP',
-                current_amount: 2500
-              }}
-            />
-
             {
-              this.renderTransactionHeader()
+              ledger && (
+                <BalanceCard
+                  data={ledger}
+                />
+              )
             }
 
             {
-              transactionData && (
+              (history && history.length > 0) && this.renderTransactionHeader()
+            }
+
+            {
+              history && (
                 <View style={BasicStyles.standardContainer}>
                   {
-                    transactionData.map((item, index) => (
+                    history.map((item, index) => (
                       <TransactionCard data={item} key={index}/>
                     ))
                   }
@@ -233,6 +243,7 @@ class Dashboard extends Component {
             <QRCodeModal redirect={this.redirect} />
           </View>
         </ScrollView>
+        {isLoading ? <Spinner mode="overlay" /> : null}
         {
           showRatings && (
             <View style={{
@@ -284,7 +295,6 @@ const mapDispatchToProps = (dispatch) => {
   const {actions} = require('@redux');
   return {
     setLedger: (ledger) => dispatch(actions.setLedger(ledger)),
-    setUserLedger: (userLedger) => dispatch(actions.setUserLedger(userLedger)),
   };
 };
 

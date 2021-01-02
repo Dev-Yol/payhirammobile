@@ -17,11 +17,15 @@ class BalanceCard extends Component {
           Available Balance
         </Text>
         <Text style={styles.BalanceTextStyle}>
-          {Currency.display(data.amount, data.currency)}
+          {Currency.display(data.balance, data.currency)}
         </Text>
-        <Text style={styles.CurrentBalanceTextStyle}>
-          Current Balance: {Currency.display(data.current_amount, data.currency)}
-        </Text>
+        {
+          /*
+            <Text style={styles.CurrentBalanceTextStyle}>
+              Current Balance: {Currency.display(data.current_amount, data.currency)}
+            </Text>
+          */
+        }
       </View>
     );
   }

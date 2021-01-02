@@ -28,6 +28,7 @@ class ProposalModal extends Component {
   };
 
   renderContent() {
+    const { ledger } = this.props.state;
     return (
       <View style={[Style.CreateRequestContainer, {
           width: '100%',
@@ -43,13 +44,14 @@ class ProposalModal extends Component {
           <View style={{
             height: height,
           }}>
-            <BalanceCard
-              data={{
-                amount: 500,
-                currency: 'PHP',
-                current_amount: 2500
-              }}
-            />
+            {
+              ledger && (
+                <BalanceCard
+                  data={ledger}
+                />
+              )
+            }
+            
 
               <View style={{
                 height: height,
@@ -72,8 +74,10 @@ class ProposalModal extends Component {
                     variable={this.state.processingFee}
                     onChange={(value) => this.setState({processingFee: value})}
                     label={'Amount'}
+                    placeholder={'Amount'}
                     onError={false}
                     required={true}
+                    keyboardType={'numeric'}
                   />
 
 

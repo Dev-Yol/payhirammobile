@@ -67,7 +67,34 @@ class Requests extends Component {
       'hardwareBackPress',
       this.handleBackPress,
     );
+    this.retrieveSummaryLedger()
   }
+
+  retrieveSummaryLedger = () => {
+    const {user} = this.props.state;
+    const { setLedger } = this.props;
+    if (user == null) {
+      return;
+    }
+    let parameter = {
+      account_id: user.id,
+      account_code: user.code
+    };
+    this.setState({isLoading: true});
+    console.log('parameter', parameter)
+    Api.request(Routes.ledgerSummary, parameter, (response) => {
+      console.log('response', response)
+      this.setState({isLoading: false});
+      if (response != null) {
+        setLedger(response.data[0]);
+      } else {
+        setLedger(null);
+      }
+    }, error => {
+      console.log('response', error)
+      this.setState({isLoading: false});
+    });
+  };
 
   componentWillUnmount() {
     this.backHandler.remove();
@@ -463,6 +490,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(actions.setSearchParameter(searchParameter)),
     setMessengerGroup: (messengerGroup) =>
       dispatch(actions.setMessengerGroup(messengerGroup)),
+    setLedger: (ledger) => dispatch(actions.setLedger(ledger)),
   };
 };
 

@@ -21,7 +21,7 @@ class TransactionCard extends Component {
                       color: Color.secondary,
                       fontSize: BasicStyles.standardFontSize - 1,
                       paddingTop: 10
-                    }}>{data.date}</Text>
+                    }}>{data.created_at_human}</Text>
                     <Text style={{
                       fontSize: BasicStyles.standardFontSize,
                       paddingTop: 10,
