@@ -6,26 +6,54 @@ import { Picker } from '@react-native-community/picker';
 import { connect } from 'react-redux';
 import BalanceCard from 'modules/generic/BalanceCard';
 import Style from './ProposalModalStyle';
-import { BasicStyles, Color, Helper } from 'common'
+import { BasicStyles, Color, Helper, Routes } from 'common'
 import TextInputWithLabel from 'components/Form/TextInputWithLabel';
 import PickerWithLabel from 'components/Form/PickerWithLabel';
 import Button from 'components/Form/Button';
 import Modal from 'react-native-modal';
 import Currency from 'services/Currency';
+import Api from 'services/api/index.js';
 
 const height = Math.round(Dimensions.get('window').height)
 class ProposalModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        currency: 'Philippine Peso - PHP',
-        processingFee: 0
+        currency: 'PHP',
+        charge: 0
     };
   }
 
   redirect = (route) => {
     this.props.navigation.navigate(route);
   };
+
+  submit(){
+    const { user, ledger, request } = this.props.state;
+    const { charge, currency } = this.state;
+    if(user == null || ledger == null || request == null){
+      return
+    }
+    if(charge <= 0 || currency == null){
+      return
+    }
+    let parameter = {
+      request_id: request.id,
+      currency: currency,
+      charge: charge,
+      status: 'requesting',
+      account_id: user.id
+    }
+    console.log('parameter', parameter)
+    this.props.loading(true)
+    Api.request(Routes.requestPeerCreate, parameter, (response) => {
+      this.props.loading(false)
+      this.props.closeModal()
+    }, error => {
+      this.props.loading(false)
+      console.log('response', error)
+    });
+  }
 
   renderContent() {
     const { ledger } = this.props.state;
@@ -71,8 +99,8 @@ class ProposalModal extends Component {
                   />
 
                   <TextInputWithLabel 
-                    variable={this.state.processingFee}
-                    onChange={(value) => this.setState({processingFee: value})}
+                    variable={this.state.charge}
+                    onChange={(value) => this.setState({charge: value})}
                     label={'Amount'}
                     placeholder={'Amount'}
                     onError={false}
@@ -101,7 +129,7 @@ class ProposalModal extends Component {
                         fontWeight: 'bold'
                       }}>
                       {
-                        Currency.display(0.00, 'PHP')
+                        Currency.display(parseFloat(this.state.charge * Helper.partnerShare).toFixed(2), 'PHP')
                       }
                     </Text>
                   </View>
@@ -126,7 +154,7 @@ class ProposalModal extends Component {
                         fontWeight: 'bold'
                       }}>
                       {
-                        Currency.display(0.00, 'PHP')
+                        Currency.display(parseFloat(this.state.charge * Helper.payhiramShare).toFixed(2), 'PHP')
                       }
                     </Text>
                   </View>
@@ -157,7 +185,7 @@ class ProposalModal extends Component {
                         color: Color.secondary
                       }}>
                       {
-                        Currency.display(0.00, 'PHP')
+                        Currency.display(this.state.charge, 'PHP')
                       }
                     </Text>
                   </View>
@@ -187,7 +215,7 @@ class ProposalModal extends Component {
 
               <Button 
                 title={'Continue'}
-                onClick={() => {}}
+                onClick={() => {this.submit()}}
                 style={{
                   width: '45%',
                   marginLeft: '5%',

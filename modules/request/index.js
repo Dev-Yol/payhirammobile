@@ -215,31 +215,6 @@ class Requests extends Component {
     });
   };
 
-  retrieveThread = (id) => {
-    const {user} = this.props.state;
-    const {setMessengerGroup} = this.props;
-    let parameter = {
-      condition: [
-        {
-          value: id,
-          column: 'id',
-          clause: '=',
-        },
-      ],
-      account_id: user.id,
-    };
-    Api.request(
-      Routes.customMessengerGroupRetrieveByParams,
-      parameter,
-      (response) => {
-        this.setState({isLoading: true});
-        if (response.data != null) {
-          setMessengerGroup(response.data);
-          this.props.navigation.navigate('messagesStack');
-        }
-      },
-    );
-  };
 
   acceptPeer = (item, request) => {
     const {user} = this.props.state;
@@ -271,9 +246,11 @@ class Requests extends Component {
   };
 
   connectRequest = (item) => {
+    const { setRequest } = this.props;
     this.setState({
       connectSelected: item,
     });
+    setRequest(item)
     setTimeout(() => {
       this.setState({connectModal: true});
     }, 500);
@@ -468,6 +445,9 @@ class Requests extends Component {
 
         <ProposalModal
           visible={connectModal}
+          loading={(flag) => this.setState({
+            isLoading: flag
+          })}
           closeModal={() =>
             this.setState({
               connectModal: false,
@@ -488,9 +468,8 @@ const mapDispatchToProps = (dispatch) => {
     setUserLedger: (userLedger) => dispatch(actions.setUserLedger(userLedger)),
     setSearchParameter: (searchParameter) =>
       dispatch(actions.setSearchParameter(searchParameter)),
-    setMessengerGroup: (messengerGroup) =>
-      dispatch(actions.setMessengerGroup(messengerGroup)),
     setLedger: (ledger) => dispatch(actions.setLedger(ledger)),
+    setRequest: (request) => dispatch(actions.setRequest(request)),
   };
 };
 

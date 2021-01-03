@@ -32,7 +32,8 @@ const types = {
   SET_THEME: 'SET_THEME',
   SET_REQUEST_INPUT: 'SET_REQUEST_INPUT',
   SET_VALIDATE_OTP: 'SET_VALIDATE_OTP',
-  VIEW_MENU: 'VIEW_MENU'
+  VIEW_MENU: 'VIEW_MENU',
+  SET_REQUEST: 'SET_REQUEST',
 };
 
 export const actions = {
@@ -87,6 +88,9 @@ export const actions = {
   setRequests(requests) {
     return {type: types.SET_REQUESTS, requests};
   },
+  setRequest(request) {
+    return {type: types.SET_REQUEST, request};
+  },
   updateRequests(requests) {
     return {type: types.UPDATE_REQUESTS, requests};
   },
@@ -137,6 +141,7 @@ const initialState = {
   searchParameter: null,
   location: null,
   requests: null,
+  request: null,
   nav: null,
   pinFlag: false,
   systemNotification: null,
@@ -146,7 +151,6 @@ const initialState = {
   requestInput: null,
   isValidOtp: false,
   isViewing: false
-  
 };
 
 storeData = async (key, value) => {
@@ -169,7 +173,7 @@ const reducer = (state = initialState, action) => {
   const {theme} = action;
   const {requestInput} = action;
   const {isValidOtp} = action;
-  const { isViewing } = action;
+  const { isViewing, request } = action;
   switch (type) {
     case types.LOGOUT:
       AsyncStorage.clear();
@@ -371,6 +375,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         requests,
+      };
+    case types.SET_REQUEST:
+      return {
+        ...state,
+        request
       };
     case types.UPDATE_REQUESTS:
       state.requests.push(...requests);
