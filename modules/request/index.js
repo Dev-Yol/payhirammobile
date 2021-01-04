@@ -138,6 +138,7 @@ class Requests extends Component {
         if (flag == true) {
           const { setRequests } = this.props;
           if (response.data != null) {
+            console.log('retrieve', response.data)
             setRequests(response.data);
           } else {
             setRequests(null);
