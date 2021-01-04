@@ -23,7 +23,6 @@ class ProposalModal extends Component {
         charge: 0
     };
   }
-
   redirect = (route) => {
     this.props.navigation.navigate(route);
   };
@@ -49,10 +48,13 @@ class ProposalModal extends Component {
     Api.request(Routes.requestPeerCreate, parameter, (response) => {
       this.props.loading(false)
       this.props.closeModal()
-    }, error => {
+      this.props.navigation.navigate('requestItemStack', {data: this.props.data})
+    },
+    error => {
       this.props.loading(false)
       console.log('response', error)
-    });
+    }
+    );
   }
 
   renderContent() {

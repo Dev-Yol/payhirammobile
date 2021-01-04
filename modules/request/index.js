@@ -42,6 +42,7 @@ class Requests extends Component {
       connectSelected: null,
       searchValue: null,
       searchType: null,
+      requestItemData: [],
       size: 0,
       filterOptions: [
         {
@@ -246,6 +247,7 @@ class Requests extends Component {
   };
 
   connectRequest = (item) => {
+    // console.log(",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,", item);
     const { setRequest } = this.props;
     this.setState({
       connectSelected: item,
@@ -445,6 +447,8 @@ class Requests extends Component {
 
         <ProposalModal
           visible={connectModal}
+          data = {this.state.connectSelected}
+          navigation={this.props.navigation}
           loading={(flag) => this.setState({
             isLoading: flag
           })}
