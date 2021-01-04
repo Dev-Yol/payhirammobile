@@ -21,7 +21,8 @@ class ViewProfile extends Component {
     }
     render() {
         const { user } = this.props.navigation.state.params
-        const ratings = { stars: 5 }
+        {console.log("---user props--- ", user)}
+        const ratings = { stars: user.rating }
         let stars = []
         for (let i = 0; i < 5; i++) {
             stars.push(
