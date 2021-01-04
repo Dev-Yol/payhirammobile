@@ -32,18 +32,8 @@ export default {
     {
       title: 'Settings',
       route: 'Settings',
-    },
-    {
-      title: 'Terms and Conditions',
-      route: 'TermsAndConditions',
-    },
+    }
     
-  ],
-  currency: [
-    {
-      title: 'Philippine Peso',
-      value: 'PHP',
-    },
   ],
   currency: [{
     title: 'Philippine Peso',
@@ -54,9 +44,8 @@ export default {
   },
   MAXIMUM_DEPOSIT: 500000,
   MAXIMUM_WITHDRAWAL: 500000,
-  payhiramCharges: {
-    percentage: 0.2,
-  },
+  payhiramShare: 0.2,
+  partnerShare: 0.8,
   fulfillmentTypes: [
     {
       value: 1,

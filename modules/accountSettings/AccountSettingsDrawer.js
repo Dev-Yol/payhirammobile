@@ -17,10 +17,7 @@ class HeaderOptions extends Component {
     super(props);
   }
   back = () => {
-    const navigateAction = NavigationActions.navigate({
-      routeName: 'Settings',
-    });
-    this.props.navigationProps.dispatch(navigateAction);
+    this.props.navigationProps.pop()
   };
   render() {
     return (
@@ -52,17 +49,7 @@ const AccountSettingsStack = createStackNavigator({
       title: 'Account Settings',
       headerLeft: <HeaderOptions navigationProps={navigation} />,
       drawerLabel: 'Account Settings',
-      // headerStyle: {
-      //   backgroundColor: 'white',
-      //   height: 80,
-      //   elevation: 0,
-      // },
-      // headerTintColor: '#4c4c4c',
-      // headerTitleStyle: {
-      //   fontSize: 18,
-      //   fontWeight: 'bold',
-      // },
-      headerTransparent: true
+      ...BasicStyles.headerDrawerStyle
     }),
   },
 });

@@ -28,7 +28,9 @@ import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faStar, faPlus, faSearch} from '@fortawesome/free-solid-svg-icons';
 import {Dimensions} from 'react-native';
 import RequestOptions from './RequestOptions.js';
-import BottomSheet from './bottomsheet/BottomSheet';
+import ProposalModal from 'modules/generic/ProposalModal';
+import RequestCard from 'modules/generic/RequestCard';
+
 const height = Math.round(Dimensions.get('window').height);
 class Requests extends Component {
   constructor(props) {
@@ -65,7 +67,34 @@ class Requests extends Component {
       'hardwareBackPress',
       this.handleBackPress,
     );
+    this.retrieveSummaryLedger()
   }
+
+  retrieveSummaryLedger = () => {
+    const {user} = this.props.state;
+    const { setLedger } = this.props;
+    if (user == null) {
+      return;
+    }
+    let parameter = {
+      account_id: user.id,
+      account_code: user.code
+    };
+    this.setState({isLoading: true});
+    console.log('parameter', parameter)
+    Api.request(Routes.ledgerSummary, parameter, (response) => {
+      console.log('response', response)
+      this.setState({isLoading: false});
+      if (response != null) {
+        setLedger(response.data[0]);
+      } else {
+        setLedger(null);
+      }
+    }, error => {
+      console.log('response', error)
+      this.setState({isLoading: false});
+    });
+  };
 
   componentWillUnmount() {
     this.backHandler.remove();
@@ -186,31 +215,6 @@ class Requests extends Component {
     });
   };
 
-  retrieveThread = (id) => {
-    const {user} = this.props.state;
-    const {setMessengerGroup} = this.props;
-    let parameter = {
-      condition: [
-        {
-          value: id,
-          column: 'id',
-          clause: '=',
-        },
-      ],
-      account_id: user.id,
-    };
-    Api.request(
-      Routes.customMessengerGroupRetrieveByParams,
-      parameter,
-      (response) => {
-        this.setState({isLoading: true});
-        if (response.data != null) {
-          setMessengerGroup(response.data);
-          this.props.navigation.navigate('messagesStack');
-        }
-      },
-    );
-  };
 
   acceptPeer = (item, request) => {
     const {user} = this.props.state;
@@ -242,9 +246,11 @@ class Requests extends Component {
   };
 
   connectRequest = (item) => {
+    const { setRequest } = this.props;
     this.setState({
       connectSelected: item,
     });
+    setRequest(item)
     setTimeout(() => {
       this.setState({connectModal: true});
     }, 500);
@@ -328,277 +334,6 @@ class Requests extends Component {
     );
   };
 
-  _peers = (peers, request) => {
-    const {user} = this.props.state;
-    return (
-      <View>
-        <View
-          style={{
-            borderBottomWidth: 1,
-            borderBottomColor: Color.primary,
-          }}>
-          <Text
-            style={{
-              paddingTop: 10,
-              paddingBottom: 10,
-              color: Color.primary,
-            }}>
-            Peer request list
-          </Text>
-        </View>
-        <View>
-          {peers.peers.map((item, index) => {
-            return (
-              <View>
-                {this._header(item, 'rating')}
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    paddingTop: 10,
-                    paddingBottom: 10,
-                  }}>
-                  <View
-                    style={{
-                      width: '50%',
-                    }}>
-                    <Text style={Style.text}>Processing fee</Text>
-                    <Text
-                      style={{
-                        fontWeight: 'bold',
-                        color: Color.primary,
-                      }}>
-                      {Currency.display(item.charge, item.currency)}
-                    </Text>
-                  </View>
-                  {peers.status === false && (
-                    <View
-                      style={{
-                        width: '50%',
-                        alignItems: 'flex-end',
-                      }}>
-                      <TouchableHighlight
-                        onPress={() => {
-                          this.acceptPeer(item, request);
-                        }}
-                        underlayColor={Color.gray}
-                        style={[Style.btn, {backgroundColor: Color.warning}]}>
-                        <Text
-                          style={{
-                            color: Color.white,
-                          }}>
-                          Accept
-                        </Text>
-                      </TouchableHighlight>
-                    </View>
-                  )}
-                  {peers.status === false && (
-                    <View
-                      style={{
-                        width: '50%',
-                        alignItems: 'flex-end',
-                      }}>
-                      <TouchableHighlight
-                        onPress={() => {
-                          this.viewThread(item);
-                        }}
-                        underlayColor={Color.gray}
-                        style={[Style.btn, {backgroundColor: Color.secondary}]}>
-                        <Text
-                          style={{
-                            color: Color.white,
-                          }}>
-                          View Thread
-                        </Text>
-                      </TouchableHighlight>
-                    </View>
-                  )}
-                </View>
-              </View>
-            );
-          })}
-        </View>
-      </View>
-    );
-  };
-
-  _footer = (item) => {
-    const {isBookmark} = this.state;
-    const {user} = this.props.state;
-    return (
-      <View>
-        <View
-          style={{
-            flexDirection: 'row',
-            marginBottom: 10,
-          }}>
-          {isBookmark == true && (
-            <View
-              style={{
-                width: '50%',
-              }}>
-              <TouchableHighlight
-                onPress={() => {
-                  this.bookmark(item);
-                }}
-                style={[Style.btn, {backgroundColor: Color.primary}]}
-                underlayColor={Color.gray}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                  }}>
-                  {item.bookmark == true && (
-                    <FontAwesomeIcon
-                      icon={faStar}
-                      style={{
-                        color: Color.white,
-                        marginRight: 10,
-                      }}
-                    />
-                  )}
-                  <Text
-                    style={{
-                      color: Color.white,
-                    }}>
-                    Bookmark
-                  </Text>
-                </View>
-              </TouchableHighlight>
-            </View>
-          )}
-          {user.account_type != 'USER' && (
-            <View
-              style={{
-                width: '50%',
-              }}>
-              <TouchableHighlight
-                onPress={() => {
-                  this.connectRequest(item);
-                }}
-                underlayColor={Color.gray}
-                style={[Style.btn, {backgroundColor: Color.primary}]}>
-                <Text
-                  style={{
-                    color: Color.white,
-                  }}>
-                  Connect
-                </Text>
-              </TouchableHighlight>
-            </View>
-          )}
-        </View>
-      </View>
-    );
-  };
-
-  _body = (item) => {
-    return (
-      <View>
-        <Text
-          style={[
-            Style.text,
-            {
-              paddingTop: 10,
-              paddingBottom: 10,
-              textAlign: 'justify',
-            },
-          ]}>
-          {item.reason}
-        </Text>
-        {item.images != null && (
-          <View>
-            {item.images.map((image, imageIndex) => {
-              return <View></View>;
-            })}
-          </View>
-        )}
-      </View>
-    );
-  };
-
-  _subHeader = (item) => {
-    const {user} = this.props.state;
-    return (
-      <View>
-        <Text
-          style={{
-            color: Color.primary,
-          }}>
-          {Helper.showRequestType(item.type)}
-        </Text>
-        {item.coupon != null && parseInt(item.account_id) == user.id && (
-          <Text style={Style.text}>
-            {item.coupon.type === 'percentage'
-              ? item.coupon.amount + '% '
-              : Currency.display(item.coupon.amount, item.coupon.currency) +
-                ' '}
-            Discount({item.coupon.code})
-          </Text>
-        )}
-        {item.max_charge !== null && item.max_charge > 0 && (
-          <Text style={Style.text}>
-            Suggested Charge -{' '}
-            {Currency.display(item.max_charge, item.currency)}
-          </Text>
-        )}
-        <Text style={Style.text}>Posted on {item.created_at_human}</Text>
-        {item.location != null && (
-          <Text style={Style.text}>
-            {item.location.route +
-              ', ' +
-              item.location.locality +
-              ', ' +
-              item.location.country}
-          </Text>
-        )}
-        <Text style={Style.text}>Needed on {item.needed_on_human}</Text>
-      </View>
-    );
-  };
-
-  _header = (item, type) => {
-    return (
-      <View>
-        <View style={{flexDirection: 'row', marginTop: 10}}>
-          <UserImage user={item.account} />
-          <Text
-            style={{
-              color: Color.primary,
-              lineHeight: 30,
-              paddingLeft: 10,
-              width: '40%',
-            }}>
-            {item.account.username}
-          </Text>
-          <View
-            style={{
-              width: '50%',
-            }}>
-            {type == 'amount' && (
-              <Text
-                style={{
-                  color: Color.primary,
-                  fontWeight: 'bold',
-                  textAlign: 'right',
-                  lineHeight: 30,
-                  width: '100%',
-                }}>
-                {Currency.display(item.amount, item.currency)}
-              </Text>
-            )}
-            {type == 'rating' && (
-              <View
-                style={{
-                  width: '100%',
-                  alignItems: 'flex-end',
-                }}>
-                <Rating ratings={item.rating}></Rating>
-              </View>
-            )}
-          </View>
-        </View>
-      </View>
-    );
-  };
 
   FlatListItemSeparator = () => {
     return <View style={Style.Separator} />;
@@ -619,23 +354,11 @@ class Requests extends Component {
             ItemSeparatorComponent={this.FlatListItemSeparator}
             renderItem={({item, index}) => (
               <View>
-                <TouchableOpacity
-                  onPress={() =>
-                    this.props.navigation.navigate('reviewsStack', {
-                      requestDetails: item,
-                    })
-                  }>
-                  {this._header(item, 'amount')}
-                  {this._subHeader(item)}
-                  {this._body(item)}
-                  <View>
-                    <Rating ratings={item.rating}></Rating>
-                  </View>
-                  {item.account_id != user.id && this._footer(item)}
-                  {/*item.account_id == user.id &&
-                  item.peers.peers != null &&
-                this._peers(item.peers, item)*/}
-                </TouchableOpacity>
+                <RequestCard 
+                  onConnectRequest={(item) => this.connectRequest(item)}
+                  data={item}
+                  navigation={this.props.navigation}
+                  />
               </View>
             )}
             keyExtractor={(item, index) => index.toString()}
@@ -669,97 +392,31 @@ class Requests extends Component {
         {/*this._search()*/}
         <ScrollView
           style={Style.ScrollView}
+          showsVerticalScrollIndicator={false}
           onScroll={(event) => {
-            let scrollingHeight =
-              event.nativeEvent.layoutMeasurement.height +
-              event.nativeEvent.contentOffset.y;
-            let totalHeight = event.nativeEvent.contentSize.height - 20;
-            if (event.nativeEvent.contentOffset.y <= 0) {
-              if (this.state.isLoading == false) {
-                this.setState({active: 1});
-                setTimeout(() => {
-                  this.retrieve();
-                }, 10);
+            let scrollingHeight = event.nativeEvent.layoutMeasurement.height + event.nativeEvent.contentOffset.y
+            let totalHeight = event.nativeEvent.contentSize.height
+            if(event.nativeEvent.contentOffset.y <= 0) {
+              if(isLoading == false){
+                // this.retrieve(false)
               }
             }
-            if (scrollingHeight >= totalHeight) {
-              let totalPage = this.state.size / this.state.limit;
-              let prevActive = this.state.active;
-              let newPage =
-                this.state.active < totalPage - 1
-                  ? this.state.active + 1
-                  : this.state.active;
-              this.setState({active: newPage});
-              setTimeout(() => {
-                if (prevActive < newPage) {
-                  this.retrieve(false);
-                } else {
-                  ToastAndroid.show('Nothing follows!', ToastAndroid.LONG);
-                }
-              }, 10);
+            if(scrollingHeight >= (totalHeight)) {
+              if(isLoading == false){
+                this.props.retrieve(true)
+              }
             }
           }}>
           <SystemNotification></SystemNotification>
           <View style={[Style.MainContainer, {marginTop: 60}]}>
-            {/* <View
-              style={{
-                alignItems: 'center',
-                flexDirection: 'row',
-              }}>
-              <TouchableOpacity
-                onPress={() => this.setRetrieveParameter(false)}
-                style={{
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  height: 50,
-                  backgroundColor:
-                    this.state.activePage == 0 ? Color.primary : Color.white,
-                  borderColor: Color.primary,
-                  borderTopLeftRadius: 5,
-                  borderWidth: 1,
-                  width: '50%',
-                }}>
-                <Text
-                  style={{
-                    color:
-                      this.state.activePage == 0 ? Color.white : Color.primary,
-                    fontSize: 11,
-                    textAlign: 'center',
-                  }}>
-                  All requests
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => this.setRetrieveParameter(true)}
-                style={{
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  height: 50,
-                  borderTopRightRadius: 5,
-                  backgroundColor:
-                    this.state.activePage == 1 ? Color.primary : Color.white,
-                  borderColor: Color.primary,
-                  borderWidth: 1,
-                  borderLeftWidth: 0,
-                  width: '50%',
-                }}>
-                <Text
-                  style={{
-                    color:
-                      this.state.activePage == 1 ? Color.white : Color.primary,
-                    fontSize: 11,
-                    textAlign: 'center',
-                  }}>
-                  View my requests
-                </Text>
-              </TouchableOpacity>
-            </View> */}
+            
             {this._flatList()}
             {requests == null && isLoading == false && (
               <Empty refresh={true} onRefresh={() => this.onRefresh()} />
             )}
           </View>
         </ScrollView>
+
         <TouchableOpacity
           style={Style.floatingButton}
           onPress={() => {
@@ -773,6 +430,7 @@ class Requests extends Component {
             size={16}
           />
         </TouchableOpacity>
+
         {isLoading ? <Spinner mode="overlay" /> : null}
         {/* <CustomModal
           visible={connectModal}
@@ -784,13 +442,17 @@ class Requests extends Component {
           }}
           data={connectSelected}
           action={(flag) => this.connectAction(flag)}></CustomModal> */}
-        <BottomSheet
+
+        <ProposalModal
           visible={connectModal}
+          loading={(flag) => this.setState({
+            isLoading: flag
+          })}
           closeModal={() =>
             this.setState({
               connectModal: false,
             })
-          }></BottomSheet>
+          }></ProposalModal>
       </View>
     );
   }
@@ -806,8 +468,8 @@ const mapDispatchToProps = (dispatch) => {
     setUserLedger: (userLedger) => dispatch(actions.setUserLedger(userLedger)),
     setSearchParameter: (searchParameter) =>
       dispatch(actions.setSearchParameter(searchParameter)),
-    setMessengerGroup: (messengerGroup) =>
-      dispatch(actions.setMessengerGroup(messengerGroup)),
+    setLedger: (ledger) => dispatch(actions.setLedger(ledger)),
+    setRequest: (request) => dispatch(actions.setRequest(request)),
   };
 };
 

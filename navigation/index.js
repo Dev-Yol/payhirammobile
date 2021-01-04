@@ -8,7 +8,6 @@ import MessagesStack from 'components/Messenger/MessagesDrawer.js';
 import LedgerStack from 'modules/dashboard/LedgerDrawer.js';
 import CreateBorrowRequestStack from 'modules/request/CreateBorrowDrawer.js';
 import LocationStack from 'components/Location/Drawer.js';
-import RequestStack from 'modules/request/requestUpdated/requestDrawer.js';
 import DashboardStack from 'modules/dashboard/DashboardDrawer.js';
 import CreateRequestStack from '../modules/request/createRequest/CreateRequestDrawer';
 import AccountSettingsStack from 'modules/accountSettings/AccountSettingsDrawer.js';
@@ -16,7 +15,7 @@ import SettingsStack from 'modules/settings/SettingsDrawer.js';
 import OtpStack from 'modules/otp/OtpDrawer.js';
 import RequestItemStack from 'modules/request/requestItem/requestItemDrawer.js';
 import EditProfileStack from 'modules/profile/editProfile/editProfileDrawer.js';
-import TransactionsStack from 'modules/transactions/transactionsDrawer.js';
+import TransactionsStack from 'modules/transactions/Drawer.js';
 import NotificationSettingsStack from 'modules/notification/settings/NotificationSettingsDrawer.js';
 import CreateTicketStack from 'modules/createTicket/CreateTicketDrawer.js';
 import DisplayStack from 'modules/display/DisplayDrawer.js';
@@ -84,7 +83,6 @@ const PrimaryNav = createStackNavigator(
     createRequestStack: {screen: CreateRequestStack},
     locationStack: {screen: LocationStack},
     createBorrowStack: {screen: CreateBorrowRequestStack},
-    requestStack: {screen: RequestStack},
     dashboardStack: {screen: DashboardStack},
     accountSettingsStack: {screen: AccountSettingsStack},
     settingsStack: {screen: SettingsStack},

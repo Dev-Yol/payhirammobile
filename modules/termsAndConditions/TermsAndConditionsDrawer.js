@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {View, TouchableOpacity, Text} from 'react-native';
 import {createStackNavigator} from 'react-navigation-stack';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faQrcode, faBars} from '@fortawesome/free-solid-svg-icons';
+import {faChevronLeft, faBars} from '@fortawesome/free-solid-svg-icons';
 import TermsAndConditions from 'modules/termsAndConditions';
 import {NavigationActions} from 'react-navigation';
 import {BasicStyles} from 'common';
@@ -13,10 +13,7 @@ class HeaderOptions extends Component {
     super(props);
   }
   back = () => {
-    const navigateAction = NavigationActions.navigate({
-      routeName: 'Terms and Conditions',
-    });
-    this.props.navigationProps.dispatch(navigateAction);
+    this.props.navigationProps.pop()
   };
   render() {
     return (
@@ -24,7 +21,7 @@ class HeaderOptions extends Component {
         <TouchableOpacity onPress={this.back.bind(this)}>
           {/*Donute Button Image */}
           <FontAwesomeIcon
-            icon={faBars}
+            icon={faChevronLeft}
             size={BasicStyles.iconSize}
             style={BasicStyles.iconStyle}
           />
@@ -47,11 +44,7 @@ const TermsAndConditionsStack = createStackNavigator({
     navigationOptions: ({navigation}) => ({
       title: 'Terms And Conditions',
       headerLeft: <HeaderOptions navigationProps={navigation} />,
-      drawerLabel: 'Terms And Conditions',
-      headerStyle: {
-        backgroundColor: 'white',
-      },
-      headerTintColor: '#4c4c4c',
+      ...BasicStyles.headerDrawerStyle
     }),
   },
 });

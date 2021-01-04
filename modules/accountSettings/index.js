@@ -5,6 +5,7 @@ import {
   TextInput,
   TouchableHighlight,
   ScrollView,
+  Dimensions
 } from 'react-native';
 import { connect } from 'react-redux';
 import { Routes, Color, Helper, BasicStyles } from 'common';
@@ -14,6 +15,9 @@ import styles from 'modules/accountSettings/Styles.js';
 import PasswordWithIcon from 'components/InputField/Password.js';
 import Api from 'services/api/index.js';
 import { Spinner } from 'components';
+import Button from 'components/Form/Button';
+import TextInputWithLabel from 'components/Form/TextInputWithLabel';
+const height = Math.round(Dimensions.get('window').height);
 
 class AccountSettings extends Component {
   constructor(props) {
@@ -97,44 +101,41 @@ class AccountSettings extends Component {
 
   render() {
     let { user } = this.props.state;
-    const Label = ({ label }) => {
-      return (
-        <View
-          style={{
-            textAlign: 'left',
-            alignSelf: 'flex-start',
-          }}>
-          <Text style={{ marginBottom: 5 }}>{label}</Text>
-        </View>
-      );
-    };
 
     return (
       <ScrollView style={{ flex: 1, paddingTop: 10 }}>
-        <View style={[styles.AccountSettingsContainer]}>
+        <View style={[styles.AccountSettingsContainer, {height: height + 25}]}>
           {this.state.isLoading ? <Spinner mode="overlay" /> : null}
-          <Label label={'Username'} />
-          <TextInput
-            style={BasicStyles.formControl}
-            editable={false}
-            value={user.username}
+
+         <TextInputWithLabel 
+            variable={user.username}
+            onChange={(value) => {}}
+            label={'Username'}
+            onError={false}
+            required={false}
           />
-          <Label label={'Email'} />
-          <TextInput
-            style={BasicStyles.formControl}
-            value={this.state.email}
+
+
+          <TextInputWithLabel 
+            variable={this.state.email}
+            onChange={(value) => {this.setState({email: value})}}
+            label={'Email Address'}
+            onError={false}
             placeholder={'Enter Email address'}
-            onChangeText={(e) => {
-              this.setState({ email: e })
-            }}
+            required={true}
           />
-          <TouchableHighlight
-            style={[BasicStyles.btn, BasicStyles.btnSecondary]}
-            onPress={this.updateEmail}
-            underlayColor={Color.gray}>
-            <Text style={BasicStyles.textWhite}>Update Email</Text>
-          </TouchableHighlight>
-          <Label label={'Password'} />
+
+          <Button 
+            style={{
+              backgroundColor: Color.secondary,
+              marginTop: 15,
+              marginBottom: 15
+            }}
+            title={'Update Email'}
+            onClick={() => this.updateEmail}/>
+
+
+
           <PasswordWithIcon
             onTyping={(input) =>
               this.setState({
@@ -142,7 +143,8 @@ class AccountSettings extends Component {
               })
             }
           />
-          <Label label={'Confirm Password'} />
+
+
           <PasswordWithIcon
             onTyping={(input) =>
               this.setState({
@@ -150,14 +152,14 @@ class AccountSettings extends Component {
               })
             }
           />
-          <TouchableHighlight
-            style={[BasicStyles.btn, BasicStyles.btnSecondary]}
-            onPress={() => {
-              this.updatePassword();
+
+          <Button 
+            style={{
+              backgroundColor: Color.secondary
             }}
-            underlayColor={Color.gray}>
-            <Text style={BasicStyles.textWhite}>Change Password</Text>
-          </TouchableHighlight>
+            title={'Change Password'}
+            onClick={() => this.updatePassword}/>
+
         </View>
       </ScrollView>
     );

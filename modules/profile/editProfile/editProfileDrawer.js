@@ -12,7 +12,7 @@ class HeaderOptions extends Component {
     super(props);
   }
   back = () => {
-    this.props.navigationProps.navigate('drawerStack');
+    this.props.navigationProps.pop()
   };
   render() {
     return (
@@ -45,10 +45,7 @@ const EditProfileStack = createStackNavigator({
     navigationOptions: ({navigation}) => ({
       title: 'Edit Profile',
       headerLeft: <HeaderOptions navigationProps={navigation} />,
-      // headerTintColor: BasicStyles.headerTintColor,
-      // headerTitleContainerStyle: BasicStyles.headerTitleContainerStyle,
-      // headerTitleStyle: BasicStyles.headerTitleStyle,
-      headerTransparent: true
+      ...BasicStyles.headerDrawerStyle
     }),
   },
 });

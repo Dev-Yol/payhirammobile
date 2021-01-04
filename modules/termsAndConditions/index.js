@@ -8,12 +8,9 @@ class TermsAndConditions extends Component {
       <ScrollView>
         <View style={styles.TermsAndConditionsContainer}>
           <View style={styles.SectionContainer}>
-            <View style={styles.SectionTitleContainer}>
-              <Text style={styles.SectionTitleTextStyle}>
-                Terms & Conditions
-              </Text>
-            </View>
-            <View style={styles.SectionDescriptionContainer}>
+            <View style={[styles.SectionDescriptionContainer, {
+              marginTop: 25
+            }]}>
               <Text style={styles.SectionDescriptionTextStyle}>
                 Thank you for choosing PAYHIRAM a product of Increment Technologies (“we, us, our”) to provide you (“you, your, yours, user”) with services for money transfer. Our program is very straightforward and easy to use, designed to take you from beginner to advanced which are available on (i) applications available to download on mobile on both iOS and Android, and access our website by using any desktops or mobile devices, by which you can use to send or transfer funds in any location you want, collectively being our services to you (“Program”).
 In order to access our program, whether or not you are an existing or former user, you confirm that you have read these Terms of Use (“Terms”). Whenever you use our services, you acknowledge that you understand and agree to these Terms, and you also agree to our Privacy and Cookie Policies. We recommend that you print a copy of these Terms for future reference. We may terminate your access to the Services if you breach our Terms.
@@ -138,20 +135,20 @@ const styles = StyleSheet.create({
     width: '90%',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    paddingLeft: '8.5%',
-    paddingVertical: '3%',
+    marginLeft: '5%',
+    marginRight: '5%'
   },
   SectionContainer: {
     width: '100%',
   },
   SectionTitleContainer: {},
   SectionTitleTextStyle: {
-    fontSize: 20,
+    fontSize: BasicStyles.standardTitleFontSize,
     fontWeight: 'bold',
-    marginTop: 60
+    marginTop: 10
   },
   SectionTwoTitleTextStyle: {
-    fontSize: 20,
+    fontSize: BasicStyles.standardTitleFontSize,
     fontWeight: 'bold',
   },
   SectionDescriptionContainer: {},

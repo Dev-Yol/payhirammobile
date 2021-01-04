@@ -4,6 +4,7 @@ import {createStackNavigator} from 'react-navigation-stack';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faChevronLeft} from '@fortawesome/free-solid-svg-icons';
 import Reviews from 'modules/reviews';
+import { BasicStyles } from 'common';
 import {connect} from 'react-redux';
 
 class HeaderOptions extends Component {
@@ -60,15 +61,7 @@ const ReviewsStack = createStackNavigator({
       title: 'Reviews',
       drawerLabel: 'Reviews',
       headerLeft: <HeaderOptions navigationProps={navigation} />,
-      headerStyle: {
-        backgroundColor: 'white',
-        height: 80,
-        elevation: 0,
-      },
-      headerTintColor: '#4c4c4c',
-      headerTitleStyle: {
-        fontSize: 20,
-      },
+      ...BasicStyles.headerDrawerStyle
     }),
   },
 });

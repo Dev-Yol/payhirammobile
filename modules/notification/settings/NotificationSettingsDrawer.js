@@ -17,10 +17,7 @@ class HeaderOptions extends Component {
     super(props);
   }
   back = () => {
-    const navigateAction = NavigationActions.navigate({
-      routeName: 'Settings',
-    });
-    this.props.navigationProps.dispatch(navigateAction);
+    this.props.navigationProps.pop()
   };
   render() {
     return (
@@ -51,17 +48,7 @@ const NotificationSettingsStack = createStackNavigator({
     navigationOptions: ({navigation}) => ({
       title: 'Notification Settings',
       headerLeft: <HeaderOptions navigationProps={navigation} />,
-      drawerLabel: 'Notification Settings',
-      headerStyle: {
-        backgroundColor: 'white',
-        height: 80,
-        elevation: 0,
-      },
-      headerTintColor: '#4c4c4c',
-      headerTitleStyle: {
-        fontSize: 18,
-        fontWeight: 'bold',
-      },
+      ...BasicStyles.headerDrawerStyle
     }),
   },
 });
