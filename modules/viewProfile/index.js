@@ -121,18 +121,18 @@ class ViewProfile extends Component {
               <View style={styles.imageContainer}>
               </View>
               <View style={styles.sectionHeadingStyle}>
-                {/* {
-                 user &&  user.account_profile != null && user.account_profile.url != null && (
+                {
+                 user &&  user.account.profile != null && user.account.profile.url != null && (
                     <Image
-                      source={{ uri: Config.BACKEND_URL + user.account_profile.url }}
+                      source={{ uri: Config.BACKEND_URL + user.account.profile.url }}
                       style={[styles.image, {
                         borderRadius: 70
                       }]} />
                     )
-                } */}
+                } 
                 {
                   // && user.account_profile == null || (user.account_profile != null && user.account_profile.url == null)
-                  ((!user)) && (
+                  (user.account.profile == null || user.account.profile.url == null) && (
                     <FontAwesomeIcon
                       icon={faUserCircle}
                       size={100}
