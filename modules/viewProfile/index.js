@@ -117,17 +117,25 @@ class ViewProfile extends Component {
         <ScrollView >
           <View style={styles.container}>
             <View style={styles.headerContainer}>
-
-              <View style={styles.imageContainer}>
-              </View>
-              <View style={styles.sectionHeadingStyle}>
+              <View 
+                style={[
+                  styles.sectionHeadingStyle,
+                  {
+                    paddingTop: 30
+                  }
+                ]}
+              >
                 {
                  user &&  user.account.profile != null && user.account.profile.url != null && (
                     <Image
                       source={{ uri: Config.BACKEND_URL + user.account.profile.url }}
-                      style={[styles.image, {
-                        borderRadius: 70
-                      }]} />
+                      style={[
+                        styles.image, 
+                        {
+                          borderRadius: 70,
+                          marginTop: 10
+                        }
+                      ]} />
                     )
                 } 
                 {
@@ -137,7 +145,8 @@ class ViewProfile extends Component {
                       icon={faUserCircle}
                       size={100}
                       style={{
-                          color: Color.white
+                        color: Color.white,
+                        marginTop: 30
                       }}
                     />
                   )
@@ -145,7 +154,7 @@ class ViewProfile extends Component {
               </View>
               <Text style={styles.username}>{user.account.username}</Text>
               <View style={[styles.ratings, { flexDirection: 'row', alignItems: 'center', alignContent: 'center' }]}>
-                  {stars}
+                  { stars}
               </View>
               <View style={[styles.verifiedContainer, { marginRight: 20, }]}>
                 <Text style={styles.verifiedText}>
