@@ -16,6 +16,7 @@ class PersonalInformationCard extends Component {
     }
     render() {
         let { _renderTextIcon } = this
+        const { user } = this.props
         return (
             <View>
                 <View style={styles.cardHeader}>
@@ -24,14 +25,14 @@ class PersonalInformationCard extends Component {
                 <View style={styles.rowContainer}>
                     <View style={styles.rows}>
                         <View style={[styles.col, { paddingLeft: 20 }]}>
-                            {_renderTextIcon(faUserCircle, 'John John Doe')}
-                            {_renderTextIcon(faEnvelope, 'johndoe@gmail.com')}
-                            {_renderTextIcon(faUserCircle, 'Male')}
+                            {_renderTextIcon(faUserCircle, user.account.information.first_name != null ? user.account.information.first_name : "---<>---")}
+                            {_renderTextIcon(faEnvelope, user.account.email != null ? user.account.email : "---<>---")}
+                            {_renderTextIcon(faUserCircle,  user.account.information.sex != null ? user.account.information.sex : "---<>---")}
                         </View>
                         <View style={[styles.col, { paddingRight: 25 }]}>
-                            {_renderTextIcon(faPhoneAlt, '+63 977 123 4587')}
-                            {_renderTextIcon(faCalendarAlt, 'January 29, 1999')}
-                            {_renderTextIcon(faMapMarkerAlt, 'Cebu South Road, Cebu City, Philippines')}
+                            {_renderTextIcon(faPhoneAlt, user.account.information.cellular_number != null ? user.account.information.cellular_number : "---<>---")}
+                            {_renderTextIcon(faCalendarAlt, user.account.information.birth_date_human != null ? user.account.information.birth_date_human : "---<>---")}
+                            {_renderTextIcon(faMapMarkerAlt, user.account.information.address != null ? user.account.information.address : "---<>---")}
                         </View>
                     </View>
                 </View>
