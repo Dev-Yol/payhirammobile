@@ -6,7 +6,7 @@ import styles from './Styles';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
-const width = Math.round(Dimensions.get('window').width);
+const height = Math.round(Dimensions.get('window').height);
 class AddPayment extends Component {
     constructor(props) {
         super(props);
@@ -19,26 +19,16 @@ class AddPayment extends Component {
             wallet: require('assets/wallet.png')
         };
         return (
-            <ScrollView contentContainerStyle={styles.MainContainer}>
-                <View style={styles.PaymentMethodsContainer}>
-                    <PaymentAccountTile src={res.creditCard} />
-                    <PaymentAccountTile src={res.debitCard} />
-                    <PaymentAccountTile src={res.wallet} />
+          <View>
+            <ScrollView>
+              <View style={styles.PaymentMethodsContainer}>
+                <PaymentAccountTile src={res.creditCard} />
+                <PaymentAccountTile src={res.debitCard} />
+                <PaymentAccountTile src={res.wallet} />
 
-                </View>
-                <TouchableOpacity style={styles.floatingButton} onPress={()=>{
-                    this.props.navigation.push("addPaymentStack")
-                }}>
-                    <FontAwesomeIcon
-                        icon={faPlus}
-                        style={{
-                            color: Color.white,
-                        }}
-                        size={BasicStyles.iconSize}
-                    />
-
-                </TouchableOpacity>
+              </View>
             </ScrollView>
+          </View>
         );
     }
 }

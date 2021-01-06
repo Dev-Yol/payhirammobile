@@ -1,23 +1,12 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Dimensions} from 'react-native';
 import {BasicStyles} from 'common';
+const width = Math.round(Dimensions.get('window').width);
 const styles = StyleSheet.create({
   CreateRequestContainer: {
     alignItems: 'center',
     justifyContent: 'flex-start',
     width: '95%',
     height: '100%',
-  },
-  FillInDetailsContainer: {
-    flexDirection: 'row',
-    borderBottomWidth: 0.2,
-    borderColor: '#D5D5D5',
-    width: '100%',
-    paddingTop: 38,
-    paddingBottom: 12,
-  },
-  FillInDetailsTextStyle: {
-    fontWeight: 'bold',
-    fontSize: BasicStyles.titleText.fontSize,
   },
   SelectFulfillmentContainer: {
     justifyContent: 'flex-start',
@@ -43,7 +32,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     width: '100%',
     borderColor: '#E0E0E0',
-    borderRadius: BasicStyles.btn.borderRadius,
+    borderRadius: BasicStyles.standardBorderRadius,
   },
   AmountContainer: {
     flexDirection: 'row',
@@ -82,7 +71,7 @@ const styles = StyleSheet.create({
   },
   ButtonContainer: {
     height: 50,
-    borderRadius: BasicStyles.btn.borderRadius,
+    borderRadius: BasicStyles.standardBorderRadius,
     justifyContent: BasicStyles.btn.justifyContent,
     alignItems: BasicStyles.btn.alignItems,
   },
@@ -90,38 +79,7 @@ const styles = StyleSheet.create({
     fontSize: BasicStyles.titleText.fontSize,
     color: '#ffffff',
     textAlign: 'center',
-  },
-  CardContainer: {
-    marginTop: '2%',
-    height: 180,
-    width: 180,
-    borderRadius: 10,
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    marginHorizontal: 10,
-    paddingHorizontal: '1.5%',
-  },
-  FulfillmentTypeContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingTop: '40%',
-    paddingBottom: '10%',
-  },
-  FulfillmentTypeTextStyle: {
-    fontSize: BasicStyles.standardFontSize,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
-  },
-  FulfillmentDescription: {
-    alignItems: 'center',
-    alignSelf: 'flex-end',
-  },
-  FulfillmentDescriptionTextStyle: {
-    fontSize: BasicStyles.standardFontSize,
-    fontStyle: 'italic',
-    textAlign: 'center',
-    color: '#FFFFFF',
-  },
+  }
 });
 
 export default styles;

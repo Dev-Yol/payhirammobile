@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import Data from 'services/Data';
-import { Helper, Color } from 'common';
-import { Routes } from 'common';
+import {Helper, Color} from 'common';
+import {Routes} from 'common';
 import Api from '../services/api';
 
 const types = {
@@ -32,72 +32,76 @@ const types = {
   SET_THEME: 'SET_THEME',
   SET_REQUEST_INPUT: 'SET_REQUEST_INPUT',
   SET_VALIDATE_OTP: 'SET_VALIDATE_OTP',
-  VIEW_MENU: 'VIEW_MENU'
+  VIEW_MENU: 'VIEW_MENU',
+  SET_REQUEST: 'SET_REQUEST',
 };
 
 export const actions = {
   login: (user, token) => {
-    return { type: types.LOGIN, user, token };
+    return {type: types.LOGIN, user, token};
   },
   logout() {
-    return { type: types.LOGOUT };
+    return {type: types.LOGOUT};
   },
   updateUser: (user) => {
-    return { type: types.UPDATE_USER, user };
+    return {type: types.UPDATE_USER, user};
   },
   setNotifications(unread, notifications) {
-    return { type: types.SET_NOTIFICATIONS, unread, notifications };
+    return {type: types.SET_NOTIFICATIONS, unread, notifications};
   },
   setMessenger(unread, messages) {
-    return { type: types.SET_MESSAGES, unread, messages };
+    return {type: types.SET_MESSAGES, unread, messages};
   },
   setLedger(ledger) {
-    return { type: types.SET_LEDGER, ledger };
+    return {type: types.SET_LEDGER, ledger};
   },
   setUserLedger(userLedger) {
-    return { type: types.SET_USER_LEDGER, userLedger };
+    return {type: types.SET_USER_LEDGER, userLedger};
   },
   setMessengerGroup(messengerGroup) {
-    return { type: types.SET_MESSENGER_GROUP, messengerGroup };
+    return {type: types.SET_MESSENGER_GROUP, messengerGroup};
   },
   updateMessengerGroup(messengerGroup) {
-    return { type: types.UPDATE_MESSENGER_GROUP, messengerGroup };
+    return {type: types.UPDATE_MESSENGER_GROUP, messengerGroup};
   },
   updateMessagesOnGroupByPayload(messages) {
-    return { type: types.UPDATE_MESSAGES_ON_GROUP_BY_PAYLOAD, messages };
+    return {type: types.UPDATE_MESSAGES_ON_GROUP_BY_PAYLOAD, messages};
   },
   setMessagesOnGroup(messagesOnGroup) {
-    return { type: types.SET_MESSAGES_ON_GROUP, messagesOnGroup };
+    return {type: types.SET_MESSAGES_ON_GROUP, messagesOnGroup};
   },
   updateMessagesOnGroup(message) {
-    return { type: types.UPDATE_MESSAGES_ON_GROUP, message };
+    return {type: types.UPDATE_MESSAGES_ON_GROUP, message};
   },
   updateMessageByCode(message) {
-    return { type: types.UPDATE_MESSAGE_BY_CODE, message };
+    return {type: types.UPDATE_MESSAGE_BY_CODE, message};
   },
   setLocation(location) {
-    return { type: types.SET_LOCATION, location };
+    return {type: types.SET_LOCATION, location};
   },
   updateNotifications(unread, notification) {
-    return { type: types.UPDATE_NOTIFICATIONS, unread, notification };
+    return {type: types.UPDATE_NOTIFICATIONS, unread, notification};
   },
   setSearchParameter(searchParameter) {
-    return { type: types.SET_SEARCH_PARAMETER, searchParameter };
+    return {type: types.SET_SEARCH_PARAMETER, searchParameter};
   },
   setRequests(requests) {
-    return { type: types.SET_REQUESTS, requests };
+    return {type: types.SET_REQUESTS, requests};
+  },
+  setRequest(request) {
+    return {type: types.SET_REQUEST, request};
   },
   updateRequests(requests) {
-    return { type: types.UPDATE_REQUESTS, requests };
+    return {type: types.UPDATE_REQUESTS, requests};
   },
   setPinFlag(pinFlag) {
-    return { type: types.SET_PIN_FLAG, pinFlag };
+    return {type: types.SET_PIN_FLAG, pinFlag};
   },
   setSystemNotification(systemNotification) {
-    return { type: types.SET_SYSTEM_NOTIFICATION, systemNotification };
+    return {type: types.SET_SYSTEM_NOTIFICATION, systemNotification};
   },
   setProduct(product) {
-    return { type: types.SET_PRODUCT, product };
+    return {type: types.SET_PRODUCT, product};
   },
   setSelectedProductId(productId) {
     return {
@@ -106,19 +110,19 @@ export const actions = {
     };
   },
   setQRCodeModal(isVisible) {
-    return { type: types.QRCODE_MODAL, isVisible };
+    return {type: types.QRCODE_MODAL, isVisible};
   },
   setTheme(theme) {
-    return { type: types.SET_THEME, theme };
+    return {type: types.SET_THEME, theme};
   },
   setRequestInput(requestInput) {
-    return { type: types.SET_REQUEST_INPUT, requestInput };
+    return {type: types.SET_REQUEST_INPUT, requestInput};
   },
   setIsValidOtp(isValidOtp) {
-    return { type: types.SET_VALIDATE_OTP, isValidOtp };
+    return {type: types.SET_VALIDATE_OTP, isValidOtp};
   },
   viewMenu(isViewing){
-    return {thype: types.VIEW_MENU, isViewing}
+    return {type: types.VIEW_MENU, isViewing}
   }
 };
 
@@ -137,6 +141,7 @@ const initialState = {
   searchParameter: null,
   location: null,
   requests: null,
+  request: null,
   nav: null,
   pinFlag: false,
   systemNotification: null,
@@ -157,17 +162,18 @@ storeData = async (key, value) => {
 };
 
 const reducer = (state = initialState, action) => {
-  const { type, user, token } = action;
-  const { messages, unread, message } = action;
-  const { messengerGroup, messagesOnGroup } = action;
-  const { location, notification } = action;
-  const { searchParameter, requests } = action;
-  const { systemNotification } = action;
-  const { product, productId } = action;
-  const { isVisible } = action;
-  const { theme } = action;
-  const { requestInput } = action;
-  const { isValidOtp } = action;
+  const {type, user, token} = action;
+  const {messages, unread, message} = action;
+  const {messengerGroup, messagesOnGroup} = action;
+  const {location, notification} = action;
+  const {searchParameter, requests} = action;
+  const {systemNotification} = action;
+  const {product, productId} = action;
+  const {isVisible} = action;
+  const {theme} = action;
+  const {requestInput} = action;
+  const {isValidOtp} = action;
+  const { isViewing, request } = action;
   switch (type) {
     case types.LOGOUT:
       AsyncStorage.clear();
@@ -176,7 +182,7 @@ const reducer = (state = initialState, action) => {
       storeData('token', token);
       console.log('LOGIN', true);
       Data.setToken(token);
-      return { ...state, user, token };
+      return {...state, user, token};
     case types.UPDATE_USER:
       return {
         ...state,
@@ -370,6 +376,11 @@ const reducer = (state = initialState, action) => {
         ...state,
         requests,
       };
+    case types.SET_REQUEST:
+      return {
+        ...state,
+        request
+      };
     case types.UPDATE_REQUESTS:
       state.requests.push(...requests);
       return {
@@ -402,13 +413,15 @@ const reducer = (state = initialState, action) => {
         qrCodeModal: isVisible.isVisible,
       };
     case types.SET_THEME:
-      console.log('theme:', theme);
+      console.log('tertiary', theme.tertiary);
       storeData('primary', theme.primary);
       storeData('secondary', theme.secondary);
       storeData('tertiary', theme.tertiary);
+      storeData('fourth', theme.fourth);
       Color.setPrimary(theme.primary);
       Color.setSecondary(theme.secondary);
-      Color.setTertiary(theme.tertiary);
+      Color.setTertiary(theme.tertiary);  
+      Color.setFourth(theme.fourth);
       return {
         ...state,
         theme,
@@ -426,13 +439,12 @@ const reducer = (state = initialState, action) => {
         isValidOtp,
       };
     case types.VIEW_MENU:
-      console.log('VIEWING MENU', isViewing);
       return {
         ...state,
         isViewing,
       };
     default:
-      return { ...state, nav: state.nav };
+      return {...state, nav: state.nav};
   }
 };
 export default reducer;

@@ -12,33 +12,16 @@ class HeaderOptions extends Component {
     super(props);
   }
   back = () => {
-    this.props.navigationProps.navigate('drawerStack');
+    this.props.navigationProps.pop();
   };
   render() {
     return (
-      <View
-        style={{
-          height: 45,
-          width: 45,
-          justifyContent: 'center',
-          alignItems: 'center',
-          marginLeft: 5,
-        }}>
-        <TouchableOpacity
-          onPress={() => {
-            this.back();
-          }}
-          style={{
-            width: '16.5%',
-            alignItems: 'center',
-            marginLeft: '0.5%',
-          }}>
+      <View style={{ flexDirection: 'row' }}>
+        <TouchableOpacity onPress={this.back.bind(this)}>
           {/*Donute Button Image */}
-          <FontAwesomeIcon
-            icon={faChevronLeft}
-            size={30}
-            style={{color: '#3F0050'}}
-          />
+          <FontAwesomeIcon icon={faChevronLeft} size={BasicStyles.iconSize} style={[BasicStyles.iconStyle, {
+            color: Color.primary
+          }]} />
         </TouchableOpacity>
       </View>
     );
@@ -61,10 +44,7 @@ const CreateRequestStack = createStackNavigator({
       title: 'Create Request',
       drawerLabel: 'Create Request',
       headerLeft: <HeaderOptions navigationProps={navigation} />,
-      headerStyle: {
-        backgroundColor: 'white',
-      },
-      headerTintColor: '#4c4c4c',
+      ...BasicStyles.headerDrawerStyle
     }),
   },
 });

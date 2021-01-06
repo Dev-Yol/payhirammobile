@@ -13,7 +13,8 @@ export default {
   notificationsRetrieve: apiUrl + 'notifications/retrieve',
   notificationUpdate: apiUrl + 'notifications/update',
   messagesRetrieve: apiUrl + 'messenger_groups/retrieve_summary_payhiram',
-  ledgerSummaryRetrieve: apiUrl + 'ledgers/summary',
+  ledgerSummary: apiUrl + 'ledger/summary',
+  ledgerHistory: apiUrl + 'ledger/history',
   requestRetrieve: apiUrl + 'requests/retrieve',
   transactionRetrieve: apiUrl + 'ledger/summary_ledger',
   requestCreate: apiUrl + 'requests/create',
@@ -55,5 +56,6 @@ export default {
   productsRetrieve: apiUrl + 'products/retrieve',
   productsRetrieveBasic: apiUrl + 'products/retrieve_basic',
   accountUpdateEmail: apiUrl + 'accounts/update_email',
-  
+  circleRetrieve: apiUrl + 'my_circle/retrieve',
+  circleCreate: apiUrl + 'my_circle/create',
 };

@@ -32,18 +32,8 @@ export default {
     {
       title: 'Settings',
       route: 'Settings',
-    },
-    {
-      title: 'Terms and Conditions',
-      route: 'TermsAndConditions',
-    },
+    }
     
-  ],
-  currency: [
-    {
-      title: 'Philippine Peso',
-      value: 'PHP',
-    },
   ],
   currency: [{
     title: 'Philippine Peso',
@@ -54,9 +44,8 @@ export default {
   },
   MAXIMUM_DEPOSIT: 500000,
   MAXIMUM_WITHDRAWAL: 500000,
-  payhiramCharges: {
-    percentage: 0.2,
-  },
+  payhiramShare: 0.2,
+  partnerShare: 0.8,
   fulfillmentTypes: [
     {
       value: 1,
@@ -162,14 +151,60 @@ export default {
     },
   ],
   MessengerMenu: [{
-    title: 'Add / View Requirements',
-    payload: 'same_page',
-    payload_value: 'requirements'
-  }, {
-    title: 'Details',
-    payload: 'redirect',
-    payload_value: 'RequestItem'
-  }],
+      title: 'Add / View Requirements',
+      payload: 'same_page',
+      payload_value: 'requirements'
+    },
+    {
+      title: 'Details',
+      payload: 'redirect',
+      payload_value: 'RequestItem'
+    },
+    {
+      title: 'Transfer funds',
+      payload: 'redirect',
+      payload_value: 'TransferFunds'
+    },
+    {
+      title: 'Rate',
+      payload: 'redirect',
+      payload_value: 'reviewsStack'
+    },
+    {
+      title: 'Close',
+      payload: 'same_page',
+      payload_value: 'close'
+    }
+  ],
+  requirementsMenu: [
+    {
+      title: 'On App Signature',
+      payload: 'same_page',
+      payload_value: 'signature',
+      button: {
+        title: 'Add',
+        color: Color.success
+      }
+    },
+    {
+      title: 'Receiver Picture',
+      payload: 'redirect',
+      payload_value: 'receiver_picture',
+      button: {
+        title: 'Add',
+        color: Color.success
+      }
+    },
+    {
+      title: 'Valid ID',
+      payload: 'redirect',
+      payload_value: 'valid_id',
+      button: {
+        title: 'Delete',
+        color: Color.danger
+      }
+    }
+  ],
   payments: [
     {
       title: 'UnionBank of the Philippines',
