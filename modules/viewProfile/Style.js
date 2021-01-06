@@ -8,7 +8,7 @@ export default StyleSheet.create({
     },
     headerContainer: {
         width: width,
-        height: width - 110,
+        height: width - 70,
         backgroundColor: Color.primary,
         alignContent: 'center',
         alignItems: 'center',
