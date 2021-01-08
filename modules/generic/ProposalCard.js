@@ -107,15 +107,13 @@ class ProposalCard extends Component {
               <Button
                 title={'View Profile'}
                 onClick={() => {this.props.navigation.navigate('viewProfileStack', {
-                  data: item
+                  user: item
                 })}}
                 style={{
                   width: '45%',
                   marginRight: '5%'
                 }}
               />
-
-
               <Button
                 title={'Accept'}
                 onClick={() => {this.props.onAcceptRequest()}}

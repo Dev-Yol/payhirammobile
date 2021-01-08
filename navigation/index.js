@@ -69,7 +69,6 @@ const LocationWithMapStack = createStackNavigator(
     navigationOptions: {},
   },
 );
-
 // Manifest of possible screens
 const PrimaryNav = createStackNavigator(
   {
@@ -100,7 +99,7 @@ const PrimaryNav = createStackNavigator(
     qrCodeScannerStack: {screen: QRCodeScannerStack},
     addLocationStack: {screen: AddLocationStack},
     locationWithMapStack: {screen: LocationWithMapStack},
-    paymentMethodsStack: { screen: PaymentMethodsStack },
+    paymentMethodsStack: { screen: PaymentMethodsStack }
   },
   {
     // Default config for all screens
