@@ -68,9 +68,7 @@ class Dashboard extends Component {
       account_code: user.code
     };
     this.setState({isLoading: true});
-    console.log('parameter', parameter)
     Api.request(Routes.ledgerSummary, parameter, (response) => {
-      console.log('response', response)
       this.setState({isLoading: false});
       if (response != null) {
         setLedger(response.data[0]);
@@ -78,7 +76,6 @@ class Dashboard extends Component {
         setLedger(null);
       }
     }, error => {
-      console.log('response', error)
       this.setState({isLoading: false});
     });
   };
@@ -91,7 +88,8 @@ class Dashboard extends Component {
     }
     let parameter = {
       account_id: user.id,
-      account_code: user.code
+      account_code: user.code,
+      limit: 5
     };
     Api.request(Routes.ledgerHistory, parameter, (response) => {
       if (response != null) {
@@ -173,6 +171,7 @@ class Dashboard extends Component {
   }
 
   renderTransactionHeader(){
+    const {user} = this.props.state;
     return(
       <View style={{
         flexDirection: 'row',
@@ -194,7 +193,7 @@ class Dashboard extends Component {
           style={{
             width: '30%'
           }}
-          onPress={() => {this.redirect("transactionsStack")
+          onPress={() => {this.redirect("transactionsStack", {user: user})
         }}>
           <Text style={{
             width: '100%',
@@ -239,7 +238,6 @@ class Dashboard extends Component {
               )
             }
 
-            
             <QRCodeModal redirect={this.redirect} />
           </View>
         </ScrollView>

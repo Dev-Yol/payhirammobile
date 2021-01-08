@@ -37,6 +37,7 @@ class Groups extends Component{
       this.setState({isLoading: false, data: response.data});
       const { setMessenger } = this.props;
       const { messenger } = this.props.state;
+      console.log('messenger test', setMessenger, 'sadffffffffff', messenger, 'data', response.data)
       if(response.data !== null){
         var counter = 0
         for (var i = 0; i < response.data.length; i++) {
@@ -70,6 +71,7 @@ class Groups extends Component{
   }
 
   viewMessages = (item) => {
+    console.log('itemmmmmsss', item)
     const { setMessengerGroup } = this.props;
     console.log('message group', item);
     this.updateLastMessageStatus(item)
@@ -112,7 +114,7 @@ class Groups extends Component{
                       marginLeft: 10
                     }}>{item.total_unread_messages}</Text>
                   )
-                }
+                }                                                                                                                                                                 
                 {
                   parseInt(item.total_unread_messages) > 0 && Platform.OS == 'ios' && (
                     <View style={{

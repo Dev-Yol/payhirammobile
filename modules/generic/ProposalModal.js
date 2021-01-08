@@ -43,7 +43,6 @@ class ProposalModal extends Component {
       status: 'requesting',
       account_id: user.id
     }
-    console.log('parameter', parameter)
     this.props.loading(true)
     Api.request(Routes.requestPeerCreate, parameter, (response) => {
       this.props.loading(false)
@@ -52,7 +51,6 @@ class ProposalModal extends Component {
     },
     error => {
       this.props.loading(false)
-      console.log('response', error)
     }
     );
   }

@@ -15,6 +15,7 @@ import {UserImage, Rating} from 'components';
 import RequestCard from 'modules/generic/RequestCard';
 import ProposalCard from 'modules/generic/ProposalCard';
 import ProposalModal from 'modules/generic/ProposalModal';
+import ConfirmationModal from 'components/Modal/ConfirmationModal.js';
 
 const width = Math.round(Dimensions.get('window').width);
 const height = Math.round(Dimensions.get('window').height);
@@ -27,7 +28,26 @@ class RequestItem extends Component {
       isLoading: false,
       connectSelected: null,
       connectModal: false,
-    };
+      isConfirmationModal: false,
+      isConfirm: false
+    }
+  }
+  confirm = () => {
+    this.setState({isConfirmationModal: true})
+    this.viewMessages()
+  }
+
+  viewMessages = () => {
+    this.closeModal()
+    const { setMessengerGroup } = this.props;
+    setMessengerGroup();
+    setTimeout(() => {
+      this.props.navigation.navigate('messagesStack');
+    }, 500)
+  }
+
+  closeModal = () => {
+    this.setState({isConfirmationModal: false})
   }
 
   connectRequest = () => {
@@ -41,10 +61,16 @@ class RequestItem extends Component {
   };
 
   acceptRequest = () => {
+    this.confirm()
+  }
 
+  componentDidMount() {
+    // console.log('requests-----> ', this.props.state)
   }
 
   render() {
+    const {user} = this.props.state;
+    const { isConfirmationModal } = this.state;
     const { data } = this.props.navigation.state.params;
     const { connectModal } = this.state;
     return (
@@ -61,6 +87,7 @@ class RequestItem extends Component {
                 onConnectRequest={() => this.connectRequest()}
                 data={data}
                 navigation={this.props.navigation}
+
                 />
             </View>
 
@@ -84,11 +111,29 @@ class RequestItem extends Component {
                 onAcceptRequest={() => this.acceptRequest()}
                 navigation={this.props.navigation}
                 />
+                {isConfirmationModal ?
+                <ConfirmationModal
+                  visible={isConfirmationModal}
+                  title={'Confirmation Message'}
+                  message={'Are you sure you want to accept this request?'}
+                  onCLose={() => {
+                    this.closeModal()
+                  }}
+                  onConfirm={() => {
+                    // this.closeModal()
+                    this.viewMessages()
+                  }}
+                /> : null }
             </View>
           </View>
         </ScrollView>
         <ProposalModal
           visible={connectModal}
+          loading={(flag) => this.setState({
+            isLoading: flag
+          })}
+          data = {this.state.connectSelected}
+          navigation={this.props.navigation}
           closeModal={() =>
             this.setState({
               connectModal: false,
@@ -98,5 +143,13 @@ class RequestItem extends Component {
     );
   }
 }
+const mapStateToProps = (state) => ({state: state});
 
-export default RequestItem;
+const mapDispatchToProps = (dispatch) => {
+  const {actions} = require('@redux');
+  return {
+    setMessengerGroup: (messengerGroup) => dispatch(actions.setMessengerGroup(messengerGroup))
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(RequestItem);

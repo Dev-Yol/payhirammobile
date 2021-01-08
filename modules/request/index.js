@@ -247,7 +247,6 @@ class Requests extends Component {
   };
 
   connectRequest = (item) => {
-    // console.log(",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,", item);
     const { setRequest } = this.props;
     this.setState({
       connectSelected: item,
@@ -357,7 +356,7 @@ class Requests extends Component {
             renderItem={({item, index}) => (
               <View>
                 <RequestCard 
-                  onConnectRequest={(item) => this.connectRequest(item)}
+                  onConnectRequest={(item) => {this.connectRequest(item)}}
                   data={item}
                   navigation={this.props.navigation}
                   />

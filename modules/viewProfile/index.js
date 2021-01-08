@@ -77,7 +77,7 @@ class ViewProfile extends Component {
     )
   }
   render() {
-    const { user } = this.props.navigation.state.params
+    const {user} = this.props.navigation.state.params
     const { cards } = user.account
     const ratings = { stars: user.rating.stars }
     let stars = []

@@ -1,33 +1,45 @@
 import React, {Component} from 'react';
 import { View, Text, ScrollView, TextInput, TouchableOpacity} from 'react-native';
+import Api from 'services/api/index.js';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faCheckCircle, faUserCircle, faUpload } from '@fortawesome/free-solid-svg-icons';
-import { BasicStyles, Color } from 'common';
+import { BasicStyles, Color, Routes} from 'common';
 import Currency from 'services/Currency.js'
 import Styles from './Styles.js'
 import TransactionCard from 'modules/generic/TransactionCard';
-const sample = [{
-  id: 1,
-  amount: 500,
-  via: '****5678',
-  description: 'This is a test',
-  date: 'August 9, 2020 5:00 PM',
-  currency: 'PHP'
-}, {
-  id: 2,
-  amount: 600,
-  via: '****5678',
-  description: 'This is a test',
-  date: 'August 9, 2020 5:00 PM',
-  currency: 'PHP'
-}]
+// const sample = [{
+//   id: 1,
+//   amount: 500,
+//   via: '****5678',
+//   description: 'This is a test',
+//   date: 'August 9, 2020 5:00 PM',
+//   currency: 'PHP'
+// }, {
+//   id: 2,
+//   amount: 600,
+//   via: '****5678',
+//   description: 'This is a test',
+//   date: 'August 9, 2020 5:00 PM',
+//   currency: 'PHP'
+// }]
+
+
 class Transactions extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: sample
+      data: []
     };
   }
+
+  componentDidMount(){
+    console.log('user hereitis', JSON.stringify(this.props.routes))
+    // const {user} = this.props;
+    // if (user != null) {
+    this.retrieveLedgerHistory({created_at: 'desc'}, {column: 'created_at', value: ''})
+    // }
+  }
+
   onChange(item, type){
     if(type == 'gender'){
       this.setState({gender: item});
@@ -36,8 +48,42 @@ class Transactions extends Component {
     }
   }
 
+  retrieveLedgerHistory = (sort, filter) => {
+    // const { user } = this.props.state
+    let key = Object.keys(sort)
+    // if (user == null) {
+    //   return;
+    // }
+    let parameter = {
+      // account_id: this.user.userID,
+      offset: 0,
+      limit: 50,
+      sort: {
+        column: key[0],
+        value: sort[key[0]]
+      },
+      value: filter.value + '%',
+      column: filter.column
+    };
+    Api.request(Routes.transactionRetrieve, parameter, (response) => {
+      console.log('history all', response)
+      if (response != null) {
+        this.setState({
+          data: response.data
+        })
+      } else {
+        this.setState({
+          data: []
+        })
+      }
+    }, error => {
+      console.log('response', error)
+    });
+  };
+
   render() {
     const { data } = this.state;
+    console.log('data ni dir', this.state)
     return (
       <View>
         <ScrollView showsHorizontalScrollIndicator={false}>
