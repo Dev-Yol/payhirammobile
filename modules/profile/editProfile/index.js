@@ -18,6 +18,7 @@ import {BasicStyles, Color} from 'common';
 import {Rating, DateTime} from 'components';
 import { connect } from 'react-redux';
 import UserImage from 'components/User/Image';
+import Button from 'components/Form/Button';
 
 class EditProfile extends Component {
   constructor(props) {
@@ -36,7 +37,7 @@ class EditProfile extends Component {
   }
 
   render() {
-    const { user } = this.props.state;
+    const { user, theme } = this.props.state;
     const {data} = [
       {
         title: 'Male',
@@ -55,7 +56,7 @@ class EditProfile extends Component {
               alignItems: 'center',
               paddingVertical: 10,
               width: '100%',
-              backgroundColor: Color.primary,
+              backgroundColor: theme ? theme.primary : Color.primary,
             }}>
 
             {
@@ -243,15 +244,17 @@ class EditProfile extends Component {
               </View>
             </TouchableOpacity>
           </View>
-          <TouchableHighlight
-            style={[
-              BasicStyles.btn,
-              BasicStyles.btnSecondary,
-              {alignSelf: 'center'},
-            ]}
-            underlayColor={Color.gray}>
-            <Text style={BasicStyles.textWhite}>Update</Text>
-          </TouchableHighlight>
+
+          <Button 
+              title={'Update'}
+              onClick={() => {}}
+              style={{
+                width: '90%',
+                marginRight: '5%',
+                marginLeft: '5%',
+                backgroundColor: theme ? theme.secondary : Color.secondary
+              }}
+            />
         </ScrollView>
       </View>
     );
