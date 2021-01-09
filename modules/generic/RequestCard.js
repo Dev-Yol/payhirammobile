@@ -13,13 +13,14 @@ class RequestCard extends Component {
   }
 
   _header = (item, type) => {
+    const { theme } = this.props.state;
     return (
       <View>
         <View style={{flexDirection: 'row', marginTop: 10}}>
-          <UserImage user={item.account} />
+          <UserImage user={item.account} color={theme ? theme.primary : Color.primary}/>
           <Text
             style={{
-              color: Color.primary,
+              color: theme ? theme.primary : Color.primary,
               lineHeight: 30,
               paddingLeft: 10,
               width: '40%',
@@ -33,7 +34,7 @@ class RequestCard extends Component {
             {type == 'amount' && (
               <Text
                 style={{
-                  color: Color.secondary,
+                  color: theme ? theme.secondary : Color.secondary,
                   fontWeight: 'bold',
                   textAlign: 'right',
                   lineHeight: 30,
@@ -58,12 +59,12 @@ class RequestCard extends Component {
   };
 
   _subHeader = (item) => {
-    const {user} = this.props.state;
+    const {user, theme} = this.props.state;
     return (
       <View>
         <Text
           style={{
-            color: Color.primary,
+            color: theme ? theme.primary : Color.primary,
           }}>
           {Helper.showRequestType(item.type)}
         </Text>
@@ -123,7 +124,7 @@ class RequestCard extends Component {
   };
 
   _footer = (item) => {
-    const {user} = this.props.state;
+    const {user, theme} = this.props.state;
     return (
       <View>
         <View
@@ -144,7 +145,7 @@ class RequestCard extends Component {
                 underlayColor={Color.gray}
                 style={[BasicStyles.standardButton, 
                   {
-                    backgroundColor: Color.secondary
+                    backgroundColor: theme ? theme.secondary : Color.secondary
                   }]}>
                 <Text
                   style={{

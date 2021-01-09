@@ -1,10 +1,11 @@
 import {StyleSheet} from 'react-native';
+import { Color } from 'common';
 
 const styles = StyleSheet.create({
   Circle: {
-    height: 50-(50*0.30),
-    width: 50-(50*0.30),
-    borderRadius: 50,
+    height:30,
+    width: 30,
+    borderRadius: 15,
   },
   SettingTileContainer: {
     // height: 130,
@@ -13,7 +14,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: '3%',
     paddingVertical: '2%',
     borderBottomWidth: 1,
-    borderColor: '#E9E9E9',
+    borderColor: Color.lightGray,
   },
   ThemeDetailsContainer: {
     width: '70%',

@@ -143,7 +143,7 @@ class CreateRequest extends Component {
   };
 
   render() {
-    const { ledger } = this.props.state;
+    const { ledger, theme } = this.props.state;
     return (
       <View style={{
         flex: 1
@@ -314,7 +314,7 @@ class CreateRequest extends Component {
                 onClick={() => this.createRequest()}
                 title={'Post'}
                 style={{
-                  backgroundColor: Color.secondary
+                  backgroundColor: theme ? theme.secondary : Color.secondary
                 }}
               />
             </View>

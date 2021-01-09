@@ -4,10 +4,12 @@ import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faChevronRight} from '@fortawesome/free-solid-svg-icons';
 import styles from 'modules/settings/Styles.js';
 import { BasicStyles, Color } from 'common';
+import {connect} from 'react-redux';
 
 class SettingTile extends Component {
   render() {
     const { item } = this.props;
+    const { theme } = this.props.state;
     return (
       <TouchableOpacity
         style={styles.container}
@@ -16,7 +18,7 @@ class SettingTile extends Component {
           flexDirection: 'row',
           width: '80%'
         }}>
-          <FontAwesomeIcon icon={item.icon} size={18} color={Color.secondary}/>
+          <FontAwesomeIcon icon={item.icon} size={18} color={theme ? theme.secondary : Color.secondary}/>
           <Text style={{
             fontSize: BasicStyles.standardFontSize,
             paddingLeft: 5
@@ -34,4 +36,14 @@ class SettingTile extends Component {
   }
 }
 
-export default SettingTile;
+
+const mapStateToProps = (state) => ({state: state});
+
+const mapDispatchToProps = (dispatch) => {
+  const {actions} = require('@redux');
+  return {
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SettingTile);
+

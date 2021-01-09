@@ -82,6 +82,7 @@ class Groups extends Component{
   }
 
   _card = (item) => {
+    const { theme } = this.props.state;
     return (
       <View>
         <TouchableHighlight
@@ -90,14 +91,14 @@ class Groups extends Component{
           >
           <View>
             <View style={{flexDirection: 'row', marginTop: 5, paddingLeft: 10, paddingRight: 10}}>
-              <UserImage user={item.title}/>
+              <UserImage user={item.title} color={theme ? theme.primary : Color.primary}/>
               <View style={{
                 paddingLeft: 10,
                 width: '30%',
                 flexDirection: 'row'
               }}>
                 <Text style={{
-                  color: Color.primary,
+                  color: theme ? theme.primary : Color.primary,
                   lineHeight: 30,
                 }}>{item.title.username.length > 10 ? item.title.username.substr(0, 10) + '...' : item.title.username}</Text>
                 {

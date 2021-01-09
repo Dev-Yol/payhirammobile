@@ -16,14 +16,15 @@ class HeaderOptions extends Component {
     this.props.navigationProps.pop()
   };
   render() {
+    const { theme } = this.props.state;
     return (
       <View style={{flexDirection: 'row'}}>
         <TouchableOpacity onPress={this.back.bind(this)}>
           {/*Donute Button Image */}
           <FontAwesomeIcon
             icon={faChevronLeft}
-            size={BasicStyles.iconSize}
-            style={BasicStyles.iconStyle}
+            size={BasicStyles.headerBackIconSize}
+            style={{color: theme ? theme.primary : Color.primary }}
           />
         </TouchableOpacity>
       </View>
@@ -37,13 +38,14 @@ const mapDispatchToProps = (dispatch) => {
   const {actions} = require('@redux');
   return {};
 };
+let HeaderOptionsConnect  = connect(mapStateToProps, mapDispatchToProps)(HeaderOptions);
 
 const TermsAndConditionsStack = createStackNavigator({
   termsAndConditionsScreen: {
     screen: TermsAndConditions,
     navigationOptions: ({navigation}) => ({
       title: 'Terms And Conditions',
-      headerLeft: <HeaderOptions navigationProps={navigation} />,
+      headerLeft: <HeaderOptionsConnect navigationProps={navigation} />,
       ...BasicStyles.headerDrawerStyle
     }),
   },

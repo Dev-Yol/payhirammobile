@@ -15,13 +15,16 @@ class HeaderOptions extends Component {
     this.props.navigationProps.pop();
   };
   render() {
+    const { theme } = this.props.state;
     return (
       <View style={{ flexDirection: 'row' }}>
         <TouchableOpacity onPress={this.back.bind(this)}>
           {/*Donute Button Image */}
-          <FontAwesomeIcon icon={faChevronLeft} size={BasicStyles.iconSize} style={[BasicStyles.iconStyle, {
-            color: Color.primary
-          }]} />
+          <FontAwesomeIcon
+            icon={faChevronLeft}
+            size={BasicStyles.headerBackIconSize}
+            style={{color: theme ? theme.primary : Color.primary }}
+          />
         </TouchableOpacity>
       </View>
     );
@@ -37,13 +40,15 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
+let HeaderOptionsConnect  = connect(mapStateToProps, mapDispatchToProps)(HeaderOptions);
+
 const CreateRequestStack = createStackNavigator({
   createRequestScreen: {
     screen: CreateRequest,
     navigationOptions: ({navigation}) => ({
       title: 'Create Request',
       drawerLabel: 'Create Request',
-      headerLeft: <HeaderOptions navigationProps={navigation} />,
+      headerLeft: <HeaderOptionsConnect navigationProps={navigation} />,
       ...BasicStyles.headerDrawerStyle
     }),
   },

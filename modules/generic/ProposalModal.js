@@ -56,7 +56,7 @@ class ProposalModal extends Component {
   }
 
   renderContent() {
-    const { ledger } = this.props.state;
+    const { ledger, theme } = this.props.state;
     return (
       <View style={[Style.CreateRequestContainer, {
           width: '100%',
@@ -182,7 +182,7 @@ class ProposalModal extends Component {
                         textAlign: 'right',
                         fontSize: BasicStyles.standardFontSize,
                         fontWeight: 'bold',
-                        color: Color.secondary
+                        color: theme ? theme.secondary : Color.secondary
                       }}>
                       {
                         Currency.display(this.state.charge, 'PHP')
@@ -219,7 +219,7 @@ class ProposalModal extends Component {
                 style={{
                   width: '45%',
                   marginLeft: '5%',
-                  backgroundColor: Color.secondary
+                  backgroundColor: theme ? theme.secondary : Color.secondary
                 }}
               />
 

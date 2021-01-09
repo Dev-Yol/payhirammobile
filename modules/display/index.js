@@ -1,25 +1,31 @@
 import React, { Component } from 'react';
-import { View, Text, TextInput, StyleSheet } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Dimensions, ScrollView } from 'react-native';
 import { connect } from 'react-redux'
 import ThemeSettingTile from 'modules/display/ThemeSettingTile.js';
 import { H1 } from 'native-base';
+const height = Math.round(Dimensions.get('window').height);
 
 const dummyThemeData = [
   {
-    title: 'Increment',
-    details: 'Magenta, Light Green, Yellow, Black',
+    title: 'Increment Mode',
+    details: 'Add description here',
     colors: ['#3F0050', '#22B173', '#F2C94C', '#000000'],
   },
   {
-    title: 'Night Mode',
-    details: 'Black, Yellow, White, Gray',
-    colors: ['#000000', '#F2C94C', '#F2F2F2', '#828282'],
+    title: 'Beach Model',
+    details: 'Add description here',
+    colors: ['#03D5BD', '#0B62BB', '#529AEC', '#000000'],
   },
   {
-    title: 'Daylight Mode',
-    details: 'White, Yellow, Gray, Black',
-    colors: ['#FFFFFF', '#F2C94C', '#4F4F4F', '#000000'],
+    title: 'Flirty Mode',
+    details: 'Add description here',
+    colors: ['#9A50CC', '#E768D1', '#6E79E0', '#000000'],
   },
+  {
+    title: 'Concealed Mode',
+    details: 'Add description here',
+    colors: ['#074689', '#FDB7A1', '#F8EEBE', '#000000'],
+  }
 ];
 class Display extends Component {
   constructor(props) {
@@ -38,6 +44,7 @@ class Display extends Component {
       tertiary: _theme[2],
       fourth: _theme[3]
     });
+    console.log(_theme)
     this.setState({selectedTile: index});
   };
 
@@ -57,7 +64,22 @@ class Display extends Component {
     });
   };
   render() {
-    return <View>{this.displayThemeTiles()}</View>;
+    return (
+      <View>
+        <ScrollView
+          showsVerticalScrollIndicator={false}>
+          <View
+          style={{
+            height: height + 25,
+            flex: 1
+          }}
+
+          >
+            {this.displayThemeTiles()}
+          </View>
+        </ScrollView>
+      </View>
+    )
   }
 }
 

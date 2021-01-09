@@ -171,7 +171,7 @@ class Dashboard extends Component {
   }
 
   renderTransactionHeader(){
-    const {user} = this.props.state;
+    const {user, theme} = this.props.state;
     return(
       <View style={{
         flexDirection: 'row',
@@ -198,7 +198,7 @@ class Dashboard extends Component {
           <Text style={{
             width: '100%',
             textAlign: 'right',
-            color: Color.secondary,
+            color: theme ? theme.secondary : Color.secondary,
             fontWeight: 'bold'
           }}>View More</Text>
         </TouchableOpacity>
