@@ -97,6 +97,7 @@ export default {
     color: Color.white
   },
   iconSize: 24,
+  headerBackIconSize: 30,
   iconStyle: {
     color: Color.primary,
     paddingLeft: 20,

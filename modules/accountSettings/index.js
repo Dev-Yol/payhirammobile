@@ -9,8 +9,6 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import { Routes, Color, Helper, BasicStyles } from 'common';
-import AccountSettingsInput from 'modules/accountSettings/AccountSettingsInput.js';
-import AccountSettingsButton from 'modules/accountSettings/AccountSettingsButton.js';
 import styles from 'modules/accountSettings/Styles.js';
 import PasswordWithIcon from 'components/InputField/Password.js';
 import Api from 'services/api/index.js';
@@ -100,7 +98,7 @@ class AccountSettings extends Component {
 
 
   render() {
-    let { user } = this.props.state;
+    let { user, theme } = this.props.state;
 
     return (
       <ScrollView style={{ flex: 1, paddingTop: 10 }}>
@@ -127,7 +125,7 @@ class AccountSettings extends Component {
 
           <Button 
             style={{
-              backgroundColor: Color.secondary,
+              backgroundColor: theme ? theme.secondary : Color.secondary,
               marginTop: 15,
               marginBottom: 15
             }}
@@ -155,7 +153,7 @@ class AccountSettings extends Component {
 
           <Button 
             style={{
-              backgroundColor: Color.secondary
+              backgroundColor: theme ? theme.secondary : Color.secondary
             }}
             title={'Change Password'}
             onClick={() => this.updatePassword}/>

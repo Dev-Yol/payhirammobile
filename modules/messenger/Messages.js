@@ -327,9 +327,10 @@ class Messages extends Component{
   }
 
   _headerRight = (item) => {
+    const { theme } = this.props.state;
     return (
       <View style={{flexDirection: 'row', marginTop: 10}}>
-        <UserImage user={item.account}/>
+        <UserImage user={item.account} color={theme ? theme.primary : Color.primary}/>
         <Text style={{
           lineHeight: 30,
           paddingLeft: 10
@@ -339,18 +340,20 @@ class Messages extends Component{
   }
 
   _headerLeft = (item) => {
+    const { theme } = this.props.state;
     return (
       <View style={{flexDirection: 'row', marginTop: 10, justifyContent: 'flex-end' }}>
         <Text style={{
           lineHeight: 30,
           paddingRight: 10
         }}>{item.account.username}</Text>
-        <UserImage user={item.account}/>
+        <UserImage user={item.account} color={theme ? theme.primary : Color.primary}/>
       </View>
     );
   }
 
   _rightTemplate = (item) => {
+    const { theme } = this.props.state;
     return (
       <View>
         {this._headerRight(item)}
@@ -359,13 +362,19 @@ class Messages extends Component{
         }]}>{item.created_at_human}</Text>
         {
           item.message != null && Platform.OS == 'android' && (
-            <Text style={Style.messageTextRight}>{item.message}</Text>
+            <Text style={[Style.messageTextRight, {
+              backgroundColor: theme ? theme.primary : Color.primary
+            }]}>{item.message}</Text>
           )
         }
         {
           item.message != null && Platform.OS == 'ios' && (
-            <View style={Style.messageTextRight}>
-                <Text style={Style.messageTextRightIOS}>{item.message}</Text>
+            <View style={[Style.messageTextRight, {
+              backgroundColor: theme ? theme.primary : Color.primary
+            }]}>
+                <Text style={[Style.messageTextLeftIOS, {
+                  backgroundColor: theme ? theme.primary : Color.primary
+                }]}>{item.message}</Text>
             </View>
           )
         }
@@ -377,6 +386,7 @@ class Messages extends Component{
   }
 
   _leftTemplate = (item) => {
+    const { theme } = this.props.state;
     return (
       <View>
         {this._headerLeft(item)}
@@ -385,13 +395,19 @@ class Messages extends Component{
         }]}>{item.created_at_human}</Text>
         {
           item.message != null && Platform.OS == 'android' && (
-            <Text style={Style.messageTextLeft}>{item.message}</Text>
+            <Text style={[Style.messageTextLeft, {
+              backgroundColor: theme ? theme.primary : Color.primary
+            }]}>{item.message}</Text>
           )
         }
         {
           item.message != null && Platform.OS == 'ios' && (
-            <View style={Style.messageTextLeft}>
-                <Text style={Style.messageTextLeftIOS}>{item.message}</Text>
+            <View style={[Style.messageTextLeft, {
+              backgroundColor: theme ? theme.primary : Color.primary
+            }]}>
+                <Text style={[Style.messageTextLeftIOS, {
+                  backgroundColor: theme ? theme.primary : Color.primary
+                }]}>{item.message}</Text>
             </View>
           )
         }
@@ -525,6 +541,7 @@ class Messages extends Component{
   }
 
   _footer = () => {
+    const { theme } = this.props.state;
     return (
       <View style={{
         flexDirection: 'row' 
@@ -542,7 +559,7 @@ class Messages extends Component{
             icon={ faImage }
             size={BasicStyles.iconSize}
             style={{
-              color: Color.primary
+              color: theme ? theme.primary : Color.primary
             }}
             />
         </TouchableOpacity>
@@ -565,7 +582,7 @@ class Messages extends Component{
             icon={ faPaperPlane }
             size={BasicStyles.iconSize}
             style={{
-              color: Color.primary
+              color: theme ? theme.primary : Color.primary
             }}
             />
         </TouchableOpacity>

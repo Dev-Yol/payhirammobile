@@ -15,11 +15,15 @@ class HeaderOptions extends Component {
     this.props.navigationProps.navigate('drawerStack');
   };
   render() {
+    const { theme } = this.props.state;
     return (
       <View style={{ flexDirection: 'row' }}>
         <TouchableOpacity onPress={this.back.bind(this)}>
           {/*Donute Button Image */}
-          <FontAwesomeIcon icon={ faChevronLeft } size={BasicStyles.iconSize} style={BasicStyles.iconStyle}/>
+          <FontAwesomeIcon
+          icon={ faChevronLeft }
+          size={BasicStyles.headerBackIconSize}
+          style={{color: theme ? theme.primary : Color.primary }} />
         </TouchableOpacity>
       </View>
     );
@@ -54,6 +58,9 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
+
+let HeaderOptionsConnect  = connect(mapStateToProps, mapDispatchToProps)(HeaderOptions);
+
 let HeaderRightWithRedux = connect(
   mapStateToProps,
   mapDispatchToProps
@@ -64,7 +71,7 @@ const NotificationStack = createStackNavigator({
     screen: Notifications, 
     navigationOptions: ({ navigation }) => ({
       title: 'Notifications',
-      headerLeft: <HeaderOptions navigationProps={navigation} />,
+      headerLeft: <HeaderOptionsConnect navigationProps={navigation} />,
       headerRight: <HeaderRightWithRedux navigationProps={navigation} />,
       drawerLabel: 'Notifications',
       headerStyle: {

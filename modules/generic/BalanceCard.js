@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import styles from './BalanceCardStyle';
 import Currency from 'services/Currency';
+import {connect} from 'react-redux';
+import { Color } from 'common';
 
 class BalanceCard extends Component {
   constructor(props) {
@@ -10,9 +12,12 @@ class BalanceCard extends Component {
 
   render() {
     const { data } = this.props;
+    const { theme } = this.props.state;
     return (
       <View
-        style={styles.CardContainer}>
+        style={[styles.CardContainer, {
+          backgroundColor: theme ? theme.secondary : Color.secondary
+        }]}>
         <Text style={styles.AvailableBalanceTextStyle}>
           Available Balance
         </Text>
@@ -31,4 +36,12 @@ class BalanceCard extends Component {
   }
 }
 
-export default BalanceCard;
+const mapStateToProps = (state) => ({state: state});
+
+const mapDispatchToProps = (dispatch) => {
+  const {actions} = require('@redux');
+  return {
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(BalanceCard);

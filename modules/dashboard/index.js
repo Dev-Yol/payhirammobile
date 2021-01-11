@@ -171,7 +171,7 @@ class Dashboard extends Component {
   }
 
   renderTransactionHeader(){
-    const {user} = this.props.state;
+    const {user, theme} = this.props.state;
     return(
       <View style={{
         flexDirection: 'row',
@@ -198,7 +198,7 @@ class Dashboard extends Component {
           <Text style={{
             width: '100%',
             textAlign: 'right',
-            color: Color.secondary,
+            color: theme ? theme.secondary : Color.secondary,
             fontWeight: 'bold'
           }}>View More</Text>
         </TouchableOpacity>
@@ -208,7 +208,7 @@ class Dashboard extends Component {
 
   render() {
     const { showRatings, isLoading, history } = this.state;
-    const { ledger } = this.props.state;
+    const { ledger, theme } = this.props.state;
     return (
       <View>
         <ScrollView 
@@ -251,7 +251,7 @@ class Dashboard extends Component {
               height: 125,
               borderTopLeftRadius: 15,
               borderTopRightRadius: 15,
-              backgroundColor: Color.primary,
+              backgroundColor: theme ? theme.primary : Color.primary,
               width: '100%',
               zIndex: 10
             }}>
@@ -261,7 +261,7 @@ class Dashboard extends Component {
                 alignItems: 'center'
               }}>
                 <Text style={{
-                  color: Color.secondary,
+                  color: theme ? theme.secondary : Color.secondary,
                   fontWeight: 'bold',
                   fontSize: 16,
                   paddingTop: 15,

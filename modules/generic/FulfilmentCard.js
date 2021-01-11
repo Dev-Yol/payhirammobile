@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import styles from './FulfilmentCardStyle.js';
 import { BasicStyles, Helper, Color } from 'common';
+import {connect} from 'react-redux';
 
 const Data = [{
     type: 'Send',
@@ -35,6 +36,7 @@ class FulfilmentCard extends Component {
 
   render() {
     const { active } = this.state;
+    const { theme } = this.props.state;
     return (
       <View style={{
         flexDirection: 'row',
@@ -44,7 +46,7 @@ class FulfilmentCard extends Component {
           Data && Data.map((item, index) => (
            
             <TouchableOpacity
-              style={[styles.CardContainer, {backgroundColor: index === active ? Color.primary : Color.secondary}]}
+              style={[styles.CardContainer, {backgroundColor: index === active ? (theme ? theme.primary : Color.primary) : (theme ? theme.secondary : Color.secondary)}]}
               onPress={() => {
                 this.onSelect(item, index);
               }}>
@@ -79,4 +81,12 @@ class FulfilmentCard extends Component {
   }
 }
 
-export default FulfilmentCard;
+const mapStateToProps = (state) => ({state: state});
+
+const mapDispatchToProps = (dispatch) => {
+  const {actions} = require('@redux');
+  return {
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(FulfilmentCard);
