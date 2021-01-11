@@ -34,7 +34,6 @@ class RequestItem extends Component {
   }
   confirm = () => {
     this.setState({isConfirmationModal: true})
-    this.viewMessages()
   }
 
   viewMessages = () => {
