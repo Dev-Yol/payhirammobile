@@ -9,7 +9,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import AccountSettings from 'modules/accountSettings';
 import {NavigationActions} from 'react-navigation';
-import {BasicStyles} from 'common';
+import {BasicStyles, Color} from 'common';
 import {connect} from 'react-redux';
 
 class HeaderOptions extends Component {
@@ -28,7 +28,7 @@ class HeaderOptions extends Component {
           <FontAwesomeIcon
             icon={faChevronLeft}
             size={BasicStyles.headerBackIconSize}
-            style={{color: theme ? theme.primary : Color.primary }}
+            style={{Color: theme ? theme.primary : Color.primary }}
           />
         </TouchableOpacity>
       </View>

@@ -33,7 +33,7 @@ class Transactions extends Component {
   }
 
   componentDidMount(){
-    console.log('user hereitis', JSON.stringify(this.props.routes))
+    console.log('user hereitis', JSON.stringify(this.props))
     // const {user} = this.props;
     // if (user != null) {
     this.retrieveLedgerHistory({created_at: 'desc'}, {column: 'created_at', value: ''})
@@ -66,7 +66,6 @@ class Transactions extends Component {
       column: filter.column
     };
     Api.request(Routes.transactionRetrieve, parameter, (response) => {
-      console.log('history all', response)
       if (response != null) {
         this.setState({
           data: response.data
@@ -83,7 +82,6 @@ class Transactions extends Component {
 
   render() {
     const { data } = this.state;
-    console.log('data ni dir', this.state)
     return (
       <View>
         <ScrollView showsHorizontalScrollIndicator={false}>
