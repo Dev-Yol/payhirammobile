@@ -14,17 +14,18 @@ const dummyThemeData = [
   {
     title: 'Beach Model',
     details: 'Add description here',
-    colors: ['#03D5BD', '#0B62BB', '#529AEC', '#000000'],
+    // colors: ['#0B62BB', '#529AEC', '#03D5BD', '#000000'],
+    colors: ['#0067B3', '#40B0DF', '#FFD53D', '#000000'],
   },
   {
     title: 'Flirty Mode',
     details: 'Add description here',
-    colors: ['#9A50CC', '#E768D1', '#6E79E0', '#000000'],
+    colors: ['#2f1387', '#FF5765', '#03D5BD', '#000000'],
   },
   {
     title: 'Concealed Mode',
     details: 'Add description here',
-    colors: ['#074689', '#FDB7A1', '#F8EEBE', '#000000'],
+    colors: ['#067d68', '#0fbd83', '#3bfeb8', '#000000'],
   }
 ];
 class Display extends Component {

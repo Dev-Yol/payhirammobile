@@ -69,6 +69,7 @@ class Dashboard extends Component {
     };
     this.setState({isLoading: true});
     Api.request(Routes.ledgerSummary, parameter, (response) => {
+      console.log(response.data, 'summaryLedger')
       this.setState({isLoading: false});
       if (response != null) {
         setLedger(response.data[0]);
@@ -92,6 +93,7 @@ class Dashboard extends Component {
       limit: 5
     };
     Api.request(Routes.ledgerHistory, parameter, (response) => {
+      console.log(response.data, 'ledgerHistory')
       if (response != null) {
         this.setState({
           history: response.data
@@ -171,7 +173,7 @@ class Dashboard extends Component {
   }
 
   renderTransactionHeader(){
-    const {user, theme} = this.props.state;
+    const {theme} = this.props.state;
     return(
       <View style={{
         flexDirection: 'row',
@@ -193,7 +195,7 @@ class Dashboard extends Component {
           style={{
             width: '30%'
           }}
-          onPress={() => {this.redirect("transactionsStack", {user: user})
+          onPress={() => {this.redirect("transactionsStack")
         }}>
           <Text style={{
             width: '100%',
@@ -237,12 +239,11 @@ class Dashboard extends Component {
                 </View>
               )
             }
-
             <QRCodeModal redirect={this.redirect} />
           </View>
         </ScrollView>
         {isLoading ? <Spinner mode="overlay" /> : null}
-        {
+        {/* {
           showRatings && (
             <View style={{
               position: 'absolute',
@@ -274,7 +275,7 @@ class Dashboard extends Component {
               </View>
             </View>
           )
-        }
+        } */}
       </View>
     );
   }
