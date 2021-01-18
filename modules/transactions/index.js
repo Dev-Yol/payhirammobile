@@ -99,5 +99,13 @@ class Transactions extends Component {
   }
 }
 
+const mapStateToProps = (state) => ({state: state});
 
-export default Transactions;
+const mapDispatchToProps = (dispatch) => {
+  const {actions} = require('@redux');
+  return {
+    setLedger: (ledger) => dispatch(actions.setLedger(ledger)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Transactions);
