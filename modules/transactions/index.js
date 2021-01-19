@@ -6,6 +6,7 @@ import { faCheckCircle, faUserCircle, faUpload } from '@fortawesome/free-solid-s
 import { BasicStyles, Color, Routes} from 'common';
 import Currency from 'services/Currency.js'
 import Styles from './Styles.js'
+import { connect } from 'react-redux';
 import TransactionCard from 'modules/generic/TransactionCard';
 // const sample = [{
 //   id: 1,
