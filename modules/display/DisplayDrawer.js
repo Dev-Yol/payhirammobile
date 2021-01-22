@@ -5,7 +5,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faChevronLeft} from '@fortawesome/free-solid-svg-icons';
 import Display from './';
 import {connect} from 'react-redux';
-import { BasicStyles } from 'common';
+import { BasicStyles, Color } from 'common';
 
 class HeaderOptions extends Component {
   constructor(props) {
