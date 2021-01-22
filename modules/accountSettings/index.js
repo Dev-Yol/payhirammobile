@@ -24,7 +24,7 @@ class AccountSettings extends Component {
       email: '',
       password: '',
       confirmPassword: '',
-      isLoading: false,
+      isLoading: false
     };
   }
   isValidEmail = () => {
@@ -70,6 +70,7 @@ class AccountSettings extends Component {
       this.state.password != '' &&
       this.state.confirmPassword != null &&
       this.state.confirmPassword != '' &&
+
       this.state.password === this.state.confirmPassword
     ) {
       const { user } = this.props.state;
@@ -96,7 +97,6 @@ class AccountSettings extends Component {
     }
   };
 
-
   render() {
     let { user, theme } = this.props.state;
 
@@ -105,14 +105,15 @@ class AccountSettings extends Component {
         <View style={[styles.AccountSettingsContainer, {height: height + 25}]}>
           {this.state.isLoading ? <Spinner mode="overlay" /> : null}
 
-         <TextInputWithLabel 
-            variable={user.username}
-            onChange={(value) => {}}
-            label={'Username'}
-            onError={false}
-            required={false}
-          />
-
+        <TextInputWithLabel 
+          variable={user.username}
+          onChange={(value) => {}}
+          label={'Username'}
+          selectTextOnFocus={false}
+          onError={false}
+          editable={false}
+          required={false}
+        />
 
           <TextInputWithLabel 
             variable={this.state.email}
@@ -121,18 +122,17 @@ class AccountSettings extends Component {
             onError={false}
             placeholder={'Enter Email address'}
             required={true}
+            editable={true}
           />
 
-          <Button 
+          <Button
             style={{
               backgroundColor: theme ? theme.secondary : Color.secondary,
               marginTop: 15,
               marginBottom: 15
             }}
             title={'Update Email'}
-            onClick={() => this.updateEmail}/>
-
-
+            onClick={() => this.updateEmail()}/>
 
           <PasswordWithIcon
             onTyping={(input) =>
@@ -141,7 +141,6 @@ class AccountSettings extends Component {
               })
             }
           />
-
 
           <PasswordWithIcon
             onTyping={(input) =>
@@ -156,7 +155,7 @@ class AccountSettings extends Component {
               backgroundColor: theme ? theme.secondary : Color.secondary
             }}
             title={'Change Password'}
-            onClick={() => this.updatePassword}/>
+            onClick={() => this.updatePassword()}/>
 
         </View>
       </ScrollView>
