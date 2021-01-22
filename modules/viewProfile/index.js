@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
 import { View, Text, ScrollView, Image, TouchableOpacity, TouchableHighlight, Dimensions } from 'react-native';
 import { BasicStyles, Color } from 'common';
+import UserImage  from 'components/User/Image.js';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faStar, faCheckCircle, faUserCircle, faChevronLeft, faAddressCard } from '@fortawesome/free-solid-svg-icons';
 import { faStar as faStarRegular, faAddressCard as faAddressCardOutline, faSmile as empty } from '@fortawesome/free-regular-svg-icons';
 import styles from './Style';
 import Config from 'src/config';
 import PersonalInformationCard from './PersonalInformationCard';
-import EducationalBackgroundCard from './EducationalBackgroundCard';
 import Button from 'components/Form/Button';
+import {connect} from 'react-redux';
+import { Rating } from 'components';
 
-const width = Math.round(Dimensions.get('window').width);
+const height = Math.round(Dimensions.get('window').height);
 class ViewProfile extends Component {
   state = {
     accepted: false
@@ -18,77 +20,64 @@ class ViewProfile extends Component {
   goBack = () => {
     this.props.navigation.pop();
   };
-  toggle = () => {
-    let status = this.state.accepted
-    this.setState({ accepted: !status })
-  }
-  
+
   render() {
-    const { user } = this.props.navigation.state.params
+    const { user, rating } = this.props.navigation.state.params
     const { cards } = user
+    const { theme } = this.props.state;
     return (
-      <>
-        <View style={[styles.headerButton ,{zIndex:1000}]}>
-          <TouchableOpacity onPress={this.goBack}>
-            <FontAwesomeIcon icon={faChevronLeft} color={Color.white} size={BasicStyles.iconSize} />
-          </TouchableOpacity>
-        </View>
+      <View>
         <ScrollView >
           <View style={styles.container}>
-            <View style={styles.headerContainer}>
-              <View 
-                style={[
-                  styles.sectionHeadingStyle,
-                  {
-                    paddingTop: 30
-                  }
-                ]}
-              >
-                {
-                 user &&  user.profile != null && user.profile.url != null && (
-                    <Image
-                      source={{ uri: Config.BACKEND_URL + user.profile.url }}
-                      style={[
-                        styles.image, 
-                        {
-                          borderRadius: 70,
-                          marginTop: 10
-                        }
-                      ]} />
-                    )
-                } 
-                {
-                  (user.profile == null || user.profile.url == null) && (
-                    <FontAwesomeIcon
-                      icon={faUserCircle}
-                      size={100}
-                      style={{
-                        color: Color.white,
-                        marginTop: 30
-                      }}
-                    />
-                  )
-                }
+            <View style={{
+              height: height / 3,
+              justifyContent: 'center',
+              alignItems: 'center',
+              backgroundColor: theme ? theme.primary : Color.primary
+            }}>
+              <View style={{
+              }}>
+                <UserImage user={user} color={Color.white} style={{
+                  width: 100,
+                  height: 100
+                }}
+                size={100}
+                />
               </View>
-              <Text style={styles.username}>{user.username}</Text>
-              <View style={[styles.verifiedContainer, { marginRight: 20, }]}>
-                <Text style={styles.verifiedText}>
-                  <FontAwesomeIcon
-                    icon={faCheckCircle}
-                    size={16}
-                    style={{
-                      backgroundColor: Color.white,
-                      color: Color.info,
-                      borderRadius: 20,
 
-                    }}
-                  />
-                  <Text style={{ fontSize: 16 }}>{' '}Verified</Text>
-                </Text>
+              <View style={{
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}>
+                <FontAwesomeIcon
+                  icon={faCheckCircle}
+                  size={16}
+                  style={{
+                    backgroundColor: Color.white,
+                    color: Color.info,
+                    borderRadius: 20,
+                  }}
+                />
+                <Text style={{
+                  marginLeft: 5,
+                  color: Color.white
+                }}>{user.username}</Text>
               </View>
+
+              <View>
+                <Rating ratings={rating} label={null}></Rating>
+              </View>
+
             </View>
+            
+            {
+              user.information && (
+                <PersonalInformationCard user={user}/>
+              )
+            }
+
           </View>
-          <PersonalInformationCard user={user}/>
 
         </ScrollView>
         <View style={{ 
@@ -111,10 +100,18 @@ class ViewProfile extends Component {
                 }}
               />
             </View>
-        </View> 
-      </>     
+        </View>
+      </View>
     );
   }
 }
+const mapStateToProps = (state) => ({state: state});
 
-export default ViewProfile
+const mapDispatchToProps = (dispatch) => {
+  const {actions} = require('@redux');
+  return {
+    setMessengerGroup: (messengerGroup) => dispatch(actions.setMessengerGroup(messengerGroup))
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ViewProfile);
