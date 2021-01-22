@@ -8,6 +8,8 @@ import styles from './Style';
 import Config from 'src/config';
 import PersonalInformationCard from './PersonalInformationCard';
 import EducationalBackgroundCard from './EducationalBackgroundCard';
+import Button from 'components/Form/Button';
+
 const width = Math.round(Dimensions.get('window').width);
 class ViewProfile extends Component {
   state = {
@@ -20,93 +22,10 @@ class ViewProfile extends Component {
     let status = this.state.accepted
     this.setState({ accepted: !status })
   }
-  renderID(cards) {
-    return (
-      cards != null || cards != undefined ?
-        cards.map(el => {
-          return (
-            <View style={
-              {
-                width: (width / 2) - 4,
-                borderWidth: 1,
-                borderColor: Color.gray,
-                alignItems: 'center',
-                margin: 2
-              }
-            }>
-              <FontAwesomeIcon
-                icon={faAddressCardOutline}
-                size={100}
-                style={{
-                  color: Color.normalGray
-                }}
-              />
-              <Text
-                style={{
-                  fontSize: BasicStyles.standardFontSize
-                }}
-              > {el.title.replace("_", " ").toUpperCase()} </Text>
-            </View>
-          )
-        })
-      :
-        <View style={
-          {
-            width: (width - 4),
-            borderWidth: 1,
-            borderColor: Color.gray,
-            alignItems: 'center',
-            margin: 2,
-            paddingTop: 30,
-            paddingBottom: 30
-          }
-        }>
-          <FontAwesomeIcon
-            icon={empty}
-            size={100}
-            style={{
-              color: Color.danger
-            }}
-          />
-          <Text
-            style={{
-              fontSize: BasicStyles.standardFontSize
-            }}
-          > Nothing to show </Text>
-        </View>
-    )
-  }
+  
   render() {
-    const {user} = this.props.navigation.state.params
-    const { cards } = user.account
-    const ratings = { stars: user.rating.stars }
-    let stars = []
-    for (let i = 0; i < 5; i++) {
-      stars.push(
-        <FontAwesomeIcon
-          icon={(ratings.stars > i) ? faStar : faStarRegular}
-          size={20}
-          style={{
-            color: Color.warning,
-            marginTop: 5,
-            marginHorizontal: 5
-          }}
-          key={i}
-        />
-      )
-    }
-    const removeButton = () => {
-      return <View style={{ alignItems: 'center', alignContent: 'center', justifyContent: 'center', marginBottom: 5, paddingTop: 20 }}>
-        <TouchableHighlight
-          onPress={this.toggle}
-          style={[BasicStyles.btn, BasicStyles.btnDanger]}
-          underlayColor={Color.gray}>
-          <Text style={BasicStyles.textWhite}>
-              Remove
-          </Text>
-        </TouchableHighlight>
-      </View>
-    }
+    const { user } = this.props.navigation.state.params
+    const { cards } = user
     return (
       <>
         <View style={[styles.headerButton ,{zIndex:1000}]}>
@@ -126,9 +45,9 @@ class ViewProfile extends Component {
                 ]}
               >
                 {
-                 user &&  user.account.profile != null && user.account.profile.url != null && (
+                 user &&  user.profile != null && user.profile.url != null && (
                     <Image
-                      source={{ uri: Config.BACKEND_URL + user.account.profile.url }}
+                      source={{ uri: Config.BACKEND_URL + user.profile.url }}
                       style={[
                         styles.image, 
                         {
@@ -139,8 +58,7 @@ class ViewProfile extends Component {
                     )
                 } 
                 {
-                  // && user.account_profile == null || (user.account_profile != null && user.account_profile.url == null)
-                  (user.account.profile == null || user.account.profile.url == null) && (
+                  (user.profile == null || user.profile.url == null) && (
                     <FontAwesomeIcon
                       icon={faUserCircle}
                       size={100}
@@ -152,10 +70,7 @@ class ViewProfile extends Component {
                   )
                 }
               </View>
-              <Text style={styles.username}>{user.account.username}</Text>
-              <View style={[styles.ratings, { flexDirection: 'row', alignItems: 'center', alignContent: 'center' }]}>
-                  { stars}
-              </View>
+              <Text style={styles.username}>{user.username}</Text>
               <View style={[styles.verifiedContainer, { marginRight: 20, }]}>
                 <Text style={styles.verifiedText}>
                   <FontAwesomeIcon
@@ -174,56 +89,28 @@ class ViewProfile extends Component {
             </View>
           </View>
           <PersonalInformationCard user={user}/>
-          {/* <EducationalBackgroundCard user={user}/> */}
-
-          <View style={styles.cardHeader}>
-            <Text style={[{ fontSize: BasicStyles.standardFontSize }, styles.cardHeaderText]}>ID's</Text>
-          </View>
-
-          <View style={
-            { 
-              flexDirection: 'row',
-              flex: 1,
-              flexWrap: 'wrap',
-              alignItems: 'flex-start'
-            }
-          }>
-            {/*<View>
-              <FontAwesomeIcon
-                icon={faAddressCard}
-                size={100}
-                style={{ marginHorizontal: 25 }}
-              />
-            </View>*/}
-            {
-              this.renderID(cards)
-            }
-          </View>
 
         </ScrollView>
-        <View style={{ borderTopColor: Color.lightGray, borderTopWidth: 1 }}>
-          {
-            this.state.accepted ? removeButton() :
-              <View style={{ flexDirection: 'row', justifyContent: 'center', marginBottom: 5, paddingTop: 20 }}>
-                <TouchableHighlight
-                  onPress={this.toggle}
-                  style={[BasicStyles.btn, BasicStyles.btnDanger, { width: '45%' }]}
-                  underlayColor={Color.gray}>
-                  <Text style={BasicStyles.textWhite}>
-                      Decline
-                  </Text>
-                </TouchableHighlight>
-                <View style={{ width: "2%" }}></View>
-                <TouchableHighlight
-                    onPress={this.toggle}
-                    style={[BasicStyles.btn, BasicStyles.btnSecondary, { width: '45%' }]}
-                    underlayColor={Color.gray}>
-                    <Text style={BasicStyles.textWhite}>
-                        Accept
-                    </Text>
-                </TouchableHighlight>
-              </View>
-          }
+        <View style={{ 
+          position: 'absolute',
+          bottom: 5,
+          left: 0,
+          width: '100%'
+        }}>
+            <View
+              style={{ flexDirection: 'row'
+              }}>
+              <Button
+                title={'Send Request'}
+                onClick={() => {}}
+                style={{
+                  width: '90%',
+                  marginRight: '5%',
+                  marginLeft: '5%',
+                  backgroundColor: Color.secondary
+                }}
+              />
+            </View>
         </View> 
       </>     
     );

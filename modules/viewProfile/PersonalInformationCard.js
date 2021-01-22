@@ -25,14 +25,14 @@ class PersonalInformationCard extends Component {
                 <View style={styles.rowContainer}>
                     <View style={styles.rows}>
                         <View style={[styles.col, { paddingLeft: 20 }]}>
-                            {_renderTextIcon(faUserCircle, user.account.information.first_name != null ? user.account.information.first_name : "---<>---")}
-                            {_renderTextIcon(faEnvelope, user.account.email != null ? user.account.email : "---<>---")}
-                            {_renderTextIcon(faUserCircle,  user.account.information.sex != null ? user.account.information.sex : "---<>---")}
+                            {_renderTextIcon(faUserCircle, user.information.first_name != null ? user.information.first_name : "---<>---")}
+                            {_renderTextIcon(faEnvelope, user.email != null ? user.email : "---<>---")}
+                            {_renderTextIcon(faUserCircle,  user.information.sex != null ? user.information.sex : "---<>---")}
                         </View>
                         <View style={[styles.col, { paddingRight: 25 }]}>
-                            {_renderTextIcon(faPhoneAlt, user.account.information.cellular_number != null ? user.account.information.cellular_number : "---<>---")}
-                            {_renderTextIcon(faCalendarAlt, user.account.information.birth_date_human != null ? user.account.information.birth_date_human : "---<>---")}
-                            {_renderTextIcon(faMapMarkerAlt, user.account.information.address != null ? user.account.information.address : "---<>---")}
+                            {_renderTextIcon(faPhoneAlt, user.information.cellular_number != null ? user.information.cellular_number : "---<>---")}
+                            {_renderTextIcon(faCalendarAlt, user.information.birth_date_human != null ? user.information.birth_date_human : "---<>---")}
+                            {_renderTextIcon(faMapMarkerAlt, user.information.address != null ? user.information.address : "---<>---")}
                         </View>
                     </View>
                 </View>
