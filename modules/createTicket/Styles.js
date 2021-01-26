@@ -5,20 +5,16 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
     width: '100%',
-    height: '100%',
-    paddingHorizontal: '7%',
     marginTop: '4%',
+    flex: 1,
   },
   InputContainer: {
-    width: '100%',
-    paddingBottom: '5%',
+    width: '90%'
   },
   TicketButtonContainer: {
     width: '100%',
     alignItems: 'center',
-    position: 'absolute',
-    bottom: 30,
-    paddingBottom: 10,
+    bottom: 5
   },
   CustomButtonContainer: {
     borderRadius: 10,
@@ -48,6 +44,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#E0E0E0',
     borderRadius: 12,
+  },
+  Image: {
+    height: 100,
+    width: 100,
   },
 });
 

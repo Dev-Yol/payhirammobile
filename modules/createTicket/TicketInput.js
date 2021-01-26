@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, TextInput, StyleSheet} from 'react-native';
+import {View, Text, TextInput} from 'react-native';
 
 import styles from 'modules/createTicket/Styles.js';
 
@@ -13,7 +13,11 @@ class TicketInput extends Component {
           </Text>
         </View>
         <View style={styles.TextInputContainer}>
-          <TextInput />
+          <TextInput
+            onChangeText={value => {
+              this.props.handler(value);
+            }}
+            value={this.props.inputValue}/>
         </View>
       </View>
     );

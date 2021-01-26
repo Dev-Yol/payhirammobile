@@ -28,6 +28,8 @@ import QRCodeScannerStack from 'modules/qrCodeScanner/qrCodeScannerDrawer.js';
 import PaymentMethodsStack from 'modules/payment/PaymentMethodsDrawer.js';
 import AddLocationStack from 'modules/addLocation/AddLocationDrawer.js';
 import LocationWithMap from 'components/Location/LocationWithMap';
+import SupportStack from 'components/Support/SupportDrawer.js';
+import UpdateTicketStack from 'components/Support/UpdateTicket/UpdateTicketDrawer.js';
 
 // login stack
 const LoginStack = createStackNavigator(
@@ -100,6 +102,9 @@ const PrimaryNav = createStackNavigator(
     qrCodeScannerStack: {screen: QRCodeScannerStack},
     addLocationStack: {screen: AddLocationStack},
     locationWithMapStack: {screen: LocationWithMapStack},
+    paymentMethodsStack: { screen: PaymentMethodsStack },
+    supportStack: { screen: SupportStack },
+    updateTicketStack: { screen: UpdateTicketStack },
     paymentMethodsStack: { screen: PaymentMethodsStack }
   },
   {
