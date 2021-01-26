@@ -9,7 +9,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import AccountSettings from 'modules/accountSettings';
 import {NavigationActions} from 'react-navigation';
-import {BasicStyles} from 'common';
+import {BasicStyles, Color} from 'common';
 import {connect} from 'react-redux';
 
 class HeaderOptions extends Component {
@@ -20,14 +20,15 @@ class HeaderOptions extends Component {
     this.props.navigationProps.pop()
   };
   render() {
+    const { theme } = this.props.state;
     return (
-      <View style={{flexDirection: 'row', marginLeft: 10}}>
+      <View style={{flexDirection: 'row'}}>
         <TouchableOpacity onPress={this.back.bind(this)}>
           {/*Donute Button Image */}
           <FontAwesomeIcon
             icon={faChevronLeft}
-            size={30}
-            style={{color: '#572066'}}
+            size={BasicStyles.headerBackIconSize}
+            style={{Color: theme ? theme.primary : Color.primary }}
           />
         </TouchableOpacity>
       </View>
@@ -42,12 +43,14 @@ const mapDispatchToProps = (dispatch) => {
   return {};
 };
 
+let HeaderOptionsConnect  = connect(mapStateToProps, mapDispatchToProps)(HeaderOptions);
+
 const AccountSettingsStack = createStackNavigator({
   accountSettingsScreen: {
     screen: AccountSettings,
     navigationOptions: ({navigation}) => ({
       title: 'Account Settings',
-      headerLeft: <HeaderOptions navigationProps={navigation} />,
+      headerLeft: <HeaderOptionsConnect navigationProps={navigation} />,
       drawerLabel: 'Account Settings',
       ...BasicStyles.headerDrawerStyle
     }),

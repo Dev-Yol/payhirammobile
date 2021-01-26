@@ -18,7 +18,7 @@ export default {
   black: '#000',
   success: '#22B173',
   info:'#0066FF',
-
+  fourth: fourth,
   setPrimary(color){
     primary = color
   },

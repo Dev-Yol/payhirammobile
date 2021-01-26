@@ -17,6 +17,7 @@ class ProposalCard extends Component {
 
 
   _header = (item, type) => {
+    console.log('item', item)
     return (
       <View>
         <View style={{flexDirection: 'row', marginTop: 10}}>
@@ -28,7 +29,7 @@ class ProposalCard extends Component {
               paddingLeft: 10,
               width: '40%',
             }}>
-            {item.account.username}
+            {item?.account?.username}
           </Text>
           <View
             style={{
@@ -43,7 +44,7 @@ class ProposalCard extends Component {
                   lineHeight: 30,
                   width: '100%',
                 }}>
-                {Currency.display(item.amount, item.currency)}
+                {Currency.display(item.charge, item.currency)}
               </Text>
             )}
             {type == 'rating' && (
@@ -82,7 +83,7 @@ class ProposalCard extends Component {
             style={{color: Color.secondary, marginHorizontal: 10}}
             size={10}
           />
-          <Text>3.5 km</Text>
+          <Text>{item.distance}</Text>
         </View>
       </View>
     );
@@ -91,6 +92,7 @@ class ProposalCard extends Component {
 
   _footer = (item) => {
     const {user} = this.props.state;
+    const { data } = this.props;
     return (
       <View>
         <View
@@ -107,15 +109,14 @@ class ProposalCard extends Component {
               <Button
                 title={'View Profile'}
                 onClick={() => {this.props.navigation.navigate('viewProfileStack', {
-                  data: item
+                  user: item.account,
+                  rating: item.rating
                 })}}
                 style={{
                   width: '45%',
                   marginRight: '5%'
                 }}
               />
-
-
               <Button
                 title={'Accept'}
                 onClick={() => {this.props.onAcceptRequest()}}
@@ -135,16 +136,22 @@ class ProposalCard extends Component {
   render() {
     const { data } = this.props;
     return (
-      <TouchableOpacity
-        onPress={() =>
-          this.props.navigation.navigate('requestItemStack', {
-            data: data,
-          })
-        }>
-        {this._header(data, 'amount')}
-        {this._body(data)}
-        {this._footer(data)}
-      </TouchableOpacity>
+      <View>
+        {
+          (data.peers && data.peers.peers) && data.peers.peers.map((item, index) => (
+            <TouchableOpacity
+              onPress={() =>
+                this.props.navigation.navigate('requestItemStack', {
+                  data: item,
+                })
+              }>
+              {item.account && this._header(item, 'amount')}
+              {this._body(item)}
+              {this._footer(item)}
+            </TouchableOpacity>
+          ))
+        }
+      </View>
     );
   }
 }

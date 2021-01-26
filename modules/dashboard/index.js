@@ -68,9 +68,8 @@ class Dashboard extends Component {
       account_code: user.code
     };
     this.setState({isLoading: true});
-    console.log('parameter', parameter)
     Api.request(Routes.ledgerSummary, parameter, (response) => {
-      console.log('response', response)
+      console.log(response.data, 'summaryLedger')
       this.setState({isLoading: false});
       if (response != null) {
         setLedger(response.data[0]);
@@ -78,7 +77,6 @@ class Dashboard extends Component {
         setLedger(null);
       }
     }, error => {
-      console.log('response', error)
       this.setState({isLoading: false});
     });
   };
@@ -91,9 +89,11 @@ class Dashboard extends Component {
     }
     let parameter = {
       account_id: user.id,
-      account_code: user.code
+      account_code: user.code,
+      limit: 5
     };
     Api.request(Routes.ledgerHistory, parameter, (response) => {
+      console.log(response.data, 'ledgerHistory')
       if (response != null) {
         this.setState({
           history: response.data
@@ -173,6 +173,7 @@ class Dashboard extends Component {
   }
 
   renderTransactionHeader(){
+    const {theme} = this.props.state;
     return(
       <View style={{
         flexDirection: 'row',
@@ -199,7 +200,7 @@ class Dashboard extends Component {
           <Text style={{
             width: '100%',
             textAlign: 'right',
-            color: Color.secondary,
+            color: theme ? theme.secondary : Color.secondary,
             fontWeight: 'bold'
           }}>View More</Text>
         </TouchableOpacity>
@@ -209,7 +210,7 @@ class Dashboard extends Component {
 
   render() {
     const { showRatings, isLoading, history } = this.state;
-    const { ledger } = this.props.state;
+    const { ledger, theme } = this.props.state;
     return (
       <View>
         <ScrollView 
@@ -238,13 +239,11 @@ class Dashboard extends Component {
                 </View>
               )
             }
-
-            
             <QRCodeModal redirect={this.redirect} />
           </View>
         </ScrollView>
         {isLoading ? <Spinner mode="overlay" /> : null}
-        {
+        {/* {
           showRatings && (
             <View style={{
               position: 'absolute',
@@ -253,7 +252,7 @@ class Dashboard extends Component {
               height: 125,
               borderTopLeftRadius: 15,
               borderTopRightRadius: 15,
-              backgroundColor: Color.primary,
+              backgroundColor: theme ? theme.primary : Color.primary,
               width: '100%',
               zIndex: 10
             }}>
@@ -263,7 +262,7 @@ class Dashboard extends Component {
                 alignItems: 'center'
               }}>
                 <Text style={{
-                  color: Color.secondary,
+                  color: theme ? theme.secondary : Color.secondary,
                   fontWeight: 'bold',
                   fontSize: 16,
                   paddingTop: 15,
@@ -276,7 +275,7 @@ class Dashboard extends Component {
               </View>
             </View>
           )
-        }
+        } */}
       </View>
     );
   }

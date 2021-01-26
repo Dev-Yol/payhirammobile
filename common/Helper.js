@@ -32,8 +32,15 @@ export default {
     {
       title: 'Settings',
       route: 'Settings',
+    },
+    {
+      title: 'Terms and Conditions',
+      route: 'TermsAndConditions',
+    },
+    {
+      title: 'Support',
+      route: 'Support',
     }
-    
   ],
   currency: [{
     title: 'Philippine Peso',

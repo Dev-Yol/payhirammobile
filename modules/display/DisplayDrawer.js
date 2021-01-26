@@ -5,7 +5,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faChevronLeft} from '@fortawesome/free-solid-svg-icons';
 import Display from './';
 import {connect} from 'react-redux';
-import { BasicStyles } from 'common';
+import { BasicStyles, Color } from 'common';
 
 class HeaderOptions extends Component {
   constructor(props) {
@@ -15,14 +15,15 @@ class HeaderOptions extends Component {
     this.props.navigationProps.pop();
   };
   render() {
+    const { theme } = this.props.state;
     return (
-      <View style={{flexDirection: 'row', marginLeft: 10}}>
+      <View style={{flexDirection: 'row'}}>
         <TouchableOpacity onPress={this.back.bind(this)}>
           {/*Donute Button Image */}
           <FontAwesomeIcon
             icon={faChevronLeft}
-            size={30}
-            style={{color: '#572066'}}
+            size={BasicStyles.headerBackIconSize}
+            style={{color: theme ? theme.primary : Color.primary }}
           />
         </TouchableOpacity>
       </View>
@@ -39,13 +40,15 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
+let HeaderOptionsConnect  = connect(mapStateToProps, mapDispatchToProps)(HeaderOptions);
+
 const DisplayStack = createStackNavigator({
   displayScreen: {
     screen: Display,
     navigationOptions: ({navigation}) => ({
       title: 'Theme Settings',
       drawerLabel: 'Display',
-      headerLeft: <HeaderOptions navigationProps={navigation} />,
+      headerLeft: <HeaderOptionsConnect navigationProps={navigation} />,
       ...BasicStyles.headerDrawerStyle
     }),
   },

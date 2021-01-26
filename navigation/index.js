@@ -13,6 +13,7 @@ import CreateRequestStack from '../modules/request/createRequest/CreateRequestDr
 import AccountSettingsStack from 'modules/accountSettings/AccountSettingsDrawer.js';
 import SettingsStack from 'modules/settings/SettingsDrawer.js';
 import OtpStack from 'modules/otp/OtpDrawer.js';
+// import RequestItemStack from 'modules/otp/OtpDrawer.js';
 import RequestItemStack from 'modules/request/requestItem/requestItemDrawer.js';
 import EditProfileStack from 'modules/profile/editProfile/editProfileDrawer.js';
 import TransactionsStack from 'modules/transactions/Drawer.js';
@@ -27,6 +28,8 @@ import QRCodeScannerStack from 'modules/qrCodeScanner/qrCodeScannerDrawer.js';
 import PaymentMethodsStack from 'modules/payment/PaymentMethodsDrawer.js';
 import AddLocationStack from 'modules/addLocation/AddLocationDrawer.js';
 import LocationWithMap from 'components/Location/LocationWithMap';
+import SupportStack from 'components/Support/SupportDrawer.js';
+import UpdateTicketStack from 'components/Support/UpdateTicket/UpdateTicketDrawer.js';
 
 // login stack
 const LoginStack = createStackNavigator(
@@ -69,7 +72,6 @@ const LocationWithMapStack = createStackNavigator(
     navigationOptions: {},
   },
 );
-
 // Manifest of possible screens
 const PrimaryNav = createStackNavigator(
   {
@@ -101,6 +103,9 @@ const PrimaryNav = createStackNavigator(
     addLocationStack: {screen: AddLocationStack},
     locationWithMapStack: {screen: LocationWithMapStack},
     paymentMethodsStack: { screen: PaymentMethodsStack },
+    supportStack: { screen: SupportStack },
+    updateTicketStack: { screen: UpdateTicketStack },
+    paymentMethodsStack: { screen: PaymentMethodsStack }
   },
   {
     // Default config for all screens

@@ -9,8 +9,6 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import { Routes, Color, Helper, BasicStyles } from 'common';
-import AccountSettingsInput from 'modules/accountSettings/AccountSettingsInput.js';
-import AccountSettingsButton from 'modules/accountSettings/AccountSettingsButton.js';
 import styles from 'modules/accountSettings/Styles.js';
 import PasswordWithIcon from 'components/InputField/Password.js';
 import Api from 'services/api/index.js';
@@ -26,7 +24,7 @@ class AccountSettings extends Component {
       email: '',
       password: '',
       confirmPassword: '',
-      isLoading: false,
+      isLoading: false
     };
   }
   isValidEmail = () => {
@@ -72,6 +70,7 @@ class AccountSettings extends Component {
       this.state.password != '' &&
       this.state.confirmPassword != null &&
       this.state.confirmPassword != '' &&
+
       this.state.password === this.state.confirmPassword
     ) {
       const { user } = this.props.state;
@@ -98,23 +97,23 @@ class AccountSettings extends Component {
     }
   };
 
-
   render() {
-    let { user } = this.props.state;
+    let { user, theme } = this.props.state;
 
     return (
       <ScrollView style={{ flex: 1, paddingTop: 10 }}>
         <View style={[styles.AccountSettingsContainer, {height: height + 25}]}>
           {this.state.isLoading ? <Spinner mode="overlay" /> : null}
 
-         <TextInputWithLabel 
-            variable={user.username}
-            onChange={(value) => {}}
-            label={'Username'}
-            onError={false}
-            required={false}
-          />
-
+        <TextInputWithLabel 
+          variable={user.username}
+          onChange={(value) => {}}
+          label={'Username'}
+          selectTextOnFocus={false}
+          onError={false}
+          editable={false}
+          required={false}
+        />
 
           <TextInputWithLabel 
             variable={this.state.email}
@@ -123,18 +122,17 @@ class AccountSettings extends Component {
             onError={false}
             placeholder={'Enter Email address'}
             required={true}
+            editable={true}
           />
 
-          <Button 
+          <Button
             style={{
-              backgroundColor: Color.secondary,
+              backgroundColor: theme ? theme.secondary : Color.secondary,
               marginTop: 15,
               marginBottom: 15
             }}
             title={'Update Email'}
-            onClick={() => this.updateEmail}/>
-
-
+            onClick={() => this.updateEmail()}/>
 
           <PasswordWithIcon
             onTyping={(input) =>
@@ -143,7 +141,6 @@ class AccountSettings extends Component {
               })
             }
           />
-
 
           <PasswordWithIcon
             onTyping={(input) =>
@@ -155,10 +152,10 @@ class AccountSettings extends Component {
 
           <Button 
             style={{
-              backgroundColor: Color.secondary
+              backgroundColor: theme ? theme.secondary : Color.secondary
             }}
             title={'Change Password'}
-            onClick={() => this.updatePassword}/>
+            onClick={() => this.updatePassword()}/>
 
         </View>
       </ScrollView>

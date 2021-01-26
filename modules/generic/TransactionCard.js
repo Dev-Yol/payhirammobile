@@ -5,10 +5,12 @@ import { faCheckCircle, faUserCircle, faUpload } from '@fortawesome/free-solid-s
 import { BasicStyles, Color } from 'common';
 import Currency from 'services/Currency.js'
 import Styles from './TransactionCardStyle.js';
+import {connect} from 'react-redux';
 
 class TransactionCard extends Component {
   render() {
     const { data } = this.props;
+    const { theme } = this.props.state;
     return (
       <View>
         <ScrollView showsHorizontalScrollIndicator={false}>
@@ -18,7 +20,7 @@ class TransactionCard extends Component {
                 <TouchableOpacity style={Styles.Card}>
                   <View style={{flexGrow: 1}}>
                     <Text style={{
-                      color: Color.secondary,
+                      color: theme ? theme.secondary : Color.secondary,
                       fontSize: BasicStyles.standardFontSize - 1,
                       paddingTop: 10
                     }}>{data.created_at_human}</Text>
@@ -35,7 +37,7 @@ class TransactionCard extends Component {
                   </View>
                   <View>
                     <Text style={{
-                      color: Color.secondary,
+                      color: theme ? theme.secondary : Color.secondary,
                       fontSize: BasicStyles.standardFontSize,
                       fontWeight: 'bold'
                     }}>{Currency.display(data.amount, data.currency)}</Text>
@@ -50,5 +52,12 @@ class TransactionCard extends Component {
     );
   }
 }
+const mapStateToProps = (state) => ({state: state});
 
-export default TransactionCard;
+const mapDispatchToProps = (dispatch) => {
+  const {actions} = require('@redux');
+  return {
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(TransactionCard);

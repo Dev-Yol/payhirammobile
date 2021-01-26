@@ -42,6 +42,7 @@ class Requests extends Component {
       connectSelected: null,
       searchValue: null,
       searchType: null,
+      requestItemData: [],
       size: 0,
       filterOptions: [
         {
@@ -355,7 +356,7 @@ class Requests extends Component {
             renderItem={({item, index}) => (
               <View>
                 <RequestCard 
-                  onConnectRequest={(item) => this.connectRequest(item)}
+                  onConnectRequest={(item) => {this.connectRequest(item)}}
                   data={item}
                   navigation={this.props.navigation}
                   />
@@ -375,7 +376,7 @@ class Requests extends Component {
       connectSelected,
       isRequestOptions,
     } = this.state;
-    const {requests} = this.props.state;
+    const {requests, theme} = this.props.state;
     return (
       <View style={Style.MainContainer}>
         {isRequestOptions && (
@@ -418,7 +419,9 @@ class Requests extends Component {
         </ScrollView>
 
         <TouchableOpacity
-          style={Style.floatingButton}
+          style={[Style.floatingButton, {
+            backgroundColor: theme ? theme.secondary : Color.secondary
+          }]}
           onPress={() => {
             this.props.navigation.navigate('createRequestStack');
           }}>
@@ -445,6 +448,8 @@ class Requests extends Component {
 
         <ProposalModal
           visible={connectModal}
+          data = {this.state.connectSelected}
+          navigation={this.props.navigation}
           loading={(flag) => this.setState({
             isLoading: flag
           })}

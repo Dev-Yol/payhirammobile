@@ -23,7 +23,6 @@ class ProposalModal extends Component {
         charge: 0
     };
   }
-
   redirect = (route) => {
     this.props.navigation.navigate(route);
   };
@@ -44,19 +43,20 @@ class ProposalModal extends Component {
       status: 'requesting',
       account_id: user.id
     }
-    console.log('parameter', parameter)
     this.props.loading(true)
     Api.request(Routes.requestPeerCreate, parameter, (response) => {
       this.props.loading(false)
       this.props.closeModal()
-    }, error => {
+      this.props.navigation.navigate('requestItemStack', {data: this.props.data})
+    },
+    error => {
       this.props.loading(false)
-      console.log('response', error)
-    });
+    }
+    );
   }
 
   renderContent() {
-    const { ledger } = this.props.state;
+    const { ledger, theme } = this.props.state;
     return (
       <View style={[Style.CreateRequestContainer, {
           width: '100%',
@@ -182,7 +182,7 @@ class ProposalModal extends Component {
                         textAlign: 'right',
                         fontSize: BasicStyles.standardFontSize,
                         fontWeight: 'bold',
-                        color: Color.secondary
+                        color: theme ? theme.secondary : Color.secondary
                       }}>
                       {
                         Currency.display(this.state.charge, 'PHP')
@@ -219,7 +219,7 @@ class ProposalModal extends Component {
                 style={{
                   width: '45%',
                   marginLeft: '5%',
-                  backgroundColor: Color.secondary
+                  backgroundColor: theme ? theme.secondary : Color.secondary
                 }}
               />
 
