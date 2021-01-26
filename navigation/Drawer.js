@@ -17,7 +17,8 @@ import Billing from 'modules/profile/Billing.js';
 import Circle from 'modules/circle/index.js';
 import OptionRight from './OptionRight';
 import TermsAndConditions from 'modules/termsAndConditions';
-
+import Support from 'components/Support';
+import UpdateTicket from 'components/Support/UpdateTicket';
 import Style from './Style.js';
 import { connect } from 'react-redux'
 
@@ -196,6 +197,24 @@ const _StackNavigator = createStackNavigator({
       headerTransparent: true
     }),
   },
+  Support: {
+    screen: Support,
+    navigationOptions: ({ navigation }) => ({
+      title: null,
+      headerLeft: <MenuDrawerStructure navigationProps={navigation} />,
+      headerRight: <OptionRight navigationProps={navigation} />,
+      headerTransparent: true
+    }),
+  },
+  UpdateTicket: {
+    screen: UpdateTicket,
+    navigationOptions: ({ navigation }) => ({
+      title: null,
+      headerLeft: <MenuDrawerStructure navigationProps={navigation} />,
+      headerRight: <OptionRight navigationProps={navigation} />,
+      headerTransparent: true
+    }),
+  },
 });
 
 const Drawer = createDrawerNavigator(
@@ -270,6 +289,18 @@ const Drawer = createDrawerNavigator(
       screen: _StackNavigator,
       navigationOptions: {
         drawerLabel: 'Terms and Condition',
+      },
+    },
+    Support: {
+      screen: _StackNavigator,
+      navigationOptions: {
+        drawerLabel: 'Support',
+      },
+    },
+    UpdateTicketStack: {
+      screen: _StackNavigator,
+      navigationOptions: {
+        drawerLabel: 'Update Ticket',
       },
     },
   },

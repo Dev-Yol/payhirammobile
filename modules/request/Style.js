@@ -27,7 +27,7 @@ export default {
   floatingButton: {
     alignItems: 'center',
     justifyContent: 'center',
-    width: 70,
+    width: 50,
     position: 'absolute',
     bottom: 10,
     right: 10,

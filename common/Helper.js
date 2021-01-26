@@ -37,6 +37,10 @@ export default {
       title: 'Terms and Conditions',
       route: 'TermsAndConditions',
     },
+    {
+      title: 'Support',
+      route: 'Support',
+    },
     
   ],
   currency: [

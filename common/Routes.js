@@ -53,4 +53,7 @@ export default {
   couponsValidate: apiUrl + 'coupons/validate',
   productsRetrieve: apiUrl + 'products/retrieve',
   productsRetrieveBasic: apiUrl + 'products/retrieve_basic',
+  ticketsRetrieve: apiUrl + 'tickets/retrieve',
+  ticketsCreate: apiUrl + 'tickets/create',
+  ticketsUpdate: apiUrl + 'tickets/update'
 };
