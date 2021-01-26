@@ -31,7 +31,7 @@ export default {
     position: 'absolute',
     bottom: 10,
     right: 10,
-    height: 50,
+    height: 60,
     backgroundColor: Color.secondary,
     borderRadius: 100,
     color: Color.white
@@ -42,7 +42,8 @@ export default {
   bottomSheetContent: {
     height: height - (height * 0.2),
     backgroundColor: Color.white,
-    borderRadius: 10,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
   },
   bottomSheet: {
     justifyContent: 'flex-end',

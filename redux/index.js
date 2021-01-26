@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import Data from 'services/Data';
-import {Helper} from 'common';
+import {Helper, Color} from 'common';
 import {Routes} from 'common';
 import Api from '../services/api';
 
@@ -32,6 +32,8 @@ const types = {
   SET_THEME: 'SET_THEME',
   SET_REQUEST_INPUT: 'SET_REQUEST_INPUT',
   SET_VALIDATE_OTP: 'SET_VALIDATE_OTP',
+  VIEW_MENU: 'VIEW_MENU',
+  SET_REQUEST: 'SET_REQUEST',
 };
 
 export const actions = {
@@ -86,6 +88,9 @@ export const actions = {
   setRequests(requests) {
     return {type: types.SET_REQUESTS, requests};
   },
+  setRequest(request) {
+    return {type: types.SET_REQUEST, request};
+  },
   updateRequests(requests) {
     return {type: types.UPDATE_REQUESTS, requests};
   },
@@ -116,6 +121,9 @@ export const actions = {
   setIsValidOtp(isValidOtp) {
     return {type: types.SET_VALIDATE_OTP, isValidOtp};
   },
+  viewMenu(isViewing){
+    return {type: types.VIEW_MENU, isViewing}
+  }
 };
 
 const initialState = {
@@ -133,6 +141,7 @@ const initialState = {
   searchParameter: null,
   location: null,
   requests: null,
+  request: null,
   nav: null,
   pinFlag: false,
   systemNotification: null,
@@ -141,6 +150,7 @@ const initialState = {
   qrCodeModal: false,
   requestInput: null,
   isValidOtp: false,
+  isViewing: false
 };
 
 storeData = async (key, value) => {
@@ -163,6 +173,7 @@ const reducer = (state = initialState, action) => {
   const {theme} = action;
   const {requestInput} = action;
   const {isValidOtp} = action;
+  const { isViewing, request } = action;
   switch (type) {
     case types.LOGOUT:
       AsyncStorage.clear();
@@ -365,6 +376,11 @@ const reducer = (state = initialState, action) => {
         ...state,
         requests,
       };
+    case types.SET_REQUEST:
+      return {
+        ...state,
+        request
+      };
     case types.UPDATE_REQUESTS:
       state.requests.push(...requests);
       return {
@@ -401,9 +417,11 @@ const reducer = (state = initialState, action) => {
       storeData('primary', theme.primary);
       storeData('secondary', theme.secondary);
       storeData('tertiary', theme.tertiary);
+      storeData('fourth', theme.fourth);
       Color.setPrimary(theme.primary);
       Color.setSecondary(theme.secondary);
-      Color.setTertiary(theme.tertiary);
+      Color.setTertiary(theme.tertiary);  
+      Color.setFourth(theme.fourth);
       return {
         ...state,
         theme,
@@ -419,6 +437,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         isValidOtp,
+      };
+    case types.VIEW_MENU:
+      return {
+        ...state,
+        isViewing,
       };
     default:
       return {...state, nav: state.nav};

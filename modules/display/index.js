@@ -1,24 +1,32 @@
-import React, {Component} from 'react';
-import {View, Text, TextInput, StyleSheet} from 'react-native';
-
+import React, { Component } from 'react';
+import { View, Text, TextInput, StyleSheet, Dimensions, ScrollView } from 'react-native';
+import { connect } from 'react-redux'
 import ThemeSettingTile from 'modules/display/ThemeSettingTile.js';
+import { H1 } from 'native-base';
+const height = Math.round(Dimensions.get('window').height);
 
 const dummyThemeData = [
   {
-    title: 'Increment',
-    details: 'Magenta, Light Green, Yellow, Black',
+    title: 'Increment Mode',
+    details: 'Add description here',
     colors: ['#3F0050', '#22B173', '#F2C94C', '#000000'],
   },
   {
-    title: 'Night Mode',
-    details: 'Black, Yellow, White, Gray',
-    colors: ['#000000', '#F2C94C', '#F2F2F2', '#828282'],
+    title: 'Beach Model',
+    details: 'Add description here',
+    // colors: ['#0B62BB', '#529AEC', '#03D5BD', '#000000'],
+    colors: ['#0067B3', '#40B0DF', '#FFD53D', '#000000'],
   },
   {
-    title: 'Daylight Mode',
-    details: 'White, Yellow, Gray, Black',
-    colors: ['#FFFFFF', '#F2C94C', '#4F4F4F', '#000000'],
+    title: 'Flirty Mode',
+    details: 'Add description here',
+    colors: ['#2f1387', '#FF5765', '#03D5BD', '#000000'],
   },
+  {
+    title: 'Concealed Mode',
+    details: 'Add description here',
+    colors: ['#067d68', '#0fbd83', '#3bfeb8', '#000000'],
+  }
 ];
 class Display extends Component {
   constructor(props) {
@@ -29,6 +37,15 @@ class Display extends Component {
   }
 
   selectHandler = (index) => {
+    let _theme = dummyThemeData[index].colors
+    const {setTheme} = this.props;
+    setTheme({
+      primary: _theme[0],
+      secondary: _theme[1],
+      tertiary: _theme[2],
+      fourth: _theme[3]
+    });
+    console.log(_theme)
     this.setState({selectedTile: index});
   };
 
@@ -48,8 +65,32 @@ class Display extends Component {
     });
   };
   render() {
-    return <View>{this.displayThemeTiles()}</View>;
+    return (
+      <View>
+        <ScrollView
+          showsVerticalScrollIndicator={false}>
+          <View
+          style={{
+            height: height + 25,
+            flex: 1
+          }}
+
+          >
+            {this.displayThemeTiles()}
+          </View>
+        </ScrollView>
+      </View>
+    )
   }
 }
 
-export default Display;
+const mapStateToProps = state => ({state: state});
+
+const mapDispatchToProps = dispatch => {
+  const {actions} = require('@redux');
+  return {
+    setTheme: (theme) => dispatch(actions.setTheme(theme))
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Display)

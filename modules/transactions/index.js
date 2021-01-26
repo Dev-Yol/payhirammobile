@@ -1,18 +1,45 @@
 import React, {Component} from 'react';
-import { View, Text, ScrollView, TextInput, TouchableOpacity, TouchableHighlight, Image, Picker } from 'react-native';
+import { View, Text, ScrollView, TextInput, TouchableOpacity} from 'react-native';
+import Api from 'services/api/index.js';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faCheckCircle, faUserCircle, faUpload } from '@fortawesome/free-solid-svg-icons';
-import { BasicStyles, Color } from 'common';
-import { Rating, DateTime} from 'components';
+import { BasicStyles, Color, Routes} from 'common';
+import Currency from 'services/Currency.js'
+import Styles from './Styles.js'
+import TransactionCard from 'modules/generic/TransactionCard';
+// const sample = [{
+//   id: 1,
+//   amount: 500,
+//   via: '****5678',
+//   description: 'This is a test',
+//   date: 'August 9, 2020 5:00 PM',
+//   currency: 'PHP'
+// }, {
+//   id: 2,
+//   amount: 600,
+//   via: '****5678',
+//   description: 'This is a test',
+//   date: 'August 9, 2020 5:00 PM',
+//   currency: 'PHP'
+// }]
+
 
 class Transactions extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      gender: 1,
-      school: 1
+      data: []
     };
   }
+
+  componentDidMount(){
+    console.log('user hereitis', JSON.stringify(this.props))
+    // const {user} = this.props;
+    // if (user != null) {
+    this.retrieveLedgerHistory({created_at: 'desc'}, {column: 'created_at', value: ''})
+    // }
+  }
+
   onChange(item, type){
     if(type == 'gender'){
       this.setState({gender: item});
@@ -21,161 +48,56 @@ class Transactions extends Component {
     }
   }
 
+  retrieveLedgerHistory = (sort, filter) => {
+    // const { user } = this.props.state
+    let key = Object.keys(sort)
+    // if (user == null) {
+    //   return;
+    // }
+    let parameter = {
+      // account_id: this.user.userID,
+      offset: 0,
+      limit: 50,
+      sort: {
+        column: key[0],
+        value: sort[key[0]]
+      },
+      value: filter.value + '%',
+      column: filter.column
+    };
+    Api.request(Routes.transactionRetrieve, parameter, (response) => {
+      if (response != null) {
+        this.setState({
+          data: response.data
+        })
+      } else {
+        this.setState({
+          data: []
+        })
+      }
+    }, error => {
+      console.log('response', error)
+    });
+  };
+
   render() {
-    const { data } = [{
-      title: 'Male',
-      value: 'male'
-    },{
-      title: 'Female',
-      value: 'female'
-    }];
+    const { data } = this.state;
     return (
       <View>
-        <ScrollView showsHorizontalScrollIndicator={false}>           
-          <View style={{flexDirection: 'row', flex: 1, borderWidth: 1, borderColor: Color.gray, borderRadius: 5, padding: 10, margin: 10, alignItems: 'center'}}>
-            <View style={{flexGrow: 1}}>
-              <Text>August 9, 2020 5:00 PM</Text>
-              <Text style={{fontSize: 20}}>This is a test</Text>
-              <Text>via ****561</Text>
-            </View>
-            <View>
-              <Text style={{color: Color.secondary, fontSize: 25, fontWeight: 'bold'}}>+ PHP 200.00</Text>
-            </View>
-          </View>
-          <View style={{flexDirection: 'row', flex: 1, borderWidth: 1, borderColor: Color.gray, borderRadius: 5, padding: 10, margin: 10, alignItems: 'center'}}>
-            <View style={{flexGrow: 1}}>
-              <Text>August 9, 2020 5:00 PM</Text>
-              <Text style={{fontSize: 20}}>This is a test</Text>
-              <Text>via ****561</Text>
-            </View>
-            <View>
-              <Text style={{color: Color.secondary, fontSize: 25, fontWeight: 'bold'}}>+ PHP 200.00</Text>
-            </View>
-          </View>
-          <View style={{flexDirection: 'row', flex: 1, borderWidth: 1, borderColor: Color.gray, borderRadius: 5, padding: 10, margin: 10, alignItems: 'center'}}>
-            <View style={{flexGrow: 1}}>
-              <Text>August 9, 2020 5:00 PM</Text>
-              <Text style={{fontSize: 20}}>This is a test</Text>
-              <Text>via ****561</Text>
-            </View>
-            <View>
-              <Text style={{color: Color.secondary, fontSize: 25, fontWeight: 'bold'}}>+ PHP 200.00</Text>
-            </View>
-          </View>
-          <View style={{flexDirection: 'row', flex: 1, borderWidth: 1, borderColor: Color.gray, borderRadius: 5, padding: 10, margin: 10, alignItems: 'center'}}>
-            <View style={{flexGrow: 1}}>
-              <Text>August 9, 2020 5:00 PM</Text>
-              <Text style={{fontSize: 20}}>This is a test</Text>
-              <Text>via ****561</Text>
-            </View>
-            <View>
-              <Text style={{color: Color.secondary, fontSize: 25, fontWeight: 'bold'}}>+ PHP 200.00</Text>
-            </View>
-          </View>
-          <View style={{flexDirection: 'row', flex: 1, borderWidth: 1, borderColor: Color.gray, borderRadius: 5, padding: 10, margin: 10, alignItems: 'center'}}>
-            <View style={{flexGrow: 1}}>
-              <Text>August 9, 2020 5:00 PM</Text>
-              <Text style={{fontSize: 20}}>This is a test</Text>
-              <Text>via ****561</Text>
-            </View>
-            <View>
-              <Text style={{color: Color.secondary, fontSize: 25, fontWeight: 'bold'}}>+ PHP 200.00</Text>
-            </View>
-          </View>
-          <View style={{flexDirection: 'row', flex: 1, borderWidth: 1, borderColor: Color.gray, borderRadius: 5, padding: 10, margin: 10, alignItems: 'center'}}>
-            <View style={{flexGrow: 1}}>
-              <Text>August 9, 2020 5:00 PM</Text>
-              <Text style={{fontSize: 20}}>This is a test</Text>
-              <Text>via ****561</Text>
-            </View>
-            <View>
-              <Text style={{color: Color.secondary, fontSize: 25, fontWeight: 'bold'}}>+ PHP 200.00</Text>
-            </View>
-          </View>
-          <View style={{flexDirection: 'row', flex: 1, borderWidth: 1, borderColor: Color.gray, borderRadius: 5, padding: 10, margin: 10, alignItems: 'center'}}>
-            <View style={{flexGrow: 1}}>
-              <Text>August 9, 2020 5:00 PM</Text>
-              <Text style={{fontSize: 20}}>This is a test</Text>
-              <Text>via ****561</Text>
-            </View>
-            <View>
-              <Text style={{color: Color.secondary, fontSize: 25, fontWeight: 'bold'}}>+ PHP 200.00</Text>
-            </View>
-          </View>
-          <View style={{flexDirection: 'row', flex: 1, borderWidth: 1, borderColor: Color.gray, borderRadius: 5, padding: 10, margin: 10, alignItems: 'center'}}>
-            <View style={{flexGrow: 1}}>
-              <Text>August 9, 2020 5:00 PM</Text>
-              <Text style={{fontSize: 20}}>This is a test</Text>
-              <Text>via ****561</Text>
-            </View>
-            <View>
-              <Text style={{color: Color.secondary, fontSize: 25, fontWeight: 'bold'}}>+ PHP 200.00</Text>
-            </View>
-          </View>
-          <View style={{flexDirection: 'row', flex: 1, borderWidth: 1, borderColor: Color.gray, borderRadius: 5, padding: 10, margin: 10, alignItems: 'center'}}>
-            <View style={{flexGrow: 1}}>
-              <Text>August 9, 2020 5:00 PM</Text>
-              <Text style={{fontSize: 20}}>This is a test</Text>
-              <Text>via ****561</Text>
-            </View>
-            <View>
-              <Text style={{color: Color.secondary, fontSize: 25, fontWeight: 'bold'}}>+ PHP 200.00</Text>
-            </View>
-          </View>
-          <View style={{flexDirection: 'row', flex: 1, borderWidth: 1, borderColor: Color.gray, borderRadius: 5, padding: 10, margin: 10, alignItems: 'center'}}>
-            <View style={{flexGrow: 1}}>
-              <Text>August 9, 2020 5:00 PM</Text>
-              <Text style={{fontSize: 20}}>This is a test</Text>
-              <Text>via ****561</Text>
-            </View>
-            <View>
-              <Text style={{color: Color.secondary, fontSize: 25, fontWeight: 'bold'}}>+ PHP 200.00</Text>
-            </View>
-          </View>
-          <View style={{flexDirection: 'row', flex: 1, borderWidth: 1, borderColor: Color.gray, borderRadius: 5, padding: 10, margin: 10, alignItems: 'center'}}>
-            <View style={{flexGrow: 1}}>
-              <Text>August 9, 2020 5:00 PM</Text>
-              <Text style={{fontSize: 20}}>This is a test</Text>
-              <Text>via ****561</Text>
-            </View>
-            <View>
-              <Text style={{color: Color.secondary, fontSize: 25, fontWeight: 'bold'}}>+ PHP 200.00</Text>
-            </View>
-          </View>
-          <View style={{flexDirection: 'row', flex: 1, borderWidth: 1, borderColor: Color.gray, borderRadius: 5, padding: 10, margin: 10, alignItems: 'center'}}>
-            <View style={{flexGrow: 1}}>
-              <Text>August 9, 2020 5:00 PM</Text>
-              <Text style={{fontSize: 20}}>This is a test</Text>
-              <Text>via ****561</Text>
-            </View>
-            <View>
-              <Text style={{color: Color.secondary, fontSize: 25, fontWeight: 'bold'}}>+ PHP 200.00</Text>
-            </View>
-          </View>
-          <View style={{flexDirection: 'row', flex: 1, borderWidth: 1, borderColor: Color.gray, borderRadius: 5, padding: 10, margin: 10, alignItems: 'center'}}>
-            <View style={{flexGrow: 1}}>
-              <Text>August 9, 2020 5:00 PM</Text>
-              <Text style={{fontSize: 20}}>This is a test</Text>
-              <Text>via ****561</Text>
-            </View>
-            <View>
-              <Text style={{color: Color.secondary, fontSize: 25, fontWeight: 'bold'}}>+ PHP 200.00</Text>
-            </View>
-          </View>
-          <View style={{flexDirection: 'row', flex: 1, borderWidth: 1, borderColor: Color.gray, borderRadius: 5, padding: 10, margin: 10, alignItems: 'center'}}>
-            <View style={{flexGrow: 1}}>
-              <Text>August 9, 2020 5:00 PM</Text>
-              <Text style={{fontSize: 20}}>This is a test</Text>
-              <Text>via ****561</Text>
-            </View>
-            <View>
-              <Text style={{color: Color.secondary, fontSize: 25, fontWeight: 'bold'}}>+ PHP 200.00</Text>
-            </View>
+        <ScrollView showsHorizontalScrollIndicator={false}>
+          <View style={Styles.MainContainer}>
+            {
+              data && data.map((item, index) => (
+                <TransactionCard data={item}/>
+              ))
+            }     
+            
           </View>
         </ScrollView>
       </View>
     );
   }
 }
+
 
 export default Transactions;

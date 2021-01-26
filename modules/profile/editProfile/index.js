@@ -16,6 +16,9 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import {BasicStyles, Color} from 'common';
 import {Rating, DateTime} from 'components';
+import { connect } from 'react-redux';
+import UserImage from 'components/User/Image';
+import Button from 'components/Form/Button';
 
 class EditProfile extends Component {
   constructor(props) {
@@ -34,6 +37,7 @@ class EditProfile extends Component {
   }
 
   render() {
+    const { user, theme } = this.props.state;
     const {data} = [
       {
         title: 'Male',
@@ -45,23 +49,38 @@ class EditProfile extends Component {
       },
     ];
     return (
-      <View style={{marginTop: 60}}>
+      <View>
         <ScrollView showsHorizontalScrollIndicator={false}>
           <View
             style={{
               alignItems: 'center',
               paddingVertical: 10,
               width: '100%',
-              backgroundColor: Color.primary,
+              backgroundColor: theme ? theme.primary : Color.primary,
             }}>
-            <FontAwesomeIcon
-              icon={faUserCircle}
-              style={{color: Color.white, margin: 15}}
-              size={90}
-            />
-            <Text style={[{fontWeight: 'bold', color: Color.white}]}>
-              Kennette Canales
-            </Text>
+
+            {
+              user && (
+                <UserImage
+                  user={user}
+                  style={{
+                    height: 100,
+                    width: 100
+                  }}
+                  size={100}
+                  color={Color.white}
+                  />
+              )
+            }
+
+            {
+              user.username && (
+                <Text style={[{fontWeight: 'bold', color: Color.white}]}>
+                  {user.username}
+                </Text>
+              )
+            }
+            
             <Rating ratings={''} style={[{flex: 2}]}></Rating>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <FontAwesomeIcon
@@ -225,19 +244,33 @@ class EditProfile extends Component {
               </View>
             </TouchableOpacity>
           </View>
-          <TouchableHighlight
-            style={[
-              BasicStyles.btn,
-              BasicStyles.btnSecondary,
-              {alignSelf: 'center'},
-            ]}
-            underlayColor={Color.gray}>
-            <Text style={BasicStyles.textWhite}>Update</Text>
-          </TouchableHighlight>
+
+          <Button 
+              title={'Update'}
+              onClick={() => {}}
+              style={{
+                width: '90%',
+                marginRight: '5%',
+                marginLeft: '5%',
+                backgroundColor: theme ? theme.secondary : Color.secondary
+              }}
+            />
         </ScrollView>
       </View>
     );
   }
 }
 
-export default EditProfile;
+const mapStateToProps = state => ({ state: state });
+
+const mapDispatchToProps = dispatch => {
+  const { actions } = require('@redux');
+  return {
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(EditProfile);
+

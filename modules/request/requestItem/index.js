@@ -1,81 +1,210 @@
 import React, {Component} from 'react';
-import { View, Text, ScrollView, TextInput, TouchableOpacity, TouchableHighlight } from 'react-native';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faCircle, faEllipsisH } from '@fortawesome/free-solid-svg-icons';
-import { BasicStyles, Color } from 'common';
-import { UserImage, Rating } from 'components';
+import {
+  View,
+  Text,
+  ScrollView,
+  TextInput,
+  TouchableOpacity,
+  TouchableHighlight,
+  Dimensions
+} from 'react-native';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import {faCircle, faEllipsisH} from '@fortawesome/free-solid-svg-icons';
+import {BasicStyles, Color, Routes} from 'common';
+import {UserImage, Rating, Spinner} from 'components';
+import RequestCard from 'modules/generic/RequestCard';
+import ProposalCard from 'modules/generic/ProposalCard';
+import ProposalModal from 'modules/generic/ProposalModal';
+import Api from 'services/api/index.js';
+import ConfirmationModal from 'components/Modal/ConfirmationModal.js';
+
+const width = Math.round(Dimensions.get('window').width);
+const height = Math.round(Dimensions.get('window').height);
+import {connect} from 'react-redux';
 
 class RequestItem extends Component {
-  render() {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isLoading: false,
+      connectSelected: null,
+      connectModal: false,
+      isConfirmationModal: false,
+      isConfirm: false,
+      data: null
+    }
+  }
+  
+  componentDidMount() {
+    this.retrieve()
+  }
+
+  retrieve(){
+    const { user } = this.props.state;
+    const { data } = this.props.navigation.state.params;
+    if(user == null || data == null){
+      return
+    }
+    let parameter = {
+      condition: [{
+        value: data.id,
+        column: 'id',
+        clause: '='
+      }],
+      type: user.account_type,
+      account_id: user.id
+    };
+    this.setState({isLoading: true});
+    console.log('parameter', parameter)
+    Api.request(Routes.requestRetrieveItem, parameter, (response) => {
+      this.setState({isLoading: false});
+      if (response != null) {
+        this.setState({
+          data: response.data[0]
+        })
+      } else {
+        this.setState({
+          data: null
+        })
+      }
+    }, error => {
+      console.log('response', error)
+      this.setState({isLoading: false, data: null});
+    });
+  }
+
+  confirm = () => {
+    this.setState({isConfirmationModal: true})
+  }
+
+  viewMessages = () => {
+    this.closeModal()
+    const { setMessengerGroup } = this.props;
+    setMessengerGroup();
+    setTimeout(() => {
+      this.props.navigation.navigate('messagesStack');
+    }, 500)
+  }
+
+  closeModal = () => {
+    this.setState({isConfirmationModal: false})
+  }
+
+  connectRequest = () => {
+    const { data } = this.props.navigation.state.params;
+    this.setState({
+      connectSelected: data,
+    });
+    setTimeout(() => {
+      this.setState({connectModal: true});
+    }, 500);
+  };
+
+  acceptRequest = () => {
+    this.confirm()
+  }
+
+
+  renderProposals = (data) => {
+    const { isConfirmationModal } = this.state;
     return (
       <View>
-        <ScrollView showsHorizontalScrollIndicator={false}>
-          <View style={{alignItems: 'center', margin: 10}}>
-            <View style={[{width: '100%'}]}>
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <UserImage user={""} style={[{flex: 1}]} />
-                <Text style={[{fontWeight: 'bold', margin: 2, flex: 4}]}>Kennette Canales</Text>
-                <Rating ratings={""} style={[{flex: 2}]} ></Rating>
-                <TouchableOpacity style={[{marginRight: 10, marginLeft: 10, alignItems: 'center'}]}>
-                  <FontAwesomeIcon icon={ faEllipsisH } style={{color: Color.black}} size={BasicStyles.iconSize} />
-                </TouchableOpacity>
-              </View>
-              <Text style={[{margin: 2}]}>Cebu South Road, Cebu City, Philippines</Text>
-              <Text style={[{margin: 2}]}>Needed on: September 25, 2020</Text>
-              <Text style={[{margin: 2}]}>THIS IS A TEST.</Text>
-              <Text style={[{margin: 2, fontSize: 10}]}>September 23, 2020</Text>
+        <View style={{
+            borderBottomWidth: 0.5,
+            borderBottomColor: Color.lightGray
+          }}>
+          <Text style={{
+            textAlign: 'left',
+            paddingTop: 10,
+            paddingBottom: 10,
+            fontWeight: 'bold'
+          }}>Proposals</Text>
+        </View>
+        <View style={{
+
+        }}>
+          <ProposalCard 
+            data={data}
+            navigation={this.props.navigation}
+            onAcceptRequest={() => this.acceptRequest()}
+            navigation={this.props.navigation}
+            />
+            {isConfirmationModal ?
+            <ConfirmationModal
+              visible={isConfirmationModal}
+              title={'Confirmation Message'}
+              message={'Are you sure you want to accept this request?'}
+              onCLose={() => {
+                this.closeModal()
+              }}
+              onConfirm={() => {
+                // this.closeModal()
+                this.viewMessages()
+              }}
+            /> : null }
+        </View>
+      </View>
+    )
+  }
+
+
+
+  render() {
+    const {user} = this.props.state;
+    const { data, isLoading } = this.state;
+    const { connectModal } = this.state;
+    return (
+      <View>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <View style={{
+            height: height + 25,
+            width: '90%',
+            marginLeft: '5%',
+            marginRight: '5%'
+          }}>
+            {
+              data && (
+                <View style={{alignItems: 'center'}}>
+                  <RequestCard 
+                    onConnectRequest={() => this.connectRequest()}
+                    data={data}
+                    navigation={this.props.navigation}
+                    />
+                </View>
+              )
+            }
+
+            {
+              (data && data.peers && data.peers.peers) && (
+                this.renderProposals(data)
+              )
+            }
             </View>
-          </View>
-          <View>
-            <View style={[{flexDirection: "row", padding:10}]}>
-              <Text style={[{fontWeight: 'bold'}]}>Proposal</Text>
-              <View style={[{flexDirection: "row", flexGrow: 1, justifyContent:'flex-end'}]}>
-                <Text>Proccessing fee</Text>
-              </View>
-            </View>
-            <View style={{flexDirection: 'row', paddingHorizontal:10, alignItems: 'center'}}>
-              <UserImage user={""} style={[{flex: 1}]} />
-              <Text style={[{fontWeight: 'bold', margin: 2, flex: 4}]}>Kennette Canales</Text>
-              <Text style={[{fontWeight: 'bold', color: Color.secondary}]}>PHP 100.00</Text>
-            </View>
-            <View style={[{flexDirection: "row", paddingHorizontal:10, alignItems: 'center'}]}>
-              <Rating ratings={""} style={[{flex: 2}]} ></Rating>
-              <FontAwesomeIcon icon={ faCircle } style={{color: Color.secondary, marginHorizontal: 10}} size={10} />
-              <Text>3.5 km</Text>
-            </View>
-            <View style={{width: '75%', flexDirection: 'row', padding:10}}>
-              <TouchableHighlight underlayColor={Color.gray} style={[{backgroundColor: Color.primary, width: '35%', alignItems: 'center', justifyContent: 'center', height: 40, borderRadius: 5,}]}>
-                <Text style={{ color: Color.white}}>View Profile</Text>
-              </TouchableHighlight>
-              <TouchableHighlight underlayColor={Color.gray} style={[{backgroundColor: Color.secondary, width: '35%', marginLeft: 5, alignItems: 'center', justifyContent: 'center', height: 40, borderRadius: 5,}]}>
-                <Text style={{ color: Color.white}}>Accept</Text>
-              </TouchableHighlight>
-            </View>
-          </View>
-          <View>
-            <View style={{flexDirection: 'row', paddingHorizontal:10, alignItems: 'center'}}>
-              <UserImage user={""} style={[{flex: 1}]} />
-              <Text style={[{fontWeight: 'bold', margin: 2, flex: 4}]}>Kennette Canales</Text>
-              <Text style={[{fontWeight: 'bold', color: Color.secondary}]}>PHP 100.00</Text>
-            </View>
-            <View style={[{flexDirection: "row", paddingHorizontal:10, alignItems: 'center'}]}>
-              <Rating ratings={""} style={[{flex: 2}]} ></Rating>
-              <FontAwesomeIcon icon={ faCircle } style={{color: Color.secondary, marginHorizontal: 10}} size={10} />
-              <Text>3.5 km</Text>
-            </View>
-            <View style={{width: '75%', flexDirection: 'row', padding:10}}>
-              <TouchableHighlight underlayColor={Color.gray} style={[{backgroundColor: Color.primary, width: '35%', alignItems: 'center', justifyContent: 'center', height: 40, borderRadius: 5,}]}>
-                <Text style={{ color: Color.white}}>View Profile</Text>
-              </TouchableHighlight>
-              <TouchableHighlight underlayColor={Color.gray} style={[{backgroundColor: Color.secondary, width: '35%', marginLeft: 5, alignItems: 'center', justifyContent: 'center', height: 40, borderRadius: 5,}]}>
-                <Text style={{ color: Color.white}}>Accept</Text>
-              </TouchableHighlight>
-            </View>
-          </View>     
         </ScrollView>
+        {isLoading ? <Spinner mode="overlay" /> : null}
+        <ProposalModal
+          visible={connectModal}
+          loading={(flag) => this.setState({
+            isLoading: flag
+          })}
+          data = {this.state.connectSelected}
+          navigation={this.props.navigation}
+          closeModal={() =>
+            this.setState({
+              connectModal: false,
+            })
+          }></ProposalModal>
       </View>
     );
   }
 }
+const mapStateToProps = (state) => ({state: state});
 
-export default RequestItem;
+const mapDispatchToProps = (dispatch) => {
+  const {actions} = require('@redux');
+  return {
+    setMessengerGroup: (messengerGroup) => dispatch(actions.setMessengerGroup(messengerGroup))
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(RequestItem);

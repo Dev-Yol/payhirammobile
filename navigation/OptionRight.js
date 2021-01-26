@@ -36,7 +36,7 @@ class NavigationDrawerStructureRight extends Component {
   };
 
   render() {
-    const { messenger, notifications } = this.props.state;
+    const { messenger, notifications, theme } = this.props.state;
     return (
       <View style={{ flexDirection: 'row', width: width }}>
         <TouchableOpacity
@@ -47,7 +47,7 @@ class NavigationDrawerStructureRight extends Component {
           style={{
             height: 50,
             width: 50,
-            backgroundColor: '#3F0050',
+            backgroundColor: theme ? theme.primary : Color.primary,
             borderRadius: 50,
             justifyContent: 'center',
             alignItems: 'center',
@@ -56,7 +56,7 @@ class NavigationDrawerStructureRight extends Component {
           }}>
           <TouchableOpacity
             disabled
-            underlayColor={Color.secondary}
+            underlayColor={theme ? theme.secondary : Color.secondary}
             style={{
               width: '16.5%',
               alignItems: 'center',

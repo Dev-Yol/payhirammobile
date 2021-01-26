@@ -17,6 +17,8 @@ import ImageModal from 'components/Modal/ImageModal.js';
 import ImagePicker from 'react-native-image-picker';
 import CommonRequest from 'services/CommonRequest.js';
 import { Dimensions } from 'react-native';
+import { faChevronRight, faTimes } from '@fortawesome/free-solid-svg-icons';
+
 const height = Math.round(Dimensions.get('window').height);
 class Messages extends Component{
   constructor(props){
@@ -28,11 +30,15 @@ class Messages extends Component{
       imageModalUrl: null,
       isImageModal: false,
       photo: null,
-      keyRefresh: 0
+      keyRefresh: 0,
+      settingsMenu: [],
+      settingsBreadCrumbs: ['Settings']
     }
   }
 
   componentDidMount(){
+    console.log("==================messages" + JSON.stringify(this.props.state.messengerGroup))
+    this.menu(Helper.MessengerMenu);
     const { messengerGroup, user } = this.props.state;
     if(messengerGroup != null && user != null){
       this.retrieve();
@@ -321,9 +327,10 @@ class Messages extends Component{
   }
 
   _headerRight = (item) => {
+    const { theme } = this.props.state;
     return (
       <View style={{flexDirection: 'row', marginTop: 10}}>
-        <UserImage user={item.account}/>
+        <UserImage user={item.account} color={theme ? theme.primary : Color.primary}/>
         <Text style={{
           lineHeight: 30,
           paddingLeft: 10
@@ -333,18 +340,20 @@ class Messages extends Component{
   }
 
   _headerLeft = (item) => {
+    const { theme } = this.props.state;
     return (
       <View style={{flexDirection: 'row', marginTop: 10, justifyContent: 'flex-end' }}>
         <Text style={{
           lineHeight: 30,
           paddingRight: 10
         }}>{item.account.username}</Text>
-        <UserImage user={item.account}/>
+        <UserImage user={item.account} color={theme ? theme.primary : Color.primary}/>
       </View>
     );
   }
 
   _rightTemplate = (item) => {
+    const { theme } = this.props.state;
     return (
       <View>
         {this._headerRight(item)}
@@ -353,13 +362,19 @@ class Messages extends Component{
         }]}>{item.created_at_human}</Text>
         {
           item.message != null && Platform.OS == 'android' && (
-            <Text style={Style.messageTextRight}>{item.message}</Text>
+            <Text style={[Style.messageTextRight, {
+              backgroundColor: theme ? theme.primary : Color.primary
+            }]}>{item.message}</Text>
           )
         }
         {
           item.message != null && Platform.OS == 'ios' && (
-            <View style={Style.messageTextRight}>
-                <Text style={Style.messageTextRightIOS}>{item.message}</Text>
+            <View style={[Style.messageTextRight, {
+              backgroundColor: theme ? theme.primary : Color.primary
+            }]}>
+                <Text style={[Style.messageTextLeftIOS, {
+                  backgroundColor: theme ? theme.primary : Color.primary
+                }]}>{item.message}</Text>
             </View>
           )
         }
@@ -371,6 +386,7 @@ class Messages extends Component{
   }
 
   _leftTemplate = (item) => {
+    const { theme } = this.props.state;
     return (
       <View>
         {this._headerLeft(item)}
@@ -379,13 +395,19 @@ class Messages extends Component{
         }]}>{item.created_at_human}</Text>
         {
           item.message != null && Platform.OS == 'android' && (
-            <Text style={Style.messageTextLeft}>{item.message}</Text>
+            <Text style={[Style.messageTextLeft, {
+              backgroundColor: theme ? theme.primary : Color.primary
+            }]}>{item.message}</Text>
           )
         }
         {
           item.message != null && Platform.OS == 'ios' && (
-            <View style={Style.messageTextLeft}>
-                <Text style={Style.messageTextLeftIOS}>{item.message}</Text>
+            <View style={[Style.messageTextLeft, {
+              backgroundColor: theme ? theme.primary : Color.primary
+            }]}>
+                <Text style={[Style.messageTextLeftIOS, {
+                  backgroundColor: theme ? theme.primary : Color.primary
+                }]}>{item.message}</Text>
             </View>
           )
         }
@@ -519,6 +541,7 @@ class Messages extends Component{
   }
 
   _footer = () => {
+    const { theme } = this.props.state;
     return (
       <View style={{
         flexDirection: 'row' 
@@ -536,7 +559,7 @@ class Messages extends Component{
             icon={ faImage }
             size={BasicStyles.iconSize}
             style={{
-              color: Color.primary
+              color: theme ? theme.primary : Color.primary
             }}
             />
         </TouchableOpacity>
@@ -559,7 +582,7 @@ class Messages extends Component{
             icon={ faPaperPlane }
             size={BasicStyles.iconSize}
             style={{
-              color: Color.primary
+              color: theme ? theme.primary : Color.primary
             }}
             />
         </TouchableOpacity>
@@ -599,9 +622,119 @@ class Messages extends Component{
     );
   }
 
+  cloneMenu() {
+    const { viewMenu } = this.props // new
+    viewMenu(false) // new
+  }
+
+  menu(data) {
+    /**
+    * returns Settings Menu
+    */
+    this.setState({settingsMenu: data.map((el, ndx) => {
+      return (
+        <View style={Style.settingsTitles}>
+          {el.title == 'Close' && <TouchableOpacity onPress={()=>{this.cloneMenu()}}>
+            <Text style={{color: Color.danger}}> Cancel </Text>
+          </TouchableOpacity>}
+          {el.title != 'Close' && <Text style={{color: Color.black}}> {el.title} </Text>}
+          {el.button != undefined && 
+            <TouchableOpacity onPress={()=>{this.settingsAction(el)}}>
+              <View style={[Style.settingsButton, {backgroundColor: el.button.color}]}> 
+                <Text style={{fontSize: BasicStyles.standardFontSize, color: 'white'}}> {el.button.title} </Text>
+              </View>
+            </TouchableOpacity>
+          }
+          {(el.button == undefined && el.title != 'Close') &&
+            <TouchableOpacity onPress={()=>{this.settingsAction(el)}}>
+              <FontAwesomeIcon
+                icon={ faChevronRight }
+                size={BasicStyles.iconSize}
+                style={{color: Color.primary}}/>
+            </TouchableOpacity>
+          }
+        </View>
+      )
+    })})
+  }
+
+  settingsRemove() {
+    /**
+    * when x button is click
+    */
+    if(this.state.settingsBreadCrumbs.length > 1){
+      this.state.settingsBreadCrumbs.pop();
+    }else{
+      this.cloneMenu()
+    }
+    switch(this.state.settingsBreadCrumbs.length){
+      case 1:
+        this.menu(Helper.MessengerMenu)
+        break;
+      case 2:
+        this.menu(Helper.requirementsMenu)
+        break;
+    }
+  }
+
+  settingsAction(data) {
+    /**
+    * When one of the settings menu is clicked
+    */
+    if(data.payload == 'same_page'){
+      switch(data.payload_value){
+        case 'requirements':
+          let temp = this.state.settingsBreadCrumbs
+          temp.push('Requirements')
+          this.setState({settingsBreadCrumbs: temp})
+          this.menu(Helper.requirementsMenu)
+          break;
+        case 'signature':
+          let sign = this.state.settingsBreadCrumbs
+          sign.push('On App Signature')
+          this.setState({settingsBreadCrumbs: sign})
+
+          let dummyData = [1, 2, 3, 4, 5]
+
+          let frame = [
+            <View>
+              <ScrollView>
+                <View style={Style.signatureFrameContainer}>
+                  {
+                    dummyData.map((ndx, el)=>{
+                      return (
+                        <View style={Style.signatureFrame}>
+                        </View>
+                      )
+                    })
+                  }
+                </View>
+              </ScrollView>
+              <View style={{paddingTop: 50}}>
+                <View style={Style.signatureFrameContainer}>
+                  <TouchableOpacity style={[Style.signatureAction, Style.signatureActionDanger]}>
+                    <Text style={{color: Color.white}}> Decline </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={[Style.signatureAction, Style.signatureActionSuccess]}>
+                    <Text style={{color: Color.white}}> Accept </Text>
+                  </TouchableOpacity>
+                </View>
+                {false && <View style={Style.signatureFrameContainer}>
+                  <TouchableOpacity style={[Style.signatureFullSuccess, Style.signatureActionSuccess]}>
+                    <Text style={{color: Color.white}}> Upload </Text>
+                  </TouchableOpacity>
+                </View>}
+              </View>
+            </View>
+          ]
+          this.setState({settingsMenu: frame})
+      }
+    }
+  }
+
   render() {
     const { isLoading, isImageModal, imageModalUrl, photo, keyRefresh } = this.state;
-    const { messengerGroup, user } = this.props.state;
+    const { messengerGroup, user, isViewing } = this.props.state;
     return (
       <View key={keyRefresh}>
         <ScrollView
@@ -610,7 +743,7 @@ class Messages extends Component{
               this.scrollView.scrollToEnd({animated: true});
           }}
           style={[Style.ScrollView, {
-            height: '100%'
+            height: isViewing ? '40%' : '100%'
           }]}
           onScroll={(event) => {
             if(event.nativeEvent.contentOffset.y <= 0) {
@@ -634,6 +767,32 @@ class Messages extends Component{
           </View>
           {isLoading ? <Spinner mode="overlay"/> : null }
         </ScrollView>
+        {isViewing &&
+          <View
+            style={
+              {
+                height: '60%', 
+                paddingBottom: 51, 
+                paddingTop: 0, 
+                borderTopWidth: 1, 
+                borderTopColor: Color.gray
+              }
+            }
+          >
+            <View style={Style.settingsTitles}>
+              <Text> {this.state.settingsBreadCrumbs.join(' > ')} </Text>
+              <TouchableOpacity onPress={() => {this.settingsRemove()}}>
+                <FontAwesomeIcon
+                  icon={ faTimes }
+                  size={20}
+                  style={{color: 'red'}}/>
+              </TouchableOpacity>
+            </View>
+              <ScrollView>
+                {this.state.settingsMenu}
+              </ScrollView>
+          </View>
+        }
         <View style={{
           position: 'absolute',
           bottom: 0,
@@ -642,7 +801,7 @@ class Messages extends Component{
           borderTopWidth: 1,
           backgroundColor: Color.white
         }}>
-          {messengerGroup != null && messengerGroup.request.status < 2 && (this._footer())}
+          {messengerGroup != null && messengerGroup.request.status < 2 && !isViewing && (this._footer())}
         </View>
         <ImageModal
           visible={isImageModal}
@@ -662,6 +821,7 @@ const mapDispatchToProps = dispatch => {
     setMessengerGroup: (messengerGroup) => dispatch(actions.setMessengerGroup(messengerGroup)),
     updateMessagesOnGroup: (message) => dispatch(actions.updateMessagesOnGroup(message)),
     updateMessageByCode: (message) => dispatch(actions.updateMessageByCode(message)),
+    viewMenu: (isViewing) => dispatch(actions.viewMenu(isViewing))
   };
 };
 

@@ -1,6 +1,7 @@
 import Color from './Color';
 import { Dimensions } from 'react-native';
 const width = Math.round(Dimensions.get('window').width);
+const borderRadius = 12
 export default {
   formControl: {
     height: 50,
@@ -38,10 +39,12 @@ export default {
   },
   pickerStyleCreate: {
     height: 50,
-    borderBottomColor: Color.gray,
-    borderBottomWidth: 1,
+    borderColor: Color.lightGray,
+    borderWidth: 1,
     width: '100%',
-    paddingLeft: 10
+    paddingLeft: 10,
+    borderRadius: 5,
+    fontSize: 12
   },
   pickerStyleIOS: {
     inputIOS: {
@@ -53,7 +56,8 @@ export default {
       marginRight: 18,
       marginLeft: 10,
       height: 50,
-      paddingLeft: 10
+      paddingLeft: 10,
+      fontSize: 12
     }
   },
   pickerStyleIOSNoMargin: {
@@ -64,7 +68,8 @@ export default {
       color: '#000',
       height: 50,
       width: '100%',
-      paddingLeft: 10
+      paddingLeft: 10,
+      fontSize: 12
     }
   },
   btn: {
@@ -92,6 +97,7 @@ export default {
     color: Color.white
   },
   iconSize: 24,
+  headerBackIconSize: 30,
   iconStyle: {
     color: Color.primary,
     paddingLeft: 20,
@@ -132,5 +138,63 @@ export default {
     borderRadius: 15
   },
   profileIconSize: 30,
-  standardFontSize: 11
+  standardFontSize: 12,
+  standardTitleFontSize: 16,
+  standardTitle2FontSize: 14,
+  standardSubTitleFontSize: 14,
+  standardHeaderFontSize: 18,
+  standardBorderRadius: borderRadius,
+  headerDrawerStyle: {
+    headerStyle: {
+      elevation: 10,
+      backgroundColor: Color.white,
+      height: 60,
+      justifyContent: 'center',
+      alignItems: 'center',
+      fontSize: 18
+    },
+    headerTitleContainerStyle: {
+      backgroundColor: Color.white,
+      justifyContent: 'center',
+      alignItems: 'center',
+      paddingRight: 64
+    },
+    headerTitleStyle: {
+      fontWeight: 'bold',
+    },  
+  },
+  standardDivider: {
+    width: '90%',
+    height: 0.5,
+    marginLeft: '5%',
+    marginRight: '5%',
+  },
+  standardContainer: {
+    width: '90%',
+    marginRight: '5%',
+    marginLeft: '5%'
+  },
+  standardButton: {
+    height: 50,
+    backgroundColor: Color.primary,
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 5
+  },
+  standardTextInput: {
+    height: 50,
+    borderColor: Color.lightGray,
+    borderWidth: 1,
+    width: '100%',
+    borderRadius: 5,
+    paddingLeft: 10
+  },
+  standardTextInputMultiline: {
+    borderColor: Color.lightGray,
+    borderWidth: 1,
+    width: '100%',
+    borderRadius: 5,
+    paddingLeft: 10
+  },
 }
