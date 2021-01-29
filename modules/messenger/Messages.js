@@ -731,6 +731,9 @@ class Messages extends Component{
           ]
           this.setState({settingsMenu: frame})
       }
+    }else if(data.payload === 'redirect') {
+      const { request } = this.props.state.messengerGroup
+      this.props.navigation.navigate(data.payload_value, {data: {id: request.id}})
     }
   }
 
