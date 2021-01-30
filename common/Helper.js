@@ -165,7 +165,7 @@ export default {
     {
       title: 'Details',
       payload: 'redirect',
-      payload_value: 'RequestItem'
+      payload_value: 'requestItemStack'
     },
     {
       title: 'Transfer funds',
