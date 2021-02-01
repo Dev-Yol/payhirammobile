@@ -16,6 +16,7 @@ export default {
   ledgerSummary: apiUrl + 'ledger/summary',
   ledgerHistory: apiUrl + 'ledger/history',
   requestRetrieve: apiUrl + 'requests/retrieve',
+  requestRetrieveItem: apiUrl + 'requests/retrieve_item',
   transactionRetrieve: apiUrl + 'ledger/summary_ledger',
   requestCreate: apiUrl + 'requests/create',
   bookmarkCreate: apiUrl + 'bookmarks/create',
@@ -55,7 +56,10 @@ export default {
   couponsValidate: apiUrl + 'coupons/validate',
   productsRetrieve: apiUrl + 'products/retrieve',
   productsRetrieveBasic: apiUrl + 'products/retrieve_basic',
+  ticketsRetrieve: apiUrl + 'tickets/retrieve',
+  ticketsCreate: apiUrl + 'tickets/create',
+  ticketsUpdate: apiUrl + 'tickets/update',
   accountUpdateEmail: apiUrl + 'accounts/update_email',
   circleRetrieve: apiUrl + 'my_circle/retrieve',
-  circleCreate: apiUrl + 'my_circle/create',
+  circleCreate: apiUrl + 'my_circle/create'
 };

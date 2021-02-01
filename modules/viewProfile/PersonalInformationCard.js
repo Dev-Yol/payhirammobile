@@ -2,43 +2,53 @@ import React, { Component } from 'react'
 import { View, Text } from 'react-native'
 import { Color, BasicStyles } from 'common'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faUserCircle, faEnvelope, faPhoneAlt, faCalendarAlt, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
+import { faUserCircle, faEnvelope, faPhoneAlt, faCalendarAlt, faMapMarkerAlt, faCircle } from '@fortawesome/free-solid-svg-icons';
 import { } from '@fortawesome/free-regular-svg-icons';
 import styles from './Style';
 class PersonalInformationCard extends Component {
-    _renderTextIcon = (icon, text) => {
-        return (
-            <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
-                <FontAwesomeIcon icon={icon} style={{ marginRight: 5 }} size={20} />
-                <Text style={[{ fontWeight: 'bold', margin: 2, fontSize: BasicStyles.standardFontSize }]}>{text}</Text>
-            </View>
-        )
-    }
-    render() {
-        let { _renderTextIcon } = this
-        const { user } = this.props
-        return (
-            <View>
-                <View style={styles.cardHeader}>
-                    <Text style={[{ fontSize: BasicStyles.standardFontSize }, styles.cardHeaderText]}>Personal Information</Text>
-                </View>
-                <View style={styles.rowContainer}>
-                    <View style={styles.rows}>
-                        <View style={[styles.col, { paddingLeft: 20 }]}>
-                            {_renderTextIcon(faUserCircle, user.account.information.first_name != null ? user.account.information.first_name : "---<>---")}
-                            {_renderTextIcon(faEnvelope, user.account.email != null ? user.account.email : "---<>---")}
-                            {_renderTextIcon(faUserCircle,  user.account.information.sex != null ? user.account.information.sex : "---<>---")}
-                        </View>
-                        <View style={[styles.col, { paddingRight: 25 }]}>
-                            {_renderTextIcon(faPhoneAlt, user.account.information.cellular_number != null ? user.account.information.cellular_number : "---<>---")}
-                            {_renderTextIcon(faCalendarAlt, user.account.information.birth_date_human != null ? user.account.information.birth_date_human : "---<>---")}
-                            {_renderTextIcon(faMapMarkerAlt, user.account.information.address != null ? user.account.information.address : "---<>---")}
-                        </View>
-                    </View>
-                </View>
-            </View>
-        )
-    }
+  _renderTextIcon = (icon, text) => {
+    return (
+      <View style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          width: '90%',
+          marginLeft: '5%',
+          marginRight: '5%',
+          paddingTop: 20,
+          paddingBottom: 20,
+          borderBottomWidth: 1,
+          borderBottomColor: Color.lightGray
+        }}>
+        <FontAwesomeIcon icon={icon} style={{ marginRight: 5 }} size={20} />
+        <Text style={{
+          fontSize: BasicStyles.standardFontSize
+        }}>{text}</Text>
+      </View>
+    )
+  }
+  render() {
+    let { _renderTextIcon } = this
+    const { user } = this.props
+    return (
+      <View>
+        <View style={{
+          paddingTop: 20,
+          paddingBottom: 20,
+          paddingLeft: 10
+        }}>
+            <Text style={{
+              fontWeight: 'bold'
+            }}>Personal Information</Text>
+        </View>
+        {_renderTextIcon(faUserCircle, user.information.first_name)}
+        {_renderTextIcon(faEnvelope, user.email)}
+        {_renderTextIcon(faCircle,  user.information.sex)}
+        {_renderTextIcon(faPhoneAlt, user.information.cellular_number)}
+        {_renderTextIcon(faCalendarAlt, user.information.birth_date_human)}
+        {_renderTextIcon(faMapMarkerAlt, user.information.address)}
+      </View>
+    )
+  }
 }
 
 export default PersonalInformationCard;

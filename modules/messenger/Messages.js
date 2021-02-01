@@ -633,26 +633,28 @@ class Messages extends Component{
     */
     this.setState({settingsMenu: data.map((el, ndx) => {
       return (
-        <View style={Style.settingsTitles}>
+        <View key={'msgmenu'+ndx}>
           {el.title == 'Close' && <TouchableOpacity onPress={()=>{this.cloneMenu()}}>
-            <Text style={{color: Color.danger}}> Cancel </Text>
+            <View style={Style.settingsTitles}>
+              <Text style={{color: Color.danger}}> Cancel </Text>
+            </View>
           </TouchableOpacity>}
-          {el.title != 'Close' && <Text style={{color: Color.black}}> {el.title} </Text>}
-          {el.button != undefined && 
-            <TouchableOpacity onPress={()=>{this.settingsAction(el)}}>
-              <View style={[Style.settingsButton, {backgroundColor: el.button.color}]}> 
-                <Text style={{fontSize: BasicStyles.standardFontSize, color: 'white'}}> {el.button.title} </Text>
-              </View>
-            </TouchableOpacity>
-          }
-          {(el.button == undefined && el.title != 'Close') &&
-            <TouchableOpacity onPress={()=>{this.settingsAction(el)}}>
-              <FontAwesomeIcon
-                icon={ faChevronRight }
-                size={BasicStyles.iconSize}
-                style={{color: Color.primary}}/>
-            </TouchableOpacity>
-          }
+          <TouchableOpacity onPress={()=>{this.settingsAction(el)}}>
+            <View style={Style.settingsTitles}>
+              {el.title != 'Close' && <Text style={{color: Color.black}}> {el.title} </Text>}
+              {el.button != undefined && 
+                  <View style={[Style.settingsButton, {backgroundColor: el.button.color}]}> 
+                    <Text style={{fontSize: BasicStyles.standardFontSize, color: 'white'}}> {el.button.title} </Text>
+                  </View>
+              }
+              {(el.button == undefined && el.title != 'Close') &&
+                <FontAwesomeIcon
+                  icon={ faChevronRight }
+                  size={BasicStyles.iconSize}
+                  style={{color: Color.primary}}/>
+              }
+            </View>
+          </TouchableOpacity>
         </View>
       )
     })})
@@ -729,6 +731,9 @@ class Messages extends Component{
           ]
           this.setState({settingsMenu: frame})
       }
+    }else if(data.payload === 'redirect') {
+      const { request } = this.props.state.messengerGroup
+      this.props.navigation.navigate(data.payload_value, {data: {id: request.id}})
     }
   }
 

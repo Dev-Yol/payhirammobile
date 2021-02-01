@@ -32,8 +32,15 @@ export default {
     {
       title: 'Settings',
       route: 'Settings',
+    },
+    {
+      title: 'Terms and Conditions',
+      route: 'TermsAndConditions',
+    },
+    {
+      title: 'Support',
+      route: 'Support',
     }
-    
   ],
   currency: [{
     title: 'Philippine Peso',
@@ -158,7 +165,7 @@ export default {
     {
       title: 'Details',
       payload: 'redirect',
-      payload_value: 'RequestItem'
+      payload_value: 'requestItemStack'
     },
     {
       title: 'Transfer funds',
