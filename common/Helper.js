@@ -170,7 +170,7 @@ export default {
     {
       title: 'Transfer funds',
       payload: 'redirect',
-      payload_value: 'TransferFunds'
+      payload_value: 'transferFundStack'
     },
     {
       title: 'Rate',
