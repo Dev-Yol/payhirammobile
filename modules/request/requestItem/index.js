@@ -132,7 +132,7 @@ class RequestItem extends Component {
             {isConfirmationModal ?
             <ConfirmationModal
               visible={isConfirmationModal}
-              title={'Confirmation Message'}
+              title={'Confirmation'}
               message={'Are you sure you want to accept this request?'}
               onCLose={() => {
                 this.closeModal()
