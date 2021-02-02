@@ -54,6 +54,7 @@ class CreateTicket extends Component {
       noData: false,
     }
     ImagePicker.launchImageLibrary(options, response => {
+      console.log(response, "=======");
       if (response.uri) {
         let images = this.state.images;
         images.push(`data:image/png;base64,${response.data}`);
@@ -79,7 +80,7 @@ class CreateTicket extends Component {
         <ScrollView>
           <View>
             <View style={styles.InputContainer}>
-              <Text>Title</Text>
+              <Text style={styles.TicketInputTitleContainer}>Title</Text>
               <TextInput
                 style={BasicStyles.formControl}
                 onChangeText={(title) => this.setState({ title })}
@@ -88,7 +89,7 @@ class CreateTicket extends Component {
               />
             </View>
             <View style={styles.InputContainer}>
-              <Text>Description</Text>
+              <Text style={styles.TicketInputTitleContainer}>Description</Text>
               <TextInput
                 style={BasicStyles.formControl}
                 onChangeText={(description) => this.setState({ description })}
@@ -101,18 +102,9 @@ class CreateTicket extends Component {
               <Dropdown selectedValue={this.state.type} onChange={this.selectedValue} data={data}></Dropdown>
             </View>
             {this.state.isLoading ? <Spinner mode="overlay" /> : null}
-            <View>
-              {this.state.images.map((u, i) => {
-                return (
-                  <View key={i} style={{flexDirection: 'row'}}>
-                    <Image
-                      source={{ uri: u }}
-                      style={styles.Image}
-                    />
-                  </View>
-                )
-              })}
+            <View style={{flexDirection: 'row', padding: 15, width: '90%'}}>
               <TouchableOpacity
+                style={{marginBottom: 25, padding: 15}}
                 onPress={() => {
                   this.choosePhoto();
                 }}>
@@ -124,12 +116,24 @@ class CreateTicket extends Component {
                   size={50}
                 />
               </TouchableOpacity>
+              <ScrollView horizontal={true}>
+                {this.state.images.map((u, i) => {
+                  return (
+                    <View key={i}>
+                      <Image
+                        source={{ uri: u }}
+                        style={styles.Image}
+                      />
+                    </View>
+                  )
+                })}
+              </ScrollView>
             </View>
           </View>
           <View style={styles.TicketButtonContainer}>
           <TicketButton
             buttonColor="#22B173"
-            buttonWidth="100%"
+            buttonWidth={350}
             buttonHeight={50}
             fontSize={14}
             textColor="#FFFFFF"
