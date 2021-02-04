@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native'
 
 const styles = StyleSheet.create({
   CreateTicketContainer: {
@@ -7,17 +7,19 @@ const styles = StyleSheet.create({
     width: '100%',
     marginTop: '4%',
     flex: 1,
+    padding: 15
   },
   InputContainer: {
-    width: '90%'
+    width: '90%',
+    marginTop: 5
   },
   TicketButtonContainer: {
     width: '100%',
-    alignItems: 'center',
-    bottom: 5
+    alignItems: 'center'
   },
   CustomButtonContainer: {
     borderRadius: 10,
+    right: 7,
   },
   ButtonTextContainer: {
     paddingVertical: '5%',
@@ -31,7 +33,9 @@ const styles = StyleSheet.create({
     marginTop: '2%',
     width: '100%',
   },
-  TicketInputTitleContainer: {},
+  TicketInputTitleContainer: {
+    marginBottom: 5
+  },
   TicketInputTitleTextStyle: {
     fontSize: 15,
   },
