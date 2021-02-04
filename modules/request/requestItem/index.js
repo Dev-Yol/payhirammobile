@@ -6,6 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
   TouchableHighlight,
+  Alert,
   Dimensions
 } from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
@@ -16,7 +17,7 @@ import RequestCard from 'modules/generic/RequestCard';
 import ProposalCard from 'modules/generic/ProposalCard';
 import ProposalModal from 'modules/generic/ProposalModal';
 import Api from 'services/api/index.js';
-import ConfirmationModal from 'components/Modal/ConfirmationModal.js';
+// import ConfirmationModal from 'components/Modal/ConfirmationModal.js';
 
 const width = Math.round(Dimensions.get('window').width);
 const height = Math.round(Dimensions.get('window').height);
@@ -29,8 +30,8 @@ class RequestItem extends Component {
       isLoading: false,
       connectSelected: null,
       connectModal: false,
-      isConfirmationModal: false,
-      isConfirm: false,
+      // isConfirmationModal: false,
+      // isConfirm: false,
       data: null
     }
   }
@@ -73,12 +74,11 @@ class RequestItem extends Component {
     });
   }
 
-  confirm = () => {
-    this.setState({isConfirmationModal: true})
-  }
+  // confirm = () => {
+  //   this.setState({isConfirmationModal: true})
+  // }
 
   viewMessages = () => {
-    this.closeModal()
     const { setMessengerGroup } = this.props;
     setMessengerGroup();
     setTimeout(() => {
@@ -86,9 +86,9 @@ class RequestItem extends Component {
     }, 500)
   }
 
-  closeModal = () => {
-    this.setState({isConfirmationModal: false})
-  }
+  // closeModal = () => {
+  //   this.setState({isConfirmationModal: false})
+  // }
 
   connectRequest = () => {
     const { data } = this.props.navigation.state.params;
@@ -101,12 +101,20 @@ class RequestItem extends Component {
   };
 
   acceptRequest = () => {
-    this.confirm()
+    Alert.alert(
+      'Confirmation',
+      'Are you sure you want to accept this request?',
+      [
+        {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+        {text: 'OK', onPress: () => this.viewMessages()},
+      ],
+      { cancelable: false }
+    )
   }
 
 
   renderProposals = (data) => {
-    const { isConfirmationModal } = this.state;
+    // const { isConfirmationModal } = this.state;
     return (
       <View>
         <View style={{
@@ -129,7 +137,7 @@ class RequestItem extends Component {
             onAcceptRequest={() => this.acceptRequest()}
             navigation={this.props.navigation}
             />
-            {isConfirmationModal ?
+            {/* {isConfirmationModal ?
             <ConfirmationModal
               visible={isConfirmationModal}
               title={'Confirmation'}
@@ -141,7 +149,7 @@ class RequestItem extends Component {
                 // this.closeModal()
                 this.viewMessages()
               }}
-            /> : null }
+            /> : null } */}
         </View>
       </View>
     )
