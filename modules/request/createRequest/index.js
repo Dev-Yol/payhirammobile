@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {Text, View, StyleSheet, ScrollView, TextInput, Dimensions} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faStar, faAsterisk} from '@fortawesome/free-solid-svg-icons';
-import {Picker} from '@react-native-community/picker';
 import {connect} from 'react-redux';
 import Api from 'services/api/index.js';
 import {Spinner} from 'components';

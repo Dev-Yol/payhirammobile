@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import { View, Text, ScrollView, TouchableHighlight } from 'react-native';
-import { UserImage, Rating, Spinner } from 'components';
+import { UserImage, Spinner } from 'components';
+import { Rating } from 'components/index.js';
 import { Routes, Color } from 'common';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faCheckCircle, faTimesCircle} from '@fortawesome/free-solid-svg-icons';
