@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import Style from './Style';
-import {Text, View, TouchableOpacity, TextInput, Picker, ScrollView, TouchableHighlight, ToastAndroid, Platform} from 'react-native';
+import {Text, View, TouchableOpacity, TextInput, ScrollView, TouchableHighlight, ToastAndroid, Platform} from 'react-native';
+import { Picker } from '@react-native-community/picker';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { connect } from 'react-redux';

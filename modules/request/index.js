@@ -10,7 +10,8 @@ import {
   BackHandler,
   ToastAndroid,
 } from 'react-native';
-import {Picker, FlatList, TouchableOpacity} from 'react-native';
+import {FlatList, TouchableOpacity} from 'react-native';
+import { Picker } from '@react-native-community/picker';
 import {Routes, Color, Helper, BasicStyles} from 'common';
 import {
   Spinner,

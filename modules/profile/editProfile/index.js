@@ -6,8 +6,8 @@ import {
   TextInput,
   TouchableOpacity,
   TouchableHighlight,
-  Picker,
 } from 'react-native';
+import { Picker } from '@react-native-community/picker';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {
   faCheckCircle,

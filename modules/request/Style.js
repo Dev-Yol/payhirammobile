@@ -31,7 +31,7 @@ export default {
     position: 'absolute',
     bottom: 10,
     right: 10,
-    height: 60,
+    height: 50,
     backgroundColor: Color.secondary,
     borderRadius: 100,
     color: Color.white
