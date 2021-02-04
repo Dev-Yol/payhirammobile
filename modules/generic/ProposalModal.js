@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, TouchableHighlight, ScrollView, TextInput, Dimensions } from 'react-native';
+import { Text, View, TouchableHighlight, ScrollView, TextInput, Dimensions, Alert } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faAsterisk } from '@fortawesome/free-solid-svg-icons';
 import { Picker } from '@react-native-community/picker';
@@ -26,6 +26,17 @@ class ProposalModal extends Component {
   redirect = (route) => {
     this.props.navigation.navigate(route);
   };
+
+  check = () => {
+    Alert.alert(
+      'Alert',
+      'Please fill in all fields.',
+      [
+        {text: 'Ok', onPress: () => console.log('Cancel Pressed'), style: 'cancel'}
+      ],
+      { cancelable: false }
+    )
+  } 
 
   submit(){
     const { user, ledger, request } = this.props.state;
@@ -87,7 +98,7 @@ class ProposalModal extends Component {
                 marginLeft: '5%',
                 marginRight: '5%'
               }}>
-                  <PickerWithLabel 
+                  <PickerWithLabel
                     label={'Select Currency'}
                     data={Helper.currency}
                     placeholder={'Click to select'}
@@ -98,7 +109,7 @@ class ProposalModal extends Component {
                     onError={false}
                   />
 
-                  <TextInputWithLabel 
+                    <TextInputWithLabel 
                     variable={this.state.charge}
                     onChange={(value) => this.setState({charge: value})}
                     label={'Amount'}
@@ -106,8 +117,7 @@ class ProposalModal extends Component {
                     onError={false}
                     required={true}
                     keyboardType={'numeric'}
-                  />
-
+                    />
 
                   <View style={{
                     width: '100%',
@@ -215,7 +225,7 @@ class ProposalModal extends Component {
 
               <Button 
                 title={'Continue'}
-                onClick={() => {this.submit()}}
+                onClick={() => {this.state.charge != 0 || this.state.charge != '' ? this.submit() : this.check()}}
                 style={{
                   width: '45%',
                   marginLeft: '5%',

@@ -9,12 +9,13 @@ import {
 } from 'react-native';
 import { Picker } from '@react-native-community/picker';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import Api from 'services/api/index.js';
 import {
   faCheckCircle,
   faUserCircle,
   faUpload,
 } from '@fortawesome/free-solid-svg-icons';
-import {BasicStyles, Color} from 'common';
+import {BasicStyles, Color, Routes} from 'common';
 import {Rating, DateTime} from 'components';
 import { connect } from 'react-redux';
 import UserImage from 'components/User/Image';
@@ -26,6 +27,11 @@ class EditProfile extends Component {
     this.state = {
       gender: 1,
       school: 1,
+      email: '',
+      phone_number: '',
+      sex: 0,
+      address: '',
+      birth_date: ''
     };
   }
   onChange(item, type) {
@@ -36,8 +42,36 @@ class EditProfile extends Component {
     }
   }
 
+  update = () => {
+    console.log('IMmmmmmmmmmmmmmmmmmmmmmmmmmm herrrrrrrrrrrrrrrrrrrrrrrrrrre')
+    const { user } = this.props.state;
+    let parameters = {
+      id: user.account_information.account_id,
+      phone_number: user.account_information.phone_number,
+      sex: user.account_information.phone_number,
+      address: user.account_information.address,
+      birth_date: user.account_information.birth_date,
+      email: user.email
+    };
+    this.setState({ isLoading: true });
+    Api.request(
+      Routes.accountProfileUpdate,
+      parameters, (response) => {
+        console.log('Successfully updated=====================', parameters)
+        this.setState({ isLoading: false });
+        alert('Updated Successfully');
+      },
+      (error) => {
+        console.log('Failed to Update', error);
+        this.setState({ isLoading: false });
+      }
+    )
+  }
+
   render() {
     const { user, theme } = this.props.state;
+    let fullName = user.account_information.first_name + user.account_information.middle_name + user.account_information.last_name
+    console.log('=============================', fullName)
     const {data} = [
       {
         title: 'Male',
@@ -102,25 +136,42 @@ class EditProfile extends Component {
               }}>
               Basic Settings
             </Text>
+            
             <Text style={{marginLeft: 20}}>Full Name</Text>
             <TextInput
               style={[BasicStyles.formControl, {alignSelf: 'center'}]}
-              placeholder={'Enter Full Name'}
+              placeholder={fullName != 0 ? fullName : 'Enter your Full Name'}
+              // value={fullName}
+              variable={this.state.fullname}
+              onChange={(value) => {this.setState({fullName: value})}}
+              required={true}
             />
             <Text style={{marginLeft: 20}}>Phone Number</Text>
             <TextInput
               style={[BasicStyles.formControl, {alignSelf: 'center'}]}
               placeholder={'Enter Phone Number'}
+              value={user.account_information.phone_number}
+              variable={this.state.phone_number}
+              onChange={(value) => {this.setState({phone_number: value})}}
+              required={true}
             />
             <Text style={{marginLeft: 20}}>Email</Text>
             <TextInput
               style={[BasicStyles.formControl, {alignSelf: 'center'}]}
               placeholder={'Enter Email'}
+              value={user.email}
+              variable={this.state.email}
+              onChange={(value) => {this.setState({email: value})}}
+              required={true}
             />
             <View style={{flexDirection: 'row', justifyContent: 'center'}}>
               <View style={{width: '40%', marginRight: 20}}>
                 <Text>Birthdate</Text>
-                <DateTime type={'date'} style={{marginTop: 0}} />
+                <DateTime type={'date'} style={{marginTop: 0}} 
+                value={user.account_information.birth_date}
+                variable={this.state.birth_date}
+                onChange={(value) => {this.setState({birth_date: value})}}
+                required={true}/>
               </View>
               <View style={{width: '40%', marginLeft: 20}}>
                 <Text>Gender</Text>
@@ -135,7 +186,11 @@ class EditProfile extends Component {
                   <Picker
                     selectedValue={this.state.gender}
                     onValueChange={(input) => this.onChange(input, 'gender')}
-                    style={BasicStyles.pickerStyleCreate}>
+                    style={BasicStyles.pickerStyleCreate}
+                    value={user.account_information.sex}
+                    variable={this.state.sex}
+                    onChange={(value) => {this.setState({sex: value})}}
+                    required={true}>
                     <Picker.Item key={1} label={'Male'} value={1} />
                     <Picker.Item key={2} label={'Female'} value={2} />
                   </Picker>
@@ -146,9 +201,13 @@ class EditProfile extends Component {
             <TextInput
               style={[BasicStyles.formControl, {alignSelf: 'center'}]}
               placeholder={'Enter Address'}
+              value={user.account_information.address}
+              variable={this.state.address}
+              onChange={(value) => {this.setState({address: value})}}
+              required={true}
             />
           </View>
-          <View>
+          {/* <View>
             <Text
               style={{
                 borderBottomWidth: 1,
@@ -213,7 +272,7 @@ class EditProfile extends Component {
                 <DateTime type={'date'} style={{marginTop: 0}} />
               </View>
             </View>
-          </View>
+          </View> */}
           <View>
             <Text
               style={{
@@ -245,9 +304,9 @@ class EditProfile extends Component {
             </TouchableOpacity>
           </View>
 
-          <Button 
+          <Button
               title={'Update'}
-              onClick={() => {}}
+              onClick={() => this.update()}
               style={{
                 width: '90%',
                 marginRight: '5%',
