@@ -9,7 +9,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import NotificationSettings from './index.js';
 import {NavigationActions} from 'react-navigation';
-import {BasicStyles} from 'common';
+import {BasicStyles, Color} from 'common';
 import {connect} from 'react-redux';
 
 class HeaderOptions extends Component {

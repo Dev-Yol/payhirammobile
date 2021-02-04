@@ -35,6 +35,8 @@ export default {
   mmCreateWithImage: apiUrl + 'messenger_messages/create_with_images',
   ratingsCreate: apiUrl + 'ratings/create',
   notificationSettingsRetrieve: apiUrl + 'notification_settings/retrieve',
+  notificationSettingsCreate: apiUrl + 'notification_settings/create',
+  notificationSettingsUpdate: apiUrl + 'notification_settings/update',
   notificationSettingOtp: apiUrl + 'notification_settings/update_otp',
   imageUpload: apiUrl + 'images/upload',
   imageRetrieve: apiUrl + 'images/retrieve',
