@@ -34,8 +34,9 @@ class Circle extends Component{
           <TouchableHighlight 
             onPress={() => {
               this.redirect(el)
-            }} 
+            }}
             underlayColor={Color.gray}
+            key={ndx}
           >
             <View style={{flexDirection: 'row', margin: 10, alignItems: 'center'}}>
               <UserImage user={el.account} style={[{flex: 3}]}/>

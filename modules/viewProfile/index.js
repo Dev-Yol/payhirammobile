@@ -22,7 +22,8 @@ class ViewProfile extends Component {
   };
 
   render() {
-    const { user, rating } = this.props.navigation.state.params
+    const { rating } = this.props.navigation.state.params.user
+    const { user } = this.props.navigation.state.params
     const { cards } = user
     const { theme } = this.props.state;
     return (
