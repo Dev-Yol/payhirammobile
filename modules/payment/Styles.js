@@ -23,17 +23,33 @@ export default StyleSheet.create({
     fontWeight: 'bold',
   },
   floatingButton: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    bottom: 0,
     backgroundColor: Color.primary,
     height: 70,
     width: 70,
-    position: 'absolute',
-    bottom: 20,
     right: 25,
-    borderRadius: 50,
-    justifyContent: 'center',
-    alignItems: 'center',
+    borderRadius: 100
   },
   textFloatingBtn: {
     color: Color.white,
   },
+  ButtonContainer: {
+    alignItems: 'center',
+    marginTop: '60%',
+    left: 130,
+  },
+  CustomButtonContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    textAlign: 'center',
+    width: 50,
+    height: 50,
+    position: 'absolute',
+    backgroundColor: Color.primary,
+    color: Color.white,
+    borderRadius: 50,
+  }
 });
