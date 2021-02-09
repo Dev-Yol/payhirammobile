@@ -20,49 +20,111 @@ import {Rating, DateTime} from 'components';
 import { connect } from 'react-redux';
 import UserImage from 'components/User/Image';
 import Button from 'components/Form/Button';
-
+import { Item } from 'native-base';
+const gender = [{
+  title: 'Male',
+  value: 'male'
+}, {
+  title: 'Female',
+  value: 'female'
+}]
 class EditProfile extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      gender: 1,
-      school: 1,
-      email: '',
-      phone_number: '',
-      sex: 0,
-      address: '',
-      birth_date: ''
+      email: null,
+      cellular_number: null,
+      first_name: null,
+      middle_name: null,
+      last_name: null,
+      sex: null,
+      id: null,
+      address: null,
+      birthDate: null
     };
   }
-  onChange(item, type) {
-    if (type == 'gender') {
-      this.setState({gender: item});
-    } else {
-      this.setState({school: item});
+  
+  componentDidMount = () => {
+    this.retrieve()
+  }
+
+  retrieve = () => {
+    const { user } = this.props.state;
+    if(user === null){
+      return
     }
+    let parameter = {
+      condition: [{
+        value: user.id,
+        clause: '=',
+        column: 'account_id'
+      }]
+    }
+    this.setState({
+      isLoading: true, 
+      showDatePicker: false
+    })
+    Api.request(Routes.accountInformationRetrieve, parameter, response => {
+      this.setState({isLoading: false})
+      if(response.data.length > 0){
+        let data = response.data[0]
+        this.setState({
+          id: data.id,
+          first_name: data.first_name,
+          middle_name: data.middle_name,
+          last_name: data.last_name,
+          sex: data.sex,
+          cellular_number: data.cellular_number,
+          address: data.address,
+          birthDate: data.birth_date
+        })
+        if(data.birth_date != null){
+          this.setState({
+            dateFlag: true,
+            birthDateLabel: data.birth_date
+          })
+        }
+      }else{
+        this.setState({
+          id: null,
+          first_name: null,
+          middle_name: null,
+          last_name: null,
+          sex: null,
+          cellular_number: null,
+          address: null,
+          birthDate: new Date(),
+        })
+      }
+    });
   }
 
   update = () => {
-    console.log('IMmmmmmmmmmmmmmmmmmmmmmmmmmm herrrrrrrrrrrrrrrrrrrrrrrrrrre')
     const { user } = this.props.state;
+    if(user === null){
+      return
+    }
     let parameters = {
-      id: user.account_information.account_id,
-      phone_number: user.account_information.phone_number,
-      sex: user.account_information.phone_number,
-      address: user.account_information.address,
-      birth_date: user.account_information.birth_date,
-      email: user.email
+      id: this.state.id,
+      account_id: user.id,
+      first_name: this.state.first_name,
+      middle_name: this.state.middle_name,
+      last_name: this.state.last_name,
+      cellular_number: this.state.cellular_number,
+      sex: this.state.sex,
+      address: this.state.address,
+      birth_date: this.state.birth_date,
+      email: this.state.email
     };
     this.setState({ isLoading: true });
     Api.request(
-      Routes.accountProfileUpdate,
+      Routes.accountInformationUpdate,
       parameters, (response) => {
-        console.log('Successfully updated=====================', parameters)
         this.setState({ isLoading: false });
+        this.retrieve()
         alert('Updated Successfully');
       },
       (error) => {
-        console.log('Failed to Update', error);
         this.setState({ isLoading: false });
       }
     )
@@ -70,18 +132,6 @@ class EditProfile extends Component {
 
   render() {
     const { user, theme } = this.props.state;
-    let fullName = user.account_information.first_name + user.account_information.middle_name + user.account_information.last_name
-    console.log('=============================', fullName)
-    const {data} = [
-      {
-        title: 'Male',
-        value: 'male',
-      },
-      {
-        title: 'Female',
-        value: 'female',
-      },
-    ];
     return (
       <View>
         <ScrollView showsHorizontalScrollIndicator={false}>
@@ -137,25 +187,39 @@ class EditProfile extends Component {
               Basic Settings
             </Text>
             
-            <Text style={{marginLeft: 20}}>Full Name</Text>
+            <Text style={{marginLeft: 20}}>First Name</Text>
             <TextInput
               style={[BasicStyles.formControl, {alignSelf: 'center'}]}
-              placeholder={fullName != 0 ? fullName : 'Enter your Full Name'}
-              // value={fullName}
-              variable={this.state.fullname}
-              onChange={(value) => {this.setState({fullName: value})}}
+              placeholder={'Enter your First Name'}
+              onChangeText={(first_name) => this.setState({first_name})}
+              value={this.state.first_name}
+              required={true}
+            />
+            <Text style={{marginLeft: 20}}>Middle Name</Text>
+            <TextInput
+              style={[BasicStyles.formControl, {alignSelf: 'center'}]}
+              placeholder={'Enter your Middle Name'}
+              onChangeText={(middle_name) => this.setState({middle_name})}
+              value={this.state.middle_name}
+              required={true}
+            />
+            <Text style={{marginLeft: 20}}>Last Name</Text>
+            <TextInput
+              style={[BasicStyles.formControl, {alignSelf: 'center'}]}
+              placeholder={'Enter your Last Name'}
+              onChangeText={(last_name) => this.setState({last_name})}
+              value={this.state.last_name}
               required={true}
             />
             <Text style={{marginLeft: 20}}>Phone Number</Text>
             <TextInput
               style={[BasicStyles.formControl, {alignSelf: 'center'}]}
               placeholder={'Enter Phone Number'}
-              value={user.account_information.phone_number}
-              variable={this.state.phone_number}
-              onChange={(value) => {this.setState({phone_number: value})}}
+              onChangeText={(cellular_number) => this.setState({cellular_number})}
+              value={this.state.cellular_number}
               required={true}
             />
-            <Text style={{marginLeft: 20}}>Email</Text>
+            {/* <Text style={{marginLeft: 20}}>Email</Text>
             <TextInput
               style={[BasicStyles.formControl, {alignSelf: 'center'}]}
               placeholder={'Enter Email'}
@@ -163,17 +227,24 @@ class EditProfile extends Component {
               variable={this.state.email}
               onChange={(value) => {this.setState({email: value})}}
               required={true}
-            />
+            /> */}
             <View style={{flexDirection: 'row', justifyContent: 'center'}}>
               <View style={{width: '40%', marginRight: 20}}>
                 <Text>Birthdate</Text>
-                <DateTime type={'date'} style={{marginTop: 0}} 
-                value={user.account_information.birth_date}
-                variable={this.state.birth_date}
-                onChange={(value) => {this.setState({birth_date: value})}}
-                required={true}/>
+                <DateTime
+                  type={'date'}
+                  placeholder={'Select Date'}
+                  onFinish={(date) => {
+                    this.setState({
+                      birthDate: date.date
+                    })
+                  }}
+                  style={{
+                    marginTop: 5
+                  }}
+                />
               </View>
-              <View style={{width: '40%', marginLeft: 20}}>
+              <View style={{width: '40%', marginLeft: 20, }}>
                 <Text>Gender</Text>
                 <View
                   style={{
@@ -184,15 +255,20 @@ class EditProfile extends Component {
                     borderRadius: 5,
                   }}>
                   <Picker
-                    selectedValue={this.state.gender}
-                    onValueChange={(input) => this.onChange(input, 'gender')}
+                    selectedValue={this.state.sex}
+                    onValueChange={(sex) => this.setState({sex})}
                     style={BasicStyles.pickerStyleCreate}
-                    value={user.account_information.sex}
-                    variable={this.state.sex}
-                    onChange={(value) => {this.setState({sex: value})}}
                     required={true}>
-                    <Picker.Item key={1} label={'Male'} value={1} />
-                    <Picker.Item key={2} label={'Female'} value={2} />
+                    {
+                      gender.map((item, index) => { 
+                        return (
+                          <Picker.Item 
+                          key={index} 
+                          label={item.title} 
+                          value={item.value} />
+                        )
+                      })
+                    }
                   </Picker>
                 </View>
               </View>
@@ -200,10 +276,9 @@ class EditProfile extends Component {
             <Text style={{marginLeft: 20}}>Address</Text>
             <TextInput
               style={[BasicStyles.formControl, {alignSelf: 'center'}]}
-              placeholder={'Enter Address'}
-              value={user.account_information.address}
-              variable={this.state.address}
-              onChange={(value) => {this.setState({address: value})}}
+              onChangeText={(address) => this.setState({address})}
+              value={this.state.address}
+              placeholder={'Enter address'}
               required={true}
             />
           </View>

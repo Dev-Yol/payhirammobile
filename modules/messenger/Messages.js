@@ -37,7 +37,7 @@ class Messages extends Component{
   }
 
   componentDidMount(){
-    console.log("==================messages" + JSON.stringify(this.props.state.messengerGroup))
+    // console.log('TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT', this.props);
     this.menu(Helper.MessengerMenu);
     const { messengerGroup, user } = this.props.state;
     if(messengerGroup != null && user != null){

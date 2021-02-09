@@ -90,7 +90,7 @@ class ProposalCard extends Component {
   };
 
 
-  _footer = (item) => {
+  _footer = (item, index) => {
     const {user} = this.props.state;
     const { data } = this.props;
     return (
@@ -119,7 +119,7 @@ class ProposalCard extends Component {
               />
               <Button
                 title={'Accept'}
-                onClick={() => {this.props.onAcceptRequest()}}
+                onClick={() => {this.props.onAcceptRequest(data.peers.peers[index])}}
                 style={{
                   width: '45%',
                   marginLeft: '5%',
@@ -147,7 +147,7 @@ class ProposalCard extends Component {
               }>
               {item.account && this._header(item, 'amount')}
               {this._body(item)}
-              {this._footer(item)}
+              {this._footer(item, index)}
             </TouchableOpacity>
           ))
         }
