@@ -19,6 +19,11 @@ const navigation = [
     icon: faEdit
   },
   {
+    title: 'Payment Methods',
+    route: 'paymentMethodsStack',
+    icon: faCreditCard
+  },
+  {
     title: 'Notifications',
     route: 'notificationSettingsStack',
     icon: faBell

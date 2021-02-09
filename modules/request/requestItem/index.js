@@ -17,7 +17,6 @@ import RequestCard from 'modules/generic/RequestCard';
 import ProposalCard from 'modules/generic/ProposalCard';
 import ProposalModal from 'modules/generic/ProposalModal';
 import Api from 'services/api/index.js';
-// import ConfirmationModal from 'components/Modal/ConfirmationModal.js';
 
 const width = Math.round(Dimensions.get('window').width);
 const height = Math.round(Dimensions.get('window').height);
@@ -30,9 +29,8 @@ class RequestItem extends Component {
       isLoading: false,
       connectSelected: null,
       connectModal: false,
-      // isConfirmationModal: false,
-      // isConfirm: false,
-      data: null
+      data: null,
+      peer: null
     }
   }
   
@@ -56,7 +54,6 @@ class RequestItem extends Component {
       account_id: user.id
     };
     this.setState({isLoading: true});
-    console.log('parameter', parameter)
     Api.request(Routes.requestRetrieveItem, parameter, (response) => {
       this.setState({isLoading: false});
       if (response != null) {
@@ -74,21 +71,16 @@ class RequestItem extends Component {
     });
   }
 
-  // confirm = () => {
-  //   this.setState({isConfirmationModal: true})
-  // }
-
   viewMessages = () => {
-    const { setMessengerGroup } = this.props;
-    setMessengerGroup();
+    const { isViewing } = this.props.state;
     setTimeout(() => {
-      this.props.navigation.navigate('messagesStack');
+      this.props.navigation.navigate('messagesStack', {
+        payload: 'request',
+        payload_value: this.state.peer.request_id,
+        title: this.state.peer.code
+      });
     }, 500)
   }
-
-  // closeModal = () => {
-  //   this.setState({isConfirmationModal: false})
-  // }
 
   connectRequest = () => {
     const { data } = this.props.navigation.state.params;
@@ -100,7 +92,8 @@ class RequestItem extends Component {
     }, 500);
   };
 
-  acceptRequest = () => {
+  acceptRequest = (data) => {
+    this.setState({peer: data})
     Alert.alert(
       'Confirmation',
       'Are you sure you want to accept this request?',
@@ -114,7 +107,6 @@ class RequestItem extends Component {
 
 
   renderProposals = (data) => {
-    // const { isConfirmationModal } = this.state;
     return (
       <View>
         <View style={{
@@ -134,22 +126,8 @@ class RequestItem extends Component {
           <ProposalCard 
             data={data}
             navigation={this.props.navigation}
-            onAcceptRequest={() => this.acceptRequest()}
-            navigation={this.props.navigation}
+            onAcceptRequest={this.acceptRequest}
             />
-            {/* {isConfirmationModal ?
-            <ConfirmationModal
-              visible={isConfirmationModal}
-              title={'Confirmation'}
-              message={'Are you sure you want to accept this request?'}
-              onCLose={() => {
-                this.closeModal()
-              }}
-              onConfirm={() => {
-                // this.closeModal()
-                this.viewMessages()
-              }}
-            /> : null } */}
         </View>
       </View>
     )
