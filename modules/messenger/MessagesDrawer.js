@@ -7,6 +7,7 @@ import Messages from 'modules/messenger/Messages.js';
 import { Color, BasicStyles, Helper } from 'common';
 import { UserImage } from 'components';
 import { connect } from 'react-redux';
+import { Dimensions } from 'react-native';
 import Config from 'src/config.js';
 import Currency from 'services/Currency.js';
 
@@ -29,6 +30,7 @@ class HeaderOptions extends Component {
 
   _card = () => {
     const { messengerGroup, theme } = this.props.state;
+    const width = Math.round(Dimensions.get('window').width);
     console.log('asdfasdfasdfasdf', theme)
     // {Helper.showRequestType(messengerGroup.request.type)} - 
     return (
@@ -37,20 +39,20 @@ class HeaderOptions extends Component {
           messengerGroup != null && (
           <View style={{
             flexDirection: 'row',
-            width: '100%'
-          }}>
+            width: width - 20,
+            alignItems: 'center'          }}>
             <UserImage  user={messengerGroup.title} color={theme ? theme.primary :  Color.primary}/>
             <Text style={{
               color: theme ? theme.primary :  Color.primary,
               lineHeight: 30,
               paddingLeft: 1,
-              width: '30%'
-            }}>{messengerGroup.title.username.length > 10 ? messengerGroup.title.username.substr(0, 10) + '...' : messengerGroup.title.username}</Text>
+              // width: '30%'
+            }}>{messengerGroup.title.length > 10 ? messengerGroup.title.substr(0, 10) + '...' : messengerGroup.title}</Text>
             {Helper.MessengerMenu != null &&
               <TouchableHighlight 
                 activeOpacity={0.6}
                 underlayColor={Color.lightGray}
-                onPress={this.viewMenu.bind(this)}
+                onPress={this.viewMenu.bind(this)} 
                 style={
                   {
                     position: 'absolute',
@@ -66,7 +68,7 @@ class HeaderOptions extends Component {
               >
                 <FontAwesomeIcon 
                   icon={ faEllipsisV } 
-                  style={{color: theme ? theme.primary :  Color.primary}}
+                  style={{color: 'white'}}
                 />
               </TouchableHighlight>
             }
