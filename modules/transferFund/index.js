@@ -11,7 +11,7 @@ class TransferFundDrawer extends Component {
       <View>
         <ScrollView showsHorizontalScrollIndicator={false}>
           <View style={Styles.MainContainer}>
-                <TransferFundCard />
+            <TransferFundCard />
           </View>
         </ScrollView>
       </View>
