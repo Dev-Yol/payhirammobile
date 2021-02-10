@@ -21,6 +21,7 @@ class Groups extends Component{
   }
 
   componentDidMount(){
+    console.log('+++++++++++++===================+++++++++++++++', this.props)
     const { user } = this.props.state;
     if(user != null){
       this.retrieve();
