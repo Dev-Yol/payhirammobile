@@ -5,7 +5,7 @@ const borderRadius = 12
 export default {
   formControl: {
     height: 50,
-    borderColor: Color.gray,
+    borderColor: Color.lightGray,
     borderWidth: 1,
     width: width - 40,
     paddingLeft: 10,

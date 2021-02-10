@@ -100,7 +100,7 @@ class Groups extends Component{
                 <Text style={{
                   color: theme ? theme.primary : Color.primary,
                   lineHeight: 30,
-                }}>{item.title.username.length > 10 ? item.title.username.substr(0, 10) + '...' : item.title.username}</Text>
+                }}>{item.title > 10 ? item.title.substr(0, 10) + '...' : item.title}</Text>
                 {
                   parseInt(item.total_unread_messages) > 0 && Platform.OS == 'android' && (
                     <Text style={{

@@ -92,7 +92,8 @@ class NotificationSettings extends Component {
     return (
       <View>
         {isLoading ? <Spinner mode="overlay"/> : null }
-        <ScrollView showsHorizontalScrollIndicator={false}>
+        <ScrollView 
+          showsVerticalScrollIndicator={false}>
           <View style={{
             flex: 1,
             height: height + 25

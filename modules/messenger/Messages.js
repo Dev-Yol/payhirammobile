@@ -37,7 +37,6 @@ class Messages extends Component{
   }
 
   componentDidMount(){
-    // console.log('TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT', this.props);
     this.menu(Helper.MessengerMenu);
     const { messengerGroup, user } = this.props.state;
     if(messengerGroup != null && user != null){
@@ -732,8 +731,12 @@ class Messages extends Component{
           this.setState({settingsMenu: frame})
       }
     }else if(data.payload === 'redirect') {
-      const { request } = this.props.state.messengerGroup
-      this.props.navigation.navigate(data.payload_value, {data: {id: request.id}})
+      if(data.title.toLowerCase() == 'details'){
+        const { request } = this.props.state.messengerGroup
+        this.props.navigation.navigate(data.payload_value, {data: {id: request.id}})
+      }else if(data.title.toLowerCase() == 'rate'){
+        this.props.navigation.navigate(data.payload_value, {data: {data: this.props.state.messengerGroup}})
+      }
     }
   }
 
