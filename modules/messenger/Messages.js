@@ -37,7 +37,7 @@ class Messages extends Component{
   }
 
   componentDidMount(){
-    // console.log('TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT', this.props);
+    console.log('mmmmmmmmmmesages modulesssssssssssssssss')
     this.menu(Helper.MessengerMenu);
     const { messengerGroup, user } = this.props.state;
     if(messengerGroup != null && user != null){
@@ -327,6 +327,7 @@ class Messages extends Component{
   }
 
   _headerRight = (item) => {
+    console.log('headerRight', item);
     const { theme } = this.props.state;
     return (
       <View style={{flexDirection: 'row', marginTop: 10}}>
@@ -340,6 +341,7 @@ class Messages extends Component{
   }
 
   _headerLeft = (item) => {
+    console.log('headerLeft', item);
     const { theme } = this.props.state;
     return (
       <View style={{flexDirection: 'row', marginTop: 10, justifyContent: 'flex-end' }}>
