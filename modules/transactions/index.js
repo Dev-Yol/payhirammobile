@@ -93,7 +93,7 @@ class Transactions extends Component {
             }
           }
         }}
-        showsHorizontalScrollIndicator={false}>
+        showsVerticalScrollIndicator={false}>
       <View>
         {isLoading ? <Spinner mode="overlay" /> : null}
           <View style={Styles.MainContainer}>
