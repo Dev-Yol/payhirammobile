@@ -40,7 +40,7 @@ const navigation = [
   },
   {
     title: 'Privacy Policies',
-    route: 'termsAndConditionsStack',
+    route: 'privacyStack',
     icon: faShieldAlt
   },
 ];
