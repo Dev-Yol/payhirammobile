@@ -30,9 +30,9 @@ class HeaderOptions extends Component {
 
   _card = () => {
     const { messengerGroup, theme } = this.props.state;
+    console.log(this.props.state)
     const width = Math.round(Dimensions.get('window').width);
-    console.log('asdfasdfasdfasdf', theme)
-    // {Helper.showRequestType(messengerGroup.request.type)} - 
+    // {Helper.showRequestType(messengerGroup.request.type)} -
     return (
       <View>
         {
@@ -40,14 +40,15 @@ class HeaderOptions extends Component {
           <View style={{
             flexDirection: 'row',
             width: width - 20,
-            alignItems: 'center'          }}>
+            alignItems: 'center'          
+            }}>
             <UserImage  user={messengerGroup.title} color={theme ? theme.primary :  Color.primary}/>
             <Text style={{
               color: theme ? theme.primary :  Color.primary,
               lineHeight: 30,
               paddingLeft: 1,
               // width: '30%'
-            }}>{messengerGroup.title.length > 10 ? messengerGroup.title.substr(0, 10) + '...' : messengerGroup.title}</Text>
+            }}>{messengerGroup.title.length > 29 ? messengerGroup.title.substr(0, 30) + '...' : messengerGroup.title}</Text>
             {Helper.MessengerMenu != null &&
               <TouchableHighlight 
                 activeOpacity={0.6}
@@ -68,7 +69,7 @@ class HeaderOptions extends Component {
               >
                 <FontAwesomeIcon 
                   icon={ faEllipsisV } 
-                  style={{color: 'white'}}
+                  style={{color: theme ? theme.primary :  Color.primary}}
                 />
               </TouchableHighlight>
             }
@@ -80,6 +81,7 @@ class HeaderOptions extends Component {
   
   
   render() {
+    const { theme } = this.props.state;
     return (
       <View style={{ flexDirection: 'row' }}>
         <TouchableOpacity onPress={this.back.bind(this)} 
@@ -87,7 +89,7 @@ class HeaderOptions extends Component {
           <FontAwesomeIcon
             icon={ faChevronLeft }
             size={BasicStyles.iconSize}
-            style={BasicStyles.iconStyle}/>
+            style={[BasicStyles.iconStyle, {color: theme ? theme.primary : Color.primary} ]}/>
         </TouchableOpacity>
         {
           this._card()
