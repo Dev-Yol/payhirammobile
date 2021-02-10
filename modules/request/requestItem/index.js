@@ -72,6 +72,10 @@ class RequestItem extends Component {
   }
 
   viewMessages = () => {
+    console.log('shooooooooooooooooooooooooooooooooooow', this.state)
+    const { setMessengerGroup } = this.props;
+    // setMessengerGroup({payload: 'request',
+    // title: this.state.peer.code})
     const { isViewing } = this.props.state;
     setTimeout(() => {
       this.props.navigation.navigate('messagesStack', {

@@ -5,6 +5,8 @@ import {
   faCheck,
   faPaperPlane,
 } from '@fortawesome/free-solid-svg-icons';
+import { faMoneyBillWaveAlt, faCog, faHome, faEnvelope, faUsers, faPalette, faShieldAlt, faHandshake, faTachometerAlt, faHeadset } from '@fortawesome/free-solid-svg-icons';
+import { faComment } from '@fortawesome/free-regular-svg-icons';
 export default {
   company: 'Increment Technologies',
   APP_NAME: '@Payhiram_',
@@ -16,22 +18,27 @@ export default {
     {
       title: 'Requests',
       route: 'Requests',
+      icon: faMoneyBillWaveAlt
     },
     {
       title: 'Dashboard',
       route: 'Dashboard',
+      icon: faTachometerAlt
     },
     {
       title: 'Circle',
       route: 'Circle',
+      icon: faUsers
     },
     {
       title: 'Messages',
-      route: 'Messenger'
+      route: 'Messenger',
+      icon: faComment
     }, 
     {
       title: 'Settings',
       route: 'Settings',
+      icon: faCog
     },
     // {
     //   title: 'Terms and Conditions',
@@ -40,6 +47,7 @@ export default {
     {
       title: 'Support',
       route: 'Support',
+      icon: faHeadset
     }
   ],
   currency: [{

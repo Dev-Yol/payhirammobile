@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { ScrollView, View, Text, StyleSheet } from 'react-native';
 import { BasicStyles } from 'common'
 
-class TermsAndConditions extends Component {
+class Privacy extends Component {
   render() {
     return (
       <ScrollView
@@ -159,4 +159,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TermsAndConditions;
+export default Privacy;

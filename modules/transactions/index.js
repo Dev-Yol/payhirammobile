@@ -85,7 +85,8 @@ class Transactions extends Component {
     const { data } = this.state;
     return (
       <View>
-        <ScrollView showsHorizontalScrollIndicator={false}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}>
           <View style={Styles.MainContainer}>
             {
               data && data.map((item, index) => (

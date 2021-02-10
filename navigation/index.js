@@ -4,7 +4,7 @@ import ForgotPassword from 'modules/basics/ForgotPassword';
 import Register from 'modules/basics/Register';
 import Drawer from './Drawer';
 import NotificationStack from 'modules/notification/Drawer.js';
-import MessagesStack from 'components/Messenger/MessagesDrawer.js';
+import MessagesStack from 'modules/messenger/MessagesDrawer.js';
 import LedgerStack from 'modules/dashboard/LedgerDrawer.js';
 import CreateBorrowRequestStack from 'modules/request/CreateBorrowDrawer.js';
 import LocationStack from 'components/Location/Drawer.js';
@@ -31,6 +31,7 @@ import AddLocationStack from 'modules/addLocation/AddLocationDrawer.js';
 import LocationWithMap from 'components/Location/LocationWithMap';
 import SupportStack from 'components/Support/SupportDrawer.js';
 import UpdateTicketStack from 'components/Support/UpdateTicket/UpdateTicketDrawer.js';
+import PrivacyStack from 'modules/privacy/Drawer';
 
 // login stack
 const LoginStack = createStackNavigator(
@@ -107,7 +108,8 @@ const PrimaryNav = createStackNavigator(
     paymentMethodsStack: { screen: PaymentMethodsStack },
     supportStack: { screen: SupportStack },
     updateTicketStack: { screen: UpdateTicketStack },
-    paymentMethodsStack: { screen: PaymentMethodsStack }
+    paymentMethodsStack: { screen: PaymentMethodsStack },
+    privacyStack: { screen: PrivacyStack}
   },
   {
     // Default config for all screens

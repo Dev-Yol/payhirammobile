@@ -105,15 +105,15 @@ class AccountSettings extends Component {
         <View style={[styles.AccountSettingsContainer, {height: height + 25}]}>
           {this.state.isLoading ? <Spinner mode="overlay" /> : null}
 
-        <TextInputWithLabel 
-          variable={user.username}
-          onChange={(value) => {}}
-          label={'Username'}
-          selectTextOnFocus={false}
-          onError={false}
-          editable={false}
-          required={false}
-        />
+          <TextInputWithLabel 
+            variable={user.username}
+            onChange={(value) => {}}
+            label={'Username'}
+            selectTextOnFocus={false}
+            onError={false}
+            editable={false}
+            required={false}
+          />
 
           <TextInputWithLabel 
             variable={this.state.email}
@@ -140,6 +140,9 @@ class AccountSettings extends Component {
                 password: input,
               })
             }
+            style={{
+              width: '100%'
+            }}
           />
 
           <PasswordWithIcon
@@ -148,6 +151,10 @@ class AccountSettings extends Component {
                 confirmPassword: input,
               })
             }
+            
+            style={{
+              width: '100%'
+            }}
           />
 
           <Button 
