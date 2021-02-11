@@ -1,5 +1,6 @@
 import { createStackNavigator } from 'react-navigation-stack';
-import Login from 'modules/basics/Login';
+import Login from 'modules/basics/LoginWithFingerPrint';
+import FingerprintScan from '../modules/basics/FingerPrintScanner';
 import ForgotPassword from 'modules/basics/ForgotPassword';
 import Register from 'modules/basics/Register';
 import Drawer from './Drawer';
@@ -44,6 +45,17 @@ const LoginStack = createStackNavigator(
   },
 );
 
+// FingerPrint stack
+const FingerPrintStack = createStackNavigator(
+  {
+    fingerPrintScreen: { screen: FingerprintScan },
+  },
+  {
+    headerMode: 'none',
+    navigationOptions: {},
+  },
+);
+
 // Forgot Password stack
 const ForgotPasswordStack = createStackNavigator(
   {
@@ -78,6 +90,7 @@ const LocationWithMapStack = createStackNavigator(
 const PrimaryNav = createStackNavigator(
   {
     loginStack: {screen: LoginStack},
+    fingerPrintStack: {screen: FingerPrintStack},
     forgotPasswordStack: {screen: ForgotPasswordStack},
     registerStack: {screen: RegisterStack},
     drawerStack: {screen: Drawer},
