@@ -65,5 +65,7 @@ export default {
   accountUpdateEmail: apiUrl + 'accounts/update_email',
   circleRetrieve: apiUrl + 'my_circle/retrieve',
   circleCreate: apiUrl + 'my_circle/create',
-  educationsRetrieve: apiUrl + 'educations/retrieve'
+  educationsRetrieve: apiUrl + 'educations/retrieve',
+  circleUpdate: apiUrl + 'my_circle/update',
+  circleDelete: apiUrl + 'my_circle/delete'
 };

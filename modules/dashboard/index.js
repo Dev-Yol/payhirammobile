@@ -244,7 +244,8 @@ class Dashboard extends Component {
                 </View>
               )
             }
-            <QRCodeModal redirect={this.props.navigation.navigate('qrCodeScannerStack', {user: this.props.state.user})} />
+            {this.props.state.qrCodeModal && (
+            <QRCodeModal redirect={this.props.navigation.navigate('qrCodeScannerStack', {user: this.props.state.user})} />)}
           </View>
         </ScrollView>
         {isLoading ? <Spinner mode="overlay" /> : null}

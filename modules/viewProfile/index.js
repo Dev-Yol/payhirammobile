@@ -35,13 +35,15 @@ class ViewProfile extends Component {
   };
 
   retrieveAccount = () => {
+    console.log(this.props.navigation.state.params.user.account.code, "=========");
     let parameter = {
       condition: [{
-        value: this.props.navigation.state.params.code,
+        value: this.props.navigation.state.params.code ? this.props.navigation.state.params.code : this.props.navigation.state.params.user.account.code,
         clause: '=',
         column: 'code'
       }]
     }
+    console.log(parameter, "=====");
     this.setState({ isLoading: true });
     Api.request(Routes.accountRetrieve, parameter, response => {
       this.setState({ isLoading: false })
@@ -74,7 +76,6 @@ class ViewProfile extends Component {
   }
 
   render() {
-    const { rating } = this.props.navigation.state.params.user
     const { user } = this.state
     const { theme } = this.props.state;
     return (
@@ -116,7 +117,7 @@ class ViewProfile extends Component {
                   </View>
                 )}
 
-                {rating && (
+                {user && user.rating && (
                   <View>
                     <Rating ratings={rating} label={null}></Rating>
                   </View>
