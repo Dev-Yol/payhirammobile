@@ -16,6 +16,16 @@ class HeaderOptions extends Component {
     super(props);
   }
 
+  componentDidMount = () => {
+    console.log('eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee', this.props.navigationProps.state.params);
+    const { payload } = this.props.navigationProps.state.params
+    const { payload_value } = this.props.navigationProps.state.params
+    const { title } = this.props.navigationProps.state.params
+    const { setMessengerGroup } = this.props
+    setMessengerGroup(title, payload, payload_value)
+    console.log(payload_value, payload, title)
+  }
+
   back = () => {
     const { setMessagesOnGroup, setMessengerGroup } = this.props;
     setMessagesOnGroup({groupId: null, messages: null});
@@ -30,7 +40,7 @@ class HeaderOptions extends Component {
 
   _card = () => {
     const { messengerGroup, theme } = this.props.state;
-    console.log(this.props.state)
+    console.log('hiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii', messengerGroup)
     const width = Math.round(Dimensions.get('window').width);
     // {Helper.showRequestType(messengerGroup.request.type)} -
     return (
@@ -40,15 +50,15 @@ class HeaderOptions extends Component {
           <View style={{
             flexDirection: 'row',
             width: width - 20,
-            alignItems: 'center'          
+            alignItems: 'center'
             }}>
-            <UserImage  user={messengerGroup.title} color={theme ? theme.primary :  Color.primary}/>
+            <UserImage  user={messengerGroup.title} color={'white'}/>
             <Text style={{
-              color: theme ? theme.primary :  Color.primary,
+              color: 'white',
               lineHeight: 30,
               paddingLeft: 1,
               // width: '30%'
-            }}>{messengerGroup.title.length > 29 ? messengerGroup.title.substr(0, 30) + '...' : messengerGroup.title}</Text>
+            }}>{messengerGroup.title.length > 29 && messengerGroup.request != null ? ' *****' + messengerGroup.title.substr(28, 32) + ' - ' + messengerGroup.request.currency + ' ' + messengerGroup.request.amount : messengerGroup.title}</Text>
             {Helper.MessengerMenu != null &&
               <TouchableHighlight 
                 activeOpacity={0.6}
@@ -69,7 +79,7 @@ class HeaderOptions extends Component {
               >
                 <FontAwesomeIcon 
                   icon={ faEllipsisV } 
-                  style={{color: theme ? theme.primary :  Color.primary}}
+                  style={{color: 'white'}}
                 />
               </TouchableHighlight>
             }
@@ -89,7 +99,7 @@ class HeaderOptions extends Component {
           <FontAwesomeIcon
             icon={ faChevronLeft }
             size={BasicStyles.iconSize}
-            style={[BasicStyles.iconStyle, {color: theme ? theme.primary : Color.primary} ]}/>
+            style={[BasicStyles.iconStyle, {color: 'white'} ]}/>
         </TouchableOpacity>
         {
           this._card()
@@ -120,13 +130,9 @@ const MessagesStack = createStackNavigator({
   messagesScreen: {
     screen: Messages, 
     navigationOptions: ({ navigation }) => ({
-      title: null,
+      title: 'Messages',
       headerLeft: <HeaderOptionsConnect navigationProps={navigation} />,
-      drawerLabel: null,
-      headerStyle: {
-        backgroundColor: Color.primary,
-      },
-      headerTintColor: '#fff',
+      ...BasicStyles.headerDrawerStyle
     })
   }
 })
