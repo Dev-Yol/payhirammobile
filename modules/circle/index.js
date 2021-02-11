@@ -8,21 +8,25 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faCheckCircle, faTimesCircle, faEllipsisH} from '@fortawesome/free-solid-svg-icons';
 import { connect } from 'react-redux';
 import Api from 'services/api/index.js';
+import _ from 'lodash';
 import Button from 'components/Form/Button';
 class Circle extends Component{
   constructor(props){
     super(props);
     this.state = {
       data: null,
-      isLoading: true
+      isLoading: true,
+      limit: 10,
+      offset: 0,
+      isLoading: false,
     }
   }
 
   componentDidMount() {
-    this.retrieve()
+    this.retrieve(false)
   }
 
-  retrieve(){
+  retrieve(flag){
     const { user } = this.props.state
     if(user == null){
       return
@@ -36,16 +40,24 @@ class Circle extends Component{
         value: user.id,
         column: 'account',
         clause: 'or'
-      }]
+      }],
+      limit: this.state.limit,
+      offset: flag == true && this.state.offset > 0 ? (this.state.offset * this.state.limit) : this.state.offset,
     }
     console.log('parameter', parameter)
     this.setState({isLoading: true})
     Api.request(Routes.circleRetrieve, parameter, response => {
       this.setState({isLoading: false})
-      if(response.data != null){
-        this.setState({data: response.data});
-      }else{
-        this.setState({data: null})
+      if (response != null) {
+        this.setState({
+          data: flag == false ? response.data : _.uniqBy([...this.state.data, ...response.data], 'id'),
+          offset: flag == false ? 1 : (this.state.offset + 1)
+        })
+      } else {
+        this.setState({
+          data: flag == false ? [] : this.state.data,
+          offset: flag == false ? 0 : this.state.offset
+        })
       }
     });
   }
@@ -53,7 +65,7 @@ class Circle extends Component{
   submit = (status, item) => {
     Alert.alert(
       "Confirmation Message",
-      'Are you sure you want to ' + (status == 'accepted' ? 'accept' : 'decline') + ' ' + item.account.username + '?',
+      'Are you sure you want to ' + (status == 'accepted' ? 'accept' : 'decline') + ' ' + item.account.information.first_name + ' ' + item.account.information.last_name + '?',
       [
         { text: "Cancel", onPress: () => {
         }},
@@ -65,7 +77,7 @@ class Circle extends Component{
           this.setState({isLoading: true})
           Api.request(Routes.circleUpdate, parameter, response => {
             this.setState({isLoading: false})
-            this.retrieve()
+            this.retrieve(false)
           });
         }}
       ],
@@ -77,7 +89,7 @@ class Circle extends Component{
   removeItem(item){
     Alert.alert(
       "Confirmation Message",
-      'Are you sure you want to cancel your request to ' + item.account.username + '?',
+      'Are you sure you want to cancel your request to ' + item.account.information.first_name + ' ' + item.account.information.last_name + '?',
       [
         { text: "Cancel", onPress: () => {
         }},
@@ -88,7 +100,7 @@ class Circle extends Component{
           this.setState({isLoading: true})
           Api.request(Routes.circleDelete, parameter, response => {
             this.setState({isLoading: false})
-            this.retrieve()
+            this.retrieve(false)
           });
         }}
       ],
@@ -163,7 +175,6 @@ class Circle extends Component{
   renderCircles(data) {
     return (
       data.map((item, index) => {
-        console.log('item', item.account.status)
         return (
           <TouchableHighlight 
             onPress={() => {
@@ -186,8 +197,8 @@ class Circle extends Component{
                   marginLeft: 5,
                   width: '90%'
                 }}>
-                <Text style={{fontWeight: 'bold'}}>{item.account.username}</Text>
-                <Text style={[{margin: 2}]}>{item.account.information.address}</Text>
+                <Text style={{fontWeight: 'bold'}}>{item.account.information.first_name + ' ' + item.account.information.last_name}</Text>
+                <Text style={[{margin: 2}]}>{item.account.information.address?.toUpperCase()}</Text>
               {
                 item.status == 'pending' && this.action(item)
               }
@@ -212,7 +223,23 @@ class Circle extends Component{
           flex: 1
         }
       }>
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView 
+          onScroll={(event) => {
+            let scrollingHeight = event.nativeEvent.layoutMeasurement.height + event.nativeEvent.contentOffset.y
+            let totalHeight = event.nativeEvent.contentSize.height
+            if(event.nativeEvent.contentOffset.y <= 0) {
+              if(this.state.loading == false){
+                // this.retrieve(false)
+              }
+            }
+            console.log(scrollingHeight, totalHeight);
+            if(scrollingHeight >= (totalHeight)) {
+              if(this.state.loading == false){
+                this.retrieve(true)
+              }
+            }
+          }}
+          showsVerticalScrollIndicator={false}>
           <View style={{
             height: height
           }}>
