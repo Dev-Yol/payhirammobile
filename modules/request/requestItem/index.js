@@ -77,11 +77,15 @@ class RequestItem extends Component {
         payload: 'request',
         payload_value: this.state.peer.request_id,
         title: this.state.peer.code,
-        account_id:  this.state.peer.account_id
+        account_id:  this.state.peer.account_id,
+        profile: this.state.peer.account.profile,
+        request: this.state.data,
+        id: this.state.peer.id,
+        con: true
       });
     }, 500)
   }
-
+  
   connectRequest = () => {
     const { data } = this.props.navigation.state.params;
     this.setState({
@@ -91,7 +95,7 @@ class RequestItem extends Component {
       this.setState({connectModal: true});
     }, 500);
   };
-
+  
   acceptRequest = (data) => {
     this.setState({peer: data})
     Alert.alert(

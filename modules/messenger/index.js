@@ -34,6 +34,7 @@ class Groups extends Component{
     }
     this.setState({isLoading: true});
     CommonRequest.retrieveMessengerGroups(user, response => {
+      console.log('bntay ka lng', response.data)
       this.setState({isLoading: false, data: response.data});
       const { setMessenger } = this.props;
       const { messenger } = this.props.state;
@@ -70,9 +71,7 @@ class Groups extends Component{
   }
 
   viewMessages = (item) => {
-    console.log('itemmmmmsss', item)
     const { setMessengerGroup } = this.props;
-    console.log('message group', item);
     this.updateLastMessageStatus(item)
     setMessengerGroup(item);
     setTimeout(() => {
@@ -90,7 +89,7 @@ class Groups extends Component{
           >
           <View>
             <View style={{flexDirection: 'row', marginTop: 5, paddingLeft: 10, paddingRight: 10}}>
-              <UserImage user={item.title} color={theme ? theme.primary : Color.primary}/>
+              <UserImage user={item.profile} color={theme ? theme.primary : Color.primary}/>
               <View style={{
                 paddingLeft: 10,
                 width: '50%',
