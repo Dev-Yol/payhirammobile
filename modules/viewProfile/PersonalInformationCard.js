@@ -14,10 +14,8 @@ class PersonalInformationCard extends Component {
           width: '90%',
           marginLeft: '5%',
           marginRight: '5%',
-          paddingTop: 20,
-          paddingBottom: 20,
-          borderBottomWidth: 1,
-          borderBottomColor: Color.lightGray
+          paddingTop: 12,
+          paddingBottom: 12,
         }}>
         <FontAwesomeIcon icon={icon} style={{ marginRight: 5 }} size={20} />
         <Text style={{
@@ -30,23 +28,22 @@ class PersonalInformationCard extends Component {
     let { _renderTextIcon } = this
     const { user } = this.props
     return (
-      <View>
         <View style={{
-          paddingTop: 20,
-          paddingBottom: 20,
-          paddingLeft: 10
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+          alignItems: 'flex-start'
         }}>
-            <Text style={{
-              fontWeight: 'bold'
-            }}>Personal Information</Text>
+          <View style={{width: '50%'}}>
+            {_renderTextIcon(faUserCircle, user.account_information.first_name || 'No data')}
+            {_renderTextIcon(faEnvelope, user.email || 'No data')}
+            {_renderTextIcon(faUserCircle,  user.account_information.sex || 'No data')}
+          </View>
+          <View style={{width: '50%'}}>
+            {_renderTextIcon(faPhoneAlt, user.account_information.cellular_number || 'No data')}
+            {_renderTextIcon(faCalendarAlt, user.account_information.birth_date_human || 'No data')}
+            {_renderTextIcon(faMapMarkerAlt, user.account_information.address || 'No data')}
+          </View>
         </View>
-        {_renderTextIcon(faUserCircle, user.information.first_name)}
-        {_renderTextIcon(faEnvelope, user.email)}
-        {_renderTextIcon(faCircle,  user.information.sex)}
-        {_renderTextIcon(faPhoneAlt, user.information.cellular_number)}
-        {_renderTextIcon(faCalendarAlt, user.information.birth_date_human)}
-        {_renderTextIcon(faMapMarkerAlt, user.information.address)}
-      </View>
     )
   }
 }

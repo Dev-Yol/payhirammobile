@@ -24,6 +24,7 @@ import { faStar as faStarRegular } from '@fortawesome/free-regular-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 const width = Math.round(Dimensions.get('window').width);
 const height = Math.round(Dimensions.get('window').height);
+import QRCode from 'react-native-qrcode-svg';
 
 const transactionData = []
 
@@ -216,6 +217,10 @@ class Dashboard extends Component {
         <ScrollView 
         showsVerticalScrollIndicator={false}>
           <View style={[styles.MainContainer, {marginTop: 60, height: height}]}>
+            <QRCode
+              size={220}
+              value={this.props.state.user.code}
+            />
             {
               ledger && (
                 <BalanceCard
@@ -239,7 +244,8 @@ class Dashboard extends Component {
                 </View>
               )
             }
-            <QRCodeModal redirect={this.redirect} />
+            {this.props.state.qrCodeModal && (
+            <QRCodeModal redirect={this.props.navigation.navigate('qrCodeScannerStack', {user: this.props.state.user})} />)}
           </View>
         </ScrollView>
         {isLoading ? <Spinner mode="overlay" /> : null}
