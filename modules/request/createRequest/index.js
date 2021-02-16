@@ -24,6 +24,7 @@ class CreateRequest extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      location: null,
       currency: 'PHP',
       date: '',
       time: '',
@@ -36,6 +37,7 @@ class CreateRequest extends Component {
     };
   }
   componentDidMount() {
+    console.log('=============================', this.props.state.user)
     this.retrieveSummaryLedger()
   }
 
@@ -108,21 +110,26 @@ class CreateRequest extends Component {
       billing_per_month: 1,
       max_charge: null,
       reason: this.state.details,
-      location: {
-        route: this.props.state.location.address,
-        locality: this.props.state.location.locality,
-        region: this.props.state.location.region,
-        country: this.props.state.location.country,
-        latitude: this.props.state.location.latitude,
-        longitude: this.props.state.location.longitude,
-      },
+      // location: 'Nasipit',
+      // location: {
+      //   route: this.props.state.location.address == null ? 'sample' : this.props.state.location.address,
+      //   locality: this.props.state.location.locality == null ? 'sample' : this.props.state.location.locality,
+      //   region: this.props.state.location.region == null ? 'sample' : this.props.state.location.region,
+      //   country: this.props.state.location.country == null ? 'sample' : this.props.state.location.country,
+      //   latitude: this.props.state.location.latitude == null ? 'sample' : this.props.state.location.latitude,
+      //   longitude: this.props.state.location.longitude == null ? 'sample' : this.props.state.location.longitude,
+      // },
       comaker: '',
       coupon: '',
     };
     this.props.setRequestInput(parameters);
-    this.props.navigation.navigate('otpStack', {
-      performTransaction: this.sendRequest,
-    });
+    this.sendRequest()
+    // this.sendRequest()
+    // this.props.navigation.navigate('requestItemStack', 
+    // );
+    // this.props.navigation.navigate('otpStack', {
+    //   performTransaction: this.sendRequest,
+    // });
   };
 
   sendRequest = () => {
@@ -169,7 +176,7 @@ class CreateRequest extends Component {
 
 
             <LocationTextInput 
-              variable={this.state.amount}
+              variable={this.state.location}
               label={'Select Location'}
               onError={false}
               required={true}
@@ -216,17 +223,19 @@ class CreateRequest extends Component {
 
             <TextInputWithLabel 
               variable={this.state.amount}
-              onChange={(value) => this.handleAmountChange(value)}
+              onChange={(value) => this.handleAmountChange(value.toString())}
               label={'Amount'}
+              keyboardType={'numeric'}
               onError={false}
               required={true}
             />
 
             <TextInputWithLabel 
               variable={this.state.maximumProcessingCharge}
-              onChange={(value) => this.handleMaxProcessingChargeChange(value)}
+              onChange={(value) => this.handleMaxProcessingChargeChange(value.toString())}
               label={'Maximum processing charge'}
               onError={false}
+              keyboardType={'numeric'}
               required={false}
               placeholder={'Optional'}
             />
