@@ -31,6 +31,7 @@ import {Dimensions} from 'react-native';
 import RequestOptions from './RequestOptions.js';
 import ProposalModal from 'modules/generic/ProposalModal';
 import RequestCard from 'modules/generic/RequestCard';
+import _ from 'lodash';
 
 const height = Math.round(Dimensions.get('window').height);
 class Requests extends Component {
@@ -56,15 +57,16 @@ class Requests extends Component {
         },
       ],
       isBookmark: false,
-      limit: 10,
+      limit: 5,
       active: 1,
       activePage: 0,
       isRequestOptions: false,
+      offset: 0
     };
   }
 
   componentDidMount() {
-    this.retrieve();
+    this.retrieve(false, true);
     this.backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
       this.handleBackPress,
@@ -123,7 +125,7 @@ class Requests extends Component {
       setSearchParameter(null);
       this.setState({activePage: 0});
       setTimeout(() => {
-        this.retrieve();
+        this.retrieve(false, true);
       }, 100);
     } else {
       let searchParameter = {
@@ -133,20 +135,20 @@ class Requests extends Component {
       this.setState({activePage: 1});
       setSearchParameter(searchParameter);
       setTimeout(() => {
-        this.retrieve();
+        this.retrieve(false, true);
       }, 100);
     }
   };
 
-  retrieve = (flag = true) => {
-    const {user, searchParameter} = this.props.state;
+  retrieve = (scroll, flag) => {
+    const {user, searchParameter, requests} = this.props.state;
     const {setUserLedger} = this.props;
     if (user == null) {
       return;
     }
     let parameter = {
       account_id: user.id,
-      offset: (this.state.active - 1) * this.state.limit,
+      offset: this.state.offset,
       limit: this.state.limit,
       sort: {
         column: 'created_at',
@@ -169,9 +171,11 @@ class Requests extends Component {
         if (flag == true) {
           const {setRequests} = this.props;
           if (response.data != null) {
-            setRequests(response.data);
+            setRequests(scroll === false ? response.data : _.uniqBy([...requests, ...response.data], 'id'));
+            this.setState({offset: scroll == false ? 1 : (this.state.offset + 1)})
           } else {
-            setRequests(null);
+            setRequests(scroll === false ? [] : this.props.state.requests);
+            this.setState({offset: scroll === false ? 0 : this.state.offset})
           }
         } else {
           const {updateRequests} = this.props;
@@ -191,7 +195,7 @@ class Requests extends Component {
     const {setSearchParameter} = this.props;
     setSearchParameter(null);
     setTimeout(() => {
-      this.retrieve();
+      this.retrieve(false, true);
     }, 1000);
   };
 
@@ -202,7 +206,7 @@ class Requests extends Component {
       value: this.state.searchValue,
     };
     setSearchParameter(parameter);
-    this.retrieve();
+    this.retrieve(false, true);
   };
 
   bookmark = (item) => {
@@ -213,7 +217,7 @@ class Requests extends Component {
     };
     this.setState({isLoading: true});
     Api.request(Routes.bookmarkCreate, parameter, (response) => {
-      this.retrieve();
+      this.retrieve(false, true);
     });
   };
 
@@ -264,7 +268,7 @@ class Requests extends Component {
     } else {
       // process charges
       this.setState({connectModal: false, connectSelected: null});
-      this.retrieve();
+      this.retrieve(false, true);
     }
   };
 
@@ -342,7 +346,7 @@ class Requests extends Component {
   };
 
   _flatList = () => {
-    const {selected} = this.state;
+    const {selected, isLoading} = this.state;
     const {user, requests} = this.props.state;
     return (
       <View
@@ -403,9 +407,10 @@ class Requests extends Component {
                 // this.retrieve(false)
               }
             }
+            console.log(scrollingHeight, totalHeight);
             if(scrollingHeight >= (totalHeight)) {
               if(isLoading == false){
-                this.props.retrieve(true)
+                this.retrieve(true, true)
               }
             }
           }}>

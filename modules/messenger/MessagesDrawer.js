@@ -16,6 +16,16 @@ class HeaderOptions extends Component {
     super(props);
   }
 
+  componentDidMount = () => {
+    if(this.props.navigationProps.state.params !== undefined){
+      if(this.props.navigationProps.state.params.con){
+        const { setMessengerGroup, setMessagesOnGroup } = this.props
+        setMessengerGroup(this.props.navigationProps.state.params)
+        setMessagesOnGroup(this.props.navigationProps.state.params)
+      }
+    }
+  }
+
   back = () => {
     const { setMessagesOnGroup, setMessengerGroup } = this.props;
     setMessagesOnGroup({groupId: null, messages: null});
@@ -24,15 +34,14 @@ class HeaderOptions extends Component {
   };
 
   viewMenu = () => {
-    const { viewMenu } = this.props // new
-    viewMenu(!this.props.state.isViewing) // new
+    const { viewMenu } = this.props
+    viewMenu(!this.props.state.isViewing)
   }
 
   _card = () => {
     const { messengerGroup, theme } = this.props.state;
     const width = Math.round(Dimensions.get('window').width);
-    console.log('asdfasdfasdfasdf', theme)
-    // {Helper.showRequestType(messengerGroup.request.type)} - 
+    // {Helper.showRequestType(messengerGroup.request.type)} -
     return (
       <View>
         {
@@ -40,14 +49,16 @@ class HeaderOptions extends Component {
           <View style={{
             flexDirection: 'row',
             width: width - 20,
-            alignItems: 'center'          }}>
-            <UserImage  user={messengerGroup.title} color={theme ? theme.primary :  Color.primary}/>
+            alignItems: 'center',
+            // marginLeft: -30
+            }}>
+            <UserImage style={{marginLeft: -20}}  user={messengerGroup?.profile} color={theme ? theme.primary : Color.primary}/>
             <Text style={{
-              color: theme ? theme.primary :  Color.primary,
+              color: theme ? theme.primary : Color.primary,
               lineHeight: 30,
               paddingLeft: 1,
               // width: '30%'
-            }}>{messengerGroup.title.length > 10 ? messengerGroup.title.substr(0, 10) + '...' : messengerGroup.title}</Text>
+            }}>{messengerGroup.title.length > 29 ? ' *****' + messengerGroup.title.substr(28, 32) + ' - ' + messengerGroup?.request?.currency + ' ' + messengerGroup?.request?.amount : messengerGroup?.title}</Text>
             {Helper.MessengerMenu != null &&
               <TouchableHighlight 
                 activeOpacity={0.6}
@@ -68,7 +79,7 @@ class HeaderOptions extends Component {
               >
                 <FontAwesomeIcon 
                   icon={ faEllipsisV } 
-                  style={{color: 'white'}}
+                  style={{color: theme ? theme.primary : Color.primary}}
                 />
               </TouchableHighlight>
             }
@@ -80,6 +91,7 @@ class HeaderOptions extends Component {
   
   
   render() {
+    const { theme } = this.props.state;
     return (
       <View style={{ flexDirection: 'row' }}>
         <TouchableOpacity onPress={this.back.bind(this)} 
@@ -87,7 +99,7 @@ class HeaderOptions extends Component {
           <FontAwesomeIcon
             icon={ faChevronLeft }
             size={BasicStyles.iconSize}
-            style={BasicStyles.iconStyle}/>
+            style={[BasicStyles.iconStyle, {color: theme ? theme.primary : Color.primary} ]}/>
         </TouchableOpacity>
         {
           this._card()
@@ -118,13 +130,9 @@ const MessagesStack = createStackNavigator({
   messagesScreen: {
     screen: Messages, 
     navigationOptions: ({ navigation }) => ({
-      title: null,
+      title: '',
       headerLeft: <HeaderOptionsConnect navigationProps={navigation} />,
-      drawerLabel: null,
-      headerStyle: {
-        backgroundColor: Color.primary,
-      },
-      headerTintColor: '#fff',
+      ...BasicStyles.headerDrawerStyle
     })
   }
 })

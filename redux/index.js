@@ -176,7 +176,7 @@ const reducer = (state = initialState, action) => {
   const { isViewing, request } = action;
   switch (type) {
     case types.LOGOUT:
-      AsyncStorage.clear();
+      AsyncStorage.removeItem(Helper.APP_NAME + 'token');
       return Object.assign({}, initialState);
     case types.LOGIN:
       storeData('token', token);

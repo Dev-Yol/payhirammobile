@@ -8,28 +8,17 @@ import Currency from 'services/Currency.js'
 import Styles from './Styles.js'
 import { connect } from 'react-redux';
 import TransactionCard from 'modules/generic/TransactionCard';
-// const sample = [{
-//   id: 1,
-//   amount: 500,
-//   via: '****5678',
-//   description: 'This is a test',
-//   date: 'August 9, 2020 5:00 PM',
-//   currency: 'PHP'
-// }, {
-//   id: 2,
-//   amount: 600,
-//   via: '****5678',
-//   description: 'This is a test',
-//   date: 'August 9, 2020 5:00 PM',
-//   currency: 'PHP'
-// }]
-
+import _ from 'lodash';
+import { Spinner } from 'components';
 
 class Transactions extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: []
+      data: [],
+      limit: 10,
+      offset: 0,
+      isLoading: false,
     };
   }
 
@@ -37,7 +26,7 @@ class Transactions extends Component {
     console.log('user hereitis', JSON.stringify(this.props))
     // const {user} = this.props;
     // if (user != null) {
-    this.retrieveLedgerHistory({created_at: 'desc'}, {column: 'created_at', value: ''})
+    this.retrieveLedgerHistory({created_at: 'desc'}, {column: 'created_at', value: ''}, false)
     // }
   }
 
@@ -49,7 +38,8 @@ class Transactions extends Component {
     }
   }
 
-  retrieveLedgerHistory = (sort, filter) => {
+  retrieveLedgerHistory = (sort, filter, flag) => {
+    this.setState({isLoading: true});
     // const { user } = this.props.state
     let key = Object.keys(sort)
     // if (user == null) {
@@ -57,8 +47,8 @@ class Transactions extends Component {
     // }
     let parameter = {
       // account_id: this.user.userID,
-      offset: 0,
-      limit: 50,
+      limit: this.state.limit,
+      offset: this.state.offset,
       sort: {
         column: key[0],
         value: sort[key[0]]
@@ -67,13 +57,16 @@ class Transactions extends Component {
       column: filter.column
     };
     Api.request(Routes.transactionRetrieve, parameter, (response) => {
+      this.setState({isLoading: false});
       if (response != null) {
         this.setState({
-          data: response.data
+          data: flag == false ? response.data : _.uniqBy([...this.state.data, ...response.data], 'id'),
+          offset: flag == false ? 1 : (this.state.offset + 1)
         })
       } else {
         this.setState({
-          data: []
+          data: flag == false ? [] : this.state.data,
+          offset: flag == false ? 0 : this.state.offset
         })
       }
     }, error => {
@@ -82,11 +75,27 @@ class Transactions extends Component {
   };
 
   render() {
-    const { data } = this.state;
+    const { data, isLoading } = this.state;
     return (
+      <ScrollView
+        onScroll={(event) => {
+          let scrollingHeight = event.nativeEvent.layoutMeasurement.height + event.nativeEvent.contentOffset.y
+          let totalHeight = event.nativeEvent.contentSize.height
+          if(event.nativeEvent.contentOffset.y <= 0) {
+            if(this.state.loading == false){
+              // this.retrieve(false)
+            }
+          }
+          console.log(scrollingHeight, totalHeight);
+          if(scrollingHeight >= (totalHeight)) {
+            if(this.state.loading == false){
+              this.retrieveLedgerHistory({created_at: 'desc'}, {column: 'created_at', value: ''}, true)
+            }
+          }
+        }}
+        showsVerticalScrollIndicator={false}>
       <View>
-        <ScrollView
-          showsVerticalScrollIndicator={false}>
+        {isLoading ? <Spinner mode="overlay" /> : null}
           <View style={Styles.MainContainer}>
             {
               data && data.map((item, index) => (
@@ -95,8 +104,8 @@ class Transactions extends Component {
             }     
             
           </View>
-        </ScrollView>
       </View>
+    </ScrollView>
     );
   }
 }

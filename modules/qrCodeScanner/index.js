@@ -12,9 +12,10 @@ import QRCodeScanner from 'react-native-qrcode-scanner';
 class Scanner extends Component {
 
     onSuccess = e => {
-        Linking.openURL(e.data).catch(err =>
-            console.error('An error occured', err)
-        );
+        // Linking.openURL(e.data).catch(err =>
+        //     console.error('An error occured', err)
+        // );
+        this.props.navigation.navigate('viewProfileStack', {user: this.props.navigation.state.params.user, code: e.data})
     };
 
     render() {

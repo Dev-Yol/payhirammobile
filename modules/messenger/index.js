@@ -34,10 +34,10 @@ class Groups extends Component{
     }
     this.setState({isLoading: true});
     CommonRequest.retrieveMessengerGroups(user, response => {
+      console.log('bntay ka lng', response.data)
       this.setState({isLoading: false, data: response.data});
       const { setMessenger } = this.props;
       const { messenger } = this.props.state;
-      console.log('messenger test', setMessenger, 'sadffffffffff', messenger, 'data', response.data)
       if(response.data !== null){
         var counter = 0
         for (var i = 0; i < response.data.length; i++) {
@@ -71,9 +71,7 @@ class Groups extends Component{
   }
 
   viewMessages = (item) => {
-    console.log('itemmmmmsss', item)
     const { setMessengerGroup } = this.props;
-    console.log('message group', item);
     this.updateLastMessageStatus(item)
     setMessengerGroup(item);
     setTimeout(() => {
@@ -91,16 +89,16 @@ class Groups extends Component{
           >
           <View>
             <View style={{flexDirection: 'row', marginTop: 5, paddingLeft: 10, paddingRight: 10}}>
-              <UserImage user={item.title} color={theme ? theme.primary : Color.primary}/>
+              <UserImage user={item.profile} color={theme ? theme.primary : Color.primary}/>
               <View style={{
                 paddingLeft: 10,
-                width: '30%',
+                width: '50%',
                 flexDirection: 'row'
               }}>
                 <Text style={{
                   color: theme ? theme.primary : Color.primary,
                   lineHeight: 30,
-                }}>{item.title > 10 ? item.title.substr(0, 10) + '...' : item.title}</Text>
+                }}>{item.title.length > 29 && item.request != null ? '*****' + item.title.substr(28, 32) + ' - ' + item.request.currency + ' ' + item.request.amount  : item.title}</Text>
                 {
                   parseInt(item.total_unread_messages) > 0 && Platform.OS == 'android' && (
                     <Text style={{

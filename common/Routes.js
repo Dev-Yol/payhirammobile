@@ -34,6 +34,7 @@ export default {
     apiUrl + 'messenger_messages/create_with_image_without_payload',
   mmCreateWithImage: apiUrl + 'messenger_messages/create_with_images',
   ratingsCreate: apiUrl + 'ratings/create',
+  ratingsRetrieve: apiUrl + 'ratings/retrieve',
   notificationSettingsRetrieve: apiUrl + 'notification_settings/retrieve',
   notificationSettingsCreate: apiUrl + 'notification_settings/create',
   notificationSettingsUpdate: apiUrl + 'notification_settings/update',
@@ -63,5 +64,8 @@ export default {
   ticketsUpdate: apiUrl + 'tickets/update',
   accountUpdateEmail: apiUrl + 'accounts/update_email',
   circleRetrieve: apiUrl + 'my_circle/retrieve',
-  circleCreate: apiUrl + 'my_circle/create'
+  circleCreate: apiUrl + 'my_circle/create',
+  educationsRetrieve: apiUrl + 'educations/retrieve',
+  circleUpdate: apiUrl + 'my_circle/update',
+  circleDelete: apiUrl + 'my_circle/delete'
 };
