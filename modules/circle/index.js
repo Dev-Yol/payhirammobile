@@ -15,7 +15,6 @@ class Circle extends Component{
     super(props);
     this.state = {
       data: null,
-      isLoading: true,
       limit: 10,
       offset: 0,
       isLoading: false,
@@ -166,7 +165,6 @@ class Circle extends Component{
               </View>
             )
           }
-
         </View>
       )
   }
@@ -214,7 +212,7 @@ class Circle extends Component{
     this.props.navigation.push("viewProfileStack", { user })
   }
   render() {
-    const { data} = this.state;
+    const { data } = this.state;
     const { user } = this.props.state;
     return (
       <View style={
@@ -244,7 +242,7 @@ class Circle extends Component{
             height: height
           }}>
             {(data && user) && this.renderCircles(data)}
-            {data && user == null && isLoading == false && (
+            {data == null && this.state.isLoading == false && (
               <Empty refresh={true} onRefresh={() => this.onRefresh()} />
             )}
           </View>

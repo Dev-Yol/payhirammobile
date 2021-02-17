@@ -97,18 +97,7 @@ class CreateRequest extends Component {
   };
 
   handleAmountChange = (amount) => {
-    // if(this.state.amount >= 1000){
     this.setState({amount: amount});
-    // }else {
-    //   Alert.alert(
-    //     'Error Message',
-    //     'Amount must not be less than 1000.',
-    //     [
-    //       {text: 'OK', onPress: () => this.viewMessages()},
-    //     ],
-    //     { cancelable: false }
-    //   )
-    // }
   };
 
   handleDetailsChange = (details) => {
@@ -123,7 +112,7 @@ class CreateRequest extends Component {
     const {user, location} = this.props.state;
     if(user == null || location == null){
       return
-    }else if(this.state.type == null || this.state.money_type == null || this.state.amount == null || this.state.maximumProcessingCharge == null || this.state.neededOn == null || this.state.reason == null) {
+    }else if(this.state.type == null || this.state.money_type == null || this.state.amount == null || this.state.neededOn == null || this.state.reason == null) {
       Alert.alert(
         'Error Message',
         'All fields with (*) are required.',
@@ -209,6 +198,7 @@ class CreateRequest extends Component {
             <LocationTextInput 
               variable={location}
               label={'Select Location'}
+              placeholder={'Select Location'}
               onError={false}
               required={true}
               route={'addLocationStack'}
@@ -258,6 +248,7 @@ class CreateRequest extends Component {
               label={'Amount'}
               keyboardType={'numeric'}
               onError={false}
+              placeholder={'Input here'}
               required={true}
             />
 
@@ -286,6 +277,7 @@ class CreateRequest extends Component {
                 style={{paddingLeft: 15, color: '#FF2020'}}
               />
             </View>
+            
             <DateTime
               onFinish={this.onDateFinish}
               placeholder="Select date"
