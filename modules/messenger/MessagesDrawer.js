@@ -20,6 +20,7 @@ class HeaderOptions extends Component {
     if(this.props.navigationProps.state.params !== undefined){
       if(this.props.navigationProps.state.params.con){
         const { setMessengerGroup, setMessagesOnGroup } = this.props
+        console.log('************************&&&&&&&&&&&&&&&&&&&&&&&&&', this.props.navigationProps.state.params)
         setMessengerGroup(this.props.navigationProps.state.params)
         setMessagesOnGroup(this.props.navigationProps.state.params)
       }

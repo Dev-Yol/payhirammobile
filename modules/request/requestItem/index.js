@@ -72,6 +72,7 @@ class RequestItem extends Component {
   }
 
   viewMessages = () => {
+    console.log('here', this.state.peer, this.state.data)
     setTimeout(() => {
       this.props.navigation.navigate('messagesStack', {
         payload: 'request',
