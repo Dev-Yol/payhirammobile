@@ -74,8 +74,11 @@ class Groups extends Component{
     const { setMessengerGroup } = this.props;
     this.updateLastMessageStatus(item)
     setMessengerGroup(item);
+    console.log('[viewMessages] data', item)
     setTimeout(() => {
-      this.props.navigation.navigate('messagesStack');
+      this.props.navigation.navigate('messagesStack', {
+        data: item
+      });
     }, 500)
   }
 
@@ -89,16 +92,16 @@ class Groups extends Component{
           >
           <View>
             <View style={{flexDirection: 'row', marginTop: 5, paddingLeft: 10, paddingRight: 10}}>
-              <UserImage user={item.profile} color={theme ? theme.primary : Color.primary}/>
+              {/*<UserImage user={item.profile} color={theme ? theme.primary : Color.primary}/>*/}
               <View style={{
                 paddingLeft: 10,
-                width: '50%',
+                width: '100%',
                 flexDirection: 'row'
               }}>
                 <Text style={{
                   color: theme ? theme.primary : Color.primary,
                   lineHeight: 30,
-                }}>{item.title.length > 29 && item.request != null ? '*****' + item.title.substr(28, 32) + ' - ' + item.request.currency + ' ' + item.request.amount  : item.title}</Text>
+                }}>{item.title.length > 29 && item.request != null ? '*****' + item.title.substr(item.title.length - 8, item.title.length - 1) + ' - ' + item.request.currency + ' ' + item.request.amount  : item.title}</Text>
                 {
                   parseInt(item.total_unread_messages) > 0 && Platform.OS == 'android' && (
                     <Text style={{
@@ -223,6 +226,7 @@ class Groups extends Component{
             }
           }
         }}
+        showsVerticalScrollIndicator={false}
         >
         <View stle={{
           flexDirection: 'row',

@@ -32,7 +32,10 @@ class Messages extends Component{
       photo: null,
       keyRefresh: 0,
       settingsMenu: [],
-      settingsBreadCrumbs: ['Settings']
+      settingsBreadCrumbs: ['Settings'],
+      offset: 0,
+      limit: 10,
+      isLock: false
     }
   }
 
@@ -46,71 +49,34 @@ class Messages extends Component{
   }
 
   retrieve = () => {
-    const { messengerGroup } = this.props.state;
-    console.log('herrrrrrrrrrrrrrre', this.props.state.messengerGroup)
-    const { setMessagesOnGroup } = this.props;
-    this.setState({isLoading: true});
-    CommonRequest.retrieveMessages(messengerGroup, response => {
-      if(response.data > 0){
-        this.setState({isLoading: false})
-        setMessagesOnGroup({
-          messages: response.data,
-          groupId: messengerGroup.request.id
-        })
-      }else {
-        this.createGroup()
-      }
-    })
-  }
-
-  createGroup = () => {
-    const { user, messengerGroup } = this.props.state
-
-    let parameter = {
-      member: messengerGroup.id,
-      creator: messengerGroup.request.account.id,
-      title: messengerGroup.request.code,
-      payload: messengerGroup.payload
-    }
-
-    console.log('****************yeah*****fdfdf*********', parameter)
-    Api.request(Routes.customMessengerGroupCreate, parameter, response => {
-      console.log('****************yeahssss**************', response)
-      if (response.data) {
-        console.log('****************yeah**************', response.data)
-        setMessengerGroup({ id: response.data, account_id: messengerGroup.id })
-        this.retrieve()
-      }
-    }, error => {
-      this.setState({ isLoading: false })
-      console.log({ messenger_groups_error: error })
-    })
-  }
-
-  retrieveGroup = (flag = null) => {
-    const { user, messengerGroup } = this.props.state
-    const { setMessengerGroup } = this.props
-    if(messengerGroup == null || user == null){
+    const { data } = this.props.navigation.state.params;
+    const { offset, limit } = this.state
+    const  { user } = this.props.state;
+    if(data == null || user == null){
       return
     }
     let parameter = {
       condition: [{
-        value: messengerGroup.id,
-        column: 'id',
-        clause: '='
+        column: 'messenger_group_id',
+        clause: '=',
+        value: data.id
       }],
-      account_id: user.id
+      sort: {
+        'created_at': 'DESC'
+      },
+      limit,
+      offset,
     }
-    CommonRequest.retrieveMessengerGroup(messengerGroup, user, response => {
-      if(response.data != null){
-        setMessengerGroup(response.data)
-        console.log('retttttttttttrrrrrrrrrrrrrrrieve', response.data)
-        setTimeout(() => {
-          this.retrieve(response.data)
-          this.setState({keyRefresh: this.state.keyRefresh + 1})
-        }, 500)
-      }
-    })
+    Api.request(Routes.messengerMessagesRetrieve, parameter, response => {
+      this.setState({ isLoading: false, offset: offset + limit });
+        setMessagesOnGroup({
+        messages: response.data.reverse(),
+        groupId: messengerGroup.id
+      })
+    }, error => {
+      this.setState({ isLoading: false });
+      console.log({ retrieveMessagesError: error })
+    });
   }
 
   sendNewMessage = () => {
@@ -362,7 +328,7 @@ class Messages extends Component{
     const { theme } = this.props.state;
     return (
       <View style={{flexDirection: 'row', marginTop: 10}}>
-        <UserImage user={item.account} color={theme ? theme.primary : Color.primary}/>
+        {/*<UserImage user={item.account} color={theme ? theme.primary : Color.primary}/>*/}
         <Text style={{
           lineHeight: 30,
           paddingLeft: 10
@@ -379,7 +345,7 @@ class Messages extends Component{
           lineHeight: 30,
           paddingRight: 10
         }}>{item.account.username}</Text>
-        <UserImage user={item.account} color={theme ? theme.primary : Color.primary}/>
+        {/*<UserImage user={item.account} color={theme ? theme.primary : Color.primary}/>*/}
       </View>
     );
   }
@@ -476,96 +442,6 @@ class Messages extends Component{
         }}>
           {item.account_id != user.id && (this._rightTemplate(item))}
         </View>
-      </View>
-    );
-  }
-
-  _templates = () => {
-    const { messengerGroup, user } = this.props.state;
-    return (
-      <View style={{
-        width: '100%'
-      }}>
-        {messengerGroup.request.status == 2 && (
-          <Review 
-            refresh={() => {
-              this.retrieveGroup()
-            }}></Review>
-        )}
-        { 
-          messengerGroup.account_id == user.id &&
-          (messengerGroup.request.type == 1 || messengerGroup.request.type == 4) && 
-          // messengerGroup.validations &&
-          // messengerGroup.validations.complete_status == false &&
-          messengerGroup.request.status < 2 && (
-            <AddRequirements onFinish={() => this.setState({keyRefresh: this.state.keyRefresh + 1})}></AddRequirements>
-          )
-        }
-        {
-          messengerGroup.account_id == user.id &&
-          (messengerGroup.request.type == 1 || messengerGroup.request.type == 4) &&
-          messengerGroup.request.status < 2 && (
-            <Transfer
-              text={
-                'Validations are complete, click transfer to proceed:'
-              }
-              onLoading={(flag) => this.setState({
-                isLoading: flag
-              })}
-              onFinished={() => {
-                this.retrieveGroup()
-              }}
-            ></Transfer>
-          )
-        }
-        {
-          messengerGroup.account_id != user.id &&
-          messengerGroup.request.type == 3 &&
-          messengerGroup.request.status < 2 && (
-            <Transfer
-              onLoading={(flag) => this.setState({
-                isLoading: flag
-              })}
-              onFinished={() => {
-                this.retrieveGroup()
-              }}
-              text={
-                'If you receive the money from other peer already, then you can continue to transfer and complete the thread.'
-              }
-            ></Transfer>
-          )
-        }
-        {
-          messengerGroup.account_id == user.id &&
-          messengerGroup.request.type == 2 &&
-          messengerGroup.request.status < 2 && (
-            <Transfer
-              onLoading={(flag) => this.setState({
-                isLoading: flag
-              })}
-              onFinished={() => {
-                this.retrieveGroup()
-              }}
-              text={
-                'If you receive the money from other peer already, then you can continue to transfer and complete the thread.'
-              }
-            ></Transfer>
-          )
-        }
-        {
-          messengerGroup.account_id != user.id &&
-          (messengerGroup.request.type == 1 || messengerGroup.request.type == 4) &&
-          messengerGroup.request.status < 2 && (
-            <SendRequirements 
-              onLoading={(flag) => this.setState({
-                isLoading: flag
-              })}
-              onFinished={() => {
-                this.retrieveGroup()
-              }}
-            ></SendRequirements>
-          )
-        }
       </View>
     );
   }
@@ -797,12 +673,6 @@ class Messages extends Component{
             width: '100%'
           }}>
             {this._flatList()}
-          </View>
-          <View style={{
-            flexDirection: 'row',
-            width: '100%'
-          }}>
-            {messengerGroup != null && user !== null && (this._templates())}
           </View>
           {isLoading ? <Spinner mode="overlay"/> : null }
         </ScrollView>

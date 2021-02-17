@@ -40,52 +40,49 @@ class HeaderOptions extends Component {
   }
 
   _card = () => {
-    const { messengerGroup, theme } = this.props.state;
+    const { theme } = this.props.state;
     const width = Math.round(Dimensions.get('window').width);
     // {Helper.showRequestType(messengerGroup.request.type)} -
+    const { data } = this.props.navigationProps.state.params;
     return (
       <View>
-        {
-          messengerGroup != null && (
-          <View style={{
-            flexDirection: 'row',
-            width: width - 20,
-            alignItems: 'center',
-            // marginLeft: -30
-            }}>
-            <UserImage style={{marginLeft: -20}}  user={messengerGroup?.profile} color={theme ? theme.primary : Color.primary}/>
-            <Text style={{
-              color: theme ? theme.primary : Color.primary,
-              lineHeight: 30,
-              paddingLeft: 1,
-              // width: '30%'
-            }}>{messengerGroup.title.length > 29 ? ' *****' + messengerGroup.title.substr(28, 32) + ' - ' + messengerGroup?.request?.currency + ' ' + messengerGroup?.request?.amount : messengerGroup?.title}</Text>
-            {Helper.MessengerMenu != null &&
-              <TouchableHighlight 
-                activeOpacity={0.6}
-                underlayColor={Color.lightGray}
-                onPress={this.viewMenu.bind(this)} 
-                style={
-                  {
-                    position: 'absolute',
-                    right: 0,
-                    paddingRight: 15,
-                    paddingLeft: 15,
-                    paddingTop: 15,
-                    paddingBottom: 15,
-                    marginRight: 15,
-                    borderRadius: 50
-                  }
+        <View style={{
+          flexDirection: 'row',
+          width: width - 20,
+          alignItems: 'center',
+          }}>
+          {/*<UserImage style={{marginLeft: -20}}  user={messengerGroup?.profile} color={theme ? theme.primary : Color.primary}/>*/}
+          <Text style={{
+            color: theme ? theme.primary : Color.primary,
+            paddingLeft: 1
+          }}>{
+            data ? '****' + data.title.substr(data.title.length - 8, data.title.length - 1) + ' - ' + data.request.currency + ' ' + data.request.amount: null
+          }</Text>
+          {Helper.MessengerMenu != null &&
+            <TouchableHighlight 
+              activeOpacity={0.6}
+              underlayColor={Color.lightGray}
+              onPress={this.viewMenu.bind(this)} 
+              style={
+                {
+                  position: 'absolute',
+                  right: 0,
+                  paddingRight: 15,
+                  paddingLeft: 15,
+                  paddingTop: 15,
+                  paddingBottom: 15,
+                  marginRight: 15,
+                  borderRadius: 50
                 }
-              >
-                <FontAwesomeIcon 
-                  icon={ faEllipsisV } 
-                  style={{color: theme ? theme.primary : Color.primary}}
-                />
-              </TouchableHighlight>
-            }
-          </View>
-        )}
+              }
+            >
+              <FontAwesomeIcon 
+                icon={ faEllipsisV } 
+                style={{color: theme ? theme.primary : Color.primary}}
+              />
+            </TouchableHighlight>
+          }
+        </View>
       </View>
     );
   }

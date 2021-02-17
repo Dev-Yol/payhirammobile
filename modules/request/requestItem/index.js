@@ -71,20 +71,56 @@ class RequestItem extends Component {
     });
   }
 
-  viewMessages = () => {
-    console.log('here', this.state.peer, this.state.data)
-    setTimeout(() => {
-      this.props.navigation.navigate('messagesStack', {
-        payload: 'request',
-        payload_value: this.state.peer.request_id,
-        title: this.state.peer.code,
-        account_id:  this.state.peer.account_id,
-        profile: this.state.peer.account.profile,
-        request: this.state.data,
-        id: this.state.peer.id,
-        con: true
-      });
-    }, 500)
+  createThread = (account) => {
+    const { user } = this.props.state;
+    const { data } = this.props.navigation.state.params;
+    if(user == null || account == null || data == null){
+      return
+    }
+    this.setState({isLoading: true});
+    let parameter = {
+      member: account.account_id,
+      creator: user.id,
+      title: data.code,
+      payload: 'request'
+    }
+
+    console.log('[Create Messenger Thread] parameter', parameter)
+    Api.request(Routes.customMessengerGroupCreate, parameter, response => {
+      this.setState({ isLoading: false })
+      if (response.data != null) {
+        this.props.navigation.navigate('messagesStack', {
+          data: {
+            id: response.data,
+            title: data.code,
+            payload: 'request',
+            account_id: user.id
+          }
+        });
+      }else{
+        Alert.alert(
+          'Thread already existed!',
+          'Do you want to view the existing thread?',
+          [
+            {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+            {text: 'OK', onPress: () => {
+              this.props.navigation.navigate('messagesStack', {
+                data: {
+                  id: response.data,
+                  title: data.code,
+                  payload: 'request',
+                  account_id: user.id
+                }
+              });
+            }},
+          ],
+          { cancelable: false }
+        )
+      }
+    }, error => {
+      this.setState({ isLoading: false })
+      console.log({ messenger_groups_error: error })
+    })
   }
   
   connectRequest = (item) => {
@@ -106,7 +142,7 @@ class RequestItem extends Component {
       'Are you sure you want to accept this request?',
       [
         {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-        {text: 'OK', onPress: () => this.viewMessages()},
+        {text: 'OK', onPress: () => this.createThread(data)},
       ],
       { cancelable: false }
     )
