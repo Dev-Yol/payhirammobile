@@ -7,7 +7,7 @@ import { Routes, BasicStyles } from 'common';
 import Dropdown from 'components/InputField/Dropdown'
 import { Spinner } from 'components';
 import { Card } from 'react-native-elements'
-import ImagePicker from '@react-native-community/picker';
+import ImagePicker from 'react-native-image-picker';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faImages } from '@fortawesome/free-solid-svg-icons';
 import Color from 'common/Color';
@@ -54,7 +54,6 @@ class CreateTicket extends Component {
       noData: false,
     }
     ImagePicker.launchImageLibrary(options, response => {
-      console.log(response, "=======");
       if (response.uri) {
         let images = this.state.images;
         images.push(`data:image/png;base64,${response.data}`);

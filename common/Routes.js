@@ -63,9 +63,9 @@ export default {
   ticketsCreate: apiUrl + 'tickets/create',
   ticketsUpdate: apiUrl + 'tickets/update',
   accountUpdateEmail: apiUrl + 'accounts/update_email',
-  circleRetrieve: apiUrl + 'my_circle/retrieve',
-  circleCreate: apiUrl + 'my_circle/create',
+  circleRetrieve: apiUrl + 'my_circles/retrieve',
+  circleCreate: apiUrl + 'my_circles/create',
   educationsRetrieve: apiUrl + 'educations/retrieve',
-  circleUpdate: apiUrl + 'my_circle/update',
-  circleDelete: apiUrl + 'my_circle/delete'
+  circleUpdate: apiUrl + 'my_circles/update',
+  circleDelete: apiUrl + 'my_circles/delete'
 };
