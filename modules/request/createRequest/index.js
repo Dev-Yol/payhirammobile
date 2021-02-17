@@ -124,9 +124,6 @@ class CreateRequest extends Component {
     };
     this.props.setRequestInput(parameters);
     this.sendRequest()
-    // this.sendRequest()
-    // this.props.navigation.navigate('requestItemStack', 
-    // );
     // this.props.navigation.navigate('otpStack', {
     //   performTransaction: this.sendRequest,
     // });
