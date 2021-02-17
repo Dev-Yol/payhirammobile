@@ -40,6 +40,7 @@ class Dashboard extends Component {
   }
 
   componentDidMount() {
+    this.props.setQRCodeModal(false)
     const {user} = this.props.state;
     if (user != null) {
       this.retrieveSummaryLedger();
@@ -300,6 +301,7 @@ const mapDispatchToProps = (dispatch) => {
   const {actions} = require('@redux');
   return {
     setLedger: (ledger) => dispatch(actions.setLedger(ledger)),
+    setQRCodeModal: (isVisible) => dispatch(actions.setQRCodeModal(isVisible))
   };
 };
 
