@@ -13,6 +13,9 @@ import Button from 'components/Form/Button';
 import Modal from 'react-native-modal';
 import Currency from 'services/Currency';
 import Api from 'services/api/index.js';
+import {
+  Spinner
+} from 'components';
 
 const height = Math.round(Dimensions.get('window').height)
 class ProposalModal extends Component {
@@ -20,7 +23,8 @@ class ProposalModal extends Component {
     super(props);
     this.state = {
         currency: 'PHP',
-        charge: 0
+        charge: 0,
+        isLoading: false
     };
   }
   redirect = (route) => {
@@ -41,7 +45,9 @@ class ProposalModal extends Component {
   submit(){
     const { user, ledger, request } = this.props.state;
     const { charge, currency } = this.state;
-    if(user == null || ledger == null || request == null){
+
+    console.log('[send proposal]')
+    if(user == null || request == null || ledger == null){
       return
     }
     if(charge <= 0 || currency == null){
@@ -54,14 +60,21 @@ class ProposalModal extends Component {
       status: 'requesting',
       account_id: user.id
     }
-    this.props.loading(true)
+    console.log('[send proposal]', parameter)
+    this.setState({
+      isLoading: true
+    })
     Api.request(Routes.requestPeerCreate, parameter, (response) => {
-      this.props.loading(false)
+      this.setState({
+        isLoading: false
+      })
       this.props.closeModal()
       this.props.navigation.navigate('requestItemStack', {data: this.props.data})
     },
     error => {
-      this.props.loading(false)
+      this.setState({
+        isLoading: false
+      })
     }
     );
   }
@@ -225,7 +238,7 @@ class ProposalModal extends Component {
 
               <Button 
                 title={'Continue'}
-                onClick={() => {this.state.charge != 0 || this.state.charge != '' ? this.submit() : this.check()}}
+                onClick={() => {this.submit()}}
                 style={{
                   width: '45%',
                   marginLeft: '5%',
@@ -241,6 +254,7 @@ class ProposalModal extends Component {
 
   render(){
     const { closeModal, visible } = this.props;
+    const { isLoading } = this.state;
     return(
       <Modal onBackdropPress={closeModal}
         transparent={true}
@@ -253,8 +267,9 @@ class ProposalModal extends Component {
             <View style={[Style.container]}>
                 {this.renderContent()}
             </View>
-        </ScrollView>
 
+        {isLoading ? <Spinner mode="overlay" /> : null}
+        </ScrollView>
     </Modal>
 
     );

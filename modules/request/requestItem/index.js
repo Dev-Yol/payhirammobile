@@ -86,11 +86,13 @@ class RequestItem extends Component {
     }, 500)
   }
   
-  connectRequest = () => {
+  connectRequest = (item) => {
     const { data } = this.props.navigation.state.params;
+    const {setRequest} = this.props;
     this.setState({
-      connectSelected: data,
+      connectSelected: item,
     });
+    setRequest(item)
     setTimeout(() => {
       this.setState({connectModal: true});
     }, 500);
@@ -156,7 +158,7 @@ class RequestItem extends Component {
               data && (
                 <View style={{alignItems: 'center'}}>
                   <RequestCard 
-                    onConnectRequest={() => this.connectRequest()}
+                    onConnectRequest={(item) => this.connectRequest(item)}
                     data={data}
                     navigation={this.props.navigation}
                     />
@@ -172,18 +174,22 @@ class RequestItem extends Component {
             </View>
         </ScrollView>
         {isLoading ? <Spinner mode="overlay" /> : null}
-        <ProposalModal
-          visible={connectModal}
-          loading={(flag) => this.setState({
-            isLoading: flag
-          })}
-          data = {this.state.connectSelected}
-          navigation={this.props.navigation}
-          closeModal={() =>
-            this.setState({
-              connectModal: false,
-            })
-          }></ProposalModal>
+        {
+          connectModal && (
+            <ProposalModal
+              visible={connectModal}
+              loading={(flag) => this.setState({
+                isLoading: flag
+              })}
+              data = {this.state.connectSelected}
+              navigation={this.props.navigation}
+              closeModal={() =>
+                this.setState({
+                  connectModal: false,
+                })
+              }></ProposalModal>
+            )
+        }
       </View>
     );
   }
@@ -193,7 +199,8 @@ const mapStateToProps = (state) => ({state: state});
 const mapDispatchToProps = (dispatch) => {
   const {actions} = require('@redux');
   return {
-    setMessengerGroup: (messengerGroup) => dispatch(actions.setMessengerGroup(messengerGroup))
+    setMessengerGroup: (messengerGroup) => dispatch(actions.setMessengerGroup(messengerGroup)),
+    setRequest: (request) => dispatch(actions.setRequest(request))
   };
 };
 

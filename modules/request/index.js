@@ -452,18 +452,23 @@ class Requests extends Component {
           data={connectSelected}
           action={(flag) => this.connectAction(flag)}></CustomModal> */}
 
-        <ProposalModal
-          visible={connectModal}
-          data = {this.state.connectSelected}
-          navigation={this.props.navigation}
-          loading={(flag) => this.setState({
-            isLoading: flag
-          })}
-          closeModal={() =>
-            this.setState({
-              connectModal: false,
-            })
-          }></ProposalModal>
+        {
+          connectModal && (
+            <ProposalModal
+              visible={connectModal}
+              data = {this.state.connectSelected}
+              navigation={this.props.navigation}
+              loading={(flag) => this.setState({
+                isLoading: flag
+              })}
+              closeModal={() =>
+                this.setState({
+                  connectModal: false,
+                })
+            }></ProposalModal>
+          )
+        }
+        
       </View>
     );
   }
