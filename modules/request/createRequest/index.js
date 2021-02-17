@@ -5,7 +5,7 @@ import {faStar, faAsterisk} from '@fortawesome/free-solid-svg-icons';
 import {connect} from 'react-redux';
 import Api from 'services/api/index.js';
 import {Spinner} from 'components';
-
+import {NavigationActions, StackActions} from 'react-navigation';
 import FulfillmentCard from 'modules/generic/FulfilmentCard';
 import BalanceCard from 'modules/generic/BalanceCard';
 import Button from 'components/Form/Button';
@@ -26,13 +26,12 @@ class CreateRequest extends Component {
     this.state = {
       location: null,
       currency: 'PHP',
-      date: '',
-      time: '',
+      neededOn: null,
       fulfillmentType: null,
       amount: 0,
       maximumProcessingCharge: null,
-      details: '',
-      money_type: '',
+      reason: null,
+      money_type: null,
       isLoading: false,
     };
   }
@@ -71,16 +70,32 @@ class CreateRequest extends Component {
     this.props.navigation.navigate(route);
   };
 
+  navigateToDrawer = (route) => {
+      const navigateAction = NavigationActions.navigate({
+      routeName: 'drawerStack',
+      action: StackActions.reset({
+        index: 0,
+        key: null,
+        actions: [
+            NavigationActions.navigate({routeName: route}),
+        ]
+      })
+    });
+    this.props.navigation.dispatch(navigateAction);
+  }
+
   onDateFinish = (datetime) => {
     this.setState({
-      date: datetime.date,
+      neededOn: datetime.date,
     });
   };
 
 
   handleSelectFulfillment = (item) => {
     this.setState({
-      fulfillmentType: item
+      fulfillmentType: item,
+      money_type: item.money_type,
+      type: item.id
     });
   };
 
@@ -89,7 +104,7 @@ class CreateRequest extends Component {
   };
 
   handleDetailsChange = (details) => {
-    this.setState({details: details});
+    this.setState({reason: details});
   };
 
   handleMaxProcessingChargeChange = (maximumProcessingCharge) => {
@@ -97,30 +112,24 @@ class CreateRequest extends Component {
   };
 
   createRequest = async () => {
-    const {user} = this.props.state;
+    const {user, location} = this.props.state;
+    if(user == null || location == null){
+      return
+    }
     let parameters = {
-      account_id: user.account_information.account_id,
-      money_type: this.state.money_type,
-      currency: this.state.currency,
-      type: this.state.fulfillmentType,
+      account_id: user.id,
       amount: this.state.amount,
-      interest: 1,
-      months_payable: 1,
-      needed_on: this.state.date,
-      billing_per_month: 1,
-      max_charge: null,
-      reason: this.state.details,
-      // location: 'Nasipit',
-      // location: {
-      //   route: this.props.state.location.address == null ? 'sample' : this.props.state.location.address,
-      //   locality: this.props.state.location.locality == null ? 'sample' : this.props.state.location.locality,
-      //   region: this.props.state.location.region == null ? 'sample' : this.props.state.location.region,
-      //   country: this.props.state.location.country == null ? 'sample' : this.props.state.location.country,
-      //   latitude: this.props.state.location.latitude == null ? 'sample' : this.props.state.location.latitude,
-      //   longitude: this.props.state.location.longitude == null ? 'sample' : this.props.state.location.longitude,
-      // },
-      comaker: '',
-      coupon: '',
+      comaker: null,
+      coupon: null,
+      currency: this.state.currency,
+      interest: null,
+      location_id: location.id,
+      max_charge: this.state.maximumProcessingCharge,
+      months_payable: null,
+      needed_on: this.state.neededOn,
+      reason: this.state.reason,
+      type: this.state.type,
+      money_type: this.state.money_type
     };
     this.props.setRequestInput(parameters);
     this.sendRequest()
@@ -131,12 +140,10 @@ class CreateRequest extends Component {
 
   sendRequest = () => {
     this.setState({isLoading: true});
-    Api.request(
-      Routes.requestCreate,
-      this.props.state.requestInput,
-      (response) => {
-        console.log('RESPONSE', response);
+    console.log('parameters', this.props.state.requestInput)
+    Api.request(Routes.requestCreate, this.props.state.requestInput, response => {
         this.setState({isLoading: false});
+        this.navigateToDrawer('Requests')
       },
       (error) => {
         console.log('API ERROR', error);
@@ -146,7 +153,7 @@ class CreateRequest extends Component {
   };
 
   render() {
-    const { ledger, theme } = this.props.state;
+    const { ledger, theme, location } = this.props.state;
     return (
       <View style={{
         flex: 1
@@ -173,7 +180,7 @@ class CreateRequest extends Component {
 
 
             <LocationTextInput 
-              variable={this.state.location}
+              variable={location}
               label={'Select Location'}
               onError={false}
               required={true}
@@ -254,13 +261,13 @@ class CreateRequest extends Component {
             </View>
             <DateTime
               onFinish={this.onDateFinish}
-              placeholder="Select date and time"
+              placeholder="Select date"
               type="date"
             />
 
 
             <TextInputWithLabel 
-              variable={this.state.details}
+              variable={this.state.reason}
               onChange={(value) => this.handleDetailsChange(value)}
               label={'Details'}
               onError={false}
@@ -288,7 +295,7 @@ class CreateRequest extends Component {
                     {fontSize: BasicStyles.standardFontSize},
                   ]}>
                   {
-                    Currency.display(0.00, 'PHP')
+                    Currency.display(this.state.amount, 'PHP')
                   }
                 </Text>
               </View>
@@ -310,7 +317,7 @@ class CreateRequest extends Component {
                 <View style={styles.AmountDetailsContainer}>
                   <Text style={styles.AmountDetailsStyle}>
                   {
-                    Currency.display(0.00, 'PHP')
+                    Currency.display(this.state.amount, 'PHP')
                   }
                   </Text>
                 </View>
