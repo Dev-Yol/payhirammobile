@@ -38,7 +38,8 @@ class Messages extends Component{
 
   componentDidMount(){
     this.menu(Helper.MessengerMenu);
-    const { messengerGroup, user } = this.props.state;
+    const { user, messengerGroup } = this.props.state;
+    console.log('dfasdfa', this.props)
     if(messengerGroup != null && user != null){
       this.retrieve();
     }
@@ -46,15 +47,43 @@ class Messages extends Component{
 
   retrieve = () => {
     const { messengerGroup } = this.props.state;
+    console.log('herrrrrrrrrrrrrrre', this.props.state.messengerGroup)
     const { setMessagesOnGroup } = this.props;
     this.setState({isLoading: true});
     CommonRequest.retrieveMessages(messengerGroup, response => {
-      console.log('herrrrrrrrrrrrrrre', response)
-      this.setState({isLoading: false})
-      setMessagesOnGroup({
-        messages: response.data,
-        groupId: messengerGroup.request.id
-      })
+      if(response.data > 0){
+        this.setState({isLoading: false})
+        setMessagesOnGroup({
+          messages: response.data,
+          groupId: messengerGroup.request.id
+        })
+      }else {
+        this.createGroup()
+      }
+    })
+  }
+
+  createGroup = () => {
+    const { user, messengerGroup } = this.props.state
+
+    let parameter = {
+      member: messengerGroup.id,
+      creator: messengerGroup.request.account.id,
+      title: messengerGroup.request.code,
+      payload: messengerGroup.payload
+    }
+
+    console.log('****************yeah*****fdfdf*********', parameter)
+    Api.request(Routes.customMessengerGroupCreate, parameter, response => {
+      console.log('****************yeahssss**************', response)
+      if (response.data) {
+        console.log('****************yeah**************', response.data)
+        setMessengerGroup({ id: response.data, account_id: messengerGroup.id })
+        this.retrieve()
+      }
+    }, error => {
+      this.setState({ isLoading: false })
+      console.log({ messenger_groups_error: error })
     })
   }
 
