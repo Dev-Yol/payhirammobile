@@ -163,6 +163,7 @@ class Requests extends Component {
       Routes.requestRetrieve,
       parameter,
       (response) => {
+        console.log('=============================', requests, response)
         this.setState({
           isLoading: false,
           size: response.size ? response.size : 0,

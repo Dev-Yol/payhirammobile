@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Text, View, StyleSheet, ScrollView, TextInput, Dimensions} from 'react-native';
+import {Text, View, StyleSheet, ScrollView, TextInput, Dimensions, Alert} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faStar, faAsterisk} from '@fortawesome/free-solid-svg-icons';
 import {connect} from 'react-redux';
@@ -36,7 +36,6 @@ class CreateRequest extends Component {
     };
   }
   componentDidMount() {
-    console.log('=============================', this.props.state.user)
     this.retrieveSummaryLedger()
   }
 
@@ -51,9 +50,7 @@ class CreateRequest extends Component {
       account_code: user.code
     };
     this.setState({isLoading: true});
-    console.log('parameter', parameter)
     Api.request(Routes.ledgerSummary, parameter, (response) => {
-      console.log('response', response)
       this.setState({isLoading: false});
       if (response != null) {
         setLedger(response.data[0]);
@@ -100,7 +97,18 @@ class CreateRequest extends Component {
   };
 
   handleAmountChange = (amount) => {
+    // if(this.state.amount >= 1000){
     this.setState({amount: amount});
+    // }else {
+    //   Alert.alert(
+    //     'Error Message',
+    //     'Amount must not be less than 1000.',
+    //     [
+    //       {text: 'OK', onPress: () => this.viewMessages()},
+    //     ],
+    //     { cancelable: false }
+    //   )
+    // }
   };
 
   handleDetailsChange = (details) => {
@@ -114,6 +122,26 @@ class CreateRequest extends Component {
   createRequest = async () => {
     const {user, location} = this.props.state;
     if(user == null || location == null){
+      return
+    }else if(this.state.type == null || this.state.money_type == null || this.state.amount == null || this.state.maximumProcessingCharge == null || this.state.neededOn == null || this.state.reason == null) {
+      Alert.alert(
+        'Error Message',
+        'All fields with (*) are required.',
+        [
+          {text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel'}
+        ],
+        { cancelable: false }
+      )
+      return
+    }else if(parseInt(this.state.amount) < 1000){
+      Alert.alert(
+        'Error Message',
+        'Amount must not be less than 1000',
+        [
+          {text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel'}
+        ],
+        { cancelable: false }
+      )
       return
     }
     let parameters = {
@@ -140,7 +168,6 @@ class CreateRequest extends Component {
 
   sendRequest = () => {
     this.setState({isLoading: true});
-    console.log('parameters', this.props.state.requestInput)
     Api.request(Routes.requestCreate, this.props.state.requestInput, response => {
         this.setState({isLoading: false});
         this.navigateToDrawer('Requests')
