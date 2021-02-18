@@ -15,6 +15,7 @@ class Slider extends Component {
     super(props);
   }
   navigateToScreen = (route) => {
+    console.log('[nav]', route);
     this.props.navigation.toggleDrawer();
     const navigateAction = NavigationActions.navigate({
       routeName: 'drawerStack',
@@ -32,6 +33,23 @@ class Slider extends Component {
     this.props.navigation.dispatch(navigateAction);
   }
 
+  navigateToLogin = (route) => {
+    const navigateAction = NavigationActions.navigate({
+      routeName: 'loginStack',
+      action: StackActions.reset({
+        index: 0,
+        key: null,
+        actions: [
+            NavigationActions.navigate({routeName: route, params: {
+              initialRouteName: route,
+              index: 0
+            }}),
+        ]
+      })
+    });
+  }
+  
+
   logoutAction(){
     
     //clear storage
@@ -39,6 +57,7 @@ class Slider extends Component {
     logout();
     // setActiveRoute(null)
     setTimeout(() => {
+      // this.navigateToLogin('Login')
       this.props.navigation.navigate('loginStack');
     }, 100)
   }
