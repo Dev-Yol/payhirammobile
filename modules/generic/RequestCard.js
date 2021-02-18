@@ -177,7 +177,7 @@ class RequestCard extends Component {
         <View>
           <Rating ratings={data.rating}></Rating>
         </View>
-        {data.account_id != user.id && this._footer(data)}
+        {data.account.code != user.code && this._footer(data)}
       </TouchableOpacity>
     );
   }

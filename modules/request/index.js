@@ -148,7 +148,7 @@ class Requests extends Component {
     }
     let parameter = {
       account_id: user.id,
-      offset: this.state.offset,
+      offset: this.state.offset * this.state.limit,
       limit: this.state.limit,
       sort: {
         column: 'created_at',
