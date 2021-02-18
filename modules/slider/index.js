@@ -15,6 +15,7 @@ class Slider extends Component {
     super(props);
   }
   navigateToScreen = (route) => {
+    console.log('[nav]', route);
     this.props.navigation.toggleDrawer();
     const navigateAction = NavigationActions.navigate({
       routeName: 'drawerStack',
@@ -43,6 +44,7 @@ class Slider extends Component {
     logout();
     // setActiveRoute(null)
     setTimeout(() => {
+      // this.navigateToLogin('Login')
       this.props.navigation.navigate('loginStack');
     }, 100)
   }
