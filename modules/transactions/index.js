@@ -23,7 +23,6 @@ class Transactions extends Component {
   }
 
   componentDidMount(){
-    console.log('user hereitis', JSON.stringify(this.props))
     // const {user} = this.props;
     // if (user != null) {
     this.retrieveLedgerHistory({created_at: 'desc'}, {column: 'created_at', value: ''}, false)
@@ -40,13 +39,13 @@ class Transactions extends Component {
 
   retrieveLedgerHistory = (sort, filter, flag) => {
     this.setState({isLoading: true});
-    // const { user } = this.props.state
+    const { user } = this.props.state
     let key = Object.keys(sort)
     // if (user == null) {
     //   return;
     // }
     let parameter = {
-      account_id: this.props.state.user.account_information.account_id,
+      account_id: user.id,
       limit: this.state.limit,
       offset: this.state.offset,
       sort: {
@@ -101,8 +100,7 @@ class Transactions extends Component {
               data && data.map((item, index) => (
                 <TransactionCard data={item}/>
               ))
-            }     
-            
+            }
           </View>
       </View>
     </ScrollView>

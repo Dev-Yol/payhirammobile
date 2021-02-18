@@ -72,7 +72,7 @@ class TransferFundCard extends Component {
           <Text style={{
             marginTop: 10,
             color: theme ? theme.primary : Color.primary
-          }}> Full Name </Text>
+          }}> {user} </Text>
         </View>
         <View
           style={{
@@ -100,6 +100,7 @@ class TransferFundCard extends Component {
             </Text>
           </TouchableHighlight>
         </View>
+        <Text>Informations about Request and Charges</Text>
       </SafeAreaView>
     )
   }
