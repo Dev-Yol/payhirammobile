@@ -46,7 +46,24 @@ class EditProfile extends Component {
   }
   
   componentDidMount = () => {
+    const { user } = this.props.state
     this.retrieve()
+    if((this.state.email != null || this.state.cellular_number != null || this.state.first_name != null || this.state.middle_name != null || this.state.last_name != null ||
+      this.state.sex != null || this.state.address != null || this.state.birthDate != null) && user.status != 'verified'){
+        Alert.alert(
+          'Verification Link',
+          'Click the button below for an appointment.',
+          [
+            {text: 'Ok', onPress: () => console.log('Generate Link')},
+            {
+              text: 'Cancel',
+              onPress: () => console.log('Cancel Pressed'),
+              style: 'cancel',
+            }
+          ],
+          { cancelable: false }
+        )
+      }
   }
 
   retrieve = () => {
@@ -180,10 +197,10 @@ class EditProfile extends Component {
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <FontAwesomeIcon
                 icon={faCheckCircle}
-                style={{color: 'blue'}}
+                style={{color: 'blue', marginLeft: 5}}
                 size={15}
               />
-              <Text style={{color: Color.white}}>Verified</Text>
+              <Text style={{color: Color.white}}>{user.status}</Text>
             </View>
           </View>
           <View>
