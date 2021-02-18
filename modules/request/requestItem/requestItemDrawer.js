@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {View, TouchableOpacity, Text, StyleSheet} from 'react-native';
 import {createStackNavigator} from 'react-navigation-stack';
+import {NavigationActions, StackActions} from 'react-navigation';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faChevronLeft} from '@fortawesome/free-solid-svg-icons';
 import {Color, BasicStyles} from 'common';
@@ -12,7 +13,20 @@ class HeaderOptions extends Component {
     super(props);
   }
   back = () => {
-    this.props.navigationProps.navigate('drawerStack');
+    const navigateAction = NavigationActions.navigate({
+      routeName: 'drawerStack',
+      action: StackActions.reset({
+        index: 0,
+        key: null,
+        actions: [
+            NavigationActions.navigate({routeName: 'Requests', params: {
+              initialRouteName: 'Requests',
+              index: 0
+            }}),
+        ]
+      })
+    });
+    this.props.navigationProps.dispatch(navigateAction);
   };
   render() {
     return (

@@ -4,6 +4,7 @@ import {
   Text,
   ScrollView,
   TextInput,
+  Alert,
   TouchableOpacity,
   TouchableHighlight,
 } from 'react-native';
@@ -45,7 +46,24 @@ class EditProfile extends Component {
   }
   
   componentDidMount = () => {
+    const { user } = this.props.state
     this.retrieve()
+    if((this.state.email != null || this.state.cellular_number != null || this.state.first_name != null || this.state.middle_name != null || this.state.last_name != null ||
+      this.state.sex != null || this.state.address != null || this.state.birthDate != null) && user.status != 'verified'){
+        Alert.alert(
+          'Verification Link',
+          'Click the button below for an appointment.',
+          [
+            {text: 'Ok', onPress: () => console.log('Generate Link')},
+            {
+              text: 'Cancel',
+              onPress: () => console.log('Cancel Pressed'),
+              style: 'cancel',
+            }
+          ],
+          { cancelable: false }
+        )
+      }
   }
 
   retrieve = () => {
@@ -101,7 +119,17 @@ class EditProfile extends Component {
 
   update = () => {
     const { user } = this.props.state;
-    if(user === null){
+    if(user == null){
+      return
+    }else if(this.state.first_name == null || this.state.middle_name == null || this.state.last_name == null || this.state.cellular_number == null || this.state.sex == null || this.state.address == null || this.state.birthDate == null){
+      Alert.alert(
+        'Error Message',
+        'Please fill in all the fields.',
+        [
+          {text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel'}
+        ],
+        { cancelable: false }
+      )
       return
     }
     let parameters = {
@@ -113,7 +141,7 @@ class EditProfile extends Component {
       cellular_number: this.state.cellular_number,
       sex: this.state.sex,
       address: this.state.address,
-      birth_date: this.state.birth_date,
+      birth_date: this.state.birthDate,
       email: this.state.email
     };
     this.setState({ isLoading: true });
@@ -164,15 +192,28 @@ class EditProfile extends Component {
                 </Text>
               )
             }
-            
+
+            {
+              user.status == 'verified' && (
+                <FontAwesomeIcon
+                  icon={faCheckCircle}
+                  size={15}
+                  style={{
+                    color: 'aqua',
+                    marginTop: -17,
+                    marginLeft: 65
+                  }}
+                />
+              )
+            }
             <Rating ratings={''} style={[{flex: 2}]}></Rating>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <FontAwesomeIcon
                 icon={faCheckCircle}
-                style={{color: 'blue'}}
+                style={{color: 'blue', marginLeft: 5}}
                 size={15}
               />
-              <Text style={{color: Color.white}}>Verified</Text>
+              <Text style={{color: Color.white}}>{user.status}</Text>
             </View>
           </View>
           <View>
@@ -228,8 +269,8 @@ class EditProfile extends Component {
               onChange={(value) => {this.setState({email: value})}}
               required={true}
             /> */}
-            <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-              <View style={{width: '40%', marginRight: 20}}>
+            {/* <View style={{flexDirection: 'row', justifyContent: 'center'}}> */}
+              <View style={{width: '90%', marginLeft: '5%'}}>
                 <Text>Birthdate</Text>
                 <DateTime
                   type={'date'}
@@ -240,11 +281,11 @@ class EditProfile extends Component {
                     })
                   }}
                   style={{
-                    marginTop: 5
+                    marginTop: 1
                   }}
                 />
               </View>
-              <View style={{width: '40%', marginLeft: 20, }}>
+              <View style={{width: '90%', marginLeft: '5%'}}>
                 <Text>Gender</Text>
                 <View
                   style={{
@@ -272,7 +313,7 @@ class EditProfile extends Component {
                   </Picker>
                 </View>
               </View>
-            </View>
+            {/* </View> */}
             <Text style={{marginLeft: 20}}>Address</Text>
             <TextInput
               style={[BasicStyles.formControl, {alignSelf: 'center'}]}

@@ -160,8 +160,15 @@ class AccountSettings extends Component {
             style={{
               width: '100%'
             }}
-          />
+            />
 
+          <Text style={{
+            fontSize: BasicStyles.standardFontSize,
+            paddingBottom: 10,
+            marginRight: '68%'
+          }}>
+            Confirm Password
+          </Text>
           <PasswordWithIcon
             onTyping={(input) =>
               this.setState({

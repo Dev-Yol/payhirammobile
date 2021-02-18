@@ -7,15 +7,23 @@ import {connect} from 'react-redux';
 const Data = [{
     type: 'Send',
     description: 'Allow other peers to fulfill your transaction when you to send money to your family, friends, or to businesses',
+    id: 1,
+    money_type: 'cash'
   }, {
     type: 'Withdrawal',
     description: 'Allow other peers to fulfill your withdrawals from Payhiram',
+    id: 2,
+    money_type: 'cash'
   }, {
     type: 'Deposit',
     description: 'Allow other peers to find your deposits Payhiram',
+    id: 3,
+    money_type: 'e-wallet'
   }, {
     type: 'Bills and Payment',
     description: "Don't have time and want to pay your bills? Allow other peers to pay your bills.",
+    id: 4,
+    money_type: 'cash'
   },
 ];
 
@@ -49,7 +57,8 @@ class FulfilmentCard extends Component {
               style={[styles.CardContainer, {backgroundColor: index === active ? (theme ? theme.primary : Color.primary) : (theme ? theme.secondary : Color.secondary)}]}
               onPress={() => {
                 this.onSelect(item, index);
-              }}>
+              }}
+              key={index}>
               <View style={styles.title}>
                 <Text
                   style={[

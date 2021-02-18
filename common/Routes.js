@@ -21,12 +21,15 @@ export default {
   requestCreate: apiUrl + 'requests/create',
   bookmarkCreate: apiUrl + 'bookmarks/create',
   requestPeerCreate: apiUrl + 'request_peers/create',
+  requestPeerRetrieveItem: apiUrl + 'request_peers/retrieve_item',
+  requestPeerUpdate: apiUrl + 'request_peers/update',
+  requestPeerDelete: apiUrl + 'request_peers/delete',
   requestManageByThread: apiUrl + 'requests/manage_request_by_thread',
   customMessengerGroupRetrieve: apiUrl + 'custom_messenger_groups/retrieve',
   customMessengerGroupCreate: apiUrl + 'custom_messenger_groups/create',
   customMessengerGroupRetrieveByParams:
     apiUrl + 'custom_messenger_groups/retrieve_by_params',
-  customMessengerGroupCreate: apiUrl + 'custom_messenger_groups/create',
+  // customMessengerGroupCreate: apiUrl + 'custom_messenger_groups/create',
   messengerMessagesCreate: apiUrl + 'messenger_messages/create',
   messengerMessagesRetrieve: apiUrl + 'messenger_messages/retrieve',
   messengerMessagesUpdate: apiUrl + 'messenger_messages/update_by_status',
@@ -45,7 +48,6 @@ export default {
   imageUploadBase64: apiUrl + 'images/upload_base64',
   requestValidationCreate: apiUrl + 'request_validations/create',
   requestValidationUpdate: apiUrl + 'request_validations/update',
-  requestPeerUpdate: apiUrl + 'request_peers/update',
   depositCreate: apiUrl + 'deposits/create',
   withdrawalCreate: apiUrl + 'withdrawals/create',
   withdrawalRetrieve: apiUrl + 'withdrawals/retrieve',
@@ -66,6 +68,9 @@ export default {
   circleRetrieve: apiUrl + 'my_circles/retrieve',
   circleCreate: apiUrl + 'my_circles/create',
   educationsRetrieve: apiUrl + 'educations/retrieve',
-  circleUpdate: apiUrl + 'my_circles/update',
-  circleDelete: apiUrl + 'my_circles/delete'
+  circleUpdate: apiUrl + 'my_circle/update',
+  circleDelete: apiUrl + 'my_circle/delete',
+  retrieveSavedAddresses: apiUrl + 'locations/retrieve',
+  addAddress: apiUrl + 'locations/create',
+  removeAddress: apiUrl + 'locations/delete'
 };

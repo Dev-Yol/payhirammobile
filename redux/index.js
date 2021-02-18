@@ -139,7 +139,16 @@ const initialState = {
     messages: null,
   },
   searchParameter: null,
-  location: null,
+  location: {
+    id: 1,
+    account_id: 1,
+    latitude: '10.373264655881858',
+    latitude: '123.94052113182192',
+    route: 'test',
+    locality: 'test',
+    region: 'test',
+    country: 'test'
+  },
   requests: null,
   request: null,
   nav: null,
@@ -161,6 +170,14 @@ storeData = async (key, value) => {
   }
 };
 
+// removeData = async (item) => {
+//   try{
+//     await AsyncStorage.removeItem(item)
+//   }catch (e){
+
+//   }
+// }
+
 const reducer = (state = initialState, action) => {
   const {type, user, token} = action;
   const {messages, unread, message} = action;
@@ -176,7 +193,9 @@ const reducer = (state = initialState, action) => {
   const { isViewing, request } = action;
   switch (type) {
     case types.LOGOUT:
-      AsyncStorage.removeItem(Helper.APP_NAME + 'token');
+      // storeData('token', '');
+      AsyncStorage.clear()
+      console.log("[LOGOUT]");
       return Object.assign({}, initialState);
     case types.LOGIN:
       storeData('token', token);
