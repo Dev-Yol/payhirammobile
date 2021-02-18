@@ -63,6 +63,7 @@ class Messages extends Component{
     }
     Api.request(Routes.messengerMessagesRetrieve, parameter, response => {
       this.setState({ isLoading: false, offset: offset + limit });
+      const {setMessagesOnGroup, messengerGroup} = this.props;
         setMessagesOnGroup({
         messages: response.data.reverse(),
         groupId: messengerGroup.id
@@ -95,11 +96,9 @@ class Messages extends Component{
       sending_flag: true,
       error: null
     }
-    console.log('parameterssssssssssssssss', parameter);
     updateMessagesOnGroup(newMessageTemp);
     this.setState({newMessage: null})
     Api.request(Routes.messengerMessagesCreate, parameter, response => {
-      console.log('ressssssssssssssssssponse', response.data)
       if(response.data != null){
         updateMessageByCode(response.data);
       }
