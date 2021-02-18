@@ -57,7 +57,8 @@ class FulfilmentCard extends Component {
               style={[styles.CardContainer, {backgroundColor: index === active ? (theme ? theme.primary : Color.primary) : (theme ? theme.secondary : Color.secondary)}]}
               onPress={() => {
                 this.onSelect(item, index);
-              }}>
+              }}
+              key={index}>
               <View style={styles.title}>
                 <Text
                   style={[

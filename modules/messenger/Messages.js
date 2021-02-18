@@ -9,13 +9,8 @@ import { connect } from 'react-redux';
 import Config from 'src/config.js';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faImage, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
-import Review from './templates/Review.js';
-import AddRequirements from './templates/AddRequirements.js';
-import Transfer from './templates/Transfer.js';
-import SendRequirements from './templates/SendRequirements.js';
 import ImageModal from 'components/Modal/ImageModal.js';
 import ImagePicker from 'react-native-image-picker';
-import CommonRequest from 'services/CommonRequest.js';
 import { Dimensions } from 'react-native';
 import { faChevronRight, faTimes } from '@fortawesome/free-solid-svg-icons';
 
@@ -42,7 +37,6 @@ class Messages extends Component{
   componentDidMount(){
     this.menu(Helper.MessengerMenu);
     const { user, messengerGroup } = this.props.state;
-    console.log('dfasdfa', this.props)
     if(messengerGroup != null && user != null){
       this.retrieve();
     }
@@ -710,7 +704,7 @@ class Messages extends Component{
           borderTopWidth: 1,
           backgroundColor: Color.white
         }}>
-          {messengerGroup != null && messengerGroup.request.status < 2 && !isViewing && (this._footer())}
+          {messengerGroup != null && messengerGroup.status < 2 && !isViewing && (this._footer())}
         </View>
         <ImageModal
           visible={isImageModal}
