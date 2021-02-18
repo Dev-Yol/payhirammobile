@@ -38,11 +38,11 @@ class ViewProfile extends Component {
   retrieveConnections() {
     let parameter = {
       condition: [{
-        value: this.props.state.user.account_information.account_id,
+        value: this.props.state.user.id,
         column: "account",
         clause: "="
       }, {
-        value: this.props.state.user.account_information.account_id,
+        value: this.props.state.user.id,
         column: "account_id",
         clause: "or"
       }]
@@ -59,9 +59,7 @@ class ViewProfile extends Component {
   checkStatus = (array) => {
     const { user } = this.state
     array.map((item, index) => {
-      if(item.account.information.account_id === user.account_information.account_id) {
-        console.log(item, "====");
-        console.log(user, "====s");
+      if(item.id === user.id) {
         this.setState({connection: item})
       }
     })
@@ -99,7 +97,7 @@ class ViewProfile extends Component {
 
   sendRequest = () => {
     let parameter = {
-      account_id: this.props.state.user.account_information.account_id,
+      account_id: this.props.state.user.id,
       to_email: this.state.user && this.state.user.email,
       content: "test"
     }
@@ -115,7 +113,7 @@ class ViewProfile extends Component {
   retrieveAccount = () => {
     let parameter = {
       condition: [{
-        value: this.props.navigation.state.params.user && this.props.navigation.state.params.code ? this.props.navigation.state.params.code : this.props.navigation.state.params.user.account.code,
+        value: this.props.navigation.state.params.user  ? this.props.navigation.state.params.user.account.code : this.props.navigation.state.params.code,
         clause: '=',
         column: 'code'
       }]
@@ -169,7 +167,7 @@ class ViewProfile extends Component {
                   <View>
                     <View>
                       <UserImage
-                        user={{ profile: user.account_profile }}
+                        user={{ profile: user.profile }}
                         color={Color.white} style={{
                           width: 100,
                           height: 100,
@@ -213,7 +211,7 @@ class ViewProfile extends Component {
 
               </View>
               {
-                user && user.account_information && (
+                user && user.information && (
                   <View>
                     <Text
                       style={{
@@ -230,7 +228,7 @@ class ViewProfile extends Component {
               }
               {this.state.isLoading ? <Spinner mode="overlay" /> : null}
 
-              {
+              {/* {
                 this.state.educationalBackground && (
                   <View>
                     <Text
@@ -245,7 +243,7 @@ class ViewProfile extends Component {
                     <EducationalBackgroundCard user={this.state.educationalBackground} />
                   </View>
                 )
-              }
+              } */}
 
             </View>
 
@@ -256,7 +254,7 @@ class ViewProfile extends Component {
             left: 0,
             width: '100%'
           }}>
-            { this.state.user && this.state.connection === null && this.state.status === true && user.account_information.account_id !== this.props.state.user.account_information.account_id && (<View
+            { this.state.user && this.state.connection === null && this.state.status === true && user.id !== this.props.state.user.id && (<View
                 style={{
                   flexDirection: 'row'
                 }}>
@@ -271,7 +269,7 @@ class ViewProfile extends Component {
                   }}
                 />
               </View>)}
-             {this.state.connection && this.state.connection.account_id === user.account_information.account_id && this.state.status === true && this.state.connection.status === 'pending' && (
+             {this.state.connection && this.state.connection.id === user.id && this.state.status === true && this.state.connection.status === 'pending' && (
               <View
                 style={{
                   flexDirection: 'row'
@@ -298,9 +296,9 @@ class ViewProfile extends Component {
               </View>
             )}
             {this.state.connection &&
-            this.state.connection.account_id === this.props.state.user.account_information.account_id &&
+            this.state.connection.id === this.props.state.user.id &&
             this.state.status === true &&
-            this.props.state.user.account_information.account_id !== this.state.connection.account.information.account_id &&
+            this.props.state.user.id !== this.state.connection.id &&
             this.state.connection.status === 'pending' && (
               <View
                 style={{
@@ -319,9 +317,9 @@ class ViewProfile extends Component {
               </View>
             )}
             {this.state.connection &&
-            (this.state.connection.account_id === this.props.state.user.account_information.account_id &&
+            (this.state.connection.id === this.props.state.user.id &&
             this.state.status === true &&
-            this.props.state.user.account_information.account_id !== this.state.connection.account.information.account_id || this.state.connection.account.information.account_id === user.account_information.account_id) &&
+            this.props.state.user.id !== this.state.connection.id || this.state.connection.id === user.id) &&
             this.state.connection.status === 'accepted' && (
               <View
                 style={{
@@ -339,7 +337,7 @@ class ViewProfile extends Component {
                 />
               </View>
             )}
-            {this.state.connection?.account.information.account_id === this.state.user?.account_information.account_id &&
+            {this.state.connection?.id === this.state.user?.id &&
             this.state.connection?.status === 'declined' && (
               <View
                 style={{

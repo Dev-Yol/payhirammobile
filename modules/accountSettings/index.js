@@ -16,6 +16,7 @@ import { Spinner } from 'components';
 import Button from 'components/Form/Button';
 import TextInputWithLabel from 'components/Form/TextInputWithLabel';
 import QRCode from 'react-native-qrcode-svg';
+import { ColorPropType } from 'react-native';
 const height = Math.round(Dimensions.get('window').height);
 
 class AccountSettings extends Component {
@@ -25,7 +26,8 @@ class AccountSettings extends Component {
       email: '',
       password: '',
       confirmPassword: '',
-      isLoading: false
+      isLoading: false,
+      error: false
     };
   }
   isValidEmail = () => {
@@ -65,14 +67,22 @@ class AccountSettings extends Component {
       alert("Invalid Email")
     }
   }
+  validPassword(value) {
+    this.setState({password: value})
+    if (/^.*(?=.{8,})((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/.test(value) === false) {;
+      this.setState({error: true})
+    } else {
+      this.setState({error: false})
+    }
+  }
   updatePassword = () => {
     if (
       this.state.password != null &&
       this.state.password != '' &&
       this.state.confirmPassword != null &&
       this.state.confirmPassword != '' &&
-
-      this.state.password === this.state.confirmPassword
+      this.state.password === this.state.confirmPassword &&
+      this.state.error === false
     ) {
       const { user } = this.props.state;
       let parameters = {
@@ -94,7 +104,7 @@ class AccountSettings extends Component {
         },
       );
     } else {
-      alert("Passwords don't match!");
+      alert("Invalid Password!");
     }
   };
 
@@ -139,11 +149,13 @@ class AccountSettings extends Component {
             title={'Update Email'}
             onClick={() => this.updateEmail()}/>
 
+          { this.state.error === true && (
+            <Text style={{color: Color.danger}}>Password must be atleast 8 alphanumeric characters. It should contain 1 number, 1 special character and 1 capital letter.</Text>
+          )}
+
           <PasswordWithIcon
             onTyping={(input) =>
-              this.setState({
-                password: input,
-              })
+              this.validPassword(input)
             }
             style={{
               width: '100%'
