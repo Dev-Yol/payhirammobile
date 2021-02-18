@@ -6,6 +6,7 @@ import {
   Image,
   TouchableHighlight,
   Text,
+  Alert,
   ScrollView,
   BackHandler,
   ToastAndroid,
@@ -273,6 +274,17 @@ class Requests extends Component {
     }
   };
 
+  validate = () => {
+    Alert.alert(
+      'Message',
+      'In order to Create Request, Please Verify your Account.',
+      [
+        {text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel'}
+      ],
+      { cancelable: false }
+    )
+  }
+
   _search = () => {
     const {searchParameter} = this.props.state;
     return (
@@ -383,7 +395,7 @@ class Requests extends Component {
       connectSelected,
       isRequestOptions,
     } = this.state;
-    const {requests, theme} = this.props.state;
+    const {requests, theme, user} = this.props.state;
     return (
       <View style={Style.MainContainer}>
         {isRequestOptions && (
@@ -434,7 +446,10 @@ class Requests extends Component {
             borderRadius: 35
           }]}
           onPress={() => {
-            this.props.navigation.navigate('createRequestStack');
+            {
+              user.status == 'verified' ? 
+              this.props.navigation.navigate('createRequestStack') : this.validate()
+            }
           }}>
           <FontAwesomeIcon
             icon={faPlus}

@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import React, {Component} from 'react';
 import styles from './Style';
 import {NavigationActions, StackActions} from 'react-navigation';
-import {ScrollView, Text, View, Image} from 'react-native';
+import {ScrollView, Text, View, Image, TouchableOpacity} from 'react-native';
 import { connect } from 'react-redux';
 import { Helper, BasicStyles, Color } from 'common';
 import Config from 'src/config.js';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
+import { faCheckCircle, faUserCircle } from '@fortawesome/free-solid-svg-icons';
 
 class Slider extends Component {
   constructor(props){
@@ -31,6 +31,10 @@ class Slider extends Component {
     });
     this.props.navigation.dispatch(navigateAction);
   }
+
+  redirect = (route) => {
+    this.props.navigation.navigate(route);
+  };
 
   logoutAction(){
     
@@ -74,6 +78,55 @@ class Slider extends Component {
                       />
                     )
                   }
+                  
+                  {
+                    user.status == 'verified' && (
+                      <FontAwesomeIcon
+                        icon={faCheckCircle}
+                        size={20}
+                        style={{
+                          color: 'aqua',
+                          marginTop: -15,
+                          marginLeft: 60
+                        }}
+                      />
+                    )
+                  }
+
+                  <Text  style={{
+                    color: Color.white,
+                    fontWeight: 'bold',
+                    fontSize: 16,
+                    marginTop: 10
+                  }}>
+                    Hi {user.username}!
+                  </Text>
+                  <TouchableOpacity
+                    style={{
+                      borderWidth:1,
+                      marginTop: 10,
+                      borderColor:'rgba(0,0,0,0.2)',
+                      alignItems:'center',
+                      justifyContent:'center',
+                      width:110,
+                      height:30,
+                      borderRadius: 30,
+                      backgroundColor: '#22B173'
+                    }}
+                    onPress={() => {this.redirect("editProfileStack")}}
+                  >
+                  {
+                    user.status == 'verified' ?
+                      <Text style={{
+                      fontWeight: 'bold'}}>
+                        Verified
+                      </Text> :
+                      <Text style={{
+                      fontWeight: 'bold'}}>
+                        Verify Now
+                      </Text>
+                  }
+                  </TouchableOpacity>
             
                 </View>
               ) : <Text style={[styles.sectionHeadingStyle, {
