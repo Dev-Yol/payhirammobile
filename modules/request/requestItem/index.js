@@ -88,13 +88,14 @@ class RequestItem extends Component {
     console.log('[Create Messenger Thread] parameter', parameter)
     Api.request(Routes.customMessengerGroupCreate, parameter, response => {
       this.setState({ isLoading: false })
-      if (response.data != null) {
+      if (response.error == null) {
         this.props.navigation.navigate('messagesStack', {
           data: {
             id: response.data,
             title: data.code,
             payload: 'request',
-            account_id: user.id
+            account_id: user.id,
+            request: data
           }
         });
       }else{
@@ -109,7 +110,8 @@ class RequestItem extends Component {
                   id: response.data,
                   title: data.code,
                   payload: 'request',
-                  account_id: user.id
+                  account_id: user.id,
+                  request: data
                 }
               });
             }},
