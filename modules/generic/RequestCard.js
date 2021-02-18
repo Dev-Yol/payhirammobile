@@ -140,18 +140,24 @@ class RequestCard extends Component {
               }}>
               <TouchableHighlight
                 onPress={() => {
-                  this.props.onConnectRequest(item);
+                  if(item.peer_flag == false){
+                    this.props.onConnectRequest(item);
+                  }else{
+                    this.props.navigation.navigate('requestItemStack', {
+                      data: item,
+                    })
+                  }
                 }}
                 underlayColor={Color.gray}
                 style={[BasicStyles.standardButton, 
                   {
-                    backgroundColor: theme ? theme.secondary : Color.secondary
+                    backgroundColor: theme ? (item.peer_flag == true ? theme.primary : theme.secondary) : (item.peer_flag == true ? Color.primary : Color.secondary)
                   }]}>
                 <Text
                   style={{
                     color: Color.white,
                   }}>
-                  Connect
+                  {item.peer_flag == true ? 'View Proposal' : 'Send Proposal'}
                 </Text>
               </TouchableHighlight>
             </View>
@@ -177,7 +183,7 @@ class RequestCard extends Component {
         <View>
           <Rating ratings={data.rating}></Rating>
         </View>
-        {data.account_id != user.id && this._footer(data)}
+        {data.account.code != user.code && this._footer(data)}
       </TouchableOpacity>
     );
   }

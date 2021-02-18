@@ -149,7 +149,7 @@ class Requests extends Component {
     }
     let parameter = {
       account_id: user.id,
-      offset: this.state.offset,
+      offset: this.state.offset * this.state.limit,
       limit: this.state.limit,
       sort: {
         column: 'created_at',
@@ -439,7 +439,10 @@ class Requests extends Component {
 
         <TouchableOpacity
           style={[Style.floatingButton, {
-            backgroundColor: theme ? theme.secondary : Color.secondary
+            backgroundColor: theme ? theme.secondary : Color.secondary,
+            height: 70,
+            width: 70,
+            borderRadius: 35
           }]}
           onPress={() => {
             {
