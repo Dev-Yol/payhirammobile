@@ -24,7 +24,8 @@ class ProposalModal extends Component {
     this.state = {
         currency: 'PHP',
         charge: 0,
-        isLoading: false
+        isLoading: false,
+        summaryLoading: false
     };
   }
 
@@ -42,11 +43,12 @@ class ProposalModal extends Component {
       account_id: user.id,
       account_code: user.code
     };
-    this.setState({isLoading: true});
+    this.setState({isLoading: true, summaryLoading: true});
     console.log('parameter', parameter)
     Api.request(Routes.ledgerSummary, parameter, (response) => {
       console.log('response', response)
-      this.setState({isLoading: false});
+      this.setState({isLoading: false, summaryLoading: false});
+
       if (response != null) {
         setLedger(response.data[0]);
       } else {
@@ -54,7 +56,7 @@ class ProposalModal extends Component {
       }
     }, error => {
       console.log('response', error)
-      this.setState({isLoading: false});
+      this.setState({isLoading: false, summaryLoading: false});
     });
   };
 
@@ -287,7 +289,7 @@ class ProposalModal extends Component {
   render(){
     const { closeModal, visible } = this.props;
     const { ledger } = this.props.state;
-    const { isLoading } = this.state;
+    const { isLoading, summaryLoading } = this.state;
     return(
       <Modal onBackdropPress={closeModal}
         transparent={true}
@@ -298,7 +300,7 @@ class ProposalModal extends Component {
         <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'flex-end', flexDirection: 'column' }}
             style={{ padding: 0 }}>
             <View style={[Style.container]}>
-                {(ledger && isLoading == false) && this.renderContent()}
+                {(ledger && summaryLoading == false) && this.renderContent()}
             </View>
 
         {isLoading ? <Spinner mode="overlay" /> : null}
