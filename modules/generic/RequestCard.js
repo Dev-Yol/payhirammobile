@@ -132,7 +132,52 @@ class RequestCard extends Component {
             flexDirection: 'row',
             marginBottom: 10,
           }}>
-          {user.account_type != 'USER' && (
+          {(user.account_type != 'USER') && (
+            <View
+              style={{
+                width: '50%',
+                marginLeft: '50%'
+              }}>
+              <TouchableHighlight
+                onPress={() => {
+                  if(item.peer_flag == false){
+                    this.props.onConnectRequest(item);
+                  }else{
+                    this.props.navigation.navigate('requestItemStack', {
+                      data: item,
+                    })
+                  }
+                }}
+                underlayColor={Color.gray}
+                style={[BasicStyles.standardButton, 
+                  {
+                    backgroundColor: theme ? (item.peer_flag == true ? theme.primary : theme.secondary) : (item.peer_flag == true ? Color.primary : Color.secondary)
+                  }]}>
+                <Text
+                  style={{
+                    color: Color.white,
+                  }}>
+                  {item.peer_flag == true ? 'View Proposal' : 'Send Proposal'}
+                </Text>
+              </TouchableHighlight>
+            </View>
+          )}
+        </View>
+      </View>
+    );
+  };
+
+
+  _footerRequestItem = (item) => {
+    const {user, theme} = this.props.state;
+    return (
+      <View>
+        <View
+          style={{
+            flexDirection: 'row',
+            marginBottom: 10,
+          }}>
+          {(user.account_type != 'USER' && item.peer_flag == false) && (
             <View
               style={{
                 width: '50%',
@@ -183,7 +228,8 @@ class RequestCard extends Component {
         <View>
           <Rating ratings={data.rating}></Rating>
         </View>
-        {data.account.code != user.code && this._footer(data)}
+        {(data.account.code != user.code && this.props.from == 'request') && this._footer(data)}
+        {(data.account.code != user.code && this.props.from == 'request_item') && this._footerRequestItem(data)}
       </TouchableOpacity>
     );
   }

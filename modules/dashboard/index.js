@@ -39,7 +39,6 @@ class Dashboard extends Component {
   }
 
   componentDidMount() {
-    console.log(this.props.state, "=====props");
     // this.props.setQRCodeModal(false)
     const {user} = this.props.state;
     if (user != null) {
@@ -71,7 +70,6 @@ class Dashboard extends Component {
     };
     this.setState({isLoading: true});
     Api.request(Routes.ledgerSummary, parameter, (response) => {
-      console.log(response.data, 'summaryLedger')
       this.setState({isLoading: false});
       if (response != null) {
         setLedger(response.data[0]);
@@ -95,7 +93,6 @@ class Dashboard extends Component {
       limit: 5
     };
     Api.request(Routes.ledgerHistory, parameter, (response) => {
-      console.log(response.data, 'ledgerHistory')
       if (response != null) {
         this.setState({
           history: response.data
