@@ -100,7 +100,7 @@ class Groups extends Component{
                 <Text style={{
                   color: theme ? theme.primary : Color.primary,
                   lineHeight: 30,
-                }}>{item.title.length > 29 && item.request != null ? '*****' + item.title.substr(item.title.length - 8, item.title.length - 1) + ' - ' + item.request.currency + ' ' + item.request.amount  : item.title}</Text>
+                }}>{item.title.length > 29 ? '*****' + item.title.substr(item.title.length - 8, item.title.length - 1) + ' - ' + item.currency + ' ' + item.amount  : item.title}</Text>
                 {
                   parseInt(item.total_unread_messages) > 0 && Platform.OS == 'android' && (
                     <Text style={{
@@ -151,9 +151,9 @@ class Groups extends Component{
               paddingRight: 10
             }}>
               <Text style={[Style.dateTextLeft, {
-                color: item.request.status < 2 ? Color.danger : Color.normalGray,
+                color: item.status < 2 ? Color.danger : Color.normalGray,
                 paddingBottom: 0
-              }]}>{item.request.status < 2 ? 'Transaction is on going' : 'Transaction completed'}</Text>
+              }]}>{item.status < 2 ? 'Transaction is on going' : 'Transaction completed'}</Text>
             </View>
             <View style={{
               marginBottom: 5,
@@ -169,7 +169,7 @@ class Groups extends Component{
                 width: '60%',
                 textAlign: 'right',
                 paddingTop: 2
-              }]}>{Helper.showRequestType(item.request.type)} - {item.thread.substring(24, 32)}</Text>
+              }]}>{Helper.showRequestType(item.type)} - {item.title.substring(24, 32)}</Text>
             </View>
           </View>
         </TouchableHighlight>

@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import { Helper, BasicStyles, Color } from 'common';
 import Config from 'src/config.js';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
+import { faCheckCircle, faUserCircle } from '@fortawesome/free-solid-svg-icons';
 
 class Slider extends Component {
   constructor(props){
@@ -78,6 +78,20 @@ class Slider extends Component {
                       />
                     )
                   }
+                  
+                  {
+                    user.status == 'verified' && (
+                      <FontAwesomeIcon
+                        icon={faCheckCircle}
+                        size={20}
+                        style={{
+                          color: 'aqua',
+                          marginTop: -15,
+                          marginLeft: 60
+                        }}
+                      />
+                    )
+                  }
 
                   <Text  style={{
                     color: Color.white,
@@ -96,8 +110,8 @@ class Slider extends Component {
                       justifyContent:'center',
                       width:110,
                       height:30,
-                      backgroundColor:'#fff',
                       borderRadius: 30,
+                      backgroundColor: '#22B173'
                     }}
                     onPress={() => {this.redirect("editProfileStack")}}
                   >

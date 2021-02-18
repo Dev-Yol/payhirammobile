@@ -56,7 +56,7 @@ class HeaderOptions extends Component {
             paddingLeft: 1
           }}>{
             // data ? '****' + data.title.substr(data.title.length - 8, data.title.length - 1) : null
-            data ? '****' + data.title.substr(data.title.length - 8, data.title.length - 1) + ' - ' + data.request.currency + ' ' + data.request.amount: null
+            data ? '****' + data.title.substr(data.title.length - 8, data.title.length - 1) + ' - ' + data.currency + ' ' + data.amount: null
           }</Text>
           {Helper.MessengerMenu != null &&
             <TouchableHighlight 

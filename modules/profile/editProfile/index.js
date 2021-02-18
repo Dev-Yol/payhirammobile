@@ -192,7 +192,20 @@ class EditProfile extends Component {
                 </Text>
               )
             }
-            
+
+            {
+              user.status == 'verified' && (
+                <FontAwesomeIcon
+                  icon={faCheckCircle}
+                  size={15}
+                  style={{
+                    color: 'aqua',
+                    marginTop: -17,
+                    marginLeft: 65
+                  }}
+                />
+              )
+            }
             <Rating ratings={''} style={[{flex: 2}]}></Rating>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <FontAwesomeIcon

@@ -51,6 +51,7 @@ class ProposalModal extends Component {
       return
     }
     if(charge <= 0 || currency == null){
+      this.check()
       return
     }
     let parameter = {
@@ -238,7 +239,7 @@ class ProposalModal extends Component {
 
               <Button 
                 title={'Continue'}
-                onClick={() => {this.submit()}}
+                onClick={() => this.submit()}
                 style={{
                   width: '45%',
                   marginLeft: '5%',
