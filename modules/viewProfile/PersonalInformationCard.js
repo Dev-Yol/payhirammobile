@@ -34,14 +34,14 @@ class PersonalInformationCard extends Component {
           alignItems: 'flex-start'
         }}>
           <View style={{width: '50%'}}>
-            {_renderTextIcon(faUserCircle, user.account_information.first_name || 'No data')}
+            {_renderTextIcon(faUserCircle, user.information.first_name || 'No data')}
             {_renderTextIcon(faEnvelope, user.email || 'No data')}
-            {_renderTextIcon(faUserCircle,  user.account_information.sex || 'No data')}
+            {_renderTextIcon(faUserCircle,  user.information.sex || 'No data')}
           </View>
           <View style={{width: '50%'}}>
-            {_renderTextIcon(faPhoneAlt, user.account_information.cellular_number || 'No data')}
-            {_renderTextIcon(faCalendarAlt, user.account_information.birth_date_human || 'No data')}
-            {_renderTextIcon(faMapMarkerAlt, user.account_information.address || 'No data')}
+            {_renderTextIcon(faPhoneAlt, user.information.cellular_number || 'No data')}
+            {_renderTextIcon(faCalendarAlt, user.information.birth_date_human || 'No data')}
+            {_renderTextIcon(faMapMarkerAlt, user.information.address || 'No data')}
           </View>
         </View>
     )

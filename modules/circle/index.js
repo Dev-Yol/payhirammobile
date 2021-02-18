@@ -248,6 +248,9 @@ class Circle extends Component{
           </View>
         </ScrollView>
         {this.state.isLoading ? <Spinner mode="overlay"/> : null }
+        {data == null && this.state.isLoading == false && (
+          <Empty refresh={true} onRefresh={() => this.retrieve(false)} />
+        )}
       </View>
     );
   }

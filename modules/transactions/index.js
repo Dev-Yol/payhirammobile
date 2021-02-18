@@ -41,9 +41,9 @@ class Transactions extends Component {
     this.setState({isLoading: true});
     const { user } = this.props.state
     let key = Object.keys(sort)
-    // if (user == null) {
-    //   return;
-    // }
+    if (user == null) {
+      return;
+    }
     let parameter = {
       account_id: user.id,
       limit: this.state.limit,
