@@ -13,6 +13,9 @@ import Button from 'components/Form/Button';
 import Modal from 'react-native-modal';
 import Currency from 'services/Currency';
 import Api from 'services/api/index.js';
+import {
+  Spinner
+} from 'components';
 
 const height = Math.round(Dimensions.get('window').height)
 class ProposalModal extends Component {
@@ -20,9 +23,41 @@ class ProposalModal extends Component {
     super(props);
     this.state = {
         currency: 'PHP',
-        charge: 0
+        charge: 0,
+        isLoading: false
     };
   }
+
+  componentDidMount(){
+    this.retrieveSummaryLedger()
+  }
+
+  retrieveSummaryLedger = () => {
+    const {user} = this.props.state;
+    const { setLedger } = this.props;
+    if (user == null) {
+      return;
+    }
+    let parameter = {
+      account_id: user.id,
+      account_code: user.code
+    };
+    this.setState({isLoading: true});
+    console.log('parameter', parameter)
+    Api.request(Routes.ledgerSummary, parameter, (response) => {
+      console.log('response', response)
+      this.setState({isLoading: false});
+      if (response != null) {
+        setLedger(response.data[0]);
+      } else {
+        setLedger(null);
+      }
+    }, error => {
+      console.log('response', error)
+      this.setState({isLoading: false});
+    });
+  };
+
   redirect = (route) => {
     this.props.navigation.navigate(route);
   };
@@ -41,10 +76,13 @@ class ProposalModal extends Component {
   submit(){
     const { user, ledger, request } = this.props.state;
     const { charge, currency } = this.state;
-    if(user == null || ledger == null || request == null){
+
+    console.log('[send proposal]')
+    if(user == null || request == null || ledger == null){
       return
     }
     if(charge <= 0 || currency == null){
+      this.check()
       return
     }
     let parameter = {
@@ -54,14 +92,21 @@ class ProposalModal extends Component {
       status: 'requesting',
       account_id: user.id
     }
-    this.props.loading(true)
+    console.log('[send proposal]', parameter)
+    this.setState({
+      isLoading: true
+    })
     Api.request(Routes.requestPeerCreate, parameter, (response) => {
-      this.props.loading(false)
+      this.setState({
+        isLoading: false
+      })
       this.props.closeModal()
       this.props.navigation.navigate('requestItemStack', {data: this.props.data})
     },
     error => {
-      this.props.loading(false)
+      this.setState({
+        isLoading: false
+      })
     }
     );
   }
@@ -225,7 +270,7 @@ class ProposalModal extends Component {
 
               <Button 
                 title={'Continue'}
-                onClick={() => {this.state.charge != 0 || this.state.charge != '' ? this.submit() : this.check()}}
+                onClick={() => this.submit()}
                 style={{
                   width: '45%',
                   marginLeft: '5%',
@@ -241,6 +286,8 @@ class ProposalModal extends Component {
 
   render(){
     const { closeModal, visible } = this.props;
+    const { ledger } = this.props.state;
+    const { isLoading } = this.state;
     return(
       <Modal onBackdropPress={closeModal}
         transparent={true}
@@ -251,10 +298,11 @@ class ProposalModal extends Component {
         <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'flex-end', flexDirection: 'column' }}
             style={{ padding: 0 }}>
             <View style={[Style.container]}>
-                {this.renderContent()}
+                {(ledger && isLoading == false) && this.renderContent()}
             </View>
-        </ScrollView>
 
+        {isLoading ? <Spinner mode="overlay" /> : null}
+        </ScrollView>
     </Modal>
 
     );
@@ -265,6 +313,7 @@ const mapStateToProps = (state) => ({ state: state });
 const mapDispatchToProps = (dispatch) => {
   const { actions } = require('@redux');
   return {
+    setLedger: (ledger) => dispatch(actions.setLedger(ledger)),
   };
 };
 

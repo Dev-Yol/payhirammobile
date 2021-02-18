@@ -38,7 +38,7 @@ export default StyleSheet.create({
   },
   ButtonContainer: {
     alignItems: 'center',
-    marginTop: '60%',
+    marginTop: '50%',
     left: 130,
   },
   CustomButtonContainer: {
@@ -47,7 +47,6 @@ export default StyleSheet.create({
     textAlign: 'center',
     width: 50,
     height: 50,
-    position: 'absolute',
     backgroundColor: Color.primary,
     color: Color.white,
     borderRadius: 50,

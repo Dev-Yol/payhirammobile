@@ -139,7 +139,16 @@ const initialState = {
     messages: null,
   },
   searchParameter: null,
-  location: null,
+  location: {
+    id: 1,
+    account_id: 1,
+    latitude: '10.373264655881858',
+    latitude: '123.94052113182192',
+    route: 'test',
+    locality: 'test',
+    region: 'test',
+    country: 'test'
+  },
   requests: null,
   request: null,
   nav: null,

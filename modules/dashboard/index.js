@@ -24,7 +24,6 @@ import { faStar as faStarRegular } from '@fortawesome/free-regular-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 const width = Math.round(Dimensions.get('window').width);
 const height = Math.round(Dimensions.get('window').height);
-import QRCode from 'react-native-qrcode-svg';
 
 const transactionData = []
 
@@ -40,6 +39,7 @@ class Dashboard extends Component {
   }
 
   componentDidMount() {
+    // this.props.setQRCodeModal(false)
     const {user} = this.props.state;
     if (user != null) {
       this.retrieveSummaryLedger();
@@ -70,7 +70,6 @@ class Dashboard extends Component {
     };
     this.setState({isLoading: true});
     Api.request(Routes.ledgerSummary, parameter, (response) => {
-      console.log(response.data, 'summaryLedger')
       this.setState({isLoading: false});
       if (response != null) {
         setLedger(response.data[0]);
@@ -94,7 +93,6 @@ class Dashboard extends Component {
       limit: 5
     };
     Api.request(Routes.ledgerHistory, parameter, (response) => {
-      console.log(response.data, 'ledgerHistory')
       if (response != null) {
         this.setState({
           history: response.data
@@ -217,10 +215,6 @@ class Dashboard extends Component {
         <ScrollView 
         showsVerticalScrollIndicator={false}>
           <View style={[styles.MainContainer, {marginTop: 60, height: height}]}>
-            <QRCode
-              size={220}
-              value={this.props.state.user.code}
-            />
             {
               ledger && (
                 <BalanceCard
@@ -300,6 +294,7 @@ const mapDispatchToProps = (dispatch) => {
   const {actions} = require('@redux');
   return {
     setLedger: (ledger) => dispatch(actions.setLedger(ledger)),
+    setQRCodeModal: (isVisible) => dispatch(actions.setLedger(isVisible))
   };
 };
 

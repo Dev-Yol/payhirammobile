@@ -3,10 +3,7 @@ import Style from './Style.js';
 import { View, TouchableHighlight, Text, ScrollView, FlatList, Platform} from 'react-native';
 import { Routes, Color, Helper, BasicStyles } from 'common';
 import { Spinner, Empty, UserImage } from 'components';
-import Api from 'services/api/index.js';
-import Currency from 'services/Currency.js';
 import { connect } from 'react-redux';
-import Config from 'src/config.js';
 import CommonRequest from 'services/CommonRequest.js';
 import { Dimensions } from 'react-native';
 const height = Math.round(Dimensions.get('window').height);
@@ -34,7 +31,6 @@ class Groups extends Component{
     }
     this.setState({isLoading: true});
     CommonRequest.retrieveMessengerGroups(user, response => {
-      console.log('bntay ka lng', response.data)
       this.setState({isLoading: false, data: response.data});
       const { setMessenger } = this.props;
       const { messenger } = this.props.state;
@@ -74,8 +70,11 @@ class Groups extends Component{
     const { setMessengerGroup } = this.props;
     this.updateLastMessageStatus(item)
     setMessengerGroup(item);
+    console.log('[viewMessages] data', item)
     setTimeout(() => {
-      this.props.navigation.navigate('messagesStack');
+      this.props.navigation.navigate('messagesStack', {
+        data: item
+      });
     }, 500)
   }
 
@@ -89,16 +88,16 @@ class Groups extends Component{
           >
           <View>
             <View style={{flexDirection: 'row', marginTop: 5, paddingLeft: 10, paddingRight: 10}}>
-              <UserImage user={item.profile} color={theme ? theme.primary : Color.primary}/>
+              {/*<UserImage user={item.profile} color={theme ? theme.primary : Color.primary}/>*/}
               <View style={{
                 paddingLeft: 10,
-                width: '50%',
+                width: '100%',
                 flexDirection: 'row'
               }}>
                 <Text style={{
                   color: theme ? theme.primary : Color.primary,
                   lineHeight: 30,
-                }}>{item.title.length > 29 && item.request != null ? '*****' + item.title.substr(28, 32) + ' - ' + item.request.currency + ' ' + item.request.amount  : item.title}</Text>
+                }}>{item.title.length > 29 ? '*****' + item.title.substr(item.title.length - 8, item.title.length - 1) + ' - ' + item.currency + ' ' + item.amount  : item.title}</Text>
                 {
                   parseInt(item.total_unread_messages) > 0 && Platform.OS == 'android' && (
                     <Text style={{
@@ -149,9 +148,9 @@ class Groups extends Component{
               paddingRight: 10
             }}>
               <Text style={[Style.dateTextLeft, {
-                color: item.request.status < 2 ? Color.danger : Color.normalGray,
+                color: item.status < 2 ? Color.danger : Color.normalGray,
                 paddingBottom: 0
-              }]}>{item.request.status < 2 ? 'Transaction is on going' : 'Transaction completed'}</Text>
+              }]}>{item.status < 2 ? 'Transaction is on going' : 'Transaction completed'}</Text>
             </View>
             <View style={{
               marginBottom: 5,
@@ -167,7 +166,7 @@ class Groups extends Component{
                 width: '60%',
                 textAlign: 'right',
                 paddingTop: 2
-              }]}>{Helper.showRequestType(item.request.type)} - {item.thread.substring(24, 32)}</Text>
+              }]}>{Helper.showRequestType(item.type)} - {item.title.substring(24, 32)}</Text>
             </View>
           </View>
         </TouchableHighlight>
@@ -223,6 +222,7 @@ class Groups extends Component{
             }
           }
         }}
+        showsVerticalScrollIndicator={false}
         >
         <View stle={{
           flexDirection: 'row',

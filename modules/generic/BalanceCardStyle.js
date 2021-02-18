@@ -23,13 +23,12 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontWeight: 'bold',
     paddingTop: 10,
-    paddingBottom: 40
+    paddingBottom: 20
   },
   CurrentBalanceTextStyle: {
-    textAlign: 'left',
+    textAlign: 'center',
     fontSize: BasicStyles.standardFontSize,
     color: '#FFFFFF',
-    paddingBottom: 10,
     paddingLeft: 10
   }
 });
