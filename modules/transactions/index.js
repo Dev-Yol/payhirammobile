@@ -46,7 +46,7 @@ class Transactions extends Component {
     //   return;
     // }
     let parameter = {
-      // account_id: this.user.userID,
+      account_id: this.props.state.user.account_information.account_id,
       limit: this.state.limit,
       offset: this.state.offset,
       sort: {

@@ -4,6 +4,7 @@ import {
   Text,
   ScrollView,
   TextInput,
+  Alert,
   TouchableOpacity,
   TouchableHighlight,
 } from 'react-native';
@@ -101,7 +102,17 @@ class EditProfile extends Component {
 
   update = () => {
     const { user } = this.props.state;
-    if(user === null){
+    if(user == null){
+      return
+    }else if(this.state.first_name == null || this.state.middle_name == null || this.state.last_name == null || this.state.cellular_number == null || this.state.sex == null || this.state.address == null || this.state.birthDate == null){
+      Alert.alert(
+        'Error Message',
+        'Please fill in all the fields.',
+        [
+          {text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel'}
+        ],
+        { cancelable: false }
+      )
       return
     }
     let parameters = {
@@ -113,7 +124,7 @@ class EditProfile extends Component {
       cellular_number: this.state.cellular_number,
       sex: this.state.sex,
       address: this.state.address,
-      birth_date: this.state.birth_date,
+      birth_date: this.state.birthDate,
       email: this.state.email
     };
     this.setState({ isLoading: true });

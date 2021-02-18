@@ -163,6 +163,7 @@ class Requests extends Component {
       Routes.requestRetrieve,
       parameter,
       (response) => {
+        console.log('=============================', requests, response)
         this.setState({
           isLoading: false,
           size: response.size ? response.size : 0,
@@ -452,18 +453,23 @@ class Requests extends Component {
           data={connectSelected}
           action={(flag) => this.connectAction(flag)}></CustomModal> */}
 
-        <ProposalModal
-          visible={connectModal}
-          data = {this.state.connectSelected}
-          navigation={this.props.navigation}
-          loading={(flag) => this.setState({
-            isLoading: flag
-          })}
-          closeModal={() =>
-            this.setState({
-              connectModal: false,
-            })
-          }></ProposalModal>
+        {
+          connectModal && (
+            <ProposalModal
+              visible={connectModal}
+              data = {this.state.connectSelected}
+              navigation={this.props.navigation}
+              loading={(flag) => this.setState({
+                isLoading: flag
+              })}
+              closeModal={() =>
+                this.setState({
+                  connectModal: false,
+                })
+            }></ProposalModal>
+          )
+        }
+        
       </View>
     );
   }

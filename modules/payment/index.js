@@ -26,22 +26,22 @@ class AddPayment extends Component {
             <PaymentAccountTile src={res.debitCard} />
             <PaymentAccountTile src={res.wallet} />
           </View>
+          <View style={styles.ButtonContainer}>
+            <TouchableOpacity
+              style={styles.CustomButtonContainer}
+              onPress={() => {
+                this.props.navigation.navigate('addPaymentStack');
+              }}>
+              <FontAwesomeIcon
+                  icon={faPlus}
+                  style={{
+                    color: Color.white,
+                  }}
+                  size={16}
+                />
+            </TouchableOpacity>
+          </View>
         </ScrollView>
-        <View style={styles.ButtonContainer}>
-          <TouchableOpacity
-            style={styles.CustomButtonContainer}
-            onPress={() => {
-              this.props.navigation.navigate('addPaymentStack');
-            }}>
-            <FontAwesomeIcon
-                icon={faPlus}
-                style={{
-                  color: Color.white,
-                }}
-                size={16}
-              />
-          </TouchableOpacity>
-        </View>
       </View>
     );
   }

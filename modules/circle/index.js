@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { View, Text, ScrollView, TouchableHighlight, Dimensions, Alert } from 'react-native';
 const height = Math.round(Dimensions.get('window').height);
-import { UserImage, Spinner } from 'components';
+import { UserImage, Spinner, Empty } from 'components';
 import { Rating } from 'components/index.js';
 import { Routes, Color } from 'common';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
@@ -15,7 +15,6 @@ class Circle extends Component{
     super(props);
     this.state = {
       data: null,
-      isLoading: true,
       limit: 10,
       offset: 0,
       isLoading: false,
@@ -166,7 +165,6 @@ class Circle extends Component{
               </View>
             )
           }
-
         </View>
       )
   }
@@ -214,7 +212,7 @@ class Circle extends Component{
     this.props.navigation.push("viewProfileStack", { user })
   }
   render() {
-    const { data} = this.state;
+    const { data } = this.state;
     const { user } = this.props.state;
     return (
       <View style={
@@ -244,6 +242,9 @@ class Circle extends Component{
             height: height
           }}>
             {(data && user) && this.renderCircles(data)}
+            {data == null && this.state.isLoading == false && (
+              <Empty refresh={true} onRefresh={() => this.onRefresh()} />
+            )}
           </View>
         </ScrollView>
         {this.state.isLoading ? <Spinner mode="overlay"/> : null }
