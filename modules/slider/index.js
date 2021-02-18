@@ -120,11 +120,13 @@ class Slider extends Component {
                   {
                     user.status == 'verified' ?
                       <Text style={{
-                      fontWeight: 'bold'}}>
+                      fontWeight: 'bold',
+                      color: Color.white}}>
                         Verified
                       </Text> :
                       <Text style={{
-                      fontWeight: 'bold'}}>
+                      fontWeight: 'bold',
+                      color: Color.white}}>
                         Verify Now
                       </Text>
                   }
