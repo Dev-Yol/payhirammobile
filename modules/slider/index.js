@@ -38,7 +38,9 @@ class Slider extends Component {
     const { logout, setActiveRoute } = this.props;
     logout();
     // setActiveRoute(null)
-    this.props.navigation.navigate('loginStack');
+    setTimeout(() => {
+      this.props.navigation.navigate('loginStack');
+    }, 100)
   }
 
   render () {

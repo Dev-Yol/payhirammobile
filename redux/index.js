@@ -161,6 +161,14 @@ storeData = async (key, value) => {
   }
 };
 
+// removeData = async (item) => {
+//   try{
+//     await AsyncStorage.removeItem(item)
+//   }catch (e){
+
+//   }
+// }
+
 const reducer = (state = initialState, action) => {
   const {type, user, token} = action;
   const {messages, unread, message} = action;
@@ -176,7 +184,9 @@ const reducer = (state = initialState, action) => {
   const { isViewing, request } = action;
   switch (type) {
     case types.LOGOUT:
-      AsyncStorage.removeItem(Helper.APP_NAME + 'token');
+      // storeData('token', '');
+      AsyncStorage.clear()
+      console.log("[LOGOUT]");
       return Object.assign({}, initialState);
     case types.LOGIN:
       storeData('token', token);
