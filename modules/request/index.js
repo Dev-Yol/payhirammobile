@@ -377,6 +377,7 @@ class Requests extends Component {
                   onConnectRequest={(item) => {this.connectRequest(item)}}
                   data={item}
                   navigation={this.props.navigation}
+                  from={'request'}
                   />
               </View>
             )}

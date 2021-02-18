@@ -45,20 +45,18 @@ class RequestItem extends Component {
       return
     }
     let parameter = {
-      condition: [{
-        value: data.id,
-        column: 'id',
-        clause: '='
-      }],
-      type: user.account_type,
-      account_id: user.id
+      request_id: data.id,
+      account_code: user.code,
+      account_request_code: data.account.code
     };
     this.setState({isLoading: true});
-    Api.request(Routes.requestRetrieveItem, parameter, (response) => {
+    console.log('[RequestItem] Retrieve parameter', parameter)
+    Api.request(Routes.requestPeerRetrieveItem, parameter, (response) => {
       this.setState({isLoading: false});
-      if (response != null) {
+      console.log('response', response)
+      if (response.data.length > 0) {
         this.setState({
-          data: response.data[0]
+          data: response.data
         })
       } else {
         this.setState({
@@ -150,6 +148,12 @@ class RequestItem extends Component {
     )
   }
 
+  onChangeTerms(item){
+    this.setState({
+      connectModal: true
+    })
+  }
+
 
   renderProposals = (data) => {
     return (
@@ -172,6 +176,11 @@ class RequestItem extends Component {
             data={data}
             navigation={this.props.navigation}
             onAcceptRequest={this.acceptRequest}
+            onChangeTerms={(params) => this.onChangeTerms(params)}
+            onLoading={(flag) => this.setState({
+              isLoading: flag
+            })}
+            onRetrieve={() => this.retrieve()}
             />
         </View>
       </View>
@@ -194,19 +203,20 @@ class RequestItem extends Component {
             marginRight: '5%'
           }}>
             {
-              data && (
+              this.props.navigation.state.params.data && (
                 <View style={{alignItems: 'center'}}>
                   <RequestCard 
                     onConnectRequest={(item) => this.connectRequest(item)}
-                    data={data}
+                    data={this.props.navigation.state.params.data}
                     navigation={this.props.navigation}
+                    from={'request_item'}
                     />
                 </View>
               )
             }
 
             {
-              (data && data.peers && data.peers.peers) && (
+              (data) && (
                 this.renderProposals(data)
               )
             }
