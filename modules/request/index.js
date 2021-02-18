@@ -62,44 +62,19 @@ class Requests extends Component {
       active: 1,
       activePage: 0,
       isRequestOptions: false,
-      offset: 0
+      offset: 0,
+      tempData: [],
+      data: []
     };
   }
 
   componentDidMount() {
-    this.retrieve(false, true);
     this.backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
       this.handleBackPress,
     );
-    this.retrieveSummaryLedger()
+    this.retrieve(false, true);
   }
-
-  retrieveSummaryLedger = () => {
-    const {user} = this.props.state;
-    const { setLedger } = this.props;
-    if (user == null) {
-      return;
-    }
-    let parameter = {
-      account_id: user.id,
-      account_code: user.code
-    };
-    this.setState({isLoading: true});
-    console.log('parameter', parameter)
-    Api.request(Routes.ledgerSummary, parameter, (response) => {
-      console.log('response', response)
-      this.setState({isLoading: false});
-      if (response != null) {
-        setLedger(response.data[0]);
-      } else {
-        setLedger(null);
-      }
-    }, error => {
-      console.log('response', error)
-      this.setState({isLoading: false});
-    });
-  };
 
   componentWillUnmount() {
     this.backHandler.remove();
@@ -141,15 +116,16 @@ class Requests extends Component {
     }
   };
 
-  retrieve = (scroll, flag) => {
-    const {user, searchParameter, requests} = this.props.state;
-    const {setUserLedger} = this.props;
+  retrieve = (scroll, flag, backgroundFlag = false) => {
+    console.log("[Request Retrieve] On Sending Request")
+    const {user, searchParameter} = this.props.state;
+    const { data, tempData } = this.state;
     if (user == null) {
       return;
     }
     let parameter = {
       account_id: user.id,
-      offset: this.state.offset * this.state.limit,
+      offset: backgroundFlag == false ? this.state.offset * this.state.limit : (this.state.offset + 1) * this.state.limit,
       limit: this.state.limit,
       sort: {
         column: 'created_at',
@@ -159,38 +135,45 @@ class Requests extends Component {
       column: searchParameter == null ? 'created_at' : searchParameter.column,
       type: user.account_type,
     };
-    this.setState({isLoading: true});
-    Api.request(
-      Routes.requestRetrieve,
-      parameter,
-      (response) => {
+    this.setState({isLoading: backgroundFlag == false && data.length > 0 ? false : true}); 
+    if(tempData.length > 0){
+      console.log("[Request Retrieve] with existing data")
+      this.manageData(scroll, flag, backgroundFlag, tempData)
+    }else{
+      console.log("[Request Retrieve] parameter", parameter)
+      Api.request( Routes.requestRetrieve, parameter, (response) => {
         this.setState({
-          isLoading: false,
           size: response.size ? response.size : 0,
         });
-        setUserLedger(response.ledger);
-        if (flag == true) {
-          const {setRequests} = this.props;
-          if (response.data != null) {
-            setRequests(scroll === false ? response.data : _.uniqBy([...requests, ...response.data], 'id'));
-            this.setState({offset: scroll == false ? 1 : (this.state.offset + 1)})
-          } else {
-            setRequests(scroll === false ? [] : this.props.state.requests);
-            this.setState({offset: scroll === false ? 0 : this.state.offset})
-          }
-        } else {
-          const {updateRequests} = this.props;
-          // scroll to bottom
-          if (response.data != null) {
-            updateRequests(response.data);
-          }
-        }
+        this.manageData(scroll, flag, backgroundFlag, response)
       },
       (error) => {
         this.setState({isLoading: false});
       },
-    );
+    ); 
+    }
   };
+
+  manageData(scroll, flag, backgroundFlag, response){
+    console.log("[Retrieve Request] Manage Data")
+    const { tempData, data } = this.state;
+    this.setState({
+      isLoading: false
+    })
+
+    if(response.data.length > 0){
+      this.setState({
+        data: scroll == false ? response.data : _.uniqBy([...data, ...response.data], 'id'),
+        offset: scroll == false ? 1 : (this.state.offset + 1)
+      })
+    }else{
+      this.setState({
+        data: flag == false ? [] : data,
+        numberOfPages: null,
+        offset: flag == false ? 0 : this.state.offset
+      })
+    }
+  }
 
   onRefresh = () => {
     const {setSearchParameter} = this.props;
@@ -358,16 +341,16 @@ class Requests extends Component {
   };
 
   _flatList = () => {
-    const {selected, isLoading} = this.state;
-    const {user, requests} = this.props.state;
+    const {selected, isLoading, data} = this.state;
+    const {user} = this.props.state;
     return (
       <View
         style={{
           marginBottom: 100,
         }}>
-        {requests != null && user != null && (
+        {data != null && user != null && (
           <FlatList
-            data={requests}
+            data={data}
             extraData={selected}
             ItemSeparatorComponent={this.FlatListItemSeparator}
             renderItem={({item, index}) => (
@@ -394,7 +377,8 @@ class Requests extends Component {
       connectSelected,
       isRequestOptions,
     } = this.state;
-    const {requests, theme, user} = this.props.state;
+    const {theme, user} = this.props.state;
+    const { data } = this.state;
     return (
       <View style={Style.MainContainer}>
         {isRequestOptions && (
@@ -420,10 +404,9 @@ class Requests extends Component {
                 // this.retrieve(false)
               }
             }
-            console.log(scrollingHeight, totalHeight);
             if(scrollingHeight >= (totalHeight)) {
               if(isLoading == false){
-                this.retrieve(true, true)
+                this.retrieve(true, true, false)
               }
             }
           }}>
@@ -431,7 +414,7 @@ class Requests extends Component {
           <View style={[Style.MainContainer, {marginTop: 60}]}>
             
             {this._flatList()}
-            {requests == null && isLoading == false && (
+            {data.length == 0 && isLoading == false && (
               <Empty refresh={true} onRefresh={() => this.onRefresh()} />
             )}
           </View>
@@ -498,7 +481,6 @@ const mapStateToProps = (state) => ({state: state});
 const mapDispatchToProps = (dispatch) => {
   const {actions} = require('@redux');
   return {
-    setRequests: (requests) => dispatch(actions.setRequests(requests)),
     updateRequests: (requests) => dispatch(actions.updateRequests(requests)),
     setUserLedger: (userLedger) => dispatch(actions.setUserLedger(userLedger)),
     setSearchParameter: (searchParameter) =>

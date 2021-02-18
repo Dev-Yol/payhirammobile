@@ -27,6 +27,37 @@ class ProposalModal extends Component {
         isLoading: false
     };
   }
+
+  componentDidMount(){
+    this.retrieveSummaryLedger()
+  }
+
+  retrieveSummaryLedger = () => {
+    const {user} = this.props.state;
+    const { setLedger } = this.props;
+    if (user == null) {
+      return;
+    }
+    let parameter = {
+      account_id: user.id,
+      account_code: user.code
+    };
+    this.setState({isLoading: true});
+    console.log('parameter', parameter)
+    Api.request(Routes.ledgerSummary, parameter, (response) => {
+      console.log('response', response)
+      this.setState({isLoading: false});
+      if (response != null) {
+        setLedger(response.data[0]);
+      } else {
+        setLedger(null);
+      }
+    }, error => {
+      console.log('response', error)
+      this.setState({isLoading: false});
+    });
+  };
+
   redirect = (route) => {
     this.props.navigation.navigate(route);
   };
@@ -255,6 +286,7 @@ class ProposalModal extends Component {
 
   render(){
     const { closeModal, visible } = this.props;
+    const { ledger } = this.props.state;
     const { isLoading } = this.state;
     return(
       <Modal onBackdropPress={closeModal}
@@ -266,7 +298,7 @@ class ProposalModal extends Component {
         <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'flex-end', flexDirection: 'column' }}
             style={{ padding: 0 }}>
             <View style={[Style.container]}>
-                {this.renderContent()}
+                {(ledger && isLoading == false) && this.renderContent()}
             </View>
 
         {isLoading ? <Spinner mode="overlay" /> : null}
@@ -281,6 +313,7 @@ const mapStateToProps = (state) => ({ state: state });
 const mapDispatchToProps = (dispatch) => {
   const { actions } = require('@redux');
   return {
+    setLedger: (ledger) => dispatch(actions.setLedger(ledger)),
   };
 };
 
