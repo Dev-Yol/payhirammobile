@@ -43,7 +43,6 @@ class HeaderOptions extends Component {
     const width = Math.round(Dimensions.get('window').width);
     // {Helper.showRequestType(messengerGroup.request.type)} -
     const { data } = this.props.navigationProps.state.params;
-    console.log('data here', data, 'here', this.props.state)
     return (
       <View>
         <View style={{
@@ -56,8 +55,8 @@ class HeaderOptions extends Component {
             color: theme ? theme.primary : Color.primary,
             paddingLeft: 1
           }}>{
-            data ? '****' + data.title.substr(data.title.length - 8, data.title.length - 1) : null
-            // data ? '****' + data.title.substr(data.title.length - 8, data.title.length - 1) + ' - ' + data.request.currency + ' ' + data.request.amount: null
+            // data ? '****' + data.title.substr(data.title.length - 8, data.title.length - 1) : null
+            data ? '****' + data.title.substr(data.title.length - 8, data.title.length - 1) + ' - ' + data.request.currency + ' ' + data.request.amount: null
           }</Text>
           {Helper.MessengerMenu != null &&
             <TouchableHighlight 

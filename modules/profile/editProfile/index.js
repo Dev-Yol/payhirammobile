@@ -239,8 +239,8 @@ class EditProfile extends Component {
               onChange={(value) => {this.setState({email: value})}}
               required={true}
             /> */}
-            <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-              <View style={{width: '40%', marginRight: 20}}>
+            {/* <View style={{flexDirection: 'row', justifyContent: 'center'}}> */}
+              <View style={{width: '90%', marginLeft: '5%'}}>
                 <Text>Birthdate</Text>
                 <DateTime
                   type={'date'}
@@ -251,11 +251,11 @@ class EditProfile extends Component {
                     })
                   }}
                   style={{
-                    marginTop: 5
+                    marginTop: 1
                   }}
                 />
               </View>
-              <View style={{width: '40%', marginLeft: 20, }}>
+              <View style={{width: '90%', marginLeft: '5%'}}>
                 <Text>Gender</Text>
                 <View
                   style={{
@@ -283,7 +283,7 @@ class EditProfile extends Component {
                   </Picker>
                 </View>
               </View>
-            </View>
+            {/* </View> */}
             <Text style={{marginLeft: 20}}>Address</Text>
             <TextInput
               style={[BasicStyles.formControl, {alignSelf: 'center'}]}
