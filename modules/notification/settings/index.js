@@ -19,13 +19,13 @@ class NotificationSettings extends Component {
   componentDidMount() {
     let parameter = {
       condition: [{
-        value: this.props.state.user.account_information.account_id,
+        value: this.props.state.user.id,
         column: 'account_id',
         clause: '='
       }]
     };
     let param = {
-      account_id: this.props.state.user.account_information.account_id,
+      account_id: this.props.state.user.id,
       email_login: 0,
       email_otp: 0,
       email_pin: 0,
@@ -68,7 +68,7 @@ class NotificationSettings extends Component {
       id: this.state.id,
       email_login: login ? 1 : 0,
       email_pin: pin ? 1 : 0,
-      account_id: this.props.state.user.account_information.account_id,
+      account_id: this.props.state.user.id,
       email_otp: 0,
       sms_login: 0,
       sms_otp: 0

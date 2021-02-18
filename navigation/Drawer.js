@@ -3,7 +3,7 @@ import { View, TouchableOpacity, Dimensions } from 'react-native';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createDrawerNavigator } from 'react-navigation-drawer';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faBars, faQrcode } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faQrcode, faShare } from '@fortawesome/free-solid-svg-icons';
 import Slider from 'modules/slider';
 import { Color, BasicStyles } from 'common';
 import Requests from 'modules/request';
@@ -58,6 +58,20 @@ class QRCode extends Component {
   }
 }
 
+class Share extends Component {
+  render() {
+    return (
+      <TouchableOpacity onPress={() => {
+        // this.props.setQRCodeModal(true)
+      }}>
+        <View style={{ paddingRight: 8 }} >
+          <FontAwesomeIcon icon={faShare} size={BasicStyles.iconSize + 5} style={{ color: 'black', marginRight: 10 }} />
+        </View>
+      </TouchableOpacity>
+    )
+  }
+}
+
 const mapStateToProps = (state) => ({ state: state });
 
 const mapDispatchToProps = (dispatch) => {
@@ -70,6 +84,7 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 const QRCodeButton = connect(mapStateToProps, mapDispatchToProps)(QRCode)
+const ShareButton = connect(mapStateToProps, mapDispatchToProps)(Share)
 const _StackNavigator = createStackNavigator({
 
   Requests: {
@@ -95,8 +110,10 @@ const _StackNavigator = createStackNavigator({
     screen: Circle,
     navigationOptions: ({ navigation }) => ({
       title: null,
-      headerLeft: <MenuDrawerStructure navigationProps={navigation} />,
-      headerRight: <OptionRight navigationProps={navigation} />,
+      headerLeft: <OptionRight navigationProps={navigation} />,
+      headerRight: (
+        <Share />
+      ),
       headerTransparent: true
     }),
   },

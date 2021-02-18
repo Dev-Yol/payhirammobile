@@ -15,7 +15,7 @@ class Scanner extends Component {
         // Linking.openURL(e.data).catch(err =>
         //     console.error('An error occured', err)
         // );
-        this.props.navigation.navigate('viewProfileStack', {user: this.props.navigation.state.params.user, code: e.data})
+        this.props.navigation.navigate('viewProfileStack', {code: e.data})
     };
 
     render() {
