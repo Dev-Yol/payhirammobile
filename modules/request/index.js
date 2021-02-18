@@ -427,7 +427,10 @@ class Requests extends Component {
 
         <TouchableOpacity
           style={[Style.floatingButton, {
-            backgroundColor: theme ? theme.secondary : Color.secondary
+            backgroundColor: theme ? theme.secondary : Color.secondary,
+            height: 70,
+            width: 70,
+            borderRadius: 35
           }]}
           onPress={() => {
             this.props.navigation.navigate('createRequestStack');
