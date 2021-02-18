@@ -5,11 +5,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faChevronLeft, faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 import Messages from 'components/Messenger/MessagesV3.js';
 import { Color, BasicStyles, Helper } from 'common';
-import { UserImage } from 'components';
 import { connect } from 'react-redux';
 import { Dimensions } from 'react-native';
-import Config from 'src/config.js';
-import Currency from 'services/Currency.js';
 
 class HeaderOptions extends Component {
   constructor(props){
