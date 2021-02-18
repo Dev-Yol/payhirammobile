@@ -3,7 +3,7 @@ import { View, TouchableOpacity, Text, Image, TouchableHighlight } from 'react-n
 import { createStackNavigator } from 'react-navigation-stack';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faChevronLeft, faEllipsisV } from '@fortawesome/free-solid-svg-icons';
-import Messages from 'modules/messenger/Messages.js';
+import Messages from 'components/Messenger/MessagesV3.js';
 import { Color, BasicStyles, Helper } from 'common';
 import { UserImage } from 'components';
 import { connect } from 'react-redux';
