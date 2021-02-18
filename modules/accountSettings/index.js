@@ -15,6 +15,7 @@ import Api from 'services/api/index.js';
 import { Spinner } from 'components';
 import Button from 'components/Form/Button';
 import TextInputWithLabel from 'components/Form/TextInputWithLabel';
+import QRCode from 'react-native-qrcode-svg';
 const height = Math.round(Dimensions.get('window').height);
 
 class AccountSettings extends Component {
@@ -103,6 +104,10 @@ class AccountSettings extends Component {
     return (
       <ScrollView style={{ flex: 1, paddingTop: 10 }}>
         <View style={[styles.AccountSettingsContainer, {height: height + 25}]}>
+            <QRCode
+              size={220}
+              value={user.code}
+            />
           {this.state.isLoading ? <Spinner mode="overlay" /> : null}
 
           <TextInputWithLabel 

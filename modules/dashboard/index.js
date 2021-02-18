@@ -24,7 +24,6 @@ import { faStar as faStarRegular } from '@fortawesome/free-regular-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 const width = Math.round(Dimensions.get('window').width);
 const height = Math.round(Dimensions.get('window').height);
-import QRCode from 'react-native-qrcode-svg';
 
 const transactionData = []
 
@@ -40,7 +39,8 @@ class Dashboard extends Component {
   }
 
   componentDidMount() {
-    this.props.setQRCodeModal(false)
+    console.log(this.props.state, "=====props");
+    // this.props.setQRCodeModal(false)
     const {user} = this.props.state;
     if (user != null) {
       this.retrieveSummaryLedger();
@@ -218,10 +218,6 @@ class Dashboard extends Component {
         <ScrollView 
         showsVerticalScrollIndicator={false}>
           <View style={[styles.MainContainer, {marginTop: 60, height: height}]}>
-            <QRCode
-              size={220}
-              value={this.props.state.user.code}
-            />
             {
               ledger && (
                 <BalanceCard
@@ -301,7 +297,7 @@ const mapDispatchToProps = (dispatch) => {
   const {actions} = require('@redux');
   return {
     setLedger: (ledger) => dispatch(actions.setLedger(ledger)),
-    setQRCodeModal: (isVisible) => dispatch(actions.setQRCodeModal(isVisible))
+    setQRCodeModal: (isVisible) => dispatch(actions.setLedger(isVisible))
   };
 };
 
