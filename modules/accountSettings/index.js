@@ -47,7 +47,7 @@ class AccountSettings extends Component {
     if (this.isValidEmail()) {
       const { user } = this.props.state;
       let parameters = {
-        id: user.account_information.account_id,
+        id: user.id,
         email: this.state.email
       };
       this.setState({ isLoading: true });
@@ -86,7 +86,7 @@ class AccountSettings extends Component {
     ) {
       const { user } = this.props.state;
       let parameters = {
-        id: user.account_information.account_id,
+        id: user.id,
         password: this.state.password,
       };
       this.setState({ isLoading: true });

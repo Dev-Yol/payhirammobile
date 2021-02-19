@@ -18,7 +18,7 @@ class CreateTicket extends Component {
     this.state = {
       title: null,
       description: null,
-      type: null,
+      type: 'Bug',
       isLoading: false,
       imageModalUrl: null,
       photo: null,
@@ -32,7 +32,7 @@ class CreateTicket extends Component {
   };
 
   create = () => {
-    let account_id = this.props.navigation.state.params.user.account_information.account_id
+    let account_id = this.props.navigation.state.params.user.id
     let parameter = {
       account_id: account_id,
       content: this.state.title,
@@ -43,6 +43,7 @@ class CreateTicket extends Component {
     this.setState({ isLoading: true })
     Api.request(Routes.ticketsCreate, parameter, response => {
       this.setState({ isLoading: false })
+      console.log(response.error, "=========================");
       if (response.data != null) {
         this.props.navigation.push('supportStack');
       }
