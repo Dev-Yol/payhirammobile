@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { Picker } from '@react-native-community/picker';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import ImagePicker from 'react-native-image-picker';
 import Api from 'services/api/index.js';
 import {
   faCheckCircle,
@@ -117,6 +118,48 @@ class EditProfile extends Component {
     });
   }
 
+  upload = () => {
+    const { user } = this.props.state
+    const options = {
+      noData: true
+    }
+    ImagePicker.launchImageLibrary(options, response => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+        this.setState({ photo: null })
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+        this.setState({ photo: null })
+      } else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+        this.setState({ photo: null })
+      }else {
+        if(response.fileSize >= 1000000){
+          Alert.alert('Notice', 'File size exceeded to 1MB')
+          return
+        }
+        let parameter = {
+          account_id: user.id,
+          file_url: response.uri
+        }
+        this.setState({isLoading: true})
+        Api.request(Routes.imageUpload, parameter, response => {
+          this.setState({isLoading: false})
+          if(response.data !== null) {
+            Alert.alert(
+              'Message',
+              'Image successfully uploaded',
+              [
+                {text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel'}
+              ],
+              { cancelable: false }
+            )
+          }
+        })
+      }
+    })
+  }
+
   update = () => {
     const { user } = this.props.state;
     if(user == null){
@@ -125,6 +168,16 @@ class EditProfile extends Component {
       Alert.alert(
         'Error Message',
         'Please fill in all the fields.',
+        [
+          {text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel'}
+        ],
+        { cancelable: false }
+      )
+      return
+    }else if(this.state.cellular_number.length < 11 || (this.state.cellular_number.substr(0, 1) != '09')){
+      Alert.alert(
+        'Error Message',
+        'Please input a valid phone number.',
         [
           {text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel'}
         ],
@@ -256,8 +309,10 @@ class EditProfile extends Component {
             <TextInput
               style={[BasicStyles.formControl, {alignSelf: 'center'}]}
               placeholder={'Enter Phone Number'}
-              onChangeText={(cellular_number) => this.setState({cellular_number})}
+              onChangeText={(cellular_number) => this.setState({cellular_number: cellular_number.toString()})}
               value={this.state.cellular_number}
+              keyboardType={'numeric'}
+              maxLength = {11}
               required={true}
             />
             {/* <Text style={{marginLeft: 20}}>Email</Text>
@@ -408,7 +463,8 @@ class EditProfile extends Component {
                   justifyContent: 'center',
                   alignItems: 'center',
                 },
-              ]}>
+              ]}
+              onPress={() => this.upload()}>
               <View style={{flexDirection: 'row'}}>
                 <Text>Upload Photo</Text>
                 <FontAwesomeIcon

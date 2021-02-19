@@ -152,7 +152,7 @@ class Groups extends Component{
                 paddingBottom: 0
               }]}>{item.status < 2 ? 'Transaction is on going' : 'Transaction completed'}</Text>
             </View>
-            <View style={{
+            {/* <View style={{
               marginBottom: 5,
               paddingLeft: 10,
               paddingRight: 10,
@@ -167,7 +167,7 @@ class Groups extends Component{
                 textAlign: 'right',
                 paddingTop: 2
               }]}>{Helper.showRequestType(item.type)} - {item.title.substring(24, 32)}</Text>
-            </View>
+            </View> */}
           </View>
         </TouchableHighlight>
       </View>

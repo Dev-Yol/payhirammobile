@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Dimensions, ScrollView, Modal, TextInput, TouchableHighlight } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Dimensions, ScrollView, Modal, TextInput, TouchableHighlight, Alert } from 'react-native';
 import { connect } from 'react-redux';
 import AddressTile from 'modules/addLocation/AddressTile.js';
 import Style from 'modules/addLocation/Style.js';
@@ -67,7 +67,7 @@ class AddLocation extends Component {
           address={address.route}
           country={address.country}
           onPress={this.selectHandler}
-          deletingClicked={() => this.removeAddress(index)}
+          deletingClicked={() => this.alertMessage(index)}
           backgroundColor={
             this.state.selectedAddress === index ? '#22B173' : '#FFFFFF'
           }
@@ -122,11 +122,23 @@ class AddLocation extends Component {
       console.log('=================== \nAdding Address Response: \n===================', response)
       this.retrieveAddresses();
       this.setState({isAddingAddressName: false})
-      this.setState({isLoading: false, executing: false})
+      this.setState({isLoading: false, executing: false, value: ''})
       setLocation(null)
     }, error => {
       console.log('Adding Address Error: ', error)
     })
+  }
+
+  alertMessage = (index) => {
+    Alert.alert(
+      'Confirmation',
+      'Are you sure you want to continue?',
+      [
+        {text: 'Cancel', onPress: () => console.log('Ok'), style: 'cancel'},
+        {text: 'Ok', onPress: () => this.removeAddress(index), style: 'cancel'}
+      ],
+      { cancelable: false }
+    )
   }
 
   removeAddress = (index) => {
