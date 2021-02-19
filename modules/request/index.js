@@ -464,6 +464,10 @@ class Requests extends Component {
               loading={(flag) => this.setState({
                 isLoading: flag
               })}
+              peerRequest={null}
+              onRetrieve={() => {}}
+              request={connectSelected}
+              from={'update'}
               closeModal={() =>
                 this.setState({
                   connectModal: false,

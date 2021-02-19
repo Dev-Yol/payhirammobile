@@ -30,7 +30,9 @@ class RequestItem extends Component {
       connectSelected: null,
       connectModal: false,
       data: null,
-      peer: null
+      peer: null,
+      modalStatus: 'create',
+      peerRequest: null
     }
   }
   
@@ -93,7 +95,10 @@ class RequestItem extends Component {
             title: data.code,
             payload: 'request',
             account_id: user.id,
-            request: data
+            request: data,
+            curreny: data.curreny,
+            amount: data.amount,
+            status: 1
           }
         });
       }else{
@@ -109,7 +114,10 @@ class RequestItem extends Component {
                   title: data.code,
                   payload: 'request',
                   account_id: user.id,
-                  request: data
+                  request: data,
+                  curreny: data.curreny,
+                  amount: data.amount,
+                  status: 1
                 }
               });
             }},
@@ -150,8 +158,14 @@ class RequestItem extends Component {
 
   onChangeTerms(item){
     this.setState({
-      connectModal: true
+      modalStatus: 'update',
+      peerRequest: item
     })
+    setTimeout(() => {
+      this.setState({
+        connectModal: true
+      })
+    }, 100)
   }
 
 
@@ -192,7 +206,7 @@ class RequestItem extends Component {
   render() {
     const {user} = this.props.state;
     const { data, isLoading } = this.state;
-    const { connectModal } = this.state;
+    const { connectModal, modalStatus } = this.state;
     return (
       <View>
         <ScrollView showsVerticalScrollIndicator={false}>
@@ -232,6 +246,10 @@ class RequestItem extends Component {
               })}
               data = {this.state.connectSelected}
               navigation={this.props.navigation}
+              from={modalStatus}
+              peerRequest={this.state.peerRequest}
+              request={this.props.navigation.state.params.data}
+              onRetrieve={() => this.retrieve()}
               closeModal={() =>
                 this.setState({
                   connectModal: false,

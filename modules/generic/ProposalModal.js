@@ -25,12 +25,24 @@ class ProposalModal extends Component {
         currency: 'PHP',
         charge: 0,
         isLoading: false,
-        summaryLoading: false
+        summaryLoading: false,
+        data: null
     };
   }
 
   componentDidMount(){
     this.retrieveSummaryLedger()
+    if(this.props.from == 'update' && this.props.peerRequest != null){
+      this.setState({
+        data: this.props.peerRequest,
+        charge: this.props.peerRequest.charge
+      })
+    }else{
+      this.setState({
+        data: null,
+        charge: 0
+      })
+    }
   }
 
   retrieveSummaryLedger = () => {
@@ -76,10 +88,11 @@ class ProposalModal extends Component {
   } 
 
   submit(){
-    const { user, ledger, request } = this.props.state;
-    const { charge, currency } = this.state;
+    const { user, ledger } = this.props.state;
+    const { request } = this.props;
+    const { charge, currency, data } = this.state;
 
-    console.log('[send proposal]')
+    console.log('[send proposal] request', request)
     if(user == null || request == null || ledger == null){
       return
     }
@@ -87,34 +100,84 @@ class ProposalModal extends Component {
       this.check()
       return
     }
-    let parameter = {
-      request_id: request.id,
-      currency: currency,
-      charge: charge,
-      status: 'requesting',
-      account_id: user.id
-    }
-    console.log('[send proposal]', parameter)
-    this.setState({
-      isLoading: true
-    })
-    Api.request(Routes.requestPeerCreate, parameter, (response) => {
+
+    console.log('[Send proposal] data', data)
+    console.log('[Send proposal] request', request)
+    if(data == null){
+      if(request.account == null){
+        return
+      }
+      let parameter = {
+        request_id: request.id,
+        currency: currency,
+        charge: charge,
+        status: 'requesting',
+        account_id: user.id,
+        to: request.account.code
+      }
+      console.log('[send proposal] parameter', parameter)
       this.setState({
-        isLoading: false
+        isLoading: true
       })
-      this.props.closeModal()
-      this.props.navigation.navigate('requestItemStack', {data: this.props.data})
-    },
-    error => {
+      Api.request(Routes.requestPeerCreate, parameter, response => {
+        console.log('[Send proposal] Success', response)
+        if(response.error == null){
+          this.setState({
+            isLoading: false
+          })
+          this.props.closeModal()
+          this.props.navigation.navigate('requestItemStack', {data: {...this.props.data, peer_flag: true}})
+        }else{
+          Alert.alert(
+            'Proposal already existed!',
+            'Do you want to view the existing proposal?',
+            [
+              {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+              {text: 'OK', onPress: () => {
+                this.props.closeModal()
+                this.props.navigation.navigate('requestItemStack', {data: {...this.props.data, peer_flag: true}})
+              }},
+            ],
+            { cancelable: false }
+          )
+        }
+      }, error => {
+        this.setState({
+          isLoading: false
+        })
+      });
+     
+    }else{
+      let parameter = {
+        id: data.id,
+        charge: charge
+      }
+      console.log('[Update proposal]', parameter)
       this.setState({
-        isLoading: false
+        isLoading: true
       })
+      Api.request(Routes.requestPeerUpdate, parameter, (response) => {
+        this.setState({
+          isLoading: false
+        })
+        setTimeout(() => {
+          this.props.closeModal()
+          this.props.onRetrieve()
+        }, 1000)
+        
+      },
+      error => {
+        this.setState({
+          isLoading: false
+        })
+      }
+      );
     }
-    );
   }
 
   renderContent() {
     const { ledger, theme } = this.props.state;
+    const { data } = this.state; 
     return (
       <View style={[Style.CreateRequestContainer, {
           width: '100%',
@@ -271,7 +334,7 @@ class ProposalModal extends Component {
 
 
               <Button 
-                title={'Continue'}
+                title={data ? 'Update' : 'Submit'}
                 onClick={() => this.submit()}
                 style={{
                   width: '45%',

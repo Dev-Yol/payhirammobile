@@ -132,7 +132,6 @@ class ProposalCard extends Component {
             flexDirection: 'row',
             marginBottom: 10,
           }}>
-          {user.account_type != 'USER' && (
             <View
               style={{
                 width: '100%',
@@ -159,7 +158,6 @@ class ProposalCard extends Component {
                 }}
               />
             </View>
-          )}
         </View>
       </View>
     );
@@ -182,7 +180,7 @@ class ProposalCard extends Component {
                 flexDirection: 'row'
               }}>
               <Button
-                title={'Withdraw'}
+                title={'Withdraw Proposal'}
                 onClick={() => {this.withdrawAlert(item)}}
                 style={{
                   width: '45%',
