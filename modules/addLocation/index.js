@@ -30,7 +30,8 @@ class AddLocation extends Component {
      * Executed each time we enter in this component &&
      * will be executed after going back to this component 
     */
-    if (this.state.addingAddress) {
+   console.log('[location]', this.props.state.location);
+    if (this.state.addingAddress && this.props.state.location != null) {
       this.setState({ isAddingAddressName: true })
     }
   }
@@ -117,10 +118,12 @@ class AddLocation extends Component {
     console.log("parameters: ", parameters)
     this.setState({isLoading: true, executing: true})
     Api.request(Routes.addAddress, parameters, response => {
+      const {setLocation} = this.props
       console.log('=================== \nAdding Address Response: \n===================', response)
       this.retrieveAddresses();
       this.setState({isAddingAddressName: false})
       this.setState({isLoading: false, executing: false})
+      setLocation(null)
     }, error => {
       console.log('Adding Address Error: ', error)
     })
@@ -163,9 +166,12 @@ class AddLocation extends Component {
         </ScrollView>
 
         <Button
-          onClick={() => {
-            this.redirect('locationWithMapStack')
-            this.setState({addingAddress: true})
+          onClick={async () => {
+            const {setLocation} = await this.props
+            await setLocation(null)
+            console.log('[lcoation again]', this.props.state.location);
+            await this.redirect('locationWithMapStack')
+            await this.setState({addingAddress: true})
           }}
           title={'Add Address'}
           style={{
@@ -181,9 +187,6 @@ class AddLocation extends Component {
           animationType="fade"
           transparent={true}
           visible={this.state.isAddingAddressName}
-          onRequestClose={() => {
-            Alert.alert("Modal has been closed.");
-          }}
         >
           <View style={Style.insideModalCenteredView}>
             <View style={Style.modalView}>
