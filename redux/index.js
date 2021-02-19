@@ -34,6 +34,7 @@ const types = {
   SET_VALIDATE_OTP: 'SET_VALIDATE_OTP',
   VIEW_MENU: 'VIEW_MENU',
   SET_REQUEST: 'SET_REQUEST',
+  SET_DEFAULT_ADDRESS: 'SET_DEFAULT_ADDRESS'
 };
 
 export const actions = {
@@ -123,6 +124,9 @@ export const actions = {
   },
   viewMenu(isViewing){
     return {type: types.VIEW_MENU, isViewing}
+  },
+  setDefaultAddress(defaultAddress) {
+    return {type: types.SET_DEFAULT_ADDRESS, defaultAddress}
   }
 };
 
@@ -159,7 +163,8 @@ const initialState = {
   qrCodeModal: false,
   requestInput: null,
   isValidOtp: false,
-  isViewing: false
+  isViewing: false,
+  defaultAddress: null
 };
 
 storeData = async (key, value) => {
@@ -190,7 +195,7 @@ const reducer = (state = initialState, action) => {
   const {theme} = action;
   const {requestInput} = action;
   const {isValidOtp} = action;
-  const { isViewing, request } = action;
+  const { isViewing, request, defaultAddress } = action;
   switch (type) {
     case types.LOGOUT:
       // storeData('token', '');
@@ -462,6 +467,11 @@ const reducer = (state = initialState, action) => {
         ...state,
         isViewing,
       };
+    case types.SET_DEFAULT_ADDRESS: 
+      return {
+        ...state,
+        defaultAddress
+      }
     default:
       return {...state, nav: state.nav};
   }

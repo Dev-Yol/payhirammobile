@@ -15,7 +15,7 @@ class AddLocation extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedAddress: 0,
+      selectedAddress: null,
       addresses: [],
       isAddingAddressName: false,
       addingAddress: false,
@@ -50,7 +50,9 @@ class AddLocation extends Component {
   }
 
   selectHandler = (index) => {
+    const {setDefaultAddress} = this.props;
     this.setState({ selectedAddress: index });
+    setDefaultAddress(this.state.addresses[index]);
   };
 
   renderAddresses = () => {
@@ -64,6 +66,7 @@ class AddLocation extends Component {
           address={address.route}
           country={address.country}
           onPress={this.selectHandler}
+          deletingClicked={() => this.removeAddress(index)}
           backgroundColor={
             this.state.selectedAddress === index ? '#22B173' : '#FFFFFF'
           }
@@ -76,10 +79,11 @@ class AddLocation extends Component {
   };
 
   retrieveAddresses = () => {
+    const {user} = this.props.state
     let parameters = {
       condition: [
         {
-          value: this.props.state.user.account_information.account_id,
+          value: user.id,
           column: 'account_id',
           clause: '=',
         }
@@ -101,7 +105,7 @@ class AddLocation extends Component {
     const {user, location} = this.props.state;
     const {value} = this.state
     let parameters = {
-      account_id: user.account_information.account_id,
+      account_id: user.id,
       latitude: location.latitude,
       longitude: location.longtitude,
       route: location.address,
@@ -122,11 +126,11 @@ class AddLocation extends Component {
     })
   }
 
-  removeAddress = (id) => {
+  removeAddress = (index) => {
     let parameter = {
-      id: id
+      id: this.state.addresses[index].id
     }
-
+    this.setState({isLoading: true})
     Api.request(Routes.removeAddress, parameter, response => {
       console.log('=================== \nRemoving Address Response: \n===================', response)
       this.retrieveAddresses();
@@ -149,6 +153,7 @@ class AddLocation extends Component {
         flex: 1,
         paddingBottom: 70
       }}>
+        {isLoading ? <Spinner mode="overlay" /> : null}
         <ScrollView showsVerticalScrollIndicator={false}>
           <View>
 
@@ -258,7 +263,6 @@ class AddLocation extends Component {
             </View>
           </View>
         </Modal>
-        {isLoading ? <Spinner mode="overlay" /> : null}
       </View>
     );
   }
@@ -271,6 +275,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     // updateUser: (user) => dispatch(actions.updateUser(user)),
     setLocation: (location) => dispatch(actions.setLocation(location)),
+    setDefaultAddress: (defaultAddress) => dispatch(actions.setDefaultAddress(defaultAddress))
   };
 };
 
