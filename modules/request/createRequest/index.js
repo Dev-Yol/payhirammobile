@@ -109,8 +109,8 @@ class CreateRequest extends Component {
   };
 
   createRequest = async () => {
-    const {user, location} = this.props.state;
-    if(user == null || location == null){
+    const {user, defaultAddress} = this.props.state;
+    if(user == null || defaultAddress == null){
       return
     }else if(this.state.type == null || this.state.money_type == null || this.state.amount == null || this.state.neededOn == null || this.state.reason == null) {
       Alert.alert(
@@ -140,7 +140,7 @@ class CreateRequest extends Component {
       coupon: null,
       currency: this.state.currency,
       interest: null,
-      location_id: location.id,
+      location_id: defaultAddress.id,
       max_charge: this.state.maximumProcessingCharge,
       months_payable: null,
       needed_on: this.state.neededOn,
@@ -169,7 +169,7 @@ class CreateRequest extends Component {
   };
 
   render() {
-    const { ledger, theme, location } = this.props.state;
+    const { ledger, theme, defaultAddress } = this.props.state;
     return (
       <View style={{
         flex: 1
@@ -196,7 +196,7 @@ class CreateRequest extends Component {
 
 
             <LocationTextInput 
-              variable={location}
+              variable={defaultAddress !== null ? defaultAddress.address_type : null}
               label={'Select Location'}
               placeholder={'Select Location'}
               onError={false}
