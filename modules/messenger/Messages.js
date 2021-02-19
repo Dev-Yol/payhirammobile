@@ -579,6 +579,7 @@ class Messages extends Component{
   }
 
   settingsAction(data) {
+    console.log(data.payload, "=========================");
     /**
     * When one of the settings menu is clicked
     */
