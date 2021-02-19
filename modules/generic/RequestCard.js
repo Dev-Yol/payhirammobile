@@ -211,9 +211,9 @@ class RequestCard extends Component {
       </View>
     );
   };
-
   render() {
     const { data } = this.props;
+    console.log('[request card]', data)
     const { user } = this.props.state;
     return (
       <TouchableOpacity

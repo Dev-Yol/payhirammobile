@@ -14,7 +14,7 @@ class Circle extends Component{
   constructor(props){
     super(props);
     this.state = {
-      data: null,
+      data: [],
       limit: 10,
       offset: 0,
       isLoading: false,
@@ -46,6 +46,7 @@ class Circle extends Component{
     console.log('parameter', parameter)
     this.setState({isLoading: true})
     Api.request(Routes.circleRetrieve, parameter, response => {
+      console.log('parameter', response.data)
       this.setState({isLoading: false})
       if (response != null) {
         this.setState({
@@ -242,15 +243,10 @@ class Circle extends Component{
             height: height
           }}>
             {(data && user) && this.renderCircles(data)}
-            {data == null && this.state.isLoading == false && (
-              <Empty refresh={true} onRefresh={() => this.onRefresh()} />
-            )}
           </View>
         </ScrollView>
+        {data.length < 1 && this.state.isLoading == false && (<Empty refresh={true} onRefresh={() => this.retrieve(true)} />)}
         {this.state.isLoading ? <Spinner mode="overlay"/> : null }
-        {data == null && this.state.isLoading == false && (
-          <Empty refresh={true} onRefresh={() => this.retrieve(false)} />
-        )}
       </View>
     );
   }
