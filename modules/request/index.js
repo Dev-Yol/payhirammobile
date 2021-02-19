@@ -428,10 +428,11 @@ class Requests extends Component {
             borderRadius: 35
           }]}
           onPress={() => {
-            {
-              user.status == 'verified' ? 
-              this.props.navigation.navigate('createRequestStack') : this.validate()
-            }
+            // {
+            //   user.status == 'verified' ? 
+            //   this.props.navigation.navigate('createRequestStack') : this.validate()
+            // }
+              this.props.navigation.navigate('createRequestStack')
           }}>
           <FontAwesomeIcon
             icon={faPlus}

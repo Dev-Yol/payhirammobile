@@ -147,7 +147,7 @@ class RequestItem extends Component {
     this.setState({peer: data})
     Alert.alert(
       'Confirmation',
-      'Are you sure you want to accept this request?',
+      'Are you sure you want to accept this proposal?',
       [
         {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
         {text: 'OK', onPress: () => this.createThread(data)},

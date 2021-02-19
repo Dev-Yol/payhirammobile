@@ -46,7 +46,7 @@ const TransactionsStack = createStackNavigator({
   transactionsScreen: {
     screen: Transactions,
     navigationOptions: ({navigation}) => ({
-      title: 'Transactions',
+      title: 'Transaction History',
       headerLeft: <HeaderOptionsConnect navigationProps={navigation} />,
       ...BasicStyles.headerDrawerStyle
     }),

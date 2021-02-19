@@ -113,7 +113,7 @@ class ViewProfile extends Component {
   retrieveAccount = () => {
     let parameter = {
       condition: [{
-        value: this.props.navigation.state.params.user  ? this.props.navigation.state.params.user.account.code : this.props.navigation.state.params.code,
+        value: this.props.navigation.state.params.user ? this.props.navigation.state.params.user.code : this.props.navigation.state.params.code,
         clause: '=',
         column: 'code'
       }]
