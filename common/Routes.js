@@ -72,5 +72,7 @@ export default {
   circleDelete: apiUrl + 'my_circle/delete',
   retrieveSavedAddresses: apiUrl + 'locations/retrieve',
   addAddress: apiUrl + 'locations/create',
-  removeAddress: apiUrl + 'locations/delete'
+  removeAddress: apiUrl + 'locations/delete',
+  uploadImage: apiUrl + 'payloads/create',
+  retrieveImage: apiUrl + 'payloads/retrieve'
 };

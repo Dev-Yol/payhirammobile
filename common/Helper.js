@@ -215,8 +215,8 @@ export default {
       payload: 'redirect',
       payload_value: 'valid_id',
       button: {
-        title: 'Delete',
-        color: Color.danger
+        title: 'Add',
+        color: Color.success
       }
     }
   ],
