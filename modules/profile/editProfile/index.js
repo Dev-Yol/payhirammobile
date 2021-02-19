@@ -49,7 +49,7 @@ class EditProfile extends Component {
     const { user } = this.props.state
     this.retrieve()
     if((this.state.email != null || this.state.cellular_number != null || this.state.first_name != null || this.state.middle_name != null || this.state.last_name != null ||
-      this.state.sex != null || this.state.address != null || this.state.birthDate != null) && user.status != 'verified'){
+      this.state.sex != null || this.state.address != null || this.state.birthDate != null) && user.status != 'granted'){
         Alert.alert(
           'Verification Link',
           'Click the button below for an appointment.',

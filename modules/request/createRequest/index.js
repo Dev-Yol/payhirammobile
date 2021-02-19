@@ -110,9 +110,9 @@ class CreateRequest extends Component {
 
   createRequest = async () => {
     const {user, defaultAddress} = this.props.state;
-    if(user == null || defaultAddress == null){
+    if(user == null){
       return
-    }else if(this.state.type == null || this.state.money_type == null || this.state.amount == null || this.state.neededOn == null || this.state.reason == null) {
+    }else if(this.state.type == null || this.state.money_type == null || this.state.amount == null || this.state.neededOn == null || this.state.reason == null || defaultAddress == null) {
       Alert.alert(
         'Error Message',
         'All fields with (*) are required.',
