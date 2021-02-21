@@ -116,7 +116,7 @@ class Requests extends Component {
     }
   };
 
-  retrieve = (scroll, flag, backgroundFlag = false) => {
+  retrieve = (scroll, flag, loading = true) => {
     console.log("[Request Retrieve] On Sending Request")
     const {user, searchParameter} = this.props.state;
     const { data, tempData } = this.state;
@@ -125,7 +125,7 @@ class Requests extends Component {
     }
     let parameter = {
       account_id: user.id,
-      offset: backgroundFlag == false ? this.state.offset * this.state.limit : (this.state.offset + 1) * this.state.limit,
+      offset: flag == true && this.state.offset > 0 ? (this.state.offset * this.state.limit) : this.state.offset,
       limit: this.state.limit,
       sort: {
         column: 'created_at',
@@ -135,45 +135,33 @@ class Requests extends Component {
       column: searchParameter == null ? 'created_at' : searchParameter.column,
       type: user.account_type,
     };
-    this.setState({isLoading: backgroundFlag == false && data.length > 0 ? false : true}); 
-    if(tempData.length > 0){
-      console.log("[Request Retrieve] with existing data")
-      this.manageData(scroll, flag, backgroundFlag, tempData)
-    }else{
-      console.log("[Request Retrieve] parameter", parameter)
-      Api.request( Routes.requestRetrieve, parameter, (response) => {
+    this.setState({isLoading: loading == false ? false : true}); 
+
+    console.log("[Request Retrieve] parameter", parameter)
+    Api.request( Routes.requestRetrieve, parameter, (response) => {
         this.setState({
           size: response.size ? response.size : 0,
+          isLoading: false
         });
-        this.manageData(scroll, flag, backgroundFlag, response)
+        if(response.data.length > 0){
+          this.setState({
+            data: flag == false ? response.data : _.uniqBy([...this.state.data, ...response.data], 'id'),
+            numberOfPages: parseInt(response.size / this.state.limit) + (response.size % this.state.limit ? 1 : 0),
+            offset: flag == false ? 1 : (this.state.offset + 1)
+          })
+        }else{
+          this.setState({
+            data: flag == false ? [] : this.state.data,
+            numberOfPages: null,
+            offset: flag == false ? 0 : this.state.offset
+          })
+        }
       },
       (error) => {
         this.setState({isLoading: false});
-      },
+      }
     ); 
-    }
   };
-
-  manageData(scroll, flag, backgroundFlag, response){
-    console.log("[Retrieve Request] Manage Data")
-    const { tempData, data } = this.state;
-    this.setState({
-      isLoading: false
-    })
-
-    if(response.data.length > 0){
-      this.setState({
-        data: scroll == false ? response.data : _.uniqBy([...data, ...response.data], 'id'),
-        offset: scroll == false ? 1 : (this.state.offset + 1)
-      })
-    }else{
-      this.setState({
-        data: flag == false ? [] : data,
-        numberOfPages: null,
-        offset: flag == false ? 0 : this.state.offset
-      })
-    }
-  }
 
   onRefresh = () => {
     const {setSearchParameter} = this.props;
@@ -404,7 +392,7 @@ class Requests extends Component {
                 // this.retrieve(false)
               }
             }
-            if(scrollingHeight >= (totalHeight)) {
+            if(scrollingHeight >= (totalHeight + 10)) {
               if(isLoading == false){
                 this.retrieve(true, true, false)
               }

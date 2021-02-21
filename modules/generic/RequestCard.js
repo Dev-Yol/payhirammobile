@@ -213,7 +213,6 @@ class RequestCard extends Component {
   };
   render() {
     const { data } = this.props;
-    console.log('[request card]', data)
     const { user } = this.props.state;
     return (
       <TouchableOpacity
