@@ -108,7 +108,7 @@ class CreateRequest extends Component {
     this.setState({maximumProcessingCharge: maximumProcessingCharge});
   };
 
-  createRequest = async () => {
+  createRequest = () => {
     const {user, defaultAddress} = this.props.state;
     if(user == null){
       return
@@ -148,11 +148,15 @@ class CreateRequest extends Component {
       type: this.state.type,
       money_type: this.state.money_type
     };
-    this.props.setRequestInput(parameters);
-    this.sendRequest()
-    // this.props.navigation.navigate('otpStack', {
-    //   performTransaction: this.sendRequest,
-    // });
+    console.log('[Create Requests] Create parameters', parameters)
+    // this.props.setRequestInput(parameters);
+    // this.sendRequest()
+    this.props.navigation.navigate('otpStack', {
+      data: {
+        payload: 'createRequest',
+        data: parameters
+      }
+    });
   };
 
   sendRequest = () => {

@@ -25,7 +25,7 @@ class RequestCard extends Component {
               paddingLeft: 10,
               width: '40%',
             }}>
-            {item.account.username}
+            {item?.account?.username}
           </Text>
           <View
             style={{
