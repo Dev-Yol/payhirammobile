@@ -42,7 +42,10 @@ class EditProfile extends Component {
       sex: null,
       id: null,
       address: null,
-      birthDate: null
+      birthDate: null,
+      profile: null,
+      url: null,
+      photo: null
     };
   }
   
@@ -73,29 +76,28 @@ class EditProfile extends Component {
       return
     }
     let parameter = {
-      condition: [{
-        value: user.id,
-        clause: '=',
-        column: 'account_id'
-      }]
+      account_id: user.id
     }
     this.setState({
       isLoading: true, 
       showDatePicker: false
     })
-    Api.request(Routes.accountInformationRetrieve, parameter, response => {
+    Api.request(Routes.accountProfileRetrieve, parameter, response => {
       this.setState({isLoading: false})
       if(response.data.length > 0){
         let data = response.data[0]
+        const { account } = data
+        console.log("[RESPONSEs]", account);
         this.setState({
-          id: data.id,
-          first_name: data.first_name,
-          middle_name: data.middle_name,
-          last_name: data.last_name,
-          sex: data.sex,
-          cellular_number: data.cellular_number,
-          address: data.address,
-          birthDate: data.birth_date
+          id: account.id,
+          first_name: account.information.first_name,
+          middle_name:  account.information.middle_name,
+          last_name:  account.information.last_name,
+          sex:  account.information.sex,
+          cellular_number:  account.information.cellular_number,
+          address:  account.information.address,
+          birthDate:  account.information.birth_date,
+          profile: account,
         })
         if(data.birth_date != null){
           this.setState({
@@ -116,6 +118,57 @@ class EditProfile extends Component {
         })
       }
     });
+  }
+
+  upload = () => {
+    const { user } = this.props.state
+    const options = {
+      noData: true
+    }
+    ImagePicker.launchImageLibrary(options, response => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+        this.setState({ photo: null })
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+        this.setState({ photo: null })
+      } else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+        this.setState({ photo: null })
+      }else {
+        if(response.fileSize >= 1000000){
+          Alert.alert('Notice', 'File size exceeded to 1MB')
+          return
+        }
+        this.setState({ photo: response })
+        let formData = new FormData();
+        let uri = Platform.OS == "android" ? response.uri : response.uri.replace("file://", "");
+        formData.append("file", {
+          name: response.fileName,
+          type: response.type,
+          uri: uri
+        });
+        formData.append('file_url', response.fileName);
+        formData.append('account_id', user.id);
+
+        this.setState({isLoading: true})
+        Api.upload(Routes.accountProfileCreate, formData, response => {
+          this.setState({isLoading: false})
+          console.log("[PARAMETER]", response);
+          if(response.data !== null) {
+            Alert.alert(
+              'Message',
+              'Image successfully uploaded',
+              [
+                {text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel'}
+              ],
+              { cancelable: false }
+            )
+            this.retrieve();
+          }
+        })
+      }
+    })
   }
 
   update = () => {
@@ -183,9 +236,9 @@ class EditProfile extends Component {
             }}>
 
             {
-              user && (
+              this.state.profile && (
                 <UserImage
-                  user={user}
+                  user={this.state.profile}
                   style={{
                     height: 100,
                     width: 100

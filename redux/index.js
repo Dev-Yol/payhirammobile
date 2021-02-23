@@ -34,7 +34,8 @@ const types = {
   SET_VALIDATE_OTP: 'SET_VALIDATE_OTP',
   VIEW_MENU: 'VIEW_MENU',
   SET_REQUEST: 'SET_REQUEST',
-  SET_DEFAULT_ADDRESS: 'SET_DEFAULT_ADDRESS'
+  SET_DEFAULT_ADDRESS: 'SET_DEFAULT_ADDRESS',
+  SET_UNREAD_MESSAGES: 'SET_UNREAD_MESSAGES'
 };
 
 export const actions = {
@@ -127,6 +128,9 @@ export const actions = {
   },
   setDefaultAddress(defaultAddress) {
     return {type: types.SET_DEFAULT_ADDRESS, defaultAddress}
+  },
+  setUnReadMessages(messages) {
+    return {type: types.SET_UNREAD_MESSAGES, messages}
   }
 };
 
@@ -142,6 +146,7 @@ const initialState = {
     groupId: null,
     messages: null,
   },
+  unReadMessages: [],
   searchParameter: null,
   location: {
     id: 1,
@@ -471,6 +476,17 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         defaultAddress
+      }
+    case types.SET_UNREAD_MESSAGES: 
+      let newUnread = []
+      if(messages.length == 0){
+        newUnread = []
+      }else{
+        newUnread = state.unReadMessages.push(messages)
+      }
+      return {
+        ...state,
+        unReadMessages: newUnread
       }
     default:
       return {...state, nav: state.nav};
