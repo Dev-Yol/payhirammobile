@@ -5,17 +5,17 @@ import {
   ScrollView,
   TextInput,
   Alert,
+  Image,
   TouchableOpacity,
   TouchableHighlight,
 } from 'react-native';
 import { Picker } from '@react-native-community/picker';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import ImagePicker from 'react-native-image-picker';
 import Api from 'services/api/index.js';
 import {
   faCheckCircle,
   faUserCircle,
-  faUpload,
+  faUpload
 } from '@fortawesome/free-solid-svg-icons';
 import {BasicStyles, Color, Routes} from 'common';
 import {Rating, DateTime} from 'components';
@@ -42,7 +42,7 @@ class EditProfile extends Component {
       sex: null,
       id: null,
       address: null,
-      birthDate: null,
+      // birthDate: null,
       profile: null,
       url: null,
       photo: null
@@ -53,7 +53,8 @@ class EditProfile extends Component {
     const { user } = this.props.state
     this.retrieve()
     if((this.state.email != null || this.state.cellular_number != null || this.state.first_name != null || this.state.middle_name != null || this.state.last_name != null ||
-      this.state.sex != null || this.state.address != null || this.state.birthDate != null) && user.status != 'granted'){
+      this.state.sex != null || this.state.address != null) && user.status != 'granted'){
+      // this.state.sex != null || this.state.address != null || this.state.birthDate != null) && user.status != 'granted'){
         Alert.alert(
           'Verification Link',
           'Click the button below for an appointment.',
@@ -96,15 +97,15 @@ class EditProfile extends Component {
           sex:  account.information.sex,
           cellular_number:  account.information.cellular_number,
           address:  account.information.address,
-          birthDate:  account.information.birth_date,
-          profile: account,
+          // birthDate:  account.information.birth_date,
+          profile: account
         })
-        if(data.birth_date != null){
-          this.setState({
-            dateFlag: true,
-            birthDateLabel: data.birth_date
-          })
-        }
+        // if(data.birth_date != null){
+        //   this.setState({
+        //     dateFlag: true,
+        //     birthDateLabel: data.birth_date
+        //   })
+        // }
       }else{
         this.setState({
           id: null,
@@ -113,8 +114,8 @@ class EditProfile extends Component {
           last_name: null,
           sex: null,
           cellular_number: null,
-          address: null,
-          birthDate: new Date(),
+          address: null
+          // birthDate: new Date(),
         })
       }
     });
@@ -175,7 +176,7 @@ class EditProfile extends Component {
     const { user } = this.props.state;
     if(user == null){
       return
-    }else if(this.state.first_name == null || this.state.middle_name == null || this.state.last_name == null || this.state.cellular_number == null || this.state.sex == null || this.state.address == null || this.state.birthDate == null){
+    }else if(this.state.first_name == null || this.state.middle_name == null || this.state.last_name == null || this.state.cellular_number == null || this.state.sex == null || this.state.address == null){
       Alert.alert(
         'Error Message',
         'Please fill in all the fields.',
@@ -185,7 +186,7 @@ class EditProfile extends Component {
         { cancelable: false }
       )
       return
-    }else if(this.state.cellular_number.length < 11 || (this.state.cellular_number.substr(0, 1) != '09')){
+    }else if(this.state.cellular_number.length != 11 || (this.state.cellular_number.substr(0, 2) != '09')){
       Alert.alert(
         'Error Message',
         'Please input a valid phone number.',
@@ -205,7 +206,7 @@ class EditProfile extends Component {
       cellular_number: this.state.cellular_number,
       sex: this.state.sex,
       address: this.state.address,
-      birth_date: this.state.birthDate,
+      // birth_date: this.state.birthDate,
       email: this.state.email
     };
     this.setState({ isLoading: true });
@@ -336,7 +337,7 @@ class EditProfile extends Component {
               required={true}
             /> */}
             {/* <View style={{flexDirection: 'row', justifyContent: 'center'}}> */}
-              <View style={{width: '90%', marginLeft: '5%'}}>
+              {/* <View style={{width: '90%', marginLeft: '5%'}}>
                 <Text>Birthdate</Text>
                 <DateTime
                   type={'date'}
@@ -350,7 +351,7 @@ class EditProfile extends Component {
                     marginTop: 1
                   }}
                 />
-              </View>
+              </View> */}
               <View style={{width: '90%', marginLeft: '5%'}}>
                 <Text>Gender</Text>
                 <View

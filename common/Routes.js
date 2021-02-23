@@ -76,5 +76,6 @@ export default {
   addAddress: apiUrl + 'locations/create',
   removeAddress: apiUrl + 'locations/delete',
   uploadImage: apiUrl + 'payloads/create',
-  retrieveImage: apiUrl + 'payloads/retrieve'
+  retrieveImage: apiUrl + 'payloads/retrieve',
+  transferFund: apiUrl + 'fund_transfer_charges/update'
 };
