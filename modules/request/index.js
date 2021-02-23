@@ -392,9 +392,9 @@ class Requests extends Component {
                 // this.retrieve(false)
               }
             }
-            if(scrollingHeight >= (totalHeight + 10)) {
+            if(Math.round(scrollingHeight) >= Math.round(totalHeight)) {
               if(isLoading == false){
-                this.retrieve(true, true, false)
+                this.retrieve(true, true, true)
               }
             }
           }}>
