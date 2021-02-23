@@ -47,6 +47,10 @@ class OTP extends Component {
           console.log('[OTP] On createRequest', data)
           this.sendCreateRequest(data.data)
           break;
+        case 'transferFund':
+          console.log('[OTP] On transferFund', data)
+          this.sendTransferFund(data.data)
+          break;
       }
     } 
   }
@@ -105,6 +109,24 @@ class OTP extends Component {
           this.props.navigation.navigate('requestItemStack', {
             data: response.data
           })          
+        }
+      },
+      (error) => {
+        console.log('API ERROR', error);
+        this.setState({isLoading: false});
+      },
+    );
+  };
+
+  sendTransferFund = (parameter) => {
+    console.log('OTP Transfer fund API Call')
+    Api.request(Routes.transferFund, parameter, response => {
+        this.setState({isLoading: false});
+        console.log('[OTP] Transfer fund response', response)
+        if(response.data != null){
+          this.props.navigation.navigate('requestItemStack', {
+            data: response.data
+          })     
         }
       },
       (error) => {

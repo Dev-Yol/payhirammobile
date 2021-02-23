@@ -5,17 +5,17 @@ import {
   ScrollView,
   TextInput,
   Alert,
+  Image,
   TouchableOpacity,
   TouchableHighlight,
 } from 'react-native';
 import { Picker } from '@react-native-community/picker';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import ImagePicker from 'react-native-image-picker';
 import Api from 'services/api/index.js';
 import {
   faCheckCircle,
   faUserCircle,
-  faUpload,
+  faUpload
 } from '@fortawesome/free-solid-svg-icons';
 import {BasicStyles, Color, Routes} from 'common';
 import {Rating, DateTime} from 'components';
@@ -118,48 +118,6 @@ class EditProfile extends Component {
     });
   }
 
-  upload = () => {
-    const { user } = this.props.state
-    const options = {
-      noData: true
-    }
-    ImagePicker.launchImageLibrary(options, response => {
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-        this.setState({ photo: null })
-      } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-        this.setState({ photo: null })
-      } else if (response.customButton) {
-        console.log('User tapped custom button: ', response.customButton);
-        this.setState({ photo: null })
-      }else {
-        if(response.fileSize >= 1000000){
-          Alert.alert('Notice', 'File size exceeded to 1MB')
-          return
-        }
-        let parameter = {
-          account_id: user.id,
-          file_url: response.uri
-        }
-        this.setState({isLoading: true})
-        Api.request(Routes.imageUpload, parameter, response => {
-          this.setState({isLoading: false})
-          if(response.data !== null) {
-            Alert.alert(
-              'Message',
-              'Image successfully uploaded',
-              [
-                {text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel'}
-              ],
-              { cancelable: false }
-            )
-          }
-        })
-      }
-    })
-  }
-
   update = () => {
     const { user } = this.props.state;
     if(user == null){
@@ -174,7 +132,7 @@ class EditProfile extends Component {
         { cancelable: false }
       )
       return
-    }else if(this.state.cellular_number.length < 11 || (this.state.cellular_number.substr(0, 1) != '09')){
+    }else if(this.state.cellular_number.length != 11 || (this.state.cellular_number.substr(0, 2) != '09')){
       Alert.alert(
         'Error Message',
         'Please input a valid phone number.',

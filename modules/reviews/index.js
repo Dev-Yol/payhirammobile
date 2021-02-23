@@ -18,6 +18,7 @@ class Reviews extends Component {
       selectedStar: 0,
       isLoading: false,
       comment: '',
+      data: null
     };
   }
 
@@ -28,6 +29,7 @@ class Reviews extends Component {
   retrieve = () => {
     const { data } = this.props.navigation.state.params;
     const { user } = this.props.state;
+    // if(user == null || data == null){
     if(user == null || data == null || (data && data.partner == null)){
       Alert.alert(
         "Error Message",
@@ -70,7 +72,7 @@ class Reviews extends Component {
       }
       this.retrieveUser(data.account_id)
     }
-    Api.request(Routes.ratingsRetrieve, parameters, response => {
+    Api.request(Routes.ratingsRetrieve, parameter, response => {
         this.setState({isLoading: false});
         console.log('response', response)
       },
