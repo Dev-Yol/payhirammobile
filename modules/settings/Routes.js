@@ -18,11 +18,11 @@ const navigation = [
     route: 'editProfileStack',
     icon: faEdit
   },
-  {
-    title: 'Payment Methods',
-    route: 'paymentMethodsStack',
-    icon: faCreditCard
-  },
+  // {
+  //   title: 'Payment Methods',
+  //   route: 'paymentMethodsStack',
+  //   icon: faCreditCard
+  // },
   {
     title: 'Notifications',
     route: 'notificationSettingsStack',
