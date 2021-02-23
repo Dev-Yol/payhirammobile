@@ -35,7 +35,8 @@ const types = {
   VIEW_MENU: 'VIEW_MENU',
   SET_REQUEST: 'SET_REQUEST',
   SET_DEFAULT_ADDRESS: 'SET_DEFAULT_ADDRESS',
-  SET_UNREAD_MESSAGES: 'SET_UNREAD_MESSAGES'
+  SET_UNREAD_MESSAGES: 'SET_UNREAD_MESSAGES',
+  SET_UNREAD_PEER_REQUEST: 'SET_UNREAD_PEER_REQUEST',
 };
 
 export const actions = {
@@ -131,6 +132,9 @@ export const actions = {
   },
   setUnReadMessages(messages) {
     return {type: types.SET_UNREAD_MESSAGES, messages}
+  },
+  setUnReadPeerRequest(message) {
+    return {type: types.SET_UNREAD_PEER_REQUEST, messages}
   }
 };
 
@@ -169,7 +173,8 @@ const initialState = {
   requestInput: null,
   isValidOtp: false,
   isViewing: false,
-  defaultAddress: null
+  defaultAddress: null,
+  unReadPeerRequest: []
 };
 
 storeData = async (key, value) => {
@@ -479,7 +484,7 @@ const reducer = (state = initialState, action) => {
       }
     case types.SET_UNREAD_MESSAGES: 
       let newUnread = []
-      if(messages.length == 0){
+      if(messages.length == null){
         newUnread = []
       }else{
         newUnread = state.unReadMessages.push(messages)
@@ -487,6 +492,17 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         unReadMessages: newUnread
+      }
+    case types.SET_UNREAD_PEER_REQUEST: 
+      let newUnreadPeerRequest = []
+      if(messages == null){
+        newUnreadPeerRequest = []
+      }else{
+        newUnreadPeerRequest = state.unReadPeerRequest.push(messages)
+      }
+      return {
+        ...state,
+        unReadPeerRequest: newUnreadPeerRequest
       }
     default:
       return {...state, nav: state.nav};

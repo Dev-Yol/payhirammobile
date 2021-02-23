@@ -40,10 +40,6 @@ class NavigationDrawerStructureRight extends Component {
     return (
       <View style={{ flexDirection: 'row', width: width }}>
         <TouchableOpacity
-          onPress={this.toggleDrawer.bind(this)}
-          underlayColor={Color.secondary}
-        >
-        <View
           style={{
             height: 50,
             width: 50,
@@ -53,24 +49,66 @@ class NavigationDrawerStructureRight extends Component {
             alignItems: 'center',
             marginLeft: 10,
             marginTop: 10
-          }}>
-          <TouchableOpacity
-            disabled
-            underlayColor={theme ? theme.secondary : Color.secondary}
-            style={{
-              width: '16.5%',
-              alignItems: 'center',
-              marginLeft: '0.5%',
-            }}>
-            {/*Donute Button Image */}
+          }}
+          onPress={this.toggleDrawer.bind(this)}
+          underlayColor={Color.secondary}
+          >
             <FontAwesomeIcon
               icon={faBars}
               size={20}
               style={{ color: '#FFFFFF' }}
             />
-          </TouchableOpacity>
-        </View>
         </TouchableOpacity>
+        {
+          (notifications && notifications.unread > 0) && (
+            <TouchableOpacity
+              style={{
+                height: 50,
+                width: 50,
+                borderRadius: 50,
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginLeft: width - 120,
+                marginTop: 10
+              }}
+              onPress={() => this.props.navigationProps.navigate('notificationStack')}
+              underlayColor={Color.secondary}
+              >
+                <View style={{
+                  width: '100%',
+                  flexDirection: 'row',
+                  position: 'relative'
+                }}>
+                  <FontAwesomeIcon
+                    icon={faBell}
+                    size={30}
+                    style={{ color: Color.gray }}
+                  />
+                  {
+                    notifications.unread && (
+                      <View style={{
+                          backgroundColor: Color.danger,
+                          height: 20,
+                          width: 20,
+                          borderRadius: 10,
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          position: 'absolute',
+                          zIndex: 1,
+                          right: 10,
+                          bottom: 1
+                        }}>
+                          <Text style={{
+                            color: Color.white,
+                            fontSize: 9
+                          }}>{notifications.unread}</Text>
+                      </View>
+                    )
+                  }
+                </View>
+            </TouchableOpacity>
+          )
+        }
       </View>
     );
   }
