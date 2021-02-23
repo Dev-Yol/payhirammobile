@@ -154,6 +154,7 @@ class Notifications extends Component{
     return (
       <ScrollView
         style={Style.ScrollView}
+        showsVerticalScrollIndicator={false}
         onScroll={(event) => {
           if(event.nativeEvent.contentOffset.y <= 0) {
             if(this.state.isLoading == false){
@@ -165,7 +166,8 @@ class Notifications extends Component{
         {notifications == null || (notifications != null && notifications.notifications == null) && (<Empty refresh={true} onRefresh={() => this.retrieve()}/>)}
         {isLoading ? <Spinner mode="overlay"/> : null }
         <View style={[Style.MainContainer, {
-          minHeight: height
+          minHeight: height,
+          marginTop: 10
         }]}>
           {
             notifications && (

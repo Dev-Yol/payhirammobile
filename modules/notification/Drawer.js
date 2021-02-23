@@ -12,7 +12,7 @@ class HeaderOptions extends Component {
     super(props);
   }
   back = () => {
-    this.props.navigationProps.navigate('drawerStack');
+    this.props.navigationProps.pop();
   };
   render() {
     const { theme } = this.props.state;
@@ -73,11 +73,7 @@ const NotificationStack = createStackNavigator({
       title: 'Notifications',
       headerLeft: <HeaderOptionsConnect navigationProps={navigation} />,
       headerRight: <HeaderRightWithRedux navigationProps={navigation} />,
-      drawerLabel: 'Notifications',
-      headerStyle: {
-        backgroundColor: Color.primary,
-      },
-      headerTintColor: '#fff',
+      ...BasicStyles.headerDrawerStyle
     })
   }
 })
