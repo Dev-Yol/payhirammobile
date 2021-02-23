@@ -57,6 +57,7 @@ class AccountSettings extends Component {
         (response) => {
           this.setState({ isLoading: false });
           alert('Email updated!');
+          this.state.email = ''
         },
         (error) => {
           console.log('update email error', error);
@@ -97,6 +98,8 @@ class AccountSettings extends Component {
           console.log('update password response', response);
           this.setState({ isLoading: false });
           alert('Password updated!');
+          this.state.password = ''
+          this.state.confirmPassword = ''
         },
         (error) => {
           console.log('update password error', error);
