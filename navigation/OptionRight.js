@@ -50,7 +50,7 @@ class NavigationDrawerStructureRight extends Component {
             marginLeft: 10,
             marginTop: 10
           }}
-          onPress={() => this.toggleDrawer.bind(this)}
+          onPress={this.toggleDrawer.bind(this)}
           underlayColor={Color.secondary}
           >
             <FontAwesomeIcon
