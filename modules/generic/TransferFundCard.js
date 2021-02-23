@@ -93,44 +93,6 @@ class TransferFundCard extends Component {
             navigation={this.props.navigation}
             />
         </View>
-        {/* <View style={{flexDirection: 'row', marginTop: 10}}> */}
-          {/* <UserImage user={item.account} color={theme ? theme.primary : Color.primary}/> */}
-          {/* <Text
-            style={{
-              color: theme ? theme.primary : Color.primary,
-              lineHeight: 30,
-              paddingLeft: 10,
-              width: '40%',
-            }}>
-            {messengerGroup?.username}
-          </Text>
-          <View
-            style={{
-              width: '50%',
-            }}> */}
-            {/* {type == 'amount' && ( */}
-              {/* <Text
-                style={{
-                  color: theme ? theme.secondary : Color.secondary,
-                  fontWeight: 'bold',
-                  textAlign: 'right',
-                  lineHeight: 30,
-                  width: '100%',
-                }}>
-                {Currency.display(messengerGroup.amount, messengerGroup.currency)}
-              </Text> */}
-            {/* )} */}
-            {/* {type == 'rating' && (
-              <View
-                style={{
-                  width: '100%',
-                  alignItems: 'flex-end',
-                }}> */}
-                {/* <Rating ratings={item.rating}></Rating> */}
-              {/* </View> */}
-            {/* )} */}
-          {/* </View>
-        </View> */}
         <View
           style={[
             {

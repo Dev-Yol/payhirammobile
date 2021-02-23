@@ -12,14 +12,8 @@ class RequestCard extends Component {
     super(props);
   }
 
-  componentDidMount = () => {
-    console.log('[RequestCard]', this.props.data);
-  }
-
   _header = (item, type) => {
-    console.log('[header]', item);
     const { theme } = this.props.state;
-    const { data } = this.props
     return (
       <View>
         <View style={{flexDirection: 'row', marginTop: 10}}>
@@ -65,7 +59,6 @@ class RequestCard extends Component {
   };
 
   _subHeader = (item) => {
-    console.log('[subheader]', item);
     const {user, theme} = this.props.state;
     return (
       <View>
@@ -132,7 +125,6 @@ class RequestCard extends Component {
 
   _footer = (item) => {
     const {user, theme} = this.props.state;
-    const { data } = this.props
     return (
       <View>
         <View
@@ -178,7 +170,6 @@ class RequestCard extends Component {
 
   _footerRequestItem = (item) => {
     const {user, theme} = this.props.state;
-    const { data } = this.props
     return (
       <View>
         <View
@@ -252,4 +243,3 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(RequestCard);
-
