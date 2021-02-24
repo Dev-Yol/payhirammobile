@@ -39,7 +39,7 @@ class HeaderRight extends Component {
     return (
       <View style={{ flexDirection: 'row' }}>
         <View>
-        { notifications.unread > 0 && (
+        { (notifications && notifications.unread > 0) && (
           <Text style={BasicStyles.badge}>{notifications.unread}</Text>
           )
         }

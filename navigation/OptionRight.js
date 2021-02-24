@@ -59,56 +59,52 @@ class NavigationDrawerStructureRight extends Component {
               style={{ color: '#FFFFFF' }}
             />
         </TouchableOpacity>
-        {
-          (notifications && notifications.unread > 0) && (
-            <TouchableOpacity
-              style={{
-                height: 50,
-                width: 50,
-                borderRadius: 50,
-                justifyContent: 'center',
-                alignItems: 'center',
-                marginLeft: width - 120,
-                marginTop: 10
-              }}
-              onPress={() => this.props.navigationProps.navigate('notificationStack')}
-              underlayColor={Color.secondary}
-              >
-                <View style={{
-                  width: '100%',
-                  flexDirection: 'row',
-                  position: 'relative'
-                }}>
-                  <FontAwesomeIcon
-                    icon={faBell}
-                    size={30}
-                    style={{ color: Color.gray }}
-                  />
-                  {
-                    notifications.unread && (
-                      <View style={{
-                          backgroundColor: Color.danger,
-                          height: 20,
-                          width: 20,
-                          borderRadius: 10,
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                          position: 'absolute',
-                          zIndex: 1,
-                          right: 10,
-                          bottom: 1
-                        }}>
-                          <Text style={{
-                            color: Color.white,
-                            fontSize: 9
-                          }}>{notifications.unread}</Text>
-                      </View>
-                    )
-                  }
-                </View>
-            </TouchableOpacity>
-          )
-        }
+        <TouchableOpacity
+          style={{
+            height: 50,
+            width: 50,
+            borderRadius: 50,
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginLeft: width - 110,
+            marginTop: 10
+          }}
+          onPress={() => this.props.navigationProps.navigate('notificationStack')}
+          underlayColor={Color.secondary}
+          >
+            <View style={{
+              width: '100%',
+              flexDirection: 'row',
+              position: 'relative'
+            }}>
+              <FontAwesomeIcon
+                icon={faBell}
+                size={30}
+                style={{ color: Color.gray }}
+              />
+              {
+                (notifications && notifications.unread > 0) && (
+                  <View style={{
+                      backgroundColor: Color.danger,
+                      height: 20,
+                      width: 20,
+                      borderRadius: 10,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      position: 'absolute',
+                      zIndex: 1,
+                      right: 10,
+                      bottom: 1
+                    }}>
+                      <Text style={{
+                        color: Color.white,
+                        fontSize: 9
+                      }}>{notifications.unread}</Text>
+                  </View>
+                )
+              }
+            </View>
+        </TouchableOpacity>
       </View>
     );
   }
