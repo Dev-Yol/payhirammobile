@@ -58,7 +58,10 @@ class Notifications extends Component{
     const { selected, isLoading } = this.state;
 
     return (
-      <SafeAreaView>
+      <SafeAreaView style={{
+        height: height,
+        flex: 1
+      }}>
         <ScrollView
           showsVerticalScrollIndicator={false}
           onScroll={(event) => {
@@ -76,50 +79,55 @@ class Notifications extends Component{
             }
           }}
           >
-          {notifications == null || (notifications != null && notifications.notifications == null) && (<Empty refresh={true} onRefresh={() => this.retrieve()}/>)}
-          {
-            notifications && notifications.notifications.map((item, index) => (
-              <TouchableHighlight
-                onPress={() => {}}
-                underlayColor={Color.gray}
-                style={{
-                  borderBottomColor: Color.lightGray,
-                  borderBottomWidth: 1
-                }}
-                >
-                <View style={{
-                  backgroundColor: notifications.unread > index ? Color.lightGray : Color.white,
-                  paddingTop: 10,
-                  paddingBottom: 10,
-                  paddingLeft: 10,
-                  paddingRight: 10
-                }}>
-                  <Text
-                    style={{
-                      fontSize: BasicStyles.standardFontSize,
-                      fontWeight: 'bold'
-                    }}>
-                    {item.title}
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: BasicStyles.standardFontSize
-                    }}>
-                    {item.message}
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: BasicStyles.standardFontSize,
-                      color: Color.gray
-                    }}>
-                    {item.date}
-                  </Text>
-                </View>
-              </TouchableHighlight>
-            ))
-          }
+          <View style={{
+            flex: 1,
+            height: height
+          }}>
+            {notifications == null || (notifications != null && notifications.notifications == null) && (<Empty refresh={true} onRefresh={() => this.retrieve()}/>)}
+            {
+              notifications && notifications.notifications.map((item, index) => (
+                <TouchableHighlight
+                  onPress={() => {}}
+                  underlayColor={Color.gray}
+                  style={{
+                    borderBottomColor: Color.lightGray,
+                    borderBottomWidth: 1
+                  }}
+                  >
+                  <View style={{
+                    backgroundColor: notifications.unread > index ? Color.lightGray : Color.white,
+                    paddingTop: 10,
+                    paddingBottom: 10,
+                    paddingLeft: 10,
+                    paddingRight: 10
+                  }}>
+                    <Text
+                      style={{
+                        fontSize: BasicStyles.standardFontSize,
+                        fontWeight: 'bold'
+                      }}>
+                      {item.title}
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: BasicStyles.standardFontSize
+                      }}>
+                      {item.message}
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: BasicStyles.standardFontSize,
+                        color: Color.gray
+                      }}>
+                      {item.date}
+                    </Text>
+                  </View>
+                </TouchableHighlight>
+              ))
+            }
+          </View>
         </ScrollView>
-        {isLoading ? <Spinner mode="overlay"/> : null }  
+        {/*isLoading ? <Spinner mode="overlay"/> : null */}  
       </SafeAreaView>
     );
   }
