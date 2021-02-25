@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, Image, TouchableOpacity, TextInput, Alert} from 'react-native';
+import {View, Text, Image, TouchableOpacity, TextInput, Alert, Dimensions} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faStar as Solid} from '@fortawesome/free-solid-svg-icons';
 import {faStar as Regular} from '@fortawesome/free-regular-svg-icons';
@@ -10,6 +10,8 @@ import {Spinner} from 'components';
 import styles from 'modules/reviews/Styles.js';
 import Button from 'components/Form/Button';
 import UserImage from 'components/User/Image';
+import TextInputWithoutLabel from 'components/Form/TextInputWithoutLabel'
+const height = Math.round(Dimensions.get('window').height);
 
 class Reviews extends Component {
   constructor(props) {
@@ -29,8 +31,8 @@ class Reviews extends Component {
   retrieve = () => {
     const { data } = this.props.navigation.state.params;
     const { user } = this.props.state;
-    // if(user == null || data == null){
-    if(user == null || data == null || (data && data.partner == null)){
+    console.log('data', data)
+    if(user == null || data == null){
       Alert.alert(
         "Error Message",
         'Invalid request of page.',
@@ -53,11 +55,26 @@ class Reviews extends Component {
         }, {
           column: 'payload_value',
           clause: '=',
-          value: data.partner.account_id
+          value: data.peer.account_id
         }]
       }
-
-      this.retrieveUser(data.partner.account_id)
+      if(data.peer == null){
+        Alert.alert(
+          "Error Message",
+          'Invalid request of page.',
+          [
+            { text: "Ok", onPress: () => {
+              this.props.navigation.pop()
+            }}
+          ],
+          { cancelable: false }
+        );
+        return
+      }
+      this.setState({
+        data: data.peer.account
+      })
+      //retrieve processor here
     }else{
       parameter = {
         condition: [{
@@ -70,7 +87,9 @@ class Reviews extends Component {
           value: data.account_id
         }]
       }
-      this.retrieveUser(data.account_id)
+      this.setState({
+        data: data.account
+      })
     }
     Api.request(Routes.ratingsRetrieve, parameter, response => {
         this.setState({isLoading: false});
@@ -111,7 +130,7 @@ class Reviews extends Component {
   submit = () => {
     const { data } = this.props.navigation.state.params;
     const { user } = this.props.state;
-    if(user == null || data == null || (data && data.partner == null)){
+    if(user == null || data == null){
       Alert.alert(
         "Error Message",
         'Invalid request of page.',
@@ -191,59 +210,62 @@ class Reviews extends Component {
 
 
   renderDetails = (data) => {
-    const { theme } = this.props.state;
+    const { theme, user } = this.props.state;
     return(
       <View style={{
-        flex: 1
+        height: height,
+        width: '90%',
+        marginLeft: '5%',
+        marginRight: '5%',
+        position: 'relative'
       }}>
-        <View style={styles.AvatarContainer}>
-          {
-            data && (
-              <UserImage
-                user={data}
-                style={{
-                  height: 100,
-                  width: 100
-                }}
-                size={100}
-                color={Color.white}
-                />
-            )
-          }
+        {
+          data && (
+            <UserImage
+              user={data}
+              style={{
+                height: 100,
+                width: 100,
+                borderRadius: 50
+              }}
+              size={100}
+              color={Color.primary}
+              />
+          )
+        }
 
-          {
-            data && (
-              <Text style={[{fontWeight: 'bold', color: Color.white}]}>
-                {data.username}
-              </Text>
-            )
-          }
-        </View>
-        <View style={styles.RatingTitleContainer}>
-          <Text style={styles.RatingTitleTextStyle}>
-            How would you rate the service of our partner?
+        <Text style={{
+          ...styles.textStyle,
+          fontWeight: 'bold',
+          textAlign: 'center',
+          marginBottom: 20
+        }}>
+          {data.username}
+        </Text>
+        <View style={styles.textContainer}>
+          <Text style={styles.textStyle}>
+            How would you rate {data.account_id == user.id ?  'the service of our partner' : 'our customer'}?
           </Text>
         </View>
-        <View style={styles.RatingContainer}>{this.renderStars()}</View>
-        <View style={styles.ExperienceTextContainer}>
-          <Text style={styles.ExperienceTextStyle}>
-            Tell us about your experience
-          </Text>
-        </View>
-        <View style={styles.CommentContainer}>
-          <TextInput
-            style={styles.CommentTextStyle}
-            onChangeText={this.handleComment}
-          />
-        </View>
-        <View style={styles.ButtonContainer}>
-         <Button
+        <View style={styles.starContainer}>{this.renderStars()}</View>
+        <Text style={{
+          ...styles.textStyle,
+          textAlign: 'center'
+        }}>
+          Tell us about your experience
+        </Text>
+        <TextInputWithoutLabel
+          variable={this.state.comment}
+          multiline={true}
+          onChange={(value) => this.setState({
+            comment: value
+          })}
+          numberOfLines={5}
+          placeholder={'Type your comment here ...'}
           style={{
-            backgroundColor: theme ? theme.secondary : Color.secondary
+            marginTop: 25
           }}
-          title={'Submit'}
-          onClick={() => this.submit()}/>
-        </View>
+        />
       </View>
     )
   }
@@ -251,9 +273,28 @@ class Reviews extends Component {
     const { theme } = this.props.state;
     const { data } = this.state;
     return (
-      <View style={styles.ReviewsContainer}>
+      <View style={{
+        ...styles.ReviewsContainer,
+        height: height,
+        flex: 1
+      }}>
         {this.state.isLoading ? <Spinner mode="overlay" /> : null}
         {data && this.renderDetails(data)}
+        {
+          data && (
+            <View style={styles.ButtonContainer}>
+             <Button
+              style={{
+                backgroundColor: theme ? theme.secondary : Color.secondary,
+                width: '90%',
+                marginLeft: '5%',
+                marginRight: '5%'
+              }}
+              title={'Submit'}
+              onClick={() => this.submit()}/>
+            </View>
+          )
+        }
       </View>
     );
   }

@@ -126,7 +126,7 @@ class ProposalModal extends Component {
             isLoading: false
           })
           this.props.closeModal()
-          this.props.navigation.navigate('requestItemStack', {data: {...this.props.data, peer_flag: true}})
+          this.props.navigation.navigate('requestItemStack', {data: {...this.props.data, peer_flag: true}, from: 'request'})
         }else{
           Alert.alert(
             'Proposal already existed!',

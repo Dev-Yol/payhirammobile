@@ -145,6 +145,7 @@ class RequestCard extends Component {
                   }else{
                     this.props.navigation.navigate('requestItemStack', {
                       data: item,
+                      from: 'request'
                     })
                   }
                 }}
@@ -190,6 +191,7 @@ class RequestCard extends Component {
                   }else{
                     this.props.navigation.navigate('requestItemStack', {
                       data: item,
+                      from: 'request'
                     })
                   }
                 }}
@@ -219,6 +221,7 @@ class RequestCard extends Component {
         onPress={() =>
           this.props.navigation.navigate('requestItemStack', {
             data: data,
+            from: 'request'
           })
         }>
         {this._header(data, 'amount')}

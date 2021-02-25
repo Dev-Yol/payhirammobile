@@ -224,7 +224,7 @@ export default {
     {
       title: 'Back',
       payload: 'redirect',
-      payload_value: 'valid_id',
+      payload_value: 'back',
       color: Color.danger
     }
   ],

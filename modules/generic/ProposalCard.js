@@ -124,7 +124,7 @@ class ProposalCard extends Component {
 
   _footer = (item, index) => {
     const {user} = this.props.state;
-    const { data } = this.props;
+    const { data, request } = this.props;
     return (
       <View>
         <View
@@ -132,32 +132,73 @@ class ProposalCard extends Component {
             flexDirection: 'row',
             marginBottom: 10,
           }}>
-            <View
-              style={{
-                width: '100%',
-                flexDirection: 'row'
-              }}>
-              <Button
-                title={'View Profile'}
-                onClick={() => {this.props.navigation.navigate('viewProfileStack', {
-                  user: item.account,
-                  rating: item.rating
-                })}}
-                style={{
-                  width: '45%',
-                  marginRight: '5%'
-                }}
-              />
-              <Button
-                title={'Accept'}
-                onClick={() => {this.props.onAcceptRequest(item)}}
-                style={{
-                  width: '45%',
-                  marginLeft: '5%',
-                  backgroundColor: Color.secondary
-                }}
-              />
-            </View>
+            {
+              (request && request.status == 0) && (
+                <View
+                  style={{
+                    width: '100%',
+                    flexDirection: 'row'
+                  }}>
+                  <Button
+                    title={'View Profile'}
+                    onClick={() => {this.props.navigation.navigate('viewProfileStack', {
+                      user: item.account,
+                      rating: item.rating
+                    })}}
+                    style={{
+                      width: '45%',
+                      marginRight: '5%'
+                    }}
+                  />
+                  <Button
+                    title={'Accept'}
+                    onClick={() => {this.props.onAcceptRequest(item)}}
+                    style={{
+                      width: '45%',
+                      marginLeft: '5%',
+                      backgroundColor: Color.secondary
+                    }}
+                  />
+                </View>
+              )
+            }
+            {
+              (item.status == 'approved') && (
+                <View
+                  style={{
+                    width: '100%',
+                    flexDirection: 'row'
+                  }}>
+                  <Button
+                    title={'Approved'}
+                    onClick={() => {}}
+                    style={{
+                      width: '45%',
+                      backgroundColor: Color.white,
+                      borderColor: Color.lightGray,
+                      borderWidth: 1,
+                      marginRight: '5%'
+                    }}
+                    textStyle={{
+                      color: Color.black
+                    }}
+                  />
+
+                  <Button
+                    title={'View Profile'}
+                    onClick={() => {this.props.navigation.navigate('viewProfileStack', {
+                      user: item.account,
+                      rating: item.rating
+                    })}}
+                    style={{
+                      width: '45%',
+                      marginRight: '5%'
+                    }}
+                  />
+                </View>
+              )
+            }
+
         </View>
       </View>
     );
@@ -165,7 +206,7 @@ class ProposalCard extends Component {
 
   _myFooter = (item, index) => {
     const {user} = this.props.state;
-    const { data } = this.props;
+    const { data, request } = this.props;
     return (
       <View>
         <View
@@ -173,7 +214,7 @@ class ProposalCard extends Component {
             flexDirection: 'row',
             marginBottom: 10,
           }}>
-          {user.account_type != 'USER' && (
+          {(user.account_type != 'USER' && request.status == 0) && (
             <View
               style={{
                 width: '100%',
@@ -215,6 +256,7 @@ class ProposalCard extends Component {
               onPress={() =>
                 this.props.navigation.navigate('requestItemStack', {
                   data: item,
+                  from: 'request'
                 })
               }>
               {item.account && this._header(item, 'amount')}

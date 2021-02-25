@@ -13,20 +13,26 @@ class HeaderOptions extends Component {
     super(props);
   }
   back = () => {
-    const navigateAction = NavigationActions.navigate({
-      routeName: 'drawerStack',
-      action: StackActions.reset({
-        index: 0,
-        key: null,
-        actions: [
-            NavigationActions.navigate({routeName: 'Requests', params: {
-              initialRouteName: 'Requests',
-              index: 0
-            }}),
-        ]
-      })
-    });
-    this.props.navigationProps.dispatch(navigateAction);
+    const { from } = this.props.navigationProps.state.params;
+    if(from == 'request'){
+      const navigateAction = NavigationActions.navigate({
+        routeName: 'drawerStack',
+        action: StackActions.reset({
+          index: 0,
+          key: null,
+          actions: [
+              NavigationActions.navigate({routeName: 'Requests', params: {
+                initialRouteName: 'Requests',
+                index: 0
+              }}),
+          ]
+        })
+      });
+      this.props.navigationProps.dispatch(navigateAction);      
+    }else{
+      this.props.navigationProps.pop()
+    }
+
   };
   render() {
     return (
