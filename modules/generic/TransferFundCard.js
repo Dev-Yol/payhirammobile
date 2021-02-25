@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, SafeAreaView, Image, TouchableHighlight } from 'react-native';
+import { View, Text, TouchableOpacity, SafeAreaView, Image, TouchableHighlight, Dimensions, ScrollView } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faUserCircle, faStar as Solid } from '@fortawesome/free-solid-svg-icons';
 import {faStar as Regular} from '@fortawesome/free-regular-svg-icons';
@@ -11,6 +11,7 @@ import {BasicStyles, Color, Routes} from 'common';
 import Api from 'services/api/index.js';
 import RequestCard from 'modules/generic/RequestCard';
 
+const height = Math.round(Dimensions.get('window').height);
 class TransferFundCard extends Component {
   constructor(props){
     super(props)
@@ -84,88 +85,29 @@ class TransferFundCard extends Component {
 
   render() {
     const {user, theme, messengerGroup} = this.props.state
-    const {peer} = this.state
+    const { data } = this.props.navigation.state.params;
     return (
-      <SafeAreaView>
-        <View style={{alignItems: 'center'}}>
-          <RequestCard 
-            data={peer}
-            navigation={this.props.navigation}
-            />
-        </View>
-        <View
-          style={[
-            {
-              paddingTop: 20,
-              paddingBottom: 20,
-              alignItems: 'center'
-            }
-          ]}
-        >
-         {
-            user.profile != null && user.profile.url != null && (
-              <Image
-                source={{uri: Config.BACKEND_URL  + user.profile.url}}
-                style={BasicStyles.profileImageSize}/>
-            )
-          }
-          {
-            (user.profile == null || (user.profile != null && user.profile.url == null)) && (
-              <FontAwesomeIcon
-                icon={faUserCircle}
-                size={BasicStyles.profileIconSize + 30}
-                style={{
-                  color: theme ? theme.primary : Color.primary
-                }}
-              />
-            )
-          }
-          <Text style={{
-            marginTop: 10,
-            color: theme ? theme.primary : Color.primary
-          }}> {user.username} </Text>
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'center'
-          }}
-        >
-          {
-            this.renderStars()
-          }
-        </View>
-          {/* <Text style={{justifyContent: 'center', marginTop: 20, textAlign: 'center', fontWeight: 'bold'}}>Are you sure you want to Transfer?</Text> */}
-          <View style={{flex: 1,
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'flex-start',
-            marginTop: 70}}>
-            <View style={{width: 100, height: 50, marginLeft: 40}}>
-              <Text style={{fontWeight: 'bold', fontSize: 18}}>Currency</Text>
+      <View>
+        <ScrollView
+          showsVerticalScrollIndicator={false}>
+            <View style={{alignItems: 'center'}}>
+              {
+                (data) && (<RequestCard 
+                  data={data}
+                  navigation={this.props.navigation}
+                />)
+              }
             </View>
-            <View style={{width: 100, height: 50, marginLeft: 40}}>
-              <Text style={{fontWeight: 'bold', fontSize: 18}}>Amount</Text>
-            </View>
-          </View>
-          <View style={{flex: 1,
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'flex-end'}}>
-            <View style={{width: 100, height: 50}}>
-              <Text>{this.props.state.messengerGroup.currency}</Text>
-            </View>
-            <View style={{width: 100, height: 50}}>
-              <Text>{this.props.state.messengerGroup.amount}</Text>
-            </View>
-          </View>
-          <View style={{
+
+        </ScrollView>
+        <View style={{
             alignItems: 'center',
             backgroundColor: Color.white,
-            width: '90%',
-            marginLeft: '5%',
-            marginRight: '5%',
-            marginTop: '100%'
+            width: '100%',
+            flexDirection: 'row',
+            position: 'absolute',
+            bottom: 10,
+            left: 0
           }}>
 
             <Button 
@@ -173,28 +115,27 @@ class TransferFundCard extends Component {
               onClick={() => console.log('Cancel')}
               style={{
                 width: '45%',
-                marginRight: '50%',
+                marginRight: '5%',
                 backgroundColor: Color.danger,
               }}
             />
 
             <Button 
               title={'Continue'}
-              onClick={() => this.props.nav.navigate('otpStack', {
+              onClick={() => this.props.navigation.navigate('otpStack', {
                 data: {
                   payload: 'transferFund',
                   data: messengerGroup
                 }
               })}
               style={{
-                marginTop: -50,
                 width: '45%',
-                marginLeft: '50%',
+                marginLeft: '5%',
                 backgroundColor: theme ? theme.secondary : Color.secondary
               }}
             />
           </View>
-      </SafeAreaView>
+      </View>
     )
   }
 }
