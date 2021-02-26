@@ -7,6 +7,7 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingHorizontal: '7%',
     marginTop: 10,
+    marginBottom: 50
   },
   UsernameContainer: {},
   EmailAddressContainer: {},

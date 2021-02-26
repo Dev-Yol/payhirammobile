@@ -50,7 +50,9 @@ const DashboardStack = createStackNavigator({
       },
       headerTintColor: '#4c4c4c',
       headerRight: (
-        <FontAwesomeIcon icon={faQrcode} size={20} style={{ color: 'black' }}/>
+        // <View style={{marginRight: 40, paddingRight: 8}}>
+        <FontAwesomeIcon icon={faQrcode} size={20} style={{ color: 'black', marginRight: 40 }}/>
+        // </View>
       ),
     }),
   },

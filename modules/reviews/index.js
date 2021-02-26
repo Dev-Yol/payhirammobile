@@ -214,16 +214,20 @@ class Reviews extends Component {
     return(
       <View style={{
         height: height,
+        marginTop: 15,
         width: '90%',
         marginLeft: '5%',
         marginRight: '5%',
         position: 'relative'
       }}>
+        <View 
+        style={{marginLeft: '36%'}}>
         {
           data && (
             <UserImage
               user={data}
               style={{
+                marginRight: '30%',
                 height: 100,
                 width: 100,
                 borderRadius: 50
@@ -233,6 +237,7 @@ class Reviews extends Component {
               />
           )
         }
+        </View>
 
         <Text style={{
           ...styles.textStyle,

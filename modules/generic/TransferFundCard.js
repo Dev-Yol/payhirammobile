@@ -22,6 +22,7 @@ class TransferFundCard extends Component {
   }
   
   componentDidMount = () => {
+    this.setState({isLoading: true})
     this.retrieve()
   }
 
