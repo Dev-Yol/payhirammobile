@@ -12,7 +12,7 @@ class HeaderOptions extends Component {
     super(props);
   }
   back = () => {
-    this.props.navigationProps.navigate('drawerStack');
+    this.props.navigationProps.pop();
   };
   render() {
     const { theme } = this.props.state;
@@ -39,7 +39,7 @@ class HeaderRight extends Component {
     return (
       <View style={{ flexDirection: 'row' }}>
         <View>
-        { notifications.unread > 0 && (
+        { (notifications && notifications.unread > 0) && (
           <Text style={BasicStyles.badge}>{notifications.unread}</Text>
           )
         }
@@ -73,11 +73,7 @@ const NotificationStack = createStackNavigator({
       title: 'Notifications',
       headerLeft: <HeaderOptionsConnect navigationProps={navigation} />,
       headerRight: <HeaderRightWithRedux navigationProps={navigation} />,
-      drawerLabel: 'Notifications',
-      headerStyle: {
-        backgroundColor: Color.primary,
-      },
-      headerTintColor: '#fff',
+      ...BasicStyles.headerDrawerStyle
     })
   }
 })

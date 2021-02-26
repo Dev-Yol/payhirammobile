@@ -49,7 +49,6 @@ class HeaderOptions extends Component {
           }}>
           {/*<UserImage style={{marginLeft: -20}}  user={messengerGroup?.profile} color={theme ? theme.primary : Color.primary}/>*/}
           <Text style={{
-            color: theme ? theme.primary : Color.primary,
             paddingLeft: 1
           }}>{
             // data ? '****' + data.title.substr(data.title.length - 8, data.title.length - 1) : null

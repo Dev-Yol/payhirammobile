@@ -166,29 +166,40 @@ export default {
     },
   ],
   MessengerMenu: [{
-      title: 'Add / View Requirements',
+      title: 'Requirements',
       payload: 'same_page',
-      payload_value: 'requirements'
+      payload_value: 'requirements',
+      color: Color.black
     },
     {
       title: 'Details',
       payload: 'redirect',
-      payload_value: 'requestItemStack'
+      payload_value: 'requestItemStack',
+      color: Color.black
     },
     {
       title: 'Transfer funds',
       payload: 'redirect',
-      payload_value: 'transferFundStack'
+      payload_value: 'transferFundStack',
+      color: Color.black
     },
     {
       title: 'Rate',
       payload: 'redirect',
-      payload_value: 'reviewsStack'
+      payload_value: 'reviewsStack',
+      color: Color.black
+    },
+    {
+      title: 'Enable Support',
+      payload: 'redirect',
+      payload_value: 'reviewsStack',
+      color: Color.black
     },
     {
       title: 'Close',
       payload: 'same_page',
-      payload_value: 'close'
+      payload_value: 'close',
+      color: Color.danger
     }
   ],
   requirementsMenu: [
@@ -196,28 +207,25 @@ export default {
       title: 'On App Signature',
       payload: 'same_page',
       payload_value: 'signature',
-      button: {
-        title: 'Add',
-        color: Color.success
-      }
+      color: Color.black
     },
     {
       title: 'Receiver Picture',
       payload: 'redirect',
       payload_value: 'receiver_picture',
-      button: {
-        title: 'Add',
-        color: Color.success
-      }
+      color: Color.black
     },
     {
       title: 'Valid ID',
       payload: 'redirect',
       payload_value: 'valid_id',
-      button: {
-        title: 'Add',
-        color: Color.success
-      }
+      color: Color.black
+    },
+    {
+      title: 'Back',
+      payload: 'redirect',
+      payload_value: 'back',
+      color: Color.danger
     }
   ],
   payments: [

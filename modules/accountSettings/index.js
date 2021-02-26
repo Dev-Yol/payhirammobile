@@ -57,6 +57,7 @@ class AccountSettings extends Component {
         (response) => {
           this.setState({ isLoading: false });
           alert('Email updated!');
+          this.state.email = ''
         },
         (error) => {
           console.log('update email error', error);
@@ -97,6 +98,8 @@ class AccountSettings extends Component {
           console.log('update password response', response);
           this.setState({ isLoading: false });
           alert('Password updated!');
+          this.state.password = ''
+          this.state.confirmPassword = ''
         },
         (error) => {
           console.log('update password error', error);
@@ -152,7 +155,14 @@ class AccountSettings extends Component {
           { this.state.error === true && (
             <Text style={{color: Color.danger}}>Password must be atleast 8 alphanumeric characters. It should contain 1 number, 1 special character and 1 capital letter.</Text>
           )}
-
+          
+          <Text style={{
+            fontSize: BasicStyles.standardFontSize,
+            paddingBottom: 10,
+            marginRight: '84%'
+          }}>
+            Password
+          </Text>
           <PasswordWithIcon
             onTyping={(input) =>
               this.validPassword(input)

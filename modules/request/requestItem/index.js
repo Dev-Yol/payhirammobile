@@ -195,6 +195,7 @@ class RequestItem extends Component {
               isLoading: flag
             })}
             onRetrieve={() => this.retrieve()}
+            request={this.props.navigation.state.params.data}
             />
         </View>
       </View>

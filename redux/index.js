@@ -36,7 +36,8 @@ const types = {
   VIEW_SHARE: 'VIEW_SHARE',
   SET_REQUEST: 'SET_REQUEST',
   SET_DEFAULT_ADDRESS: 'SET_DEFAULT_ADDRESS',
-  SET_UNREAD_MESSAGES: 'SET_UNREAD_MESSAGES'
+  SET_UNREAD_MESSAGES: 'SET_UNREAD_MESSAGES',
+  SET_UNREAD_PEER_REQUEST: 'SET_UNREAD_PEER_REQUEST',
 };
 
 export const actions = {
@@ -135,6 +136,9 @@ export const actions = {
   },
   setUnReadMessages(messages) {
     return {type: types.SET_UNREAD_MESSAGES, messages}
+  },
+  setUnReadPeerRequest(message) {
+    return {type: types.SET_UNREAD_PEER_REQUEST, messages}
   }
 };
 
@@ -173,8 +177,13 @@ const initialState = {
   requestInput: null,
   isValidOtp: false,
   isViewing: false,
+<<<<<<< HEAD
   isShow: false,
   defaultAddress: null
+=======
+  defaultAddress: null,
+  unReadPeerRequest: []
+>>>>>>> 29bbec32ec41d1021f0d0a188f51781b5f982834
 };
 
 storeData = async (key, value) => {
@@ -484,7 +493,7 @@ const reducer = (state = initialState, action) => {
       }
     case types.SET_UNREAD_MESSAGES: 
       let newUnread = []
-      if(messages.length == 0){
+      if(messages.length == null){
         newUnread = []
       }else{
         newUnread = state.unReadMessages.push(messages)
@@ -493,11 +502,25 @@ const reducer = (state = initialState, action) => {
         ...state,
         unReadMessages: newUnread
       }
+<<<<<<< HEAD
     case types.VIEW_SHARE:
       return {
         ...state,
         isShow,
       };
+=======
+    case types.SET_UNREAD_PEER_REQUEST: 
+      let newUnreadPeerRequest = []
+      if(messages == null){
+        newUnreadPeerRequest = []
+      }else{
+        newUnreadPeerRequest = state.unReadPeerRequest.push(messages)
+      }
+      return {
+        ...state,
+        unReadPeerRequest: newUnreadPeerRequest
+      }
+>>>>>>> 29bbec32ec41d1021f0d0a188f51781b5f982834
     default:
       return {...state, nav: state.nav};
   }

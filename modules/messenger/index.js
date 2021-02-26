@@ -81,96 +81,73 @@ class Groups extends Component{
   _card = (item) => {
     const { theme } = this.props.state;
     return (
-      <View>
-        <TouchableHighlight
-          onPress={() => {this.viewMessages(item)}}
-          underlayColor={Color.lightGray}
-          >
+      <TouchableHighlight
+        onPress={() => {this.viewMessages(item)}}
+        underlayColor={Color.lightGray}
+        style={{
+          paddingTop: 15,
+          paddingBottom: 15
+        }}
+        >
           <View>
-            <View style={{flexDirection: 'row', marginTop: 5, paddingLeft: 10, paddingRight: 10}}>
-              {/*<UserImage user={item.profile} color={theme ? theme.primary : Color.primary}/>*/}
+            <View style={{flexDirection: 'row',
+              paddingLeft: 10,
+              paddingRight: 10
+            }}>
               <View style={{
-                paddingLeft: 10,
                 width: '100%',
                 flexDirection: 'row'
               }}>
-                <Text style={{
-                  color: theme ? theme.primary : Color.primary,
-                  lineHeight: 30,
-                }}>{item.title.length > 29 ? '*****' + item.title.substr(item.title.length - 8, item.title.length - 1) + ' - ' + item.currency + ' ' + item.amount  : item.title}</Text>
-                {
-                  parseInt(item.total_unread_messages) > 0 && Platform.OS == 'android' && (
+              <Text style={{
+                fontSize: BasicStyles.standardFontSize,
+                fontWeight: 'bold'
+              }}>{item.title.length > 29 ? '*****' + item.title.substr(item.title.length - 8, item.title.length - 1) + ' - ' + item.currency + ' ' + item.amount  : item.title}</Text>
+              {
+                parseInt(item.total_unread_messages) > 0 && Platform.OS == 'android' && (
+                  <Text style={{
+                    color: Color.white,
+                    lineHeight: 20,
+                    paddingLeft: 5,
+                    paddingRight: 5,
+                    backgroundColor: Color.danger,
+                    borderRadius: 5,
+                    marginTop: 5,
+                    marginBottom: 5,
+                    marginLeft: 10
+                  }}>{item.total_unread_messages}</Text>
+                )
+              }                                                                                                                                                                 
+              {
+                parseInt(item.total_unread_messages) > 0 && Platform.OS == 'ios' && (
+                  <View style={{
+                    backgroundColor: Color.danger,
+                    borderRadius: 5,
+                    marginTop: 5,
+                    marginBottom: 5,
+                    marginLeft: 10
+                  }}>
                     <Text style={{
                       color: Color.white,
                       lineHeight: 20,
                       paddingLeft: 5,
                       paddingRight: 5,
-                      backgroundColor: Color.danger,
-                      borderRadius: 5,
-                      marginTop: 5,
-                      marginBottom: 5,
-                      marginLeft: 10
                     }}>{item.total_unread_messages}</Text>
-                  )
-                }                                                                                                                                                                 
-                {
-                  parseInt(item.total_unread_messages) > 0 && Platform.OS == 'ios' && (
-                    <View style={{
-                      backgroundColor: Color.danger,
-                      borderRadius: 5,
-                      marginTop: 5,
-                      marginBottom: 5,
-                      marginLeft: 10
-                    }}>
-                      <Text style={{
-                        color: Color.white,
-                        lineHeight: 20,
-                        paddingLeft: 5,
-                        paddingRight: 5,
-                      }}>{item.total_unread_messages}</Text>
-                    </View>
-                  )
-                }
-              </View>
-              <Text style={{
-                color: Color.primary,
-                lineHeight: 30,
-                paddingLeft: 10,
-                fontWeight: 'bold',
-                textAlign:'right',
-                width: '60%'
-              }}>
-                {/*Currency.display((item.request.amount + item.peer.charge).toFixed(2), item.request.currency)*/}
-              </Text>
+                  </View>
+                )
+              }
             </View>
-            <View style={{
-              paddingLeft: 10,
-              paddingRight: 10
-            }}>
-              <Text style={[Style.dateTextLeft, {
-                color: item.status < 2 ? Color.danger : Color.normalGray,
-                paddingBottom: 0
-              }]}>{item.status < 2 ? 'Transaction is on going' : 'Transaction completed'}</Text>
-            </View>
-            {/* <View style={{
-              marginBottom: 5,
-              paddingLeft: 10,
-              paddingRight: 10,
-              flexDirection: 'row'
-            }}>
-              <Text style={[Style.dateTextLeft, {
-                width: '40%',
-                paddingTop: 2
-              }]}>{item.created_at_human}</Text>
-              <Text style={[Style.dateTextLeft, {
-                width: '60%',
-                textAlign: 'right',
-                paddingTop: 2
-              }]}>{Helper.showRequestType(item.type)} - {item.title.substring(24, 32)}</Text>
-            </View> */}
           </View>
-        </TouchableHighlight>
-      </View>
+          <View style={{
+            paddingLeft: 10,
+            paddingRight: 10
+          }}>
+            <Text style={{
+              fontSize: BasicStyles.standardFontSize,
+              paddingBottom: 0
+            }}>{item.status < 2 ? 'Transaction is on going' : 'Transaction completed'}</Text>
+          </View>
+        </View>
+      </TouchableHighlight>
     );
   }
   
