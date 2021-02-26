@@ -8,9 +8,7 @@ export default {
   },
   navSectionStyle: {
     paddingTop: 5,
-    paddingBottom: 5,
-    borderBottomColor: Color.gray,
-    borderBottomWidth: 1
+    paddingBottom: 5
   },
   navSectionStyleNoBorder: {
     paddingTop: 5,

@@ -65,7 +65,6 @@ class Dashboard extends Component {
       return;
     }
     let parameter = {
-      account_id: user.id,
       account_code: user.code
     };
     this.setState({isLoading: true});
@@ -88,7 +87,6 @@ class Dashboard extends Component {
       return;
     }
     let parameter = {
-      account_id: user.id,
       account_code: user.code,
       limit: 5
     };
