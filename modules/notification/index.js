@@ -8,13 +8,15 @@ import { connect } from 'react-redux';
 import { Empty } from 'components';
 import Api from 'services/api/index.js';
 import { Dimensions } from 'react-native';
+import { color } from 'react-native-reanimated';
 const height = Math.round(Dimensions.get('window').height);
 class Notifications extends Component{
   constructor(props){
     super(props);
     this.state = {
       selected: null,
-      isLoading: false
+      isLoading: false,
+      data: []
     }
   }
 
@@ -27,6 +29,20 @@ class Notifications extends Component{
   componentDidMount(){
     this.retrieve()
   }
+
+  redirect(payload){
+    console.log("[Data]", this.state.data);
+    if(payload === 'thread'){
+      this.props.navigation.navigate('messagesStack', {
+        data: this.state.data
+      })
+    }else{
+      this.props.navigation.navigate('requestItemStack', {
+        data: this.state.data
+      })
+    }
+  }
+  
 
   retrieve = () => {
     const { setNotifications } = this.props;
@@ -46,7 +62,8 @@ class Notifications extends Component{
     this.setState({isLoading: true})
     Api.request(Routes.notificationsRetrieve, parameter, notifications => {
       this.setState({isLoading: false})
-      console.log(notifications.data.length)
+      this.setState({data: notifications.data[0]})
+      console.log("[RESTRIEVE]", notifications.data)
       setNotifications(notifications.size, notifications.data)
     }, error => {
       this.setState({isLoading: false})
@@ -87,7 +104,7 @@ class Notifications extends Component{
             {
               notifications && notifications.notifications.map((item, index) => (
                 <TouchableHighlight
-                  onPress={() => {}}
+                  onPress={() => this.redirect(item.payload)}
                   underlayColor={Color.gray}
                   style={{
                     borderBottomColor: Color.lightGray,

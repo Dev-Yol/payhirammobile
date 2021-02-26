@@ -65,8 +65,8 @@ class Share extends Component {
       <TouchableOpacity onPress={() => {
         this.props.viewShare(true)
       }}>
-        <View style={{ paddingRight: 8 }} >
-          <FontAwesomeIcon icon={faShare} size={BasicStyles.iconSize + 5} style={{ color: 'black', marginRight: 10 }} />
+        <View style={{ paddingRight: 8, marginRight: 40 }} >
+          <FontAwesomeIcon icon={faShare} size={BasicStyles.iconSize + 5} style={{ color: Color.gray, marginRight: 10 }} />
         </View>
       </TouchableOpacity>
     )
