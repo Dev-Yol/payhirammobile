@@ -51,7 +51,7 @@ class QRCode extends Component {
         this.props.setQRCodeModal(true)
       }}>
         <View style={{ paddingRight: 8 }} >
-          <FontAwesomeIcon icon={faQrcode} size={BasicStyles.iconSize + 5} style={{ color: 'black', marginRight: 10 }} />
+          <FontAwesomeIcon icon={faQrcode} size={BasicStyles.iconSize + 5} style={{ color: Color.gray, marginRight: 60, marginTop: 10 }} />
         </View>
       </TouchableOpacity>
     )
@@ -65,7 +65,7 @@ class Share extends Component {
         // this.props.setQRCodeModal(true)
       }}>
         <View style={{ paddingRight: 8 }} >
-          <FontAwesomeIcon icon={faShare} size={BasicStyles.iconSize + 5} style={{ color: 'black', marginRight: 10 }} />
+          <FontAwesomeIcon icon={faShare} size={BasicStyles.iconSize + 5} style={{ color: Color.gray, marginRight: 60, marginTop: 10 }} />
         </View>
       </TouchableOpacity>
     )
