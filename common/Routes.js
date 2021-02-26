@@ -50,6 +50,7 @@ export default {
   imageUploadBase64: apiUrl + 'images/upload_base64',
   requestValidationCreate: apiUrl + 'request_validations/create',
   requestValidationUpdate: apiUrl + 'request_validations/update',
+  requestValidationRetreive: apiUrl + 'request_validations/retrieve',
   depositCreate: apiUrl + 'deposits/create',
   withdrawalCreate: apiUrl + 'withdrawals/create',
   withdrawalRetrieve: apiUrl + 'withdrawals/retrieve',
