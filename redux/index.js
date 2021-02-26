@@ -33,6 +33,7 @@ const types = {
   SET_REQUEST_INPUT: 'SET_REQUEST_INPUT',
   SET_VALIDATE_OTP: 'SET_VALIDATE_OTP',
   VIEW_MENU: 'VIEW_MENU',
+  VIEW_SHARE: 'VIEW_SHARE',
   SET_REQUEST: 'SET_REQUEST',
   SET_DEFAULT_ADDRESS: 'SET_DEFAULT_ADDRESS',
   SET_UNREAD_MESSAGES: 'SET_UNREAD_MESSAGES'
@@ -126,6 +127,9 @@ export const actions = {
   viewMenu(isViewing){
     return {type: types.VIEW_MENU, isViewing}
   },
+  viewShare(isShow){
+    return {type: types.VIEW_SHARE, isShow}
+  },
   setDefaultAddress(defaultAddress) {
     return {type: types.SET_DEFAULT_ADDRESS, defaultAddress}
   },
@@ -169,6 +173,7 @@ const initialState = {
   requestInput: null,
   isValidOtp: false,
   isViewing: false,
+  isShow: false,
   defaultAddress: null
 };
 
@@ -196,7 +201,7 @@ const reducer = (state = initialState, action) => {
   const {searchParameter, requests} = action;
   const {systemNotification} = action;
   const {product, productId} = action;
-  const {isVisible} = action;
+  const {isVisible, isShow} = action;
   const {theme} = action;
   const {requestInput} = action;
   const {isValidOtp} = action;
@@ -488,6 +493,11 @@ const reducer = (state = initialState, action) => {
         ...state,
         unReadMessages: newUnread
       }
+    case types.VIEW_SHARE:
+      return {
+        ...state,
+        isShow,
+      };
     default:
       return {...state, nav: state.nav};
   }

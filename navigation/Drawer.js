@@ -60,9 +60,10 @@ class QRCode extends Component {
 
 class Share extends Component {
   render() {
+    console.log("[PROPS]", this.props.state.isShow);
     return (
       <TouchableOpacity onPress={() => {
-        // this.props.setQRCodeModal(true)
+        this.props.viewShare(true)
       }}>
         <View style={{ paddingRight: 8 }} >
           <FontAwesomeIcon icon={faShare} size={BasicStyles.iconSize + 5} style={{ color: 'black', marginRight: 10 }} />
@@ -79,6 +80,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     setQRCodeModal: (isVisible) => {
       dispatch(actions.setQRCodeModal({ isVisible: isVisible }))
+    },
+    viewShare: (isShow) => {
+      dispatch(actions.viewShare(isShow))
     },
   };
 };
@@ -112,7 +116,7 @@ const _StackNavigator = createStackNavigator({
       title: null,
       headerLeft: <OptionRight navigationProps={navigation} />,
       headerRight: (
-        <Share />
+        <ShareButton />
       ),
       headerTransparent: true
     }),

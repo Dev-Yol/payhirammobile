@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import { View, Text, ScrollView, TouchableHighlight, Dimensions, Alert } from 'react-native';
 const height = Math.round(Dimensions.get('window').height);
 import { UserImage, Spinner, Empty } from 'components';
+import Share from 'components/Share'
 import { Rating } from 'components/index.js';
 import { Routes, Color } from 'common';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
@@ -247,6 +248,7 @@ class Circle extends Component{
         </ScrollView>
         {data.length < 1 && this.state.isLoading == false && (<Empty refresh={true} onRefresh={() => this.retrieve(true)} />)}
         {this.state.isLoading ? <Spinner mode="overlay"/> : null }
+        <Share/>
       </View>
     );
   }
