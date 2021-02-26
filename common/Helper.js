@@ -291,6 +291,8 @@ export default {
         return 'Deposit';
       case 4:
         return 'Bills and Paymets';
+      case 5:
+        return 'Others';
       case 101:
         return 'Lending';
       case 102:
