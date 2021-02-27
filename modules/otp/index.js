@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, Alert, Dimensions, TextInput} from 'react-native';
+import {NavigationActions, StackActions} from 'react-navigation';
 import Button from 'components/Form/Button.js';
 import styles from 'modules/otp/Styles.js';
 import OneTimePin from 'modules/otp/OneTimePin.js';
@@ -118,15 +119,61 @@ class OTP extends Component {
     );
   };
 
-  sendTransferFund = (parameter) => {
+
+  navigateToScreen = (route, routeName, data) => {
+    const navigateAction = NavigationActions.navigate({
+      routeName: route,
+      action: StackActions.reset({
+        index: 0,
+        key: null,
+        actions: [
+          NavigationActions.navigate({routeName: routeName, params: {
+            data: data
+          }}),
+        ]
+      })
+    });
+    this.props.navigation.dispatch(navigateAction);
+  }
+
+  sendTransferFund = (data) => {
+    const { user } = this.props.state;
+    if(user == null || data == null){
+      return
+    }
     console.log('OTP Transfer fund API Call')
-    Api.request(Routes.transferFund, parameter, response => {
+    console.log('OTP Transfer fund API Call', data)
+    let parameter = {
+      code: data.code,
+      account_code: user.code
+    }
+    Api.request(Routes.requestManageByThread, parameter, response => {
         this.setState({isLoading: false});
         console.log('[OTP] Transfer fund response', response)
-        if(response.data != null){
-          this.props.navigation.navigate('requestItemStack', {
-            data: response.data
-          })     
+        if(response.error != null){
+          Alert.alert(
+            "Error Message",
+            response.error,
+            [
+              { text: "Ok", onPress: () => {
+                this.props.navigation.pop()
+              }}
+            ],
+            { cancelable: false }
+          );
+        }else{
+          // go to fund transfer and success message
+          // this.props.navigation.pop()
+          // this.props.navigation.navigate('transferFundStack', {
+          //   data: {
+          //     ...data,
+          //     status: 2
+          //   }
+          // }) 
+          this.navigateToScreen('transferFundStack', 'transferFundScreen', {
+            ...data,
+            status: 2
+          })
         }
       },
       (error) => {

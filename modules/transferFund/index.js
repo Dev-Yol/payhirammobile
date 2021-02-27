@@ -57,8 +57,9 @@ class TransferFundCard extends Component {
   render() {
     const {user, theme, messengerGroup} = this.props.state
     const { data } = this.props.navigation.state.params;
+    console.log('[transferFund] data', data)
     return (
-      <SafeAreaView>
+      <SafeAreaView key={data}>
         <ScrollView
           showsVerticalScrollIndicator={false}>
 
@@ -155,7 +156,7 @@ class TransferFundCard extends Component {
 
         </ScrollView>
         {
-          (data && data.type == 1 && data.account_id == user.id) && (
+          (data && data.type == 1 && data.account_id == user.id && data.status == 1) && (
             <View style={{
               alignItems: 'center',
               backgroundColor: Color.white,
