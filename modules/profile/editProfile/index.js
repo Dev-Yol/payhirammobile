@@ -22,6 +22,7 @@ import {Rating, DateTime} from 'components';
 import { connect } from 'react-redux';
 import UserImage from 'components/User/Image';
 import Button from 'components/Form/Button';
+import ImagePicker from 'react-native-image-picker';
 import { Item } from 'native-base';
 const gender = [{
   title: 'Male',
@@ -77,7 +78,18 @@ class EditProfile extends Component {
       return
     }
     let parameter = {
-      account_id: user.id
+      condition: [{
+        value: user.id,
+        column: 'account_id',
+        clause: '='
+      }]
+    }
+    let parameter2 = {
+      condition: [{
+        value: user.id,
+        clause: '=',
+        column: 'id'
+      }]
     }
     this.setState({
       isLoading: true, 
@@ -86,19 +98,18 @@ class EditProfile extends Component {
     Api.request(Routes.accountProfileRetrieve, parameter, response => {
       this.setState({isLoading: false})
       if(response.data.length > 0){
-        let data = response.data[0]
-        const { account } = data
-        console.log("[RESPONSEs]", account);
+        const { data } = response
+        console.log("[RESPONSEs]", data);
         this.setState({
-          id: account.id,
-          first_name: account.information.first_name,
-          middle_name:  account.information.middle_name,
-          last_name:  account.information.last_name,
-          sex:  account.information.sex,
-          cellular_number:  account.information.cellular_number,
-          address:  account.information.address,
+          id: data[0].account_id,
+          first_name: data[0].first_name,
+          middle_name:  data[0].middle_name,
+          last_name:  data[0].last_name,
+          sex:  data[0].sex,
+          cellular_number:  data[0].cellular_number,
+          address: data[0].address,
           // birthDate:  account.information.birth_date,
-          profile: account
+
         })
         // if(data.birth_date != null){
         //   this.setState({
@@ -119,6 +130,10 @@ class EditProfile extends Component {
         })
       }
     });
+    Api.request(Routes.accountRetrieve, parameter2, response => {
+      const {profile} = response.data[0]
+      console.log("[images]", response.data);
+    })
   }
 
   upload = () => {
@@ -141,21 +156,20 @@ class EditProfile extends Component {
           Alert.alert('Notice', 'File size exceeded to 1MB')
           return
         }
+        console.log("{File Name}", response);
         this.setState({ photo: response })
         let formData = new FormData();
         let uri = Platform.OS == "android" ? response.uri : response.uri.replace("file://", "");
-        formData.append("file", {
-          name: response.fileName,
-          type: response.type,
-          uri: uri
-        });
+        formData.append("file", response);
         formData.append('file_url', response.fileName);
         formData.append('account_id', user.id);
 
         this.setState({isLoading: true})
-        Api.upload(Routes.accountProfileCreate, formData, response => {
+        console.log("[FORMDATA]", formData);
+        Api.upload(Routes.imageUpload, formData, response => {
           this.setState({isLoading: false})
-          console.log("[PARAMETER]", response);
+          console.log("+++++++++++++++++++++++",response);
+          this.state.profile = response.data.data
           if(response.data !== null) {
             Alert.alert(
               'Message',
@@ -165,7 +179,7 @@ class EditProfile extends Component {
               ],
               { cancelable: false }
             )
-            this.retrieve();
+            // this.retrieve();
           }
         })
       }
