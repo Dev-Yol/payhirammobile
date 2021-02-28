@@ -54,6 +54,48 @@ class TransferFundCard extends Component {
     });
   }
 
+  footerOptions = (data) => {
+    const { theme } = this.props.state;
+    return (
+      <View style={{
+          alignItems: 'center',
+          backgroundColor: Color.white,
+          width: '100%',
+          flexDirection: 'row',
+          position: 'absolute',
+          bottom: 10,
+          paddingLeft: 20,
+          paddingRight: 20,
+          left: 0
+        }}>
+          <Button 
+            title={'Cancel'}
+            onClick={() => this.props.navigation.pop()}
+            style={{
+              width: '45%',
+              marginRight: '5%',
+              backgroundColor: Color.danger,
+            }}
+          />
+
+          <Button 
+            title={'Continue'}
+            onClick={() => this.props.navigation.navigate('otpStack', {
+              data: {
+                payload: 'transferFund',
+                data: data
+              }
+            })}
+            style={{
+              width: '45%',
+              marginLeft: '5%',
+              backgroundColor: theme ? theme.secondary : Color.secondary
+            }}
+          />
+        </View>
+      );
+  }
+
 
   render() {
     const {user, theme, messengerGroup} = this.props.state
@@ -196,44 +238,13 @@ class TransferFundCard extends Component {
 
         </ScrollView>
         {
-          (data && data.type == 1 && data.account_id == user.id && data.status == 1) && (
-            <View style={{
-              alignItems: 'center',
-              backgroundColor: Color.white,
-              width: '100%',
-              flexDirection: 'row',
-              position: 'absolute',
-              bottom: 10,
-              paddingLeft: 20,
-              paddingRight: 20,
-              left: 0
-            }}>
-
-              <Button 
-                title={'Cancel'}
-                onClick={() => this.props.navigation.pop()}
-                style={{
-                  width: '45%',
-                  marginRight: '5%',
-                  backgroundColor: Color.danger,
-                }}
-              />
-
-              <Button 
-                title={'Continue'}
-                onClick={() => this.props.navigation.navigate('otpStack', {
-                  data: {
-                    payload: 'transferFund',
-                    data: data
-                  }
-                })}
-                style={{
-                  width: '45%',
-                  marginLeft: '5%',
-                  backgroundColor: theme ? theme.secondary : Color.secondary
-                }}
-              />
-            </View>
+          (data && data.money_type != 'cash' && (data.peer && data.peer.account_id == user.id) && data.status == 1) && (
+            this.footerOptions(data)
+          )
+        }
+        {
+          (data && data.money_type == 'cash' && data.account_id == user.id && data.status == 1) && (
+            this.footerOptions(data)
           )
         }
       </SafeAreaView>

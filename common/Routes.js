@@ -28,7 +28,7 @@ export default {
   requestPeerDelete: apiUrl + 'request_peers/delete',
   requestManageByThread: apiUrl + 'requests/manage_request_by_thread',
   customMessengerGroupRetrieve: apiUrl + 'custom_messenger_groups/retrieve',
-  customMessengerGroupCreate: apiUrl + 'custom_messenger_groups/  ',
+  customMessengerGroupCreate: apiUrl + 'custom_messenger_groups/create',
   customMessengerGroupRetrieveByParams:
     apiUrl + 'custom_messenger_groups/retrieve_by_params',
   // customMessengerGroupCreate: apiUrl + 'custom_messenger_groups/create',

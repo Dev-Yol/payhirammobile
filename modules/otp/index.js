@@ -147,6 +147,7 @@ class OTP extends Component {
       code: data.code,
       account_code: user.code
     }
+    console.log('[Fund Transfer] data', parameter)
     Api.request(Routes.requestManageByThread, parameter, response => {
         this.setState({isLoading: false});
         console.log('[OTP] Transfer fund response', response)
