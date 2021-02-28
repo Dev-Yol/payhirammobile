@@ -16,6 +16,7 @@ import styles from './Styles';
 import {BasicStyles, Routes, Helper, Color} from 'common';
 import DateTime from 'components/DateTime';
 import Currency from 'services/Currency';
+import TextInputWithoutLabel from 'components/Form/TextInputWithoutLabel'
 
 const width = Math.round(Dimensions.get('window').width);
 const height = Math.round(Dimensions.get('window').height);
@@ -37,9 +38,9 @@ class CreateRequest extends Component {
   }
   componentDidMount() {
     this.retrieveSummaryLedger()
-    const { data } = this.props.navigation.state.params;
-    if(data){
-      this.handleSelectFulfillment(data)
+    const { params } = this.props.navigation.state;
+    if(params && params.data){
+      this.handleSelectFulfillment(params.data)
     }
   }
 
@@ -296,15 +297,33 @@ class CreateRequest extends Component {
             />
 
 
-            <TextInputWithLabel 
+            {/*<TextInputWithLabel 
+                          variable={this.state.reason}
+                          onChange={(value) => this.handleDetailsChange(value)}
+                          label={'Details'}
+                          onError={false}
+                          required={true}
+                          placeholder={'Add details here'}
+                          multiline={true}
+                          numberOfLines={5}
+                        />*/}
+
+            <Text style={{
+              fontSize: BasicStyles.standardFontSize
+            }}>
+              Details *
+            </Text>
+            <TextInputWithoutLabel
               variable={this.state.reason}
-              onChange={(value) => this.handleDetailsChange(value)}
-              label={'Details'}
-              onError={false}
-              required={true}
-              placeholder={'Add details here'}
               multiline={true}
+              onChange={(value) => this.setState({
+                reason: value
+              })}
               numberOfLines={5}
+              placeholder={'Type the details here ...'}
+              style={{
+                marginTop: 10
+              }}
             />
 
 

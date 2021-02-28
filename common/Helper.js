@@ -44,11 +44,11 @@ export default {
     //   title: 'Terms and Conditions',
     //   route: 'TermsAndConditions',
     // },
-    {
-      title: 'Support',
-      route: 'Support',
-      icon: faHeadset
-    }
+    // {
+    //   title: 'Support',
+    //   route: 'Support',
+    //   icon: faHeadset
+    // }
   ],
   currency: [{
     title: 'Philippine Peso',
