@@ -45,15 +45,6 @@ const DashboardStack = createStackNavigator({
       title: 'Dashboard',
       headerLeft: <HeaderOptions navigationProps={navigation} />,
       drawerLabel: 'Dashboard',
-      headerStyle: {
-        backgroundColor: 'white',
-      },
-      headerTintColor: '#4c4c4c',
-      headerRight: (
-        // <View style={{marginRight: 40, paddingRight: 8}}>
-        <FontAwesomeIcon icon={faQrcode} size={20} style={{ color: 'black', marginRight: 40 }}/>
-        // </View>
-      ),
     }),
   },
 });

@@ -45,6 +45,7 @@ class FulfilmentCard extends Component {
   render() {
     const { active } = this.state;
     const { theme } = this.props.state;
+    const { selected } = this.props;
     return (
       <View style={{
         flexDirection: 'row',
@@ -54,7 +55,7 @@ class FulfilmentCard extends Component {
           Data && Data.map((item, index) => (
            
             <TouchableOpacity
-              style={[styles.CardContainer, {backgroundColor: index === active ? (theme ? theme.primary : Color.primary) : (theme ? theme.secondary : Color.secondary)}]}
+              style={[styles.CardContainer, {backgroundColor: (selected && selected.id == item.id) ? (theme ? theme.primary : Color.primary) : (theme ? theme.secondary : Color.secondary)}]}
               onPress={() => {
                 this.onSelect(item, index);
               }}

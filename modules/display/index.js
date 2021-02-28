@@ -36,6 +36,16 @@ class Display extends Component {
     };
   }
 
+  componentDidMount(){
+    const { theme } = this.props.state;
+    if(theme == null){
+      return
+    }
+    this.setState({
+      selectedTile: theme.index
+    })
+  }
+
   selectHandler = (index) => {
     let _theme = dummyThemeData[index].colors
     const {setTheme} = this.props;
@@ -43,19 +53,22 @@ class Display extends Component {
       primary: _theme[0],
       secondary: _theme[1],
       tertiary: _theme[2],
-      fourth: _theme[3]
+      fourth: _theme[3],
+      index: index
     });
     console.log(_theme)
     this.setState({selectedTile: index});
   };
 
   displayThemeTiles = () => {
+    const { theme } = this.props.state;
+    console.log('theme', theme)
     return dummyThemeData.map((data, index) => {
       return (
         <ThemeSettingTile
           id={index}
           key={index}
-          selectedTile={index === this.state.selectedTile ? true : false}
+          selectedTile={(theme && parseInt(theme.index) == index) ? true : false}
           onSelect={this.selectHandler}
           themeTitle={data.title}
           colors={data.details}

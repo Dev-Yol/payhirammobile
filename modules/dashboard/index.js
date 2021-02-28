@@ -21,7 +21,9 @@ import BalanceCard from 'modules/generic/BalanceCard.js';
 import TransactionCard from 'modules/generic/TransactionCard.js';
 import QRCodeModal from 'components/Modal/QRCode';
 import { faStar as faStarRegular } from '@fortawesome/free-regular-svg-icons';
+import { faHandHoldingUsd, faMoneyBillWave, faFileInvoice } from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import ButtonWithIcon from 'components/Form/ButtonWithIcon';
 const width = Math.round(Dimensions.get('window').width);
 const height = Math.round(Dimensions.get('window').height);
 
@@ -220,6 +222,84 @@ class Dashboard extends Component {
                 />
               )
             }
+
+            <Text style={{
+              width: '100%',
+              textAlign: 'center',
+              paddingTop: 10,
+              fontSize: BasicStyles.standardFontSize,
+              fontWeight: 'bold'
+            }}>
+              Start your transaction now.
+            </Text>
+
+            <View style={{
+              flexDirection: 'row',
+              width: '90%',
+              marginLeft: '5%',
+              marignRight: '5%',
+              marginTop: 10
+            }}>
+              <ButtonWithIcon 
+                title={'Cash In'}
+                onClick={() => {
+                  this.props.navigation.navigate('createRequestStack', {
+                    data: {
+                      type: 'Deposit',
+                      description: 'Allow other peers to find your deposits Payhiram',
+                      id: 3,
+                      money_type: 'e-wallet'
+                    }
+                  })
+                }}
+                style={{
+                  width: '30%',
+                  backgroundColor: Color.primary,
+                  marginLeft: 0
+                }}
+                icon={faHandHoldingUsd}
+              />   
+
+              <ButtonWithIcon 
+                title={'Send Cash'}
+                onClick={() => {
+                  this.props.navigation.navigate('createRequestStack', {
+                    data: {
+                      type: 'Send',
+                      description: 'Allow other peers to fulfill your transaction when you to send money to your family, friends, or to businesses',
+                      id: 1,
+                      money_type: 'cash'
+                    }
+                  })
+                }}
+                style={{
+                  width: '30%',
+                  marginLeft: '3%',
+                  backgroundColor: Color.primary,
+                }}
+                icon={faMoneyBillWave}
+              /> 
+
+              <ButtonWithIcon 
+                title={'Bills Payment'}
+                onClick={() => {
+                  this.props.navigation.navigate('createRequestStack', {
+                    data: {
+                      type: 'Bills and Payment',
+                      description: "Don't have time and want to pay your bills? Allow other peers to pay your bills.",
+                      id: 4,
+                      money_type: 'cash'
+                    }
+                  })
+                }}
+                style={{
+                  width: '30%',
+                  marginLeft: '3%',
+                  backgroundColor: Color.primary,
+                }}
+                icon={faFileInvoice}
+              />   
+            </View>
 
             {
               (history && history.length > 0) && this.renderTransactionHeader()

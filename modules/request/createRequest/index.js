@@ -37,6 +37,10 @@ class CreateRequest extends Component {
   }
   componentDidMount() {
     this.retrieveSummaryLedger()
+    const { data } = this.props.navigation.state.params;
+    if(data){
+      this.handleSelectFulfillment(data)
+    }
   }
 
   retrieveSummaryLedger = () => {
@@ -229,7 +233,10 @@ class CreateRequest extends Component {
               <ScrollView
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}>
-                <FulfillmentCard onSelect={(item) => this.handleSelectFulfillment(item)}/>
+                <FulfillmentCard
+                  onSelect={(item) => this.handleSelectFulfillment(item)}
+                  selected={this.state.fulfillmentType}
+                  />
               </ScrollView>
             </View>
 

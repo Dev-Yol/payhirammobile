@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, TouchableOpacity, Text, Platform, Dimensions } from 'react-native';
+import { View, TouchableOpacity, Text, Platform, Dimensions, Share } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import {
@@ -10,6 +10,8 @@ import {
   faPlay,
   faCaretSquareRight,
   faBars,
+  faShare,
+  faQrcode
 } from '@fortawesome/free-solid-svg-icons';
 import { faCopy } from '@fortawesome/free-regular-svg-icons';
 import { Color, BasicStyles } from 'common';
@@ -35,8 +37,32 @@ class NavigationDrawerStructureRight extends Component {
     this.props.navigationProps.dispatch(navigateAction);
   };
 
+  onShare = async () => {
+    const { user } = this.props.state;
+    if(user == null){
+      return
+    }
+    try {
+      const result = await Share.share({
+        message: 'https://payhiram.ph/profile/' + user.code
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  }
+
   render() {
     const { messenger, notifications, theme } = this.props.state;
+    const { routeName } = this.props.navigationProps.state;
     return (
       <View style={{ flexDirection: 'row', width: width }}>
         <TouchableOpacity
@@ -59,6 +85,52 @@ class NavigationDrawerStructureRight extends Component {
               style={{ color: '#FFFFFF' }}
             />
         </TouchableOpacity>
+        {
+          routeName == 'Circle' && (
+            <TouchableOpacity
+                style={{
+                  height: 50,
+                  width: 50,
+                  borderRadius: 50,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginLeft:  width - 170,
+                  marginTop: 10
+                }}
+                onPress={() => this.onShare()}
+                underlayColor={Color.secondary}
+                >
+                  <FontAwesomeIcon
+                    icon={faShare}
+                    size={30}
+                    style={{ color: Color.gray }}
+                  />
+              </TouchableOpacity>
+          )
+        }
+        {
+          routeName == 'Dashboard' && (
+            <TouchableOpacity
+                style={{
+                  height: 50,
+                  width: 50,
+                  borderRadius: 50,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginLeft:  width - 170,
+                  marginTop: 10
+                }}
+                onPress={() => this.goTo('qrCodeScannerStack')}
+                underlayColor={Color.secondary}
+                >
+                  <FontAwesomeIcon
+                    icon={faQrcode}
+                    size={30}
+                    style={{ color: Color.gray }}
+                  />
+              </TouchableOpacity>
+          )
+        }
         <TouchableOpacity
           style={{
             height: 50,
@@ -66,7 +138,7 @@ class NavigationDrawerStructureRight extends Component {
             borderRadius: 50,
             justifyContent: 'center',
             alignItems: 'center',
-            marginLeft: width - 110,
+            marginLeft: (routeName == 'Circle' || routeName == 'Dashboard') ? 10 : width - 110,
             marginTop: 10
           }}
           onPress={() => this.props.navigationProps.navigate('notificationStack')}

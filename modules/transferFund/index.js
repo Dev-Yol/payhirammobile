@@ -9,6 +9,7 @@ import {connect} from 'react-redux';
 import {BasicStyles, Color, Routes} from 'common';
 import Api from 'services/api/index.js';
 import RequestCard from 'modules/generic/RequestCard';
+import {NavigationActions, StackActions} from 'react-navigation';
 
 const height = Math.round(Dimensions.get('window').height);
 class TransferFundCard extends Component {
@@ -150,6 +151,45 @@ class TransferFundCard extends Component {
                     </View>
                   </View>
                 )
+              }
+              {
+                (data.status >= 2) && (
+                    <View style={{
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      width: '100%',
+                      marginTop: 20
+                    }}>
+                      <Text style={{
+                        fontSize: BasicStyles.standardFontSize,
+                        paddingTop: 20,
+                        paddingBottom: 20
+                      }}>Transaction was completed.</Text>
+                      <Button 
+                        title={'Go to dashboard'}
+                        onClick={() => {
+                          const navigateAction = NavigationActions.navigate({
+                            routeName: 'drawerStack',
+                            action: StackActions.reset({
+                              index: 0,
+                              key: null,
+                              actions: [
+                                  NavigationActions.navigate({routeName: 'Dashboard', params: {
+                                    initialRouteName: 'Dashboard',
+                                    index: 0
+                                  }}),
+                              ]
+                            })
+                          });
+                          this.props.navigation.dispatch(navigateAction);
+                        }}
+                        style={{
+                          width: '100%',
+                          backgroundColor: Color.secondary,
+                        }}
+                      />
+                    </View>
+                  )
               }
               
             </View>
