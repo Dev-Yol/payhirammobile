@@ -188,7 +188,8 @@ export default {
     borderWidth: 1,
     width: '100%',
     borderRadius: 5,
-    paddingLeft: 10
+    paddingLeft: 10,
+    justifyContent: 'center'
   },
   standardTextInputMultiline: {
     borderColor: Color.lightGray,
