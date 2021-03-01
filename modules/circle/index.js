@@ -4,7 +4,7 @@ const height = Math.round(Dimensions.get('window').height);
 import { UserImage, Spinner, Empty } from 'components';
 // import Share from 'components/Share'
 import { Rating } from 'components/index.js';
-import { Routes, Color } from 'common';
+import { Routes, Color, BasicStyles } from 'common';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faCheckCircle, faTimesCircle, faEllipsisH} from '@fortawesome/free-solid-svg-icons';
 import { connect } from 'react-redux';
@@ -114,7 +114,8 @@ class Circle extends Component{
     return (
         <View style={{
           flexDirection: 'row',
-          width: '100%'
+          width: '100%',
+          marginTop: 10
         }}>
           {
             item.account_id == user.id && (
@@ -198,7 +199,10 @@ class Circle extends Component{
                   width: '90%'
                 }}>
                 <Text style={{fontWeight: 'bold'}}>{item.account.information.first_name + ' ' + item.account.information.last_name}</Text>
-                <Text style={[{margin: 2}]}>{item.account.information.address?.toUpperCase()}</Text>
+                <Text style={{
+                  marginTop: 10,
+                  fontSize: BasicStyles.standardFontSize
+                }}>{item.account.information.address}</Text>
               {
                 item.status == 'pending' && this.action(item)
               }

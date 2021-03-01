@@ -22,24 +22,31 @@ class TransactionCard extends Component {
                     <Text style={{
                       color: theme ? theme.secondary : Color.secondary,
                       fontSize: BasicStyles.standardFontSize - 1,
-                      paddingTop: 10
+                      paddingTop: 10,
+                      width: '70%'
                     }}>{data.created_at_human}</Text>
                     <Text style={{
                       fontSize: BasicStyles.standardFontSize,
                       paddingTop: 10,
                       paddingBottom: 10
                     }}>{data.description}</Text>
-                    <Text style={{
-                      fontSize: BasicStyles.standardFontSize,
-                      color: Color.gray,
-                      paddingBottom: 10
-                    }}>{data.via}</Text>
+                    {
+                      data.payment_payload_value && (
+                        <Text style={{
+                          fontSize: BasicStyles.standardFontSize,
+                          paddingBottom: 10
+                        }}>Transaction #: ****{data.payment_payload_value.substr(data.payment_payload_value.length - 8, data.payment_payload_value.length - 1)}</Text>
+                      )
+                    }
                   </View>
-                  <View>
+                  <View style={{
+                    width: '30%'
+                  }}>
                     <Text style={{
                       color: theme ? theme.secondary : Color.secondary,
                       fontSize: BasicStyles.standardFontSize,
-                      fontWeight: 'bold'
+                      fontWeight: 'bold',
+                      textAlign: 'right'
                     }}>{Currency.display(data.amount, data.currency)}</Text>
                   </View>
                 </TouchableOpacity>

@@ -288,7 +288,7 @@ export default {
       case 2:
         return 'Withdrawal';
       case 3:
-        return 'Deposit';
+        return 'Cash In';
       case 4:
         return 'Bills and Paymets';
       case 5:
@@ -297,6 +297,18 @@ export default {
         return 'Lending';
       case 102:
         return 'Installment';
+    }
+  },
+  showStatus(type) {
+    switch (parseInt(type)) {
+      case 0:
+        return 'Pending';
+      case 1: 
+        return 'On Going';
+      case 2:
+        return 'Completed';
+      default:
+        return 'Cancelled';
     }
   },
   validateEmail(email) {

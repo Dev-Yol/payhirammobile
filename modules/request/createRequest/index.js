@@ -35,7 +35,8 @@ class CreateRequest extends Component {
       reason: null,
       money_type: null,
       isLoading: false,
-      target: 'partners'
+      target: 'partners',
+      currentDate: null
     };
   }
   componentDidMount() {
@@ -44,6 +45,10 @@ class CreateRequest extends Component {
     if(params && params.data){
       this.handleSelectFulfillment(params.data)
     }
+    let date = new Date()
+    this.setState({
+      currentDate: date.setDate(date.getDate() + 1)
+    })
   }
 
   retrieveSummaryLedger = () => {
@@ -258,7 +263,9 @@ class CreateRequest extends Component {
           <View style={{
             ...BasicStyles.standardContainer
           }}>
-            <View>
+            <View style={{
+              marginTop: 20
+            }}>
               <Text style={{
                 fontWeight: 'bold'
               }}>
@@ -345,6 +352,7 @@ class CreateRequest extends Component {
               onChange={(value) => this.handleAmountChange(value.toString())}
               label={'Amount'}
               keyboardType={'numeric'}
+              maxLength={6}
               onError={false}
               placeholder={'Amount'}
               required={true}
@@ -380,6 +388,7 @@ class CreateRequest extends Component {
               onFinish={this.onDateFinish}
               placeholder="Select date"
               type="date"
+              minimumDate={this.state.currentDate}
             />
 
 
@@ -489,8 +498,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     // updateUser: (user) => dispatch(actions.updateUser(user)),
     setLocation: (location) => dispatch(actions.setLocation(location)),
-    setRequestInput: (requestInput) =>
-      dispatch(actions.setRequestInput(requestInput)),
+    setRequestInput: (requestInput) => dispatch(actions.setRequestInput(requestInput)),
+    setLedger: (ledger) => dispatch(actions.setLedger(ledger)),
   };
 };
 

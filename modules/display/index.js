@@ -8,23 +8,23 @@ const height = Math.round(Dimensions.get('window').height);
 const dummyThemeData = [
   {
     title: 'Increment Mode',
-    details: 'Add description here',
+    details: 'Magenta, Green, Yellow, and Black',
     colors: ['#3F0050', '#22B173', '#F2C94C', '#000000'],
   },
   {
     title: 'Beach Model',
-    details: 'Add description here',
+    details: 'Blue, Light Blue, Yellow, Black',
     // colors: ['#0B62BB', '#529AEC', '#03D5BD', '#000000'],
     colors: ['#0067B3', '#40B0DF', '#FFD53D', '#000000'],
   },
   {
     title: 'Flirty Mode',
-    details: 'Add description here',
+    details: 'Purple, Pink, Green, Black',
     colors: ['#2f1387', '#FF5765', '#03D5BD', '#000000'],
   },
   {
     title: 'Concealed Mode',
-    details: 'Add description here',
+    details: 'Dark Green, Green, Light Green, Black',
     colors: ['#067d68', '#0fbd83', '#3bfeb8', '#000000'],
   }
 ];

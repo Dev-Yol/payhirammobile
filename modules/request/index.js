@@ -33,7 +33,7 @@ import RequestOptions from './RequestOptions.js';
 import ProposalModal from 'modules/generic/ProposalModal';
 import RequestCard from 'modules/generic/RequestCard';
 import _ from 'lodash';
-
+import Footer from './Footer'
 const height = Math.round(Dimensions.get('window').height);
 class Requests extends Component {
   constructor(props) {
@@ -64,7 +64,8 @@ class Requests extends Component {
       isRequestOptions: false,
       offset: 0,
       tempData: [],
-      data: []
+      data: [],
+      page: 'public'
     };
   }
 
@@ -116,39 +117,70 @@ class Requests extends Component {
     }
   };
 
-  retrieve = (scroll, flag, loading = true) => {
+  retrieve = (scroll, flag, loading = true, page = null) => {
     console.log("[Request Retrieve] On Sending Request")
     const {user, searchParameter} = this.props.state;
     const { data, tempData } = this.state;
     if (user == null) {
       return;
     }
-    let parameter = {
-      account_id: user.id,
-      offset: flag == true && this.state.offset > 0 ? (this.state.offset * this.state.limit) : this.state.offset,
-      limit: this.state.limit,
-      sort: {
-        column: 'created_at',
-        value: 'desc',
-      },
-      value: searchParameter == null ? '%' : searchParameter.value + '%',
-      column: searchParameter == null ? 'created_at' : searchParameter.column,
-      type: user.account_type,
-    };
-    this.setState({isLoading: loading == false ? false : true}); 
-
+    let parameter = null
+    if(page != null){
+      this.setState({
+        data: [],
+        offset: 0
+      })
+    }
+    if((page != null && page == 'public') || (page == null && this.state.page == 'public')){
+      parameter = {
+        account_id: user.id,
+        offset: flag == true && this.state.offset > 0 ? (this.state.offset * this.state.limit) : this.state.offset,
+        limit: this.state.limit,
+        sort: {
+          column: 'created_at',
+          value: 'desc',
+        },
+        value: searchParameter == null ? '%' : searchParameter.value + '%',
+        column: searchParameter == null ? 'created_at' : searchParameter.column,
+        type: user.account_type,
+      };
+    }
+    if((page != null && page == 'personal') || (page == null && this.state.page == 'personal')){
+      parameter = {
+        account_id: user.id,
+        offset: flag == true && this.state.offset > 0 ? (this.state.offset * this.state.limit) : this.state.offset,
+        limit: this.state.limit,
+        sort: {
+          column: 'created_at',
+          value: 'desc',
+        },
+        value: user.id,
+        column: 'account_id',
+        type: user.account_type
+      };
+    }
+    this.setState({isLoading: (loading == false && page == null) ? false : true}); 
     console.log("[Request Retrieve] parameter", parameter)
     Api.request( Routes.requestRetrieve, parameter, (response) => {
+        console.log("[Request Retrieve] parameter", response)
         this.setState({
           size: response.size ? response.size : 0,
           isLoading: false
         });
         if(response.data.length > 0){
-          this.setState({
-            data: flag == false ? response.data : _.uniqBy([...this.state.data, ...response.data], 'id'),
-            numberOfPages: parseInt(response.size / this.state.limit) + (response.size % this.state.limit ? 1 : 0),
-            offset: flag == false ? 1 : (this.state.offset + 1)
-          })
+          if(page == null){
+            this.setState({
+              data: flag == false ? response.data : _.uniqBy([...this.state.data, ...response.data], 'id'),
+              numberOfPages: parseInt(response.size / this.state.limit) + (response.size % this.state.limit ? 1 : 0),
+              offset: flag == false ? 1 : (this.state.offset + 1)
+            })
+          }else{
+            this.setState({
+              data: response.data,
+              numberOfPages: 1,
+              offset: 1
+            })
+          }
         }else{
           this.setState({
             data: flag == false ? [] : this.state.data,
@@ -411,9 +443,10 @@ class Requests extends Component {
         <TouchableOpacity
           style={[Style.floatingButton, {
             backgroundColor: theme ? theme.secondary : Color.secondary,
-            height: 70,
-            width: 70,
-            borderRadius: 35
+            height: 60,
+            width: 60,
+            borderRadius: 30,
+            bottom: 60
           }]}
           onPress={() => {
             // {
@@ -432,17 +465,6 @@ class Requests extends Component {
         </TouchableOpacity>
 
         {isLoading ? <Spinner mode="overlay" /> : null}
-        {/* <CustomModal
-          visible={connectModal}
-          title={'Charges'}
-          payload={'charges'}
-          actionLabel={{
-            yes: 'Continue',
-            no: 'Cancel',
-          }}
-          data={connectSelected}
-          action={(flag) => this.connectAction(flag)}></CustomModal> */}
-
         {
           connectModal && (
             <ProposalModal
@@ -463,7 +485,12 @@ class Requests extends Component {
             }></ProposalModal>
           )
         }
-        
+        <Footer {...this.props} selected={this.state.page} onSelect={(value) => {
+          this.setState({
+            page: value
+          })
+          this.retrieve(false, false, false, value)
+        }}/>  
       </View>
     );
   }
