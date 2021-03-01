@@ -191,6 +191,14 @@ export default {
     paddingLeft: 10,
     justifyContent: 'center'
   },
+  standardTextInputNotCentered: {
+    height: 50,
+    borderColor: Color.lightGray,
+    borderWidth: 1,
+    width: '100%',
+    borderRadius: 5,
+    paddingLeft: 10,
+  },
   standardTextInputMultiline: {
     borderColor: Color.lightGray,
     borderWidth: 1,
