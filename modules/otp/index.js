@@ -108,7 +108,8 @@ class OTP extends Component {
         console.log('[OTP] Create Request response', response)
         if(response.data != null){
           this.props.navigation.navigate('requestItemStack', {
-            data: response.data
+            data: response.data,
+            from: 'create'
           })          
         }
       },
