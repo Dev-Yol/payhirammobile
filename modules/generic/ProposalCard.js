@@ -123,7 +123,7 @@ class ProposalCard extends Component {
 
 
   _footer = (item, index) => {
-    const {user} = this.props.state;
+    const {user, theme } = this.props.state;
     const { data, request } = this.props;
     return (
       <View>
@@ -156,7 +156,7 @@ class ProposalCard extends Component {
                     style={{
                       width: '45%',
                       marginLeft: '5%',
-                      backgroundColor: Color.secondary
+                      backgroundColor: theme ? theme.secondary : Color.secondary
                     }}
                   />
                 </View>
@@ -205,7 +205,7 @@ class ProposalCard extends Component {
   };
 
   _myFooter = (item, index) => {
-    const {user} = this.props.state;
+    const {user, theme} = this.props.state;
     const { data, request } = this.props;
     return (
       <View>
@@ -235,7 +235,7 @@ class ProposalCard extends Component {
                 style={{
                   width: '45%',
                   marginLeft: '5%',
-                  backgroundColor: Color.secondary
+                  backgroundColor: theme ? theme.secondary : Color.secondary
                 }}
               />
             </View>

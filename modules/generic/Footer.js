@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
 import {View, Text, TouchableOpacity, Platform} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faUsers, faUser} from '@fortawesome/free-solid-svg-icons';
+import {faUsers, faUser, faClock, faTachometerAlt, faPaperPlane} from '@fortawesome/free-solid-svg-icons';
 import {NavigationActions, StackActions} from 'react-navigation';
 import {BasicStyles, Color} from 'common';
 import {connect} from 'react-redux';
 
-
+const gray = '#999';
 class Footer extends Component {
   constructor(props) {
     super(props);
@@ -73,13 +73,13 @@ class Footer extends Component {
                     style={[
                       BasicStyles.iconStyle,
                       {
-                        color: selected == 'public' ? Color.white : Color.gray,
+                        color: selected == 'public' ? Color.white : gray,
                       },
                     ]}
                   />
                   <Text style={{
                     paddingLeft: 5,
-                    color: selected == 'public' ? Color.white : Color.gray,
+                    color: selected == 'public' ? Color.white : gray,
                   }}>Public</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -97,13 +97,13 @@ class Footer extends Component {
                     style={[
                       BasicStyles.iconStyle,
                       {
-                        color: selected == 'personal' ? Color.white : Color.gray,
+                        color: selected == 'personal' ? Color.white : gray,
                       },
                     ]}
                   />
                   <Text style={{
                     paddingLeft: 5,
-                    color: selected == 'personal' ? Color.white : Color.gray,
+                    color: selected == 'personal' ? Color.white : gray,
                   }}>Personal</Text>
                 </TouchableOpacity>
               </View>
@@ -125,18 +125,18 @@ class Footer extends Component {
                 }}
                 >
                 <FontAwesomeIcon
-                  icon={faUsers}
+                  icon={faTachometerAlt}
                   size={BasicStyles.iconSize}
                   style={[
                     BasicStyles.iconStyle,
                     {
-                      color: selected == 'summary' ? Color.white : Color.gray,
+                      color: selected == 'summary' ? Color.white : gray,
                     },
                   ]}
                 />
                 <Text style={{
                   paddingLeft: 5,
-                  color: selected == 'summary' ? Color.white : Color.gray,
+                  color: selected == 'summary' ? Color.white : gray,
                 }}>Summary</Text>
               </TouchableOpacity>
               <TouchableOpacity
@@ -149,19 +149,75 @@ class Footer extends Component {
                 }}
                 >
                 <FontAwesomeIcon
-                  icon={faUser}
+                  icon={faClock}
                   size={BasicStyles.iconSize}
                   style={[
                     BasicStyles.iconStyle,
                     {
-                      color: selected == 'history' ? Color.white : Color.gray,
+                      color: selected == 'history' ? Color.white : gray,
                     },
                   ]}
                 />
                 <Text style={{
                   paddingLeft: 5,
-                  color: selected == 'history' ? Color.white : Color.gray,
+                  color: selected == 'history' ? Color.white : gray,
                 }}>History</Text>
+              </TouchableOpacity>
+            </View>
+          )
+        }
+        {
+          from == 'circle' && (
+            <View style={{
+              flexDirection: 'row',
+            }}>
+              <TouchableOpacity
+                onPress={() => this.props.onSelect('circle')}
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  width: '50%',
+                  flexDirection: 'row'
+                }}
+                >
+                <FontAwesomeIcon
+                  icon={faUsers}
+                  size={BasicStyles.iconSize}
+                  style={[
+                    BasicStyles.iconStyle,
+                    {
+                      color: selected == 'circle' ? Color.white : gray,
+                    },
+                  ]}
+                />
+                <Text style={{
+                  paddingLeft: 5,
+                  color: selected == 'circle' ? Color.white : gray,
+                }}>Circle</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => this.props.onSelect('invitation')}
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  width: '50%',
+                  flexDirection: 'row'
+                }}
+                >
+                <FontAwesomeIcon
+                  icon={faPaperPlane}
+                  size={BasicStyles.iconSize}
+                  style={[
+                    BasicStyles.iconStyle,
+                    {
+                      color: selected == 'invitation' ? Color.white : gray,
+                    },
+                  ]}
+                />
+                <Text style={{
+                  paddingLeft: 5,
+                  color: selected == 'invitation' ? Color.white : gray,
+                }}>Invitation</Text>
               </TouchableOpacity>
             </View>
           )

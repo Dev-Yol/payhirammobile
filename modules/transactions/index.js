@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { View, Text, ScrollView, TextInput, TouchableOpacity} from 'react-native';
+import { View, Text, ScrollView, TextInput, TouchableOpacity, SafeAreaView, Platform} from 'react-native';
 import Api from 'services/api/index.js';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faCheckCircle, faUserCircle, faUpload } from '@fortawesome/free-solid-svg-icons';
@@ -23,10 +23,7 @@ class Transactions extends Component {
   }
 
   componentDidMount(){
-    // const {user} = this.props;
-    // if (user != null) {
-    this.retrieveLedgerHistory({created_at: 'desc'}, {column: 'created_at', value: ''}, false)
-    // }
+    this.retrieve(false)
   }
 
   onChange(item, type){
@@ -37,29 +34,30 @@ class Transactions extends Component {
     }
   }
 
-  retrieveLedgerHistory = (sort, filter, flag) => {
-    this.setState({isLoading: true});
+  retrieve = (flag) => {
     const { user } = this.props.state
-    let key = Object.keys(sort)
     if (user == null) {
       return;
     }
     let parameter = {
       account_id: user.id,
       limit: this.state.limit,
-      offset: this.state.offset,
+      offset: flag == true ? (this.state.offset * this.state.limit) : 0,
       sort: {
-        column: key[0],
-        value: sort[key[0]]
+        column: 'created_at',
+        value: 'desc'
       },
-      value: filter.value + '%',
-      column: filter.column
+      value: '%',
+      column: 'created_at'
     };
+    console.log('parameter', parameter)
+    this.setState({isLoading: true});
     Api.request(Routes.transactionRetrieve, parameter, (response) => {
+      console.log('data', response.data)
       this.setState({isLoading: false});
-      if (response != null) {
+      if (response.data.length > 0) {
         this.setState({
-          data: flag == false ? response.data : _.uniqBy([...this.state.data, ...response.data], 'id'),
+          data: flag == false ? response.data : _.uniqBy([...this.state.data, ...response.data], 'code'),
           offset: flag == false ? 1 : (this.state.offset + 1)
         })
       } else {
@@ -76,34 +74,38 @@ class Transactions extends Component {
   render() {
     const { data, isLoading } = this.state;
     return (
-      <ScrollView
-        onScroll={(event) => {
-          let scrollingHeight = event.nativeEvent.layoutMeasurement.height + event.nativeEvent.contentOffset.y
-          let totalHeight = event.nativeEvent.contentSize.height
-          if(event.nativeEvent.contentOffset.y <= 0) {
-            if(this.state.loading == false){
-              // this.retrieve(false)
+      <SafeAreaView>
+        <ScrollView
+          onScroll={(event) => {
+            let scrollingHeight = event.nativeEvent.layoutMeasurement.height + event.nativeEvent.contentOffset.y
+            let totalHeight = event.nativeEvent.contentSize.height
+            if(event.nativeEvent.contentOffset.y <= 0) {
+              if(isLoading == false){
+                this.retrieve(false)
+              }
             }
-          }
-          console.log(scrollingHeight, totalHeight);
-          if(scrollingHeight >= (totalHeight)) {
-            if(this.state.loading == false){
-              this.retrieveLedgerHistory({created_at: 'desc'}, {column: 'created_at', value: ''}, true)
+            console.log(scrollingHeight, totalHeight);
+            if(scrollingHeight >= (totalHeight - 20)) {
+              if(isLoading == false){
+                this.retrieve(true)
+              }
             }
-          }
-        }}
-        showsVerticalScrollIndicator={false}>
-      <View>
-        {isLoading ? <Spinner mode="overlay" /> : null}
-          <View style={Styles.MainContainer}>
-            {
-              data && data.map((item, index) => (
-                <TransactionCard data={item}/>
-              ))
-            }
-          </View>
-      </View>
-    </ScrollView>
+          }}
+          showsVerticalScrollIndicator={false}>
+        <View style={{
+          marginTop: Platform.OS == 'ios' ? 50 : 50
+        }}>
+            <View style={Styles.MainContainer}>
+              {
+                data && data.map((item, index) => (
+                  <TransactionCard data={item}/>
+                ))
+              }
+            </View>
+        </View>
+      </ScrollView>
+       {isLoading ? <Spinner mode="overlay" /> : null}
+    </SafeAreaView>
     );
   }
 }
