@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { View, Text, ScrollView, TextInput, TouchableOpacity} from 'react-native';
+import { View, Text, ScrollView, TextInput, TouchableOpacity, SafeAreaView, Platform} from 'react-native';
 import Api from 'services/api/index.js';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faCheckCircle, faUserCircle, faUpload } from '@fortawesome/free-solid-svg-icons';
@@ -76,34 +76,38 @@ class Transactions extends Component {
   render() {
     const { data, isLoading } = this.state;
     return (
-      <ScrollView
-        onScroll={(event) => {
-          let scrollingHeight = event.nativeEvent.layoutMeasurement.height + event.nativeEvent.contentOffset.y
-          let totalHeight = event.nativeEvent.contentSize.height
-          if(event.nativeEvent.contentOffset.y <= 0) {
-            if(this.state.loading == false){
-              // this.retrieve(false)
+      <SafeAreaView>
+        <ScrollView
+          onScroll={(event) => {
+            let scrollingHeight = event.nativeEvent.layoutMeasurement.height + event.nativeEvent.contentOffset.y
+            let totalHeight = event.nativeEvent.contentSize.height
+            if(event.nativeEvent.contentOffset.y <= 0) {
+              if(this.state.loading == false){
+                // this.retrieve(false)
+              }
             }
-          }
-          console.log(scrollingHeight, totalHeight);
-          if(scrollingHeight >= (totalHeight)) {
-            if(this.state.loading == false){
-              this.retrieveLedgerHistory({created_at: 'desc'}, {column: 'created_at', value: ''}, true)
+            console.log(scrollingHeight, totalHeight);
+            if(scrollingHeight >= (totalHeight)) {
+              if(this.state.loading == false){
+                this.retrieveLedgerHistory({created_at: 'desc'}, {column: 'created_at', value: ''}, true)
+              }
             }
-          }
-        }}
-        showsVerticalScrollIndicator={false}>
-      <View>
-        {isLoading ? <Spinner mode="overlay" /> : null}
-          <View style={Styles.MainContainer}>
-            {
-              data && data.map((item, index) => (
-                <TransactionCard data={item}/>
-              ))
-            }
-          </View>
-      </View>
-    </ScrollView>
+          }}
+          showsVerticalScrollIndicator={false}>
+        <View style={{
+          marginTop: Platform.OS == 'ios' ? 50 : 25
+        }}>
+            <View style={Styles.MainContainer}>
+              {
+                data && data.map((item, index) => (
+                  <TransactionCard data={item}/>
+                ))
+              }
+            </View>
+        </View>
+      </ScrollView>
+       {isLoading ? <Spinner mode="overlay" /> : null}
+    </SafeAreaView>
     );
   }
 }
