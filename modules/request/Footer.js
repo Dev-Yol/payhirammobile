@@ -36,6 +36,7 @@ class Footer extends Component {
 
   render (){
     const { selected } = this.props;
+    const { theme } = this.props.state;
     return(
       <View
         style={{
@@ -45,11 +46,12 @@ class Footer extends Component {
           width: '100%',
           position: 'absolute',
           bottom: 0,
-          height: 50,
+          height: 60,
           zIndex: 0,
-          backgroundColor: Color.white,
-          borderTopColor: Color.gray,
-          borderTopWidth: 0.5
+          backgroundColor: theme ? theme.primary : Color.primary,
+          borderTopLeftRadius: BasicStyles.standardBorderRadius,
+          borderTopRightRadius: BasicStyles.standardBorderRadius,
+          ...BasicStyles.standardShadow
         }}>
 
           <TouchableOpacity
@@ -58,9 +60,7 @@ class Footer extends Component {
               justifyContent: 'center',
               alignItems: 'center',
               width: '50%',
-              flexDirection: 'row',
-              borderRightColor: Color.gray,
-              borderRightWidth: 1
+              flexDirection: 'row'
             }}
             >
 
@@ -70,13 +70,13 @@ class Footer extends Component {
               style={[
                 BasicStyles.iconStyle,
                 {
-                  color: selected == 'public' ? Color.primary : Color.gray,
+                  color: selected == 'public' ? Color.white : Color.gray,
                 },
               ]}
             />
             <Text style={{
               paddingLeft: 5,
-              color: selected == 'public' ? Color.primary : Color.gray,
+              color: selected == 'public' ? Color.white : Color.gray,
             }}>Public</Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -94,13 +94,13 @@ class Footer extends Component {
               style={[
                 BasicStyles.iconStyle,
                 {
-                  color: selected == 'personal' ? Color.primary : Color.gray,
+                  color: selected == 'personal' ? Color.white : Color.gray,
                 },
               ]}
             />
             <Text style={{
               paddingLeft: 5,
-              color: selected == 'personal' ? Color.primary : Color.gray,
+              color: selected == 'personal' ? Color.white : Color.gray,
             }}>Personal</Text>
           </TouchableOpacity>
          
