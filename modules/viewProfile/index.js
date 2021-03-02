@@ -187,7 +187,7 @@ class ViewProfile extends Component {
                       <Text style={{
                         marginLeft: 5,
                         color: Color.white
-                      }}>{user.username}</Text>
+                      }}>{user.account.username}</Text>
                     </View>
                   </View>
                 )}

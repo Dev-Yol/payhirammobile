@@ -11,6 +11,7 @@ import styles from 'modules/reviews/Styles.js';
 import Button from 'components/Form/Button';
 import UserImage from 'components/User/Image';
 import TextInputWithoutLabel from 'components/Form/TextInputWithoutLabel'
+import { ScrollView } from 'react-native-gesture-handler';
 const height = Math.round(Dimensions.get('window').height);
 
 class Reviews extends Component {
@@ -46,7 +47,7 @@ class Reviews extends Component {
       return
     }
     let parameter = null
-    if(data.account_id == user.id){
+    if(data.account_id == user.id && data.peer != null){
       parameter = {
         condition: [{
           column: 'payload',
@@ -278,29 +279,31 @@ class Reviews extends Component {
     const { theme } = this.props.state;
     const { data } = this.state;
     return (
-      <View style={{
-        ...styles.ReviewsContainer,
-        height: height,
-        flex: 1
-      }}>
-        {this.state.isLoading ? <Spinner mode="overlay" /> : null}
-        {data && this.renderDetails(data)}
-        {
-          data && (
-            <View style={styles.ButtonContainer}>
-             <Button
-              style={{
-                backgroundColor: theme ? theme.secondary : Color.secondary,
-                width: '90%',
-                marginLeft: '5%',
-                marginRight: '5%'
-              }}
-              title={'Submit'}
-              onClick={() => this.submit()}/>
-            </View>
-          )
-        }
-      </View>
+      <ScrollView>
+        <View style={{
+          ...styles.ReviewsContainer,
+          height: height,
+          flex: 1
+        }}>
+          {this.state.isLoading ? <Spinner mode="overlay" /> : null}
+            {data && this.renderDetails(data)}
+          {
+            data && (
+              <View style={styles.ButtonContainer}>
+              <Button
+                style={{
+                  backgroundColor: theme ? theme.secondary : Color.secondary,
+                  width: '90%',
+                  marginLeft: '5%',
+                  marginRight: '5%'
+                }}
+                title={'Submit'}
+                onClick={() => this.submit()}/>
+              </View>
+            )
+          }
+        </View>
+      </ScrollView>
     );
   }
 }

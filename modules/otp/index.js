@@ -232,16 +232,18 @@ class OTP extends Component {
       },
     ];
     this.setState({isLoading: true});
+    console.log('[parameters]', parameters);
     Api.request(
       Routes.notificationSettingsRetrieve,
       parameters,
       (data) => {
         console.log('[OTP Success]');
+        console.log('[OTP Success]', parameters, '[data]', data);
         this.handleResult()
       },
       (error) => {
         this.setState({isLoading: false, errorMessage: 'Invalid Code'});
-        console.log('[OTP Error]');
+        console.log('[OTP Error]', parameter);
       },
     );
   };
