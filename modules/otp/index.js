@@ -247,7 +247,7 @@ class OTP extends Component {
       },
       (error) => {
         this.setState({isLoading: false, errorMessage: 'Invalid Code'});
-        console.log('[OTP Error]');
+        console.log('[OTP Error]', parameter);
       },
     );
   };

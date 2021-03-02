@@ -21,6 +21,7 @@ export default {
   requestRetrieveItem: apiUrl + 'requests/retrieve_item',
   transactionRetrieve: apiUrl + 'ledger/summary_ledger',
   requestCreate: apiUrl + 'requests/create',
+  requestDelete: apiUrl + 'requests/delete',
   bookmarkCreate: apiUrl + 'bookmarks/create',
   requestPeerCreate: apiUrl + 'request_peers/create',
   requestPeerRetrieveItem: apiUrl + 'request_peers/retrieve_item',

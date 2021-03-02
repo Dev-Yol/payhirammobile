@@ -10,6 +10,7 @@ import {
   ScrollView,
   BackHandler,
   ToastAndroid,
+  Platform
 } from 'react-native';
 import {FlatList, TouchableOpacity} from 'react-native';
 import { Picker } from '@react-native-community/picker';
@@ -431,7 +432,7 @@ class Requests extends Component {
             }
           }}>
           <SystemNotification></SystemNotification>
-          <View style={[Style.MainContainer, {marginTop: 60}]}>
+          <View style={[Style.MainContainer, {marginTop: Platform.OS == 'android' ? 50 : 50}]}>
             
             {this._flatList()}
             {data.length == 0 && isLoading == false && (
