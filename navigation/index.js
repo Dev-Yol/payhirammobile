@@ -33,6 +33,7 @@ import LocationWithMap from 'components/Location/LocationWithMap';
 import SupportStack from 'components/Support/SupportDrawer.js';
 import UpdateTicketStack from 'components/Support/UpdateTicket/UpdateTicketDrawer.js';
 import PrivacyStack from 'modules/privacy/Drawer';
+import GuidelinesStack from 'modules/guidelines/GuidelinesDrawer';
 
 // login stack
 const LoginStack = createStackNavigator(
@@ -122,7 +123,8 @@ const PrimaryNav = createStackNavigator(
     supportStack: { screen: SupportStack },
     updateTicketStack: { screen: UpdateTicketStack },
     paymentMethodsStack: { screen: PaymentMethodsStack },
-    privacyStack: { screen: PrivacyStack}
+    privacyStack: { screen: PrivacyStack},
+    guidelinesStack: { screen: GuidelinesStack}
   },
   {
     // Default config for all screens
