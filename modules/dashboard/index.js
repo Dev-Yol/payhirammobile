@@ -49,7 +49,9 @@ class Dashboard extends Component {
               <Summary onChange={(value) => this.setState({
                 page: value,
                 activeIndex: value == 'summary' ? 0 : 1
-              })}/>
+              })}
+              navigation={this.props.navigation}
+              />
             </View>
             <View style={{
               flex: 1,
