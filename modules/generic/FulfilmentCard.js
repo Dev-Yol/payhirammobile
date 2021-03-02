@@ -15,7 +15,7 @@ const Data = [{
     id: 2,
     money_type: 'cash'
   }, {
-    type: 'Deposit',
+    type: 'Cash In',
     description: 'Allow other peers to find your deposits Payhiram',
     id: 3,
     money_type: 'e-wallet'

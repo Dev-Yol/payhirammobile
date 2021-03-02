@@ -66,7 +66,7 @@ class RequestCard extends Component {
           style={{
             color: theme ? theme.primary : Color.primary,
           }}>
-          {Helper.showRequestType(item.type)}
+          {Helper.showRequestType(item.type) + ' - ' + Helper.showStatus(item.status)}
         </Text>
         {item.coupon != null && parseInt(item.account_id) == user.id && (
           <Text style={Style.text}>

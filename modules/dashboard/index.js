@@ -214,7 +214,7 @@ class Dashboard extends Component {
       <View>
         <ScrollView 
         showsVerticalScrollIndicator={false}>
-          <View style={[styles.MainContainer, {marginTop: 60, height: height}]}>
+          <View style={[styles.MainContainer, {marginTop: 60, minHeight: height}]}>
             {
               ledger && (
                 <BalanceCard
@@ -307,7 +307,10 @@ class Dashboard extends Component {
 
             {
               history && (
-                <View style={BasicStyles.standardContainer}>
+                <View style={{
+                  ...BasicStyles.standardContainer,
+                  marginBottom: 100
+                }}>
                   {
                     history.map((item, index) => (
                       <TransactionCard data={item} key={index}/>
@@ -316,8 +319,6 @@ class Dashboard extends Component {
                 </View>
               )
             }
-            {this.props.state.qrCodeModal && (
-            <QRCodeModal redirect={this.props.navigation.navigate('qrCodeScannerStack', {user: this.props.state.user})} />)}
           </View>
         </ScrollView>
         {isLoading ? <Spinner mode="overlay" /> : null}

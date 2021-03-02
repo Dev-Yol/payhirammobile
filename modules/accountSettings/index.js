@@ -159,7 +159,8 @@ class AccountSettings extends Component {
           <Text style={{
             fontSize: BasicStyles.standardFontSize,
             paddingBottom: 10,
-            marginRight: '83%'
+            textAlign: 'left',
+            width: '100%'
           }}>
             Password
           </Text>
@@ -175,7 +176,8 @@ class AccountSettings extends Component {
           <Text style={{
             fontSize: BasicStyles.standardFontSize,
             paddingBottom: 10,
-            marginRight: '68%'
+            textAlign: 'left',
+            width: '100%'
           }}>
             Confirm Password
           </Text>

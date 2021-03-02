@@ -113,7 +113,7 @@ class ViewProfile extends Component {
   retrieveAccount = () => {
     let parameter = {
       condition: [{
-        value: this.props.navigation.state.params.user ? this.props.navigation.state.params.user.code : this.props.navigation.state.params.code,
+        value: this.props.navigation.state.params.user ? this.props.navigation.state.params.user.account.code : this.props.navigation.state.params.code,
         clause: '=',
         column: 'code'
       }]
@@ -123,7 +123,7 @@ class ViewProfile extends Component {
       this.setState({ isLoading: false })
       if (response.data.length > 0) {
         this.retrieveEducationalBackground(response.data[0].id);
-        this.setState({ user: response.data[0] })
+        this.setState({ user: this.props.navigation.state.params.user ? this.props.navigation.state.params.user : response.data[0] })
       } else {
         this.setState({ user: null })
       }
@@ -152,6 +152,7 @@ class ViewProfile extends Component {
   render() {
     const { user } = this.state
     const { theme } = this.props.state;
+    console.log(user, "==========connected");
     return (
       <View>
         <View>
@@ -193,7 +194,7 @@ class ViewProfile extends Component {
 
                 {user && user.rating && (
                   <View>
-                    <Rating ratings={rating} label={null}></Rating>
+                    <Rating ratings={user.rating} label={null}></Rating>
                   </View>
                 )}
                 <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 5 }}>
@@ -211,7 +212,7 @@ class ViewProfile extends Component {
 
               </View>
               {
-                user && user.information && (
+                user && (
                   <View>
                     <Text
                       style={{
@@ -222,7 +223,7 @@ class ViewProfile extends Component {
                       }}>
                       PERSONAL INFORMATION
                     </Text>
-                    <PersonalInformationCard user={user} />
+                    <PersonalInformationCard user={this.props.navigation.state.params.user ? user.account : user} />
                   </View>
                 )
               }

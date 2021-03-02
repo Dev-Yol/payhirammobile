@@ -51,6 +51,7 @@ export default {
   requestValidationCreate: apiUrl + 'request_validations/create',
   requestValidationUpdate: apiUrl + 'request_validations/update',
   requestValidationRetreive: apiUrl + 'request_validations/retrieve',
+  requestValidationDelete: apiUrl + 'request_validations/delete',
   depositCreate: apiUrl + 'deposits/create',
   withdrawalCreate: apiUrl + 'withdrawals/create',
   withdrawalRetrieve: apiUrl + 'withdrawals/retrieve',

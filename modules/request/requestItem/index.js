@@ -96,7 +96,7 @@ class RequestItem extends Component {
             payload: 'request',
             account_id: user.id,
             request: data,
-            curreny: data.curreny,
+            currency: data.currency,
             amount: data.amount,
             status: 1
           }
@@ -115,7 +115,7 @@ class RequestItem extends Component {
                   payload: 'request',
                   account_id: user.id,
                   request: data,
-                  curreny: data.curreny,
+                  currency: data.currency,
                   amount: data.amount,
                   status: 1
                 }

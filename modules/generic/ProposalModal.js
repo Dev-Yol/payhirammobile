@@ -240,6 +240,7 @@ class ProposalModal extends Component {
                     placeholder={'Amount'}
                     onError={false}
                     required={true}
+                    maxLength={4}
                     keyboardType={'numeric'}
                     />
 

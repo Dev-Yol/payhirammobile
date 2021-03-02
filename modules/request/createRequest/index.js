@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Text, View, StyleSheet, ScrollView, TextInput, Dimensions, Alert} from 'react-native';
+import {Text, View, StyleSheet, TouchableOpacity, ScrollView, TextInput, Dimensions, Alert} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faStar, faAsterisk} from '@fortawesome/free-solid-svg-icons';
 import {connect} from 'react-redux';
@@ -7,6 +7,7 @@ import Api from 'services/api/index.js';
 import {Spinner} from 'components';
 import {NavigationActions, StackActions} from 'react-navigation';
 import FulfillmentCard from 'modules/generic/FulfilmentCard';
+import TargetCard from 'modules/generic/TargetCard';
 import BalanceCard from 'modules/generic/BalanceCard';
 import Button from 'components/Form/Button';
 import TextInputWithLabel from 'components/Form/TextInputWithLabel';
@@ -34,6 +35,8 @@ class CreateRequest extends Component {
       reason: null,
       money_type: null,
       isLoading: false,
+      target: 'partners',
+      currentDate: null
     };
   }
   componentDidMount() {
@@ -42,6 +45,10 @@ class CreateRequest extends Component {
     if(params && params.data){
       this.handleSelectFulfillment(params.data)
     }
+    let date = new Date()
+    this.setState({
+      currentDate: date.setDate(date.getDate() + 1)
+    })
   }
 
   retrieveSummaryLedger = () => {
@@ -87,6 +94,7 @@ class CreateRequest extends Component {
   }
 
   onDateFinish = (datetime) => {
+    console.log('[Selected Date]', datetime)
     this.setState({
       neededOn: datetime.date,
     });
@@ -113,11 +121,33 @@ class CreateRequest extends Component {
     this.setState({maximumProcessingCharge: maximumProcessingCharge});
   };
 
+  handleTarget = (item) => {
+    this.setState({
+      target: item.payload
+    })
+  }
+
   createRequest = () => {
     const {user, defaultAddress} = this.props.state;
+    let testParameters = {
+      account_id: user.id,
+      amount: this.state.amount,
+      comaker: null,
+      coupon: null,
+      currency: this.state.currency,
+      interest: null,
+      location_id: defaultAddress.id,
+      max_charge: this.state.maximumProcessingCharge,
+      months_payable: null,
+      needed_on: this.state.neededOn,
+      reason: this.state.reason,
+      type: this.state.type,
+      money_type: this.state.money_type
+    };
+    console.log('[Initial parameters]', testParameters)
     if(user == null){
       return
-    }else if(this.state.type == null || this.state.money_type == null || this.state.amount == null || this.state.neededOn == null || this.state.reason == null || defaultAddress == null) {
+    }else if(this.state.type == null || this.state.money_type == null || this.state.amount == null || this.state.neededOn == null || this.state.reason == null || defaultAddress == null || this.state.target == null) {
       Alert.alert(
         'Error Message',
         'All fields with (*) are required.',
@@ -177,6 +207,44 @@ class CreateRequest extends Component {
     );
   };
 
+  renderTarget = () => {
+    return(
+      <View styl={{
+        flexDirection: 'row',
+        width: '100%'
+      }}>
+        {
+          targets.map((item, index) => (
+            <TouchableOpacity
+              style={{
+                width: width / 4,
+                marginRight: 10,
+                borderRadius: BasicStyles.standardBorderRadius,
+                borderColor: Color.lightGray,
+                borderWidth: 1,
+                paddingTop: 10,
+                paddingBottom: 10,
+                alignItems: 'center',
+              }}>
+              <Text style={{
+                fontSize: BasicStyles.standardFontSize,
+                fontWeight: 'bold'
+              }}>{item.title}</Text>
+              <Text style={{
+                fontSize: BasicStyles.standardFontSize
+              }}>
+                {
+                  item.description
+                }
+              </Text>
+            </TouchableOpacity>
+          ))
+        }
+        
+      </View>
+    );
+  }
+
   render() {
     const { ledger, theme, defaultAddress } = this.props.state;
     return (
@@ -195,7 +263,9 @@ class CreateRequest extends Component {
           <View style={{
             ...BasicStyles.standardContainer
           }}>
-            <View>
+            <View style={{
+              marginTop: 20
+            }}>
               <Text style={{
                 fontWeight: 'bold'
               }}>
@@ -203,17 +273,31 @@ class CreateRequest extends Component {
               </Text>
             </View>
 
+            <View style={styles.SelectFulfillmentContainer}>
+              <Text
+                style={[
+                  styles.SelectFulfillmentTextStyle,
+                  {fontSize: BasicStyles.standardFontSize},
+                ]}>
+                Visible to
+              </Text>
+              <FontAwesomeIcon
+                icon={faAsterisk}
+                size={7}
+                style={{paddingLeft: 15, color: '#FF2020'}}
+              />
+            </View>
 
-            <LocationTextInput 
-              variable={defaultAddress !== null ? defaultAddress.address_type : null}
-              label={'Select Location'}
-              placeholder={'Select Location'}
-              onError={false}
-              required={true}
-              route={'addLocationStack'}
-              navigation={this.props.navigation}
-            />
-
+            <View style={{width: '100%'}}>
+              <ScrollView
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}>
+                <TargetCard
+                  onSelect={(item) => this.handleTarget(item)}
+                  selected={this.state.target}
+                  />
+              </ScrollView>
+            </View>
 
             <View style={styles.SelectFulfillmentContainer}>
               <Text
@@ -241,6 +325,15 @@ class CreateRequest extends Component {
               </ScrollView>
             </View>
 
+            <LocationTextInput 
+              variable={defaultAddress !== null ? defaultAddress.address_type : null}
+              label={'Select Location'}
+              placeholder={'Select Location'}
+              onError={false}
+              required={true}
+              route={'addLocationStack'}
+              navigation={this.props.navigation}
+            />
 
             <PickerWithLabel 
               label={'Select Currency'}
@@ -259,8 +352,9 @@ class CreateRequest extends Component {
               onChange={(value) => this.handleAmountChange(value.toString())}
               label={'Amount'}
               keyboardType={'numeric'}
+              maxLength={6}
               onError={false}
-              placeholder={'Input here'}
+              placeholder={'Amount'}
               required={true}
             />
 
@@ -294,6 +388,7 @@ class CreateRequest extends Component {
               onFinish={this.onDateFinish}
               placeholder="Select date"
               type="date"
+              minimumDate={this.state.currentDate}
             />
 
 
@@ -308,11 +403,22 @@ class CreateRequest extends Component {
                           numberOfLines={5}
                         />*/}
 
-            <Text style={{
-              fontSize: BasicStyles.standardFontSize
-            }}>
-              Details *
-            </Text>
+            <View style={styles.SelectFulfillmentContainer}>
+              <Text
+                style={[
+                  styles.SelectFulfillmentTextStyle,
+                  {fontSize: BasicStyles.standardFontSize},
+                ]}>
+                Details
+              </Text>
+              <FontAwesomeIcon
+                icon={faAsterisk}
+                size={7}
+                style={{paddingLeft: 15, color: '#FF2020'}}
+              />
+            </View>
+
+
             <TextInputWithoutLabel
               variable={this.state.reason}
               multiline={true}
@@ -392,8 +498,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     // updateUser: (user) => dispatch(actions.updateUser(user)),
     setLocation: (location) => dispatch(actions.setLocation(location)),
-    setRequestInput: (requestInput) =>
-      dispatch(actions.setRequestInput(requestInput)),
+    setRequestInput: (requestInput) => dispatch(actions.setRequestInput(requestInput)),
+    setLedger: (ledger) => dispatch(actions.setLedger(ledger)),
   };
 };
 
