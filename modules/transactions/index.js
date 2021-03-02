@@ -23,10 +23,7 @@ class Transactions extends Component {
   }
 
   componentDidMount(){
-    // const {user} = this.props;
-    // if (user != null) {
-    this.retrieveLedgerHistory({created_at: 'desc'}, {column: 'created_at', value: ''}, false)
-    // }
+    this.retrieve(false)
   }
 
   onChange(item, type){
@@ -37,31 +34,30 @@ class Transactions extends Component {
     }
   }
 
-  retrieveLedgerHistory = (sort, filter, flag) => {
+  retrieve = (flag) => {
     const { user } = this.props.state
-    let key = Object.keys(sort)
     if (user == null) {
       return;
     }
     let parameter = {
       account_id: user.id,
       limit: this.state.limit,
-      offset: this.state.offset,
+      offset: flag == true ? (this.state.offset * this.state.limit) : 0,
       sort: {
-        column: key[0],
-        value: sort[key[0]]
+        column: 'created_at',
+        value: 'desc'
       },
-      value: filter.value + '%',
-      column: filter.column
+      value: '%',
+      column: 'created_at'
     };
     console.log('parameter', parameter)
     this.setState({isLoading: true});
     Api.request(Routes.transactionRetrieve, parameter, (response) => {
       console.log('data', response.data)
       this.setState({isLoading: false});
-      if (response != null) {
+      if (response.data.length > 0) {
         this.setState({
-          data: flag == false ? response.data : _.uniqBy([...this.state.data, ...response.data], 'id'),
+          data: flag == false ? response.data : _.uniqBy([...this.state.data, ...response.data], 'code'),
           offset: flag == false ? 1 : (this.state.offset + 1)
         })
       } else {
@@ -85,13 +81,13 @@ class Transactions extends Component {
             let totalHeight = event.nativeEvent.contentSize.height
             if(event.nativeEvent.contentOffset.y <= 0) {
               if(isLoading == false){
-                // this.retrieve(false)
+                this.retrieve(false)
               }
             }
             console.log(scrollingHeight, totalHeight);
             if(scrollingHeight >= (totalHeight - 20)) {
               if(isLoading == false){
-                this.retrieveLedgerHistory({created_at: 'desc'}, {column: 'created_at', value: ''}, true)
+                this.retrieve(true)
               }
             }
           }}
