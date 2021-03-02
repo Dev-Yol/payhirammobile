@@ -38,7 +38,6 @@ class Transactions extends Component {
   }
 
   retrieveLedgerHistory = (sort, filter, flag) => {
-    this.setState({isLoading: true});
     const { user } = this.props.state
     let key = Object.keys(sort)
     if (user == null) {
@@ -55,7 +54,10 @@ class Transactions extends Component {
       value: filter.value + '%',
       column: filter.column
     };
+    console.log('parameter', parameter)
+    this.setState({isLoading: true});
     Api.request(Routes.transactionRetrieve, parameter, (response) => {
+      console.log('data', response.data)
       this.setState({isLoading: false});
       if (response != null) {
         this.setState({
@@ -82,13 +84,13 @@ class Transactions extends Component {
             let scrollingHeight = event.nativeEvent.layoutMeasurement.height + event.nativeEvent.contentOffset.y
             let totalHeight = event.nativeEvent.contentSize.height
             if(event.nativeEvent.contentOffset.y <= 0) {
-              if(this.state.loading == false){
+              if(isLoading == false){
                 // this.retrieve(false)
               }
             }
             console.log(scrollingHeight, totalHeight);
-            if(scrollingHeight >= (totalHeight)) {
-              if(this.state.loading == false){
+            if(scrollingHeight >= (totalHeight - 20)) {
+              if(isLoading == false){
                 this.retrieveLedgerHistory({created_at: 'desc'}, {column: 'created_at', value: ''}, true)
               }
             }
