@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, TouchableOpacity, Text } from 'react-native';
 import { createStackNavigator } from 'react-navigation-stack';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faQrcode } from '@fortawesome/free-solid-svg-icons';
+import { faQrcode, faBars } from '@fortawesome/free-solid-svg-icons';
 import Dashboard from 'modules/dashboard';
 import { NavigationActions } from 'react-navigation';
 import { BasicStyles } from 'common';

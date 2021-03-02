@@ -13,6 +13,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faCircle, faEllipsisH} from '@fortawesome/free-solid-svg-icons';
 import {BasicStyles, Color, Routes} from 'common';
 import {UserImage, Rating, Spinner} from 'components';
+import Button from 'components/Form/Button.js';
 import RequestCard from 'modules/generic/RequestCard';
 import ProposalCard from 'modules/generic/ProposalCard';
 import ProposalModal from 'modules/generic/ProposalModal';
@@ -39,6 +40,10 @@ class RequestItem extends Component {
   componentDidMount() {
     this.retrieve()
   }
+
+  // redirect = (route) => {
+  //   this.props.navigation.navigate(route);
+  // };
 
   retrieve(){
     const { user } = this.props.state;
@@ -168,6 +173,35 @@ class RequestItem extends Component {
     }, 100)
   }
 
+  delete(data){
+    let parameter = {
+      id: data?.id,
+    }
+    this.setState({isLoading: true})
+    Api.request(Routes.requestDelete, parameter, response => {
+      this.setState({isLoading: false})
+      console.log(response, "remove request");
+      // this.redirect("dashboardStack")
+    });
+  }
+
+  deleteRequest(data){
+    console.log('[deleteRequest]', data.id);
+    Alert.alert(
+      'Confirmation',
+      'Are you sure you want to delete this request?',
+      [
+        {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+        {text: 'OK', onPress: () => this.delete(data)},
+      ],
+      { cancelable: false }
+    )
+  }
+
+  editRequest(data){
+    console.log('[editRequest]', data.id);
+  }
+
 
   renderProposals = (data) => {
     return (
@@ -186,7 +220,7 @@ class RequestItem extends Component {
         <View style={{
 
         }}>
-          <ProposalCard 
+          <ProposalCard
             data={data}
             navigation={this.props.navigation}
             onAcceptRequest={this.acceptRequest}
@@ -203,10 +237,10 @@ class RequestItem extends Component {
   }
 
 
-
   render() {
-    const {user} = this.props.state;
+    const {user, theme} = this.props.state;
     const { data, isLoading } = this.state;
+    console.log('[dataRequestItem]', user, 'paramsssssss', this.props.navigation.state.params.data);
     const { connectModal, modalStatus } = this.state;
     return (
       <View>
@@ -237,6 +271,39 @@ class RequestItem extends Component {
             }
             </View>
         </ScrollView>
+        {
+          (user.username == this.props.navigation.state.params.data.account.username) && (this.props.navigation.state.params.data.status != 2 || this.props.navigation.state.params.data.status != 3) && (
+            <View style={{
+              width: '100%',
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-evenly',
+              position: 'absolute',
+              bottom: 5
+            }}>
+              <Button 
+                style={{
+                  backgroundColor: Color.danger,
+                  width: '48%',
+                  marginRight: '1%',
+                  marginLeft: '1%'
+                }}
+                title={'Cancel'}
+                onClick={() => this.deleteRequest(this.props.navigation.state.params.data)}
+              />
+              <Button 
+                style={{
+                  backgroundColor: theme ? theme.secondary : Color.secondary,
+                  width: '48%',
+                  marginRight: '1%',
+                  marginLeft: '1%'
+                }}
+                title={'Edit'}
+                onClick={() => this.editRequest(this.props.navigation.state.params.data)}
+              />
+            </View>
+          )
+        }
         {isLoading ? <Spinner mode="overlay" /> : null}
         {
           connectModal && (

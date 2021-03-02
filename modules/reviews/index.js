@@ -279,31 +279,33 @@ class Reviews extends Component {
     const { theme } = this.props.state;
     const { data } = this.state;
     return (
-      <ScrollView>
-        <View style={{
-          ...styles.ReviewsContainer,
-          height: height,
-          flex: 1
-        }}>
-          {this.state.isLoading ? <Spinner mode="overlay" /> : null}
-            {data && this.renderDetails(data)}
-          {
-            data && (
-              <View style={styles.ButtonContainer}>
-              <Button
-                style={{
-                  backgroundColor: theme ? theme.secondary : Color.secondary,
-                  width: '90%',
-                  marginLeft: '5%',
-                  marginRight: '5%'
-                }}
-                title={'Submit'}
-                onClick={() => this.submit()}/>
-              </View>
-            )
-          }
-        </View>
-      </ScrollView>
+      <View>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <View style={{
+            ...styles.ReviewsContainer,
+            height: height,
+            flex: 1
+          }}>
+              {data && this.renderDetails(data)}
+          </View>
+        </ScrollView>
+        {this.state.isLoading ? <Spinner mode="overlay" /> : null}
+        {
+          data && (
+            <View style={styles.ButtonContainer}>
+            <Button
+              style={{
+                backgroundColor: theme ? theme.secondary : Color.secondary,
+                width: '90%',
+                marginLeft: '5%',
+                marginRight: '5%'
+              }}
+              title={'Submit'}
+              onClick={() => this.submit()}/>
+            </View>
+          )
+        }
+      </View>
     );
   }
 }
