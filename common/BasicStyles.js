@@ -216,4 +216,12 @@ export default {
     shadowRadius: 10, // 2.62
     elevation: 2, // 2
   },
+  standardFormControl: {
+    height: 50,
+    borderColor: Color.lightGray,
+    borderWidth: 1,
+    width: '100%',
+    borderRadius: 5,
+    paddingLeft: 10
+  },
 }

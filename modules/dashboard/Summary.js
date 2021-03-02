@@ -240,9 +240,7 @@ class Summary extends Component {
 
             <View style={{
               flexDirection: 'row',
-              width: '90%',
-              marginLeft: '5%',
-              marignRight: '5%',
+              width: '100%',
               marginTop: 10
             }}>
               <ButtonWithIcon 
