@@ -33,7 +33,7 @@ import RequestOptions from './RequestOptions.js';
 import ProposalModal from 'modules/generic/ProposalModal';
 import RequestCard from 'modules/generic/RequestCard';
 import _ from 'lodash';
-import Footer from './Footer'
+import Footer from 'modules/generic/Footer'
 const height = Math.round(Dimensions.get('window').height);
 class Requests extends Component {
   constructor(props) {
@@ -485,12 +485,16 @@ class Requests extends Component {
             }></ProposalModal>
           )
         }
-        <Footer {...this.props} selected={this.state.page} onSelect={(value) => {
-          this.setState({
-            page: value
-          })
-          this.retrieve(false, false, false, value)
-        }}/>  
+        <Footer
+          {...this.props}
+          selected={this.state.page} onSelect={(value) => {
+            this.setState({
+              page: value
+            })
+            this.retrieve(false, false, false, value)
+          }}
+          from={'request'}
+        />  
       </View>
     );
   }

@@ -211,35 +211,39 @@ class OTP extends Component {
   validateOTP = (code) => {
     const {user} = this.props.state;
     const {data} = this.props.navigation.state.params;
-
+    this.setState({
+      errorMessage: null
+    })
     if(user == null || data == null || code == null || (code && code.length < 6)){
       return
     }
-    let parameters = [
-      {
-        condition: [
-          {
-            column: 'code',
-            value: code,
-            clause: '=',
-          },
-          {
-            column: 'account_id',
-            value: user.id,
-            clause: '=',
-          },
-        ],
-      },
-    ];
+    let parameters = {
+      condition: [{
+        column: 'code',
+        value: code,
+        clause: '=',
+      }, {
+        column: 'account_id',
+        value: user.id,
+        clause: '=',
+      }]
+    };
     this.setState({isLoading: true});
-    console.log('[parameters]', parameters);
-    Api.request(
-      Routes.notificationSettingsRetrieve,
-      parameters,
-      (data) => {
-        console.log('[OTP Success]');
-        console.log('[OTP Success]', parameters, '[data]', data);
-        this.handleResult()
+    console.log('[OTP] parameters', JSON.stringify(parameters))
+    Api.request( Routes.notificationSettingsRetrieve, parameters, (response) => {
+        this.setState({
+          isLoading: false,
+          errorMessage: null
+        })
+        console.log("[OTP] Retrieve OTP", response)
+        if(response.data.length > 0){
+          console.log('[OTP Success]');
+          this.handleResult() 
+        }else{
+          this.setState({
+            errorMessage: 'Invalid Code.'
+          })
+        }
       },
       (error) => {
         this.setState({isLoading: false, errorMessage: 'Invalid Code'});

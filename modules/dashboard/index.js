@@ -24,6 +24,7 @@ import { faStar as faStarRegular } from '@fortawesome/free-regular-svg-icons';
 import { faHandHoldingUsd, faMoneyBillWave, faFileInvoice } from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import ButtonWithIcon from 'components/Form/ButtonWithIcon';
+import Footer from 'modules/generic/Footer'
 const width = Math.round(Dimensions.get('window').width);
 const height = Math.round(Dimensions.get('window').height);
 
@@ -36,7 +37,8 @@ class Dashboard extends Component {
       isLoading: false,
       selected: null,
       showRatings: true,
-      history: []
+      history: [],
+      page: 'summary'
     };
   }
 
@@ -254,7 +256,7 @@ class Dashboard extends Component {
                 }}
                 style={{
                   width: '30%',
-                  backgroundColor: Color.primary,
+                  backgroundColor: theme ? theme.primary : Color.primary,
                   marginLeft: 0
                 }}
                 icon={faHandHoldingUsd}
@@ -275,7 +277,7 @@ class Dashboard extends Component {
                 style={{
                   width: '30%',
                   marginLeft: '3%',
-                  backgroundColor: Color.primary,
+                  backgroundColor: theme ? theme.primary : Color.primary,
                 }}
                 icon={faMoneyBillWave}
               /> 
@@ -295,7 +297,7 @@ class Dashboard extends Component {
                 style={{
                   width: '30%',
                   marginLeft: '3%',
-                  backgroundColor: Color.primary,
+                  backgroundColor: theme ? theme.primary : Color.primary,
                 }}
                 icon={faFileInvoice}
               />   
@@ -355,6 +357,16 @@ class Dashboard extends Component {
             </View>
           )
         } */}
+        <Footer
+          {...this.props}
+          selected={this.state.page} onSelect={(value) => {
+            this.setState({
+              page: value
+            })
+            this.retrieve(false, false, false, value)
+          }}
+          from={'dashboard'}
+        />  
       </View>
     );
   }
