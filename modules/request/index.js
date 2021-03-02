@@ -446,7 +446,7 @@ class Requests extends Component {
             height: 60,
             width: 60,
             borderRadius: 30,
-            bottom: 60
+            bottom: 70
           }]}
           onPress={() => {
             // {
