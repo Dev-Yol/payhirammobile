@@ -43,6 +43,11 @@ const navigation = [
     route: 'privacyStack',
     icon: faShieldAlt
   },
+  {
+    title: 'Guidelines',
+    route: 'guidelinesStack',
+    icon: faShieldAlt
+  },
 ];
 
 export default navigation;
