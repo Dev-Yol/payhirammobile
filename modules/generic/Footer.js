@@ -166,6 +166,62 @@ class Footer extends Component {
             </View>
           )
         }
+        {
+          from == 'circle' && (
+            <View style={{
+              flexDirection: 'row',
+            }}>
+              <TouchableOpacity
+                onPress={() => this.props.onSelect('circle')}
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  width: '50%',
+                  flexDirection: 'row'
+                }}
+                >
+                <FontAwesomeIcon
+                  icon={faUsers}
+                  size={BasicStyles.iconSize}
+                  style={[
+                    BasicStyles.iconStyle,
+                    {
+                      color: selected == 'circle' ? Color.white : Color.gray,
+                    },
+                  ]}
+                />
+                <Text style={{
+                  paddingLeft: 5,
+                  color: selected == 'circle' ? Color.white : Color.gray,
+                }}>Circle</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => this.props.onSelect('invitation')}
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  width: '50%',
+                  flexDirection: 'row'
+                }}
+                >
+                <FontAwesomeIcon
+                  icon={faUser}
+                  size={BasicStyles.iconSize}
+                  style={[
+                    BasicStyles.iconStyle,
+                    {
+                      color: selected == 'invitation' ? Color.white : Color.gray,
+                    },
+                  ]}
+                />
+                <Text style={{
+                  paddingLeft: 5,
+                  color: selected == 'invitation' ? Color.white : Color.gray,
+                }}>Invitation</Text>
+              </TouchableOpacity>
+            </View>
+          )
+        }
          
       </View>
         
