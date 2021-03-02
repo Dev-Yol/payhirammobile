@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { View, Text, ScrollView, TouchableHighlight, Dimensions, Alert, Share } from 'react-native';
+import { View, Text, ScrollView, TouchableHighlight, Dimensions, Alert, Share, SafeAreaView } from 'react-native';
 const height = Math.round(Dimensions.get('window').height);
 import { UserImage, Spinner, Empty } from 'components';
 // import Share from 'components/Share'

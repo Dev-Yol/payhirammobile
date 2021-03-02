@@ -47,8 +47,11 @@ class ViewProfile extends Component {
         clause: "or"
       }]
     }
+    this.setState({isLoading: true})
     Api.request(Routes.circleRetrieve, parameter, response => {
+      this.setState({isLoading: false})
       this.setState({ connections: response.data })
+      console.log(response.data, "=============connections=====");
       this.setState({status: true});
       if(response.data.length > 0) {
         this.checkStatus(response.data)
@@ -59,7 +62,8 @@ class ViewProfile extends Component {
   checkStatus = (array) => {
     const { user } = this.state
     array.map((item, index) => {
-      if(item.account.id === user.id) {
+      console.log(item.account, user, "==================item");
+      if(item.account.account.id === user.id) {
         this.setState({connection: item})
       }
     })
@@ -155,7 +159,7 @@ class ViewProfile extends Component {
   render() {
     const { user } = this.state
     const { theme } = this.props.state;
-    console.log(this.props.state.user.id, user && user.account_id, this.state.connection && this.state.connection.account.id, "========hehe");
+    console.log(!this.props.navigation.state.params.code, this.state.user && this.state.user, "========hehe");
     return (
       <View>
         <View>
@@ -240,7 +244,7 @@ class ViewProfile extends Component {
             left: 0,
             width: '100%'
           }}>
-            { this.state.status === true && user && this.props.state.user && user.account_id === this.props.state.user.id && (<View
+            { this.state.status === true && user && this.props.state.user && user.account_id === this.props.state.user.id && user.status === 'accepted' && (<View
                 style={{
                   flexDirection: 'row'
                 }}>
@@ -255,7 +259,75 @@ class ViewProfile extends Component {
                   }}
                 />
               </View>)}
-              { this.state.status === true && this.state.connection === null && (
+             {this.state.status === true && user && this.props.state.user && user.account_id !== this.props.state.user.id && (user.status === 'pending' || user.status === 'accepted') && (
+              <View
+                style={{
+                  flexDirection: 'row'
+                }}>
+                <Button
+                  title={'Accept'}
+                  style={{
+                    width: '45%',
+                    marginRight: '1%',
+                    marginLeft: '5%',
+                    backgroundColor: Color.secondary
+                  }}
+                  onClick={() => this.updateRequest('accepted')}
+                />
+                <Button
+                  title={'Decline'}
+                  style={{
+                    width: '45%',
+                    marginRight: '5%',
+                    backgroundColor: Color.danger
+                  }}
+                  onClick={() => this.updateRequest('declined')}
+                />
+              </View>
+            )}
+            { this.state.status === true && user && this.props.state.user && this.state.connection && user.id !== this.props.state.user.id && (this.state.connection.status === 'pending' || this.state.connection === 'accepted') && (
+            <View
+                style={{
+                  flexDirection: 'row'
+                }}>
+                <Button
+                  title={'Cancel'}
+                  onClick={this.removeRequest}
+                  style={{
+                    width: '90%',
+                    marginRight: '1%',
+                    marginLeft: '5%',
+                    backgroundColor: Color.danger
+                  }}
+                />
+              </View>)}
+             {this.state.status === true && user && this.props.state.user && this.state.connection && user.id === this.props.state.user.id && this.state.connection.status === 'pending' && (
+              <View
+                style={{
+                  flexDirection: 'row'
+                }}>
+                <Button
+                  title={'Accept'}
+                  style={{
+                    width: '45%',
+                    marginRight: '1%',
+                    marginLeft: '5%',
+                    backgroundColor: Color.secondary
+                  }}
+                  onClick={() => this.updateRequest('accepted')}
+                />
+                <Button
+                  title={'Decline'}
+                  style={{
+                    width: '45%',
+                    marginRight: '5%',
+                    backgroundColor: Color.danger
+                  }}
+                  onClick={() => this.updateRequest('declined')}
+                />
+              </View>
+            )}
+            { this.state.status === true && !this.props.navigation.state.params.code === false && this.state.connection === null && (
               <View
                 style={{
                   flexDirection: 'row'
@@ -271,73 +343,6 @@ class ViewProfile extends Component {
                   }}
                 />
               </View>)}
-             {this.state.status === true && user && this.props.state.user && user.account_id !== this.props.state.user.id && user.status === 'pending' && (
-              <View
-                style={{
-                  flexDirection: 'row'
-                }}>
-                <Button
-                  title={'Accept'}
-                  style={{
-                    width: '45%',
-                    marginRight: '1%',
-                    marginLeft: '5%',
-                    backgroundColor: Color.secondary
-                  }}
-                  onClick={() => this.updateRequest('accepted')}
-                />
-                <Button
-                  title={'Decline'}
-                  style={{
-                    width: '45%',
-                    marginRight: '5%',
-                    backgroundColor: Color.danger
-                  }}
-                  onClick={() => this.updateRequest('declined')}
-                />
-              </View>
-            )}
-            { this.state.status === true && this.state.connection && this.props.state.user && this.state.connection.account.id === this.props.state.user.id && (<View
-                style={{
-                  flexDirection: 'row'
-                }}>
-                <Button
-                  title={'Cancel'}
-                  onClick={this.removeRequest}
-                  style={{
-                    width: '90%',
-                    marginRight: '1%',
-                    marginLeft: '5%',
-                    backgroundColor: Color.danger
-                  }}
-                />
-              </View>)}
-             {this.state.status === true  && this.props.state.user && this.state.connection && this.state.connection.account.id !== this.props.state.user.id && this.state.connection.status === 'pending' && (
-              <View
-                style={{
-                  flexDirection: 'row'
-                }}>
-                <Button
-                  title={'Accept'}
-                  style={{
-                    width: '45%',
-                    marginRight: '1%',
-                    marginLeft: '5%',
-                    backgroundColor: Color.secondary
-                  }}
-                  onClick={() => this.updateRequest('accepted')}
-                />
-                <Button
-                  title={'Decline'}
-                  style={{
-                    width: '45%',
-                    marginRight: '5%',
-                    backgroundColor: Color.danger
-                  }}
-                  onClick={() => this.updateRequest('declined')}
-                />
-              </View>
-            )}
           </View>
         </View>
       </View >
