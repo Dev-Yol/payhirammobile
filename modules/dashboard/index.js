@@ -256,7 +256,7 @@ class Dashboard extends Component {
                 }}
                 style={{
                   width: '30%',
-                  backgroundColor: Color.primary,
+                  backgroundColor: theme ? theme.primary : Color.primary,
                   marginLeft: 0
                 }}
                 icon={faHandHoldingUsd}
@@ -277,7 +277,7 @@ class Dashboard extends Component {
                 style={{
                   width: '30%',
                   marginLeft: '3%',
-                  backgroundColor: Color.primary,
+                  backgroundColor: theme ? theme.primary : Color.primary,
                 }}
                 icon={faMoneyBillWave}
               /> 
@@ -297,7 +297,7 @@ class Dashboard extends Component {
                 style={{
                   width: '30%',
                   marginLeft: '3%',
-                  backgroundColor: Color.primary,
+                  backgroundColor: theme ? theme.primary : Color.primary,
                 }}
                 icon={faFileInvoice}
               />   
