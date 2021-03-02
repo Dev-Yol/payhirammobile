@@ -103,7 +103,7 @@ class NavigationDrawerStructureRight extends Component {
                   <FontAwesomeIcon
                     icon={faShare}
                     size={30}
-                    style={{ color: Color.gray }}
+                    style={{ color: theme ? theme.primary : Color.primary }}
                   />
               </TouchableOpacity>
           )
@@ -126,7 +126,7 @@ class NavigationDrawerStructureRight extends Component {
                   <FontAwesomeIcon
                     icon={faQrcode}
                     size={30}
-                    style={{ color: Color.gray }}
+                    style={{ color: theme ? theme.primary : Color.primary }}
                   />
               </TouchableOpacity>
           )
@@ -152,7 +152,7 @@ class NavigationDrawerStructureRight extends Component {
               <FontAwesomeIcon
                 icon={faBell}
                 size={30}
-                style={{ color: Color.gray }}
+                style={{ color: theme ? theme.primary : Color.primary }}
               />
               {
                 (notifications && notifications.unread > 0) && (
