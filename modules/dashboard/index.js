@@ -61,7 +61,7 @@ class Dashboard extends Component {
   };
 
   retrieveSummaryLedger = () => {
-    const {user} = this.props.state;
+    const { user } = this.props.state;
     const { setLedger } = this.props;
     if (user == null) {
       return;
