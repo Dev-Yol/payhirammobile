@@ -3,44 +3,32 @@ import {
     Text,
     TouchableOpacity,
     View,
-    Linking
+    Linking,
+    Dimensions
 } from 'react-native';
 import { BasicStyles, Color } from 'common'
 import QRCodeScanner from 'react-native-qrcode-scanner';
-
-
+const height = Math.round(Dimensions.get('window').height);
 class Scanner extends Component {
+  onSuccess = e => {
+      // Linking.openURL(e.data).catch(err =>
+      //     console.error('An error occured', err)
+      // );
+    this.props.navigation.navigate('viewProfileStack', {code: e.data})
+  };
 
-    onSuccess = e => {
-        // Linking.openURL(e.data).catch(err =>
-        //     console.error('An error occured', err)
-        // );
-        this.props.navigation.navigate('viewProfileStack', {code: e.data})
-    };
-
-    render() {
-        return (
-            <QRCodeScanner
-                onRead={this.onSuccess}
-                showMarker
-                topViewStyle={{ height: 10, maxHeight: 10 }}
-                bottomContent={
-                    <View style={{ alignItems: 'center', alignContent: 'center', justifyContent: 'center', paddingTop: "40%", paddingBottom: "20%" }}>
-                        <TouchableOpacity
-                            onPress={()=>{
-                                this.props.navigation.pop()
-                            }}
-                            style={[BasicStyles.btn, BasicStyles.btnSecondary]}
-                            underlayColor={Color.gray}>
-                            <Text style={BasicStyles.textWhite}>
-                                Go Back
-                        </Text>
-                        </TouchableOpacity>
-                    </View>
-                }
-            />
-        );
-    }
+  render() {
+    return (
+      <QRCodeScanner
+        onRead={this.onSuccess}
+        showMarker
+        containerStyle={{
+          height: height,
+          backgroundColor: Color.black
+        }}
+      />
+    );
+  }
 }
 
 export default Scanner;

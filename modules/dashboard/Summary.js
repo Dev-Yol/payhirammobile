@@ -22,7 +22,7 @@ import BalanceCard from 'modules/generic/BalanceCard.js';
 import TransactionCard from 'modules/generic/TransactionCard.js';
 import QRCodeModal from 'components/Modal/QRCode';
 import { faStar as faStarRegular } from '@fortawesome/free-regular-svg-icons';
-import { faHandHoldingUsd, faMoneyBillWave, faFileInvoice } from '@fortawesome/free-solid-svg-icons';
+import { faHandHoldingUsd, faMoneyBillWave, faFileInvoice, faWallet } from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import ButtonWithIcon from 'components/Form/ButtonWithIcon';
 const width = Math.round(Dimensions.get('window').width);
@@ -74,7 +74,7 @@ class Summary extends Component {
     Api.request(Routes.ledgerSummary, parameter, (response) => {
       this.setState({isLoading: false});
       if (response != null) {
-        setLedger(response.data[0]);
+        setLedger(response.data);
       } else {
         setLedger(null);
       }
@@ -178,10 +178,8 @@ class Summary extends Component {
       <View style={{
         flexDirection: 'row',
         paddingBottom: 15,
-        paddingTop: 15,
-        borderBottomWidth: 1,
-        borderBottomColor: Color.lightGray,
-        marginBottom: 25,
+        paddingTop: 25,
+        marginBottom: 10,
         ...BasicStyles.standardContainer
       }}>
         <Text style={{
@@ -220,28 +218,33 @@ class Summary extends Component {
             marginTop: Platform.OS == 'ios' ? 100 : 60,
             minHeight: height
           }}>
+
             {
-              ledger && (
+              (ledger != null && ledger.length > 0) && ledger.map(item => (
                 <BalanceCard
-                  data={ledger}
+                  data={item}
                 />
-              )
+              ))
             }
 
             <Text style={{
               width: '100%',
               textAlign: 'center',
-              paddingTop: 10,
+              paddingTop: 25,
+              paddingBottom: 15,
               fontSize: BasicStyles.standardFontSize,
               fontWeight: 'bold'
             }}>
-              Start your transaction now.
+              Start your transaction now
             </Text>
 
             <View style={{
               flexDirection: 'row',
-              width: '100%',
-              marginTop: 10
+              width: '90%',
+              marginLeft: '5%',
+              marginRight: '5%',
+              marginTop: 10,
+              alignItems: 'center'
             }}>
               <ButtonWithIcon 
                 title={'Cash In'}
@@ -258,7 +261,6 @@ class Summary extends Component {
                 style={{
                   width: '30%',
                   backgroundColor: theme ? theme.primary : Color.primary,
-                  marginLeft: 0
                 }}
                 icon={faHandHoldingUsd}
               />   
@@ -277,7 +279,8 @@ class Summary extends Component {
                 }}
                 style={{
                   width: '30%',
-                  marginLeft: '3%',
+                  marginLeft: '5%',
+                  marginRight: '5%',
                   backgroundColor: theme ? theme.primary : Color.primary,
                 }}
                 icon={faMoneyBillWave}
@@ -297,13 +300,37 @@ class Summary extends Component {
                 }}
                 style={{
                   width: '30%',
-                  marginLeft: '3%',
                   backgroundColor: theme ? theme.primary : Color.primary,
                 }}
                 icon={faFileInvoice}
               />   
             </View>
 
+            <ButtonWithIcon 
+              title={'Send to Wallet(Free)'}
+              onClick={() => {
+                // this.props.navigation.navigate('qrCodeScannerStack', {
+                //   payload: 'transfer'
+                // })
+
+                this.props.navigation.navigate('directTransferDrawer', {
+                  payload: 'transfer'
+                })
+              }}
+              description={'Transfer money through PayHiram to PayHiram Account'}
+              style={{
+                width: '90%',
+                marginLeft: '5%',
+                marginRight: '5%',
+                marginTop: 20,
+                height: 150,
+                backgroundColor: theme ? theme.secondary : Color.secondary,
+              }}
+              icon={faWallet}
+              descriptionStyle={{
+                fontSize: BasicStyles.standardFontSize
+              }}
+            />
             {
               (history && history.length > 0) && this.renderTransactionHeader()
             }

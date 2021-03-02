@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {View, Text, TouchableOpacity, Platform} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faUsers, faUser, faClock, faTachometerAlt, faPaperPlane} from '@fortawesome/free-solid-svg-icons';
+import {faUsers, faUser, faClock, faTachometerAlt, faPaperPlane, faMoneyBillWave} from '@fortawesome/free-solid-svg-icons';
 import {NavigationActions, StackActions} from 'react-navigation';
 import {BasicStyles, Color} from 'common';
 import {connect} from 'react-redux';
@@ -223,6 +223,74 @@ class Footer extends Component {
           )
         }
          
+        {
+          from == 'settings' && (
+            <View style={{
+              flexDirection: 'row',
+            }}>
+              <TouchableOpacity
+                onPress={() => this.navigateToScreen('Requests')}
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  width: '33%',
+                  flexDirection: 'row'
+                }}
+                >
+                <FontAwesomeIcon
+                  icon={faMoneyBillWave}
+                  size={BasicStyles.iconSize}
+                  style={[
+                    BasicStyles.iconStyle,
+                    {
+                      color: Color.white,
+                    },
+                  ]}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => this.navigateToScreen('Dashboard')}
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  width: '34%',
+                  flexDirection: 'row'
+                }}
+                >
+                <FontAwesomeIcon
+                  icon={faTachometerAlt}
+                  size={BasicStyles.iconSize}
+                  style={[
+                    BasicStyles.iconStyle,
+                    {
+                      color: Color.white,
+                    },
+                  ]}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => this.navigateToScreen('Circle')}
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  width: '33%',
+                  flexDirection: 'row'
+                }}
+                >
+                <FontAwesomeIcon
+                  icon={faUsers}
+                  size={BasicStyles.iconSize}
+                  style={[
+                    BasicStyles.iconStyle,
+                    {
+                      color: Color.white,
+                    },
+                  ]}
+                />
+              </TouchableOpacity>
+            </View>
+          )
+        }
       </View>
         
     )
