@@ -5,7 +5,8 @@ import {
   faBell,
   faPalette,
   faHandshake,
-  faShieldAlt
+  faShieldAlt,
+  faBookOpen
 } from '@fortawesome/free-solid-svg-icons';
 const navigation = [
   {
@@ -46,7 +47,7 @@ const navigation = [
   {
     title: 'Guidelines',
     route: 'guidelinesStack',
-    icon: faShieldAlt
+    icon: faBookOpen
   },
 ];
 

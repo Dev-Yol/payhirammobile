@@ -11,6 +11,8 @@ import { connect } from 'react-redux';
 import Api from 'services/api/index.js';
 import _ from 'lodash';
 import Button from 'components/Form/Button';
+import Footer from 'modules/generic/Footer'
+import { Pager, PagerProvider } from '@crowdlinker/react-native-pager';
 class Circle extends Component{
   constructor(props){
     super(props);
@@ -19,6 +21,8 @@ class Circle extends Component{
       limit: 10,
       offset: 0,
       isLoading: false,
+      page: 'circle',
+      activeIndex: 0
     }
   }
 
@@ -173,10 +177,13 @@ class Circle extends Component{
   }
 
 
-  renderCircles(data) {
+  renderCircles(data, status) {
+    const { user } = this.props.state;
     return (
       data.map((item, index) => {
         return (
+          <View>
+          {status === 'circle' && user.id === item.account_id && (
           <TouchableHighlight 
             onPress={() => {
               this.redirect(item)
@@ -209,6 +216,42 @@ class Circle extends Component{
               </View>
             </View>
           </TouchableHighlight>
+          )}
+          {status === 'invitation' && user.id !== item.account_id && (
+          <TouchableHighlight 
+            onPress={() => {
+              this.redirect(item)
+            }}
+            underlayColor={Color.gray}
+            key={index}
+          >
+            <View style={{
+              flexDirection: 'row',
+              paddingTop: 10,
+              paddingBottom: 10,
+              width: '90%',
+              marginLeft: '5%',
+              maginRight: '5%',
+              alignItems: 'center'
+            }}>
+              <UserImage user={item.account}/>
+              <View style={{
+                  marginLeft: 5,
+                  width: '90%'
+                }}>
+                <Text style={{fontWeight: 'bold'}}>{item.account.information.first_name + ' ' + item.account.information.last_name}</Text>
+                <Text style={{
+                  marginTop: 10,
+                  fontSize: BasicStyles.standardFontSize
+                }}>{item.account.information.address}</Text>
+              {
+                item.status == 'pending' && this.action(item)
+              }
+              </View>
+            </View>
+          </TouchableHighlight>
+          )}
+          </View>
         )
       })
     )
@@ -217,7 +260,7 @@ class Circle extends Component{
   redirect = (user) => {
     this.props.navigation.push("viewProfileStack", { user })
   }
-  render() {
+  renderContent(status) {
     const { data } = this.state;
     const { user } = this.props.state;
     return (
@@ -247,7 +290,7 @@ class Circle extends Component{
           <View style={{
             height: height
           }}>
-            {(data && user) && this.renderCircles(data)}
+            {(data && user) && this.renderCircles(data, status)}
           </View>
         </ScrollView>
         {data.length < 1 && this.state.isLoading == false && (<Empty refresh={true} onRefresh={() => this.retrieve(true)} />)}
@@ -255,6 +298,46 @@ class Circle extends Component{
       </View>
     );
   }
+
+  render() {
+    const { activeIndex, data } = this.state;
+    const { user } = this.props.state;
+    return (
+      <View style={{
+        flex: 1
+      }}>
+        <PagerProvider activeIndex={activeIndex}>
+          <Pager panProps={{enabled: false}}>
+            <View style={{
+              flex: 1,
+              minHeight: height,
+              width: '100%'
+            }}>
+              {this.renderContent('circle')}
+            </View>
+            <View style={{
+              flex: 1,
+              minHeight: height,
+              width: '100%'
+            }}>
+              {this.renderContent('invitation')}
+            </View>
+          </Pager>
+        </PagerProvider>     
+        <Footer
+          {...this.props}
+          selected={this.state.page} onSelect={(value) => {
+            this.setState({
+              page: value,
+              activeIndex: value == 'circle' ? 0 : 1
+            })
+          }}
+          from={'circle'}
+        />  
+      </View>
+    );
+  }
+
 }
 const mapStateToProps = state => ({ state: state });
 
