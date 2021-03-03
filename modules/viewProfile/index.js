@@ -32,7 +32,6 @@ class ViewProfile extends Component {
   }
   componentDidMount() {
     this.retrieveAccount();
-    this.retrieveConnections();
   }
 
   retrieveConnections() {
@@ -51,7 +50,6 @@ class ViewProfile extends Component {
     Api.request(Routes.circleRetrieve, parameter, response => {
       this.setState({isLoading: false})
       this.setState({ connections: response.data })
-      console.log(response.data, "=============connections=====");
       this.setState({status: true});
       if(response.data.length > 0) {
         this.checkStatus(response.data)
@@ -62,8 +60,7 @@ class ViewProfile extends Component {
   checkStatus = (array) => {
     const { user } = this.state
     array.map((item, index) => {
-      console.log(item.account, user, "==================item");
-      if(item.account.account.id === user.id) {
+      if(item.account.id === user.id) {
         this.setState({connection: item})
       }
     })
@@ -127,6 +124,7 @@ class ViewProfile extends Component {
     this.setState({ isLoading: true });
     Api.request(Routes.accountRetrieve, parameter, response => {
       this.setState({ isLoading: false })
+      this.retrieveConnections();
       if (response.data.length > 0) {
         this.retrieveEducationalBackground(response.data[0].id);
         this.setState({ user: this.props.navigation.state.params.user ? this.props.navigation.state.params.user : response.data[0] })
@@ -159,7 +157,7 @@ class ViewProfile extends Component {
   render() {
     const { user } = this.state
     const { theme } = this.props.state;
-    console.log(!this.props.navigation.state.params.code, this.state.user && this.state.user, "========hehe");
+    console.log(user && user.account_id, this.state.connection && this.state.connection.account_id, this.state.connection && this.state.connection.status, this.props.state.user && this.props.state.user.id, "====================comparing=============");
     return (
       <View>
         <View>
@@ -244,7 +242,7 @@ class ViewProfile extends Component {
             left: 0,
             width: '100%'
           }}>
-            { this.state.status === true && user && this.props.state.user && user.account_id === this.props.state.user.id && user.status === 'accepted' && (<View
+            { this.state.status === true && user && this.props.state.user && user.account_id === this.props.state.user.id && (user.status === 'accepted' || user.status === 'pending') && (<View
                 style={{
                   flexDirection: 'row'
                 }}>
@@ -285,7 +283,7 @@ class ViewProfile extends Component {
                 />
               </View>
             )}
-            { this.state.status === true && user && this.props.state.user && this.state.connection && user.id !== this.props.state.user.id && (this.state.connection.status === 'pending' || this.state.connection === 'accepted') && (
+            { this.state.status === true && this.props.state.user && this.state.connection && this.state.connection.account_id === this.props.state.user.id && (this.state.connection.status === 'pending' || this.state.connection.status === 'accepted') && (
             <View
                 style={{
                   flexDirection: 'row'
@@ -301,7 +299,7 @@ class ViewProfile extends Component {
                   }}
                 />
               </View>)}
-             {this.state.status === true && user && this.props.state.user && this.state.connection && user.id === this.props.state.user.id && this.state.connection.status === 'pending' && (
+             {this.state.status === true && this.props.state.user && this.state.connection && this.state.connection.account_id !== this.props.state.user.id && (this.state.connection.status === 'pending' || this.state.connection.status === 'accepted') && (
               <View
                 style={{
                   flexDirection: 'row'
@@ -343,6 +341,25 @@ class ViewProfile extends Component {
                   }}
                 />
               </View>)}
+              <View
+                style={{
+                  flexDirection: 'row'
+                }}>
+                <Button
+                  title={'Direct Transfer'}
+                  onClick={() => this.props.navigation.navigate('directTransferDrawer', {
+                    payload: 'transfer',
+                    code: this.props.navigation.state.params.user ? this.props.navigation.state.params.user.account.code : this.props.navigation.state.params.code
+                  })}
+                  style={{
+                    width: '90%',
+                    marginRight: '1%',
+                    marginLeft: '5%',
+                    backgroundColor: Color.secondary,
+                    marginTop: 5
+                  }}
+                />
+              </View>
           </View>
         </View>
       </View >

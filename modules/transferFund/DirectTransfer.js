@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, SafeAreaView, Image, TouchableHighlight, Dimensions, ScrollView, TextInput } from 'react-native';
+import { View, Text, TouchableOpacity, SafeAreaView, Image, TouchableHighlight, Dimensions, ScrollView, TextInput, Alert } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faUserCircle, faStar as Solid } from '@fortawesome/free-solid-svg-icons';
 import {faStar as Regular} from '@fortawesome/free-regular-svg-icons';
@@ -23,12 +23,33 @@ class DirectTransfer extends Component {
       selectedLedger: null,
       amount: 0,
       isLoading: false,
-      notes: null
+      notes: null,
+      scannedUser: null
     }
   }
   
   componentDidMount = () => {
     this.retrieveSummaryLedger()
+    this.retrieveAccount();
+  }
+
+  retrieveAccount = () => {
+    let parameter = {
+      condition: [{
+        value: this.props.navigation.state.params.code,
+        clause: '=',
+        column: 'code'
+      }]
+    }
+    this.setState({ isLoading: true });
+    Api.request(Routes.accountRetrieve, parameter, response => {
+      this.setState({ isLoading: false })
+      if (response.data.length > 0) {
+        this.setState({ scannedUser: response.data[0] })
+      } else {
+        this.setState({ scannedUser: null })
+      }
+    });
   }
 
   retrieveSummaryLedger = () => {
@@ -88,12 +109,23 @@ class DirectTransfer extends Component {
 
           <Button 
             title={'Continue'}
-            onClick={() => this.props.navigation.navigate('otpStack', {
-              data: {
-                payload: 'directTransfer',
-                data: data
-              }
-            })}
+            onClick={ () => this.state.amount > 0 ?
+              this.props.navigation.navigate('otpStack', {
+                data: {
+                  payload: 'directTransfer',
+                  data: data
+                }
+              })
+            :
+              Alert.alert(
+                "Opps",
+                "Invalid amount!",
+                [
+                  { text: "OK"}
+                ],
+                { cancelable: false }
+              )
+            }
             style={{
               width: '45%',
               marginLeft: '5%',
@@ -157,88 +189,91 @@ class DirectTransfer extends Component {
     );
   }
   renderSendTo = (user) => {
+    const { scannedUser } = this.state;
     return (
       <View>
-        <View style={{
-          height: 50,
-          justifyContent: 'center',
-          borderBottomWidth: 1,
-          borderBottomColor: Color.lightGray
-        }}>
-          <Text style={{
-            fontWeight: 'bold',
-            fontSize: BasicStyles.standardFontSize
-          }}>Send to </Text>
+      {scannedUser && (
+        <View>
+          <View style={{
+            height: 50,
+            justifyContent: 'center',
+            borderBottomWidth: 1,
+            borderBottomColor: Color.lightGray
+          }}>
+            <Text style={{
+              fontWeight: 'bold',
+              fontSize: BasicStyles.standardFontSize
+            }}>Send to </Text>
+          </View>
+
+          <View style={{
+            height: 50,
+            justifyContent: 'center',
+            alignItems: 'center',
+            flexDirection: 'row'
+          }}>
+            <Text style={{
+              fontSize: BasicStyles.standardFontSize,
+              width: '50%'
+            }}>Account Code</Text>
+
+            <Text style={{
+              fontSize: BasicStyles.standardFontSize,
+              width: '50%',
+              textAlign: 'right',
+              fontWeight: 'bold'
+            }}
+            numberOfLines={1}
+            >****{scannedUser.code.substr(scannedUser.code.length - 16, scannedUser.code.length - 1)}</Text>
+          </View>
+
+
+
+          <View style={{
+            height: 50,
+            justifyContent: 'center',
+            alignItems: 'center',
+            flexDirection: 'row'
+          }}>
+            <Text style={{
+              fontSize: BasicStyles.standardFontSize,
+              width: '50%'
+            }}>Account Name</Text>
+
+            <Text style={{
+              fontSize: BasicStyles.standardFontSize,
+              width: '50%',
+              textAlign: 'right',
+              fontWeight: 'bold'
+            }}
+            numberOfLines={1}
+            >{scannedUser.information ? scannedUser.information.first_name + ' ' + scannedUser.information.last_name : scannedUser.username}</Text>
+          </View>
+
+
+
+          <View style={{
+            height: 50,
+            justifyContent: 'center',
+            alignItems: 'center',
+            flexDirection: 'row'
+          }}>
+            <Text style={{
+              fontSize: BasicStyles.standardFontSize,
+              width: '50%'
+            }}>Account Email</Text>
+
+            <Text style={{
+              fontSize: BasicStyles.standardFontSize,
+              width: '50%',
+              textAlign: 'right',
+              fontWeight: 'bold'
+            }}
+            numberOfLines={1}
+            >{scannedUser.email}</Text>
+          </View>
         </View>
-
-        <View style={{
-          height: 50,
-          justifyContent: 'center',
-          alignItems: 'center',
-          flexDirection: 'row'
-        }}>
-          <Text style={{
-            fontSize: BasicStyles.standardFontSize,
-            width: '50%'
-          }}>Account Code</Text>
-
-          <Text style={{
-            fontSize: BasicStyles.standardFontSize,
-            width: '50%',
-            textAlign: 'right',
-            fontWeight: 'bold'
-          }}
-          numberOfLines={1}
-          >****{user.code.substr(user.code.length - 16, user.code.length - 1)}</Text>
-        </View>
-
-
-
-        <View style={{
-          height: 50,
-          justifyContent: 'center',
-          alignItems: 'center',
-          flexDirection: 'row'
-        }}>
-          <Text style={{
-            fontSize: BasicStyles.standardFontSize,
-            width: '50%'
-          }}>Account Name</Text>
-
-          <Text style={{
-            fontSize: BasicStyles.standardFontSize,
-            width: '50%',
-            textAlign: 'right',
-            fontWeight: 'bold'
-          }}
-          numberOfLines={1}
-          >Juan Dela Cruz</Text>
-        </View>
-
-
-
-        <View style={{
-          height: 50,
-          justifyContent: 'center',
-          alignItems: 'center',
-          flexDirection: 'row'
-        }}>
-          <Text style={{
-            fontSize: BasicStyles.standardFontSize,
-            width: '50%'
-          }}>Account Email</Text>
-
-          <Text style={{
-            fontSize: BasicStyles.standardFontSize,
-            width: '50%',
-            textAlign: 'right',
-            fontWeight: 'bold'
-          }}
-          numberOfLines={1}
-          >{user.email}</Text>
-        </View>
-
-
+      )}
       </View>
     )
   }

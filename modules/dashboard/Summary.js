@@ -309,11 +309,7 @@ class Summary extends Component {
             <ButtonWithIcon 
               title={'Send to Wallet(Free)'}
               onClick={() => {
-                // this.props.navigation.navigate('qrCodeScannerStack', {
-                //   payload: 'transfer'
-                // })
-
-                this.props.navigation.navigate('directTransferDrawer', {
+                this.props.navigation.navigate('qrCodeScannerStack', {
                   payload: 'transfer'
                 })
               }}
