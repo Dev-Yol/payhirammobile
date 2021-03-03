@@ -160,9 +160,9 @@ class Requests extends Component {
       };
     }
     this.setState({isLoading: (loading == false && page == null) ? false : true}); 
-    console.log("[Request Retrieve] parameter", parameter)
+    // console.log("[Request Retrieve] parameter", parameter)
     Api.request( Routes.requestRetrieve, parameter, (response) => {
-        console.log("[Request Retrieve] parameter", response)
+        console.log("[Request Retrieve] parameter", response.data[0].account)
         this.setState({
           size: response.size ? response.size : 0,
           isLoading: false

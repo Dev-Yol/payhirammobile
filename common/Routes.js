@@ -19,6 +19,7 @@ export default {
   ledgerHistory: apiUrl + 'ledger/history',
   requestRetrieve: apiUrl + 'requests/retrieve',
   requestRetrieveItem: apiUrl + 'requests/retrieve_item',
+  requestRetrieveByPayloadValue: apiUrl + 'requests/retrieve_by_payload_value',
   transactionRetrieve: apiUrl + 'ledger/summary_ledger',
   requestCreate: apiUrl + 'requests/create',
   bookmarkCreate: apiUrl + 'bookmarks/create',

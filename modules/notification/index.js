@@ -31,15 +31,23 @@ class Notifications extends Component{
   }
 
   redirect(payload){
-    console.log("[Data]", this.state.data);
     if(payload === 'thread'){
       this.props.navigation.navigate('messagesStack', {
         data: this.state.data
       })
+      console.log("[Data]", this.state.data);
     }else{
+      let parameter = {
+        payload_value: this.state.data.payload_value
+      }
+      Api.request(Routes.requestRetrieveByPayloadValue, parameter, response => {
+        console.log("[RESPONSE]", response.data);
+        this.setState({data: response.data[0]})
+      })
       this.props.navigation.navigate('requestItemStack', {
         data: this.state.data
       })
+      console.log("[Data]", this.state.data);
     }
   }
   
@@ -61,9 +69,9 @@ class Notifications extends Component{
     }
     this.setState({isLoading: true})
     Api.request(Routes.notificationsRetrieve, parameter, notifications => {
+      console.log("[RESTRIEVE]", notifications.data[0])
       this.setState({isLoading: false})
       this.setState({data: notifications.data[0]})
-      console.log("[RESTRIEVE]", notifications.data)
       setNotifications(notifications.size, notifications.data)
     }, error => {
       this.setState({isLoading: false})
