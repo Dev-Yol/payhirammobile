@@ -175,7 +175,7 @@ class RequestItem extends Component {
 
   delete(data){
     let parameter = {
-      id: data?.id,
+      id: data.id,
     }
     this.setState({isLoading: true})
     Api.request(Routes.requestDelete, parameter, response => {
@@ -200,6 +200,7 @@ class RequestItem extends Component {
 
   editRequest(data){
     console.log('[editRequest]', data.id);
+    this.props.navigation.navigate('createRequestStack', {editData: {data, edited:false}})
   }
 
 
@@ -240,7 +241,6 @@ class RequestItem extends Component {
   render() {
     const {user, theme} = this.props.state;
     const { data, isLoading } = this.state;
-    console.log('[dataRequestItem]', user, 'paramsssssss', this.props.navigation.state.params.data);
     const { connectModal, modalStatus } = this.state;
     return (
       <View>
