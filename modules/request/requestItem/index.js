@@ -198,12 +198,6 @@ class RequestItem extends Component {
     )
   }
 
-  editRequest(data){
-    console.log('[editRequest]', data.id);
-    this.props.navigation.navigate('createRequestStack', {editData: {data, edited:false}})
-  }
-
-
   renderProposals = (data) => {
     return (
       <View>
@@ -277,29 +271,18 @@ class RequestItem extends Component {
               width: '100%',
               flexDirection: 'row',
               alignItems: 'center',
-              justifyContent: 'space-evenly',
               position: 'absolute',
               bottom: 5
             }}>
               <Button 
                 style={{
                   backgroundColor: Color.danger,
-                  width: '48%',
-                  marginRight: '1%',
-                  marginLeft: '1%'
+                  width: '90%',
+                  marginRight: '5%',
+                  marginLeft: '5%'
                 }}
                 title={'Cancel'}
                 onClick={() => this.deleteRequest(this.props.navigation.state.params.data)}
-              />
-              <Button 
-                style={{
-                  backgroundColor: theme ? theme.secondary : Color.secondary,
-                  width: '48%',
-                  marginRight: '1%',
-                  marginLeft: '1%'
-                }}
-                title={'Edit'}
-                onClick={() => this.editRequest(this.props.navigation.state.params.data)}
               />
             </View>
           )
