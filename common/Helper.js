@@ -277,7 +277,6 @@ export default {
       payload: 'credit_card',
     },
   ],
-  transactionLimit: 50000,
   showRequestType(type) {
     switch (parseInt(type)) {
       case 1:

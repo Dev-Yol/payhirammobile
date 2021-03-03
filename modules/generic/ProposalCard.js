@@ -123,6 +123,7 @@ class ProposalCard extends Component {
 
 
   _footer = (item, index) => {
+    console.log('[item==============]', item);
     const {user, theme } = this.props.state;
     const { data, request } = this.props;
     return (
@@ -142,8 +143,9 @@ class ProposalCard extends Component {
                   <Button
                     title={'View Profile'}
                     onClick={() => {this.props.navigation.navigate('viewProfileStack', {
-                      user: item.account,
-                      rating: item.rating
+                      code: item.account.code
+                      // user: item.account,
+                      // rating: item.rating
                     })}}
                     style={{
                       width: '45%',
