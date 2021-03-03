@@ -62,7 +62,7 @@ class ProposalModal extends Component {
       this.setState({isLoading: false, summaryLoading: false});
 
       if (response != null) {
-        setLedger(response.data[0]);
+        setLedger(response.data);
       } else {
         setLedger(null);
       }
@@ -207,13 +207,13 @@ class ProposalModal extends Component {
           <View style={{
             height: height,
           }}>
-            {
-              ledger && (
-                <BalanceCard
-                  data={ledger}
-                />
-              )
-            }
+              {
+                (ledger != null && ledger.length > 0) && ledger.map(item => (
+                  <BalanceCard
+                    data={item}
+                  />
+                ))
+              }
             
 
               <View style={{

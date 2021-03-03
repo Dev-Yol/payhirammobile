@@ -10,6 +10,7 @@ import {
   ScrollView,
   BackHandler,
   ToastAndroid,
+  Platform
 } from 'react-native';
 import {FlatList, TouchableOpacity} from 'react-native';
 import { Picker } from '@react-native-community/picker';
@@ -33,7 +34,7 @@ import RequestOptions from './RequestOptions.js';
 import ProposalModal from 'modules/generic/ProposalModal';
 import RequestCard from 'modules/generic/RequestCard';
 import _ from 'lodash';
-import Footer from './Footer'
+import Footer from 'modules/generic/Footer'
 const height = Math.round(Dimensions.get('window').height);
 class Requests extends Component {
   constructor(props) {
@@ -431,7 +432,7 @@ class Requests extends Component {
             }
           }}>
           <SystemNotification></SystemNotification>
-          <View style={[Style.MainContainer, {marginTop: 60}]}>
+          <View style={[Style.MainContainer, {marginTop: Platform.OS == 'android' ? 50 : 50}]}>
             
             {this._flatList()}
             {data.length == 0 && isLoading == false && (
@@ -446,7 +447,7 @@ class Requests extends Component {
             height: 60,
             width: 60,
             borderRadius: 30,
-            bottom: 60
+            bottom: 70
           }]}
           onPress={() => {
             // {
@@ -485,12 +486,16 @@ class Requests extends Component {
             }></ProposalModal>
           )
         }
-        <Footer {...this.props} selected={this.state.page} onSelect={(value) => {
-          this.setState({
-            page: value
-          })
-          this.retrieve(false, false, false, value)
-        }}/>  
+        <Footer
+          {...this.props}
+          selected={this.state.page} onSelect={(value) => {
+            this.setState({
+              page: value
+            })
+            this.retrieve(false, false, false, value)
+          }}
+          from={'request'}
+        />  
       </View>
     );
   }

@@ -47,8 +47,11 @@ class ViewProfile extends Component {
         clause: "or"
       }]
     }
+    this.setState({isLoading: true})
     Api.request(Routes.circleRetrieve, parameter, response => {
+      this.setState({isLoading: false})
       this.setState({ connections: response.data })
+      console.log(response.data, "=============connections=====");
       this.setState({status: true});
       if(response.data.length > 0) {
         this.checkStatus(response.data)
@@ -59,7 +62,8 @@ class ViewProfile extends Component {
   checkStatus = (array) => {
     const { user } = this.state
     array.map((item, index) => {
-      if(item.id === user.id) {
+      console.log(item.account, user, "==================item");
+      if(item.account.account.id === user.id) {
         this.setState({connection: item})
       }
     })
@@ -71,12 +75,14 @@ class ViewProfile extends Component {
 
   updateRequest = (status) => {
     let parameter = {
-      id: this.state.connection.id,
+      id: this.state.user?.account_id,
       status: status
     }
     this.setState({isLoading: true})
     Api.request(Routes.circleUpdate, parameter, response => {
       this.setState({isLoading: false})
+      this.retrieveAccount();
+      this.retrieveConnections();
     });
   }
 
@@ -104,8 +110,8 @@ class ViewProfile extends Component {
     this.setState({ isLoading: true });
     Api.request(Routes.circleCreate, parameter, response => {
       this.setState({ isLoading: false })
-      console.log(response);
-      this.setState({title: 'Cancel Request'})
+      this.retrieveAccount();
+      this.retrieveConnections();
       
     });
   }
@@ -124,6 +130,7 @@ class ViewProfile extends Component {
       if (response.data.length > 0) {
         this.retrieveEducationalBackground(response.data[0].id);
         this.setState({ user: this.props.navigation.state.params.user ? this.props.navigation.state.params.user : response.data[0] })
+        console.log(response.data[0]);
       } else {
         this.setState({ user: null })
       }
@@ -152,7 +159,7 @@ class ViewProfile extends Component {
   render() {
     const { user } = this.state
     const { theme } = this.props.state;
-    console.log(user, "==========connected");
+    console.log(!this.props.navigation.state.params.code, this.state.user && this.state.user, "========hehe");
     return (
       <View>
         <View>
@@ -187,7 +194,7 @@ class ViewProfile extends Component {
                       <Text style={{
                         marginLeft: 5,
                         color: Color.white
-                      }}>{user.username}</Text>
+                      }}>{this.props.navigation.state.params.user? user.account.username : user.username}</Text>
                     </View>
                   </View>
                 )}
@@ -228,24 +235,6 @@ class ViewProfile extends Component {
                 )
               }
               {this.state.isLoading ? <Spinner mode="overlay" /> : null}
-
-              {/* {
-                this.state.educationalBackground && (
-                  <View>
-                    <Text
-                      style={{
-                        borderBottomWidth: 1,
-                        padding: 15,
-                        fontWeight: 'bold',
-                        borderColor: Color.gray,
-                      }}>
-                      EDUCATIONAL BACKGROUND
-                  </Text>
-                    <EducationalBackgroundCard user={this.state.educationalBackground} />
-                  </View>
-                )
-              } */}
-
             </View>
 
           </ScrollView>
@@ -255,22 +244,22 @@ class ViewProfile extends Component {
             left: 0,
             width: '100%'
           }}>
-            { this.state.user && this.state.connection === null && this.state.status === true && user.id !== this.props.state.user.id && (<View
+            { this.state.status === true && user && this.props.state.user && user.account_id === this.props.state.user.id && user.status === 'accepted' && (<View
                 style={{
                   flexDirection: 'row'
                 }}>
                 <Button
-                  title={this.state.title}
-                  onClick={this.state.title === 'Cancel Request' ? this.removeRequest : this.sendRequest}
+                  title={'Cancel'}
+                  onClick={this.removeRequest}
                   style={{
                     width: '90%',
                     marginRight: '1%',
                     marginLeft: '5%',
-                    backgroundColor: Color.secondary
+                    backgroundColor: Color.danger
                   }}
                 />
               </View>)}
-             {this.state.connection && this.state.connection.id === user.id && this.state.status === true && this.state.connection.status === 'pending' && (
+             {this.state.status === true && user && this.props.state.user && user.account_id !== this.props.state.user.id && (user.status === 'pending' || user.status === 'accepted') && (
               <View
                 style={{
                   flexDirection: 'row'
@@ -283,7 +272,7 @@ class ViewProfile extends Component {
                     marginLeft: '5%',
                     backgroundColor: Color.secondary
                   }}
-                  onClick={this.updateRequest('accepted')}
+                  onClick={() => this.updateRequest('accepted')}
                 />
                 <Button
                   title={'Decline'}
@@ -292,61 +281,60 @@ class ViewProfile extends Component {
                     marginRight: '5%',
                     backgroundColor: Color.danger
                   }}
-                  onClick={this.updateRequest('declined')}
+                  onClick={() => this.updateRequest('declined')}
                 />
               </View>
             )}
-            {this.state.connection &&
-            this.state.connection.id === this.props.state.user.id &&
-            this.state.status === true &&
-            this.props.state.user.id !== this.state.connection.id &&
-            this.state.connection.status === 'pending' && (
-              <View
+            { this.state.status === true && user && this.props.state.user && this.state.connection && user.id !== this.props.state.user.id && (this.state.connection.status === 'pending' || this.state.connection === 'accepted') && (
+            <View
                 style={{
                   flexDirection: 'row'
                 }}>
                 <Button
-                  title={'Cancel Request'}
-                  style={{
-                    width: '90%',
-                    marginRight: '1%',
-                    marginLeft: '5%',
-                    backgroundColor: Color.secondary
-                  }}
+                  title={'Cancel'}
                   onClick={this.removeRequest}
-                />
-              </View>
-            )}
-            {this.state.connection &&
-            (this.state.connection.id === this.props.state.user.id &&
-            this.state.status === true &&
-            this.props.state.user.id !== this.state.connection.id || this.state.connection.id === user.id) &&
-            this.state.connection.status === 'accepted' && (
-              <View
-                style={{
-                  flexDirection: 'row'
-                }}>
-                <Button
-                  title={'Remove'}
                   style={{
                     width: '90%',
                     marginRight: '1%',
                     marginLeft: '5%',
                     backgroundColor: Color.danger
                   }}
-                  onClick={this.removeRequest}
                 />
-              </View>
-            )}
-            {this.state.connection?.id === this.state.user?.id &&
-            this.state.connection?.status === 'declined' && (
+              </View>)}
+             {this.state.status === true && user && this.props.state.user && this.state.connection && user.id === this.props.state.user.id && this.state.connection.status === 'pending' && (
               <View
                 style={{
                   flexDirection: 'row'
                 }}>
                 <Button
-                  title={this.state.title}
-                  onClick={this.state.title === 'Cancel Request' ? this.removeRequest : this.sendRequest}
+                  title={'Accept'}
+                  style={{
+                    width: '45%',
+                    marginRight: '1%',
+                    marginLeft: '5%',
+                    backgroundColor: Color.secondary
+                  }}
+                  onClick={() => this.updateRequest('accepted')}
+                />
+                <Button
+                  title={'Decline'}
+                  style={{
+                    width: '45%',
+                    marginRight: '5%',
+                    backgroundColor: Color.danger
+                  }}
+                  onClick={() => this.updateRequest('declined')}
+                />
+              </View>
+            )}
+            { this.state.status === true && !this.props.navigation.state.params.code === false && this.state.connection === null && (
+              <View
+                style={{
+                  flexDirection: 'row'
+                }}>
+                <Button
+                  title={'Send Request'}
+                  onClick={this.sendRequest}
                   style={{
                     width: '90%',
                     marginRight: '1%',
@@ -354,8 +342,7 @@ class ViewProfile extends Component {
                     backgroundColor: Color.secondary
                   }}
                 />
-              </View>
-            )}
+              </View>)}
           </View>
         </View>
       </View >

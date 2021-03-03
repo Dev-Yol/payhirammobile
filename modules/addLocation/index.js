@@ -189,7 +189,7 @@ class AddLocation extends Component {
           style={{
             backgroundColor: Color.secondary,
             position: 'absolute',
-            bottom: 0,
+            bottom: 10,
             left: '5%',
             right: '5%',
             width: '90%'

@@ -206,4 +206,22 @@ export default {
     borderRadius: 5,
     paddingLeft: 10
   },
+  standardShadow: {
+    shadowColor: Color.black,
+    shadowOffset: {
+      width: 0,
+      height: 10,
+    },
+    shadowOpacity: 0.23, // 0.23
+    shadowRadius: 10, // 2.62
+    elevation: 2, // 2
+  },
+  standardFormControl: {
+    height: 50,
+    borderColor: Color.lightGray,
+    borderWidth: 1,
+    width: '100%',
+    borderRadius: 5,
+    paddingLeft: 10
+  },
 }

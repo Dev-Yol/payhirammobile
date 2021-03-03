@@ -5,7 +5,8 @@ import {
   faBell,
   faPalette,
   faHandshake,
-  faShieldAlt
+  faShieldAlt,
+  faBookOpen
 } from '@fortawesome/free-solid-svg-icons';
 const navigation = [
   {
@@ -42,6 +43,11 @@ const navigation = [
     title: 'Privacy Policies',
     route: 'privacyStack',
     icon: faShieldAlt
+  },
+  {
+    title: 'Guidelines',
+    route: 'guidelinesStack',
+    icon: faBookOpen
   },
 ];
 

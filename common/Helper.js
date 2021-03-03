@@ -30,25 +30,21 @@ export default {
       route: 'Circle',
       icon: faUsers
     },
-    {
-      title: 'Messages',
-      route: 'Messenger',
-      icon: faComment
-    }, 
+    // {
+    //   title: 'Messages',
+    //   route: 'Messenger',
+    //   icon: faComment
+    // }, 
     {
       title: 'Settings',
       route: 'Settings',
       icon: faCog
     },
-    // {
-    //   title: 'Terms and Conditions',
-    //   route: 'TermsAndConditions',
-    // },
-    // {
-    //   title: 'Support',
-    //   route: 'Support',
-    //   icon: faHeadset
-    // }
+    {
+      title: 'Ask for help',
+      route: 'Support',
+      icon: faHeadset
+    }
   ],
   currency: [{
     title: 'Philippine Peso',

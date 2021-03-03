@@ -19,6 +19,7 @@ import RequestItemStack from 'modules/request/requestItem/requestItemDrawer.js';
 import EditProfileStack from 'modules/profile/editProfile/editProfileDrawer.js';
 import TransactionsStack from 'modules/transactions/Drawer.js';
 import TransferFundStack from 'modules/transferFund/TransferFundDrawer.js';
+import DirectTransferStack from 'modules/transferFund/DirectTransferDrawer.js';
 import NotificationSettingsStack from 'modules/notification/settings/NotificationSettingsDrawer.js';
 import CreateTicketStack from 'modules/createTicket/CreateTicketDrawer.js';
 import DisplayStack from 'modules/display/DisplayDrawer.js';
@@ -33,6 +34,7 @@ import LocationWithMap from 'components/Location/LocationWithMap';
 import SupportStack from 'components/Support/SupportDrawer.js';
 import UpdateTicketStack from 'components/Support/UpdateTicket/UpdateTicketDrawer.js';
 import PrivacyStack from 'modules/privacy/Drawer';
+import GuidelinesStack from 'modules/guidelines/GuidelinesDrawer';
 
 // login stack
 const LoginStack = createStackNavigator(
@@ -122,7 +124,9 @@ const PrimaryNav = createStackNavigator(
     supportStack: { screen: SupportStack },
     updateTicketStack: { screen: UpdateTicketStack },
     paymentMethodsStack: { screen: PaymentMethodsStack },
-    privacyStack: { screen: PrivacyStack}
+    privacyStack: { screen: PrivacyStack},
+    guidelinesStack: { screen: GuidelinesStack},
+    directTransferDrawer: { screen: DirectTransferStack }
   },
   {
     // Default config for all screens
