@@ -18,11 +18,13 @@ class BalanceCard extends Component {
         style={[styles.CardContainer, {
           backgroundColor: theme ? theme.secondary : Color.secondary
         }]}>
+        
         <Text style={styles.AvailableBalanceTextStyle}>
           Available Balance
         </Text>
+
         <Text style={styles.BalanceTextStyle}>
-          {Currency.display(data.available_balance, data.currency)}
+          {Currency.display(data.available_balance >= 0 ? data.available_balance : 0, data.currency)}
         </Text>
 
         {
