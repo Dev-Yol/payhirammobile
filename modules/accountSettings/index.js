@@ -5,7 +5,8 @@ import {
   TextInput,
   TouchableHighlight,
   ScrollView,
-  Dimensions
+  Dimensions,
+  SafeAreaView
 } from 'react-native';
 import { connect } from 'react-redux';
 import { Routes, Color, Helper, BasicStyles } from 'common';
@@ -44,25 +45,34 @@ class AccountSettings extends Component {
     })
   }
   updateEmail = () => {
+    const { user } = this.props.state;
+    if(user == null){
+      return
+    }
     if (this.isValidEmail()) {
-      const { user } = this.props.state;
       let parameters = {
         id: user.id,
         email: this.state.email
       };
       this.setState({ isLoading: true });
-      Api.request(
-        Routes.accountUpdateEmail,
-        parameters,
-        (response) => {
+      console.log('[Update Email] Parameters', parameters)
+      Api.request( Routes.accountUpdateEmail, parameters, response => {
           this.setState({ isLoading: false });
-          alert('Email updated!');
-          this.state.email = ''
+          if(response.data == true){
+            alert('Your email is now updated.')
+            const { updateUser } = this.props;
+            updateUser({
+              ...user,
+              email: this.state.email
+            })
+          }else{
+            alert(response.error)
+          }
         },
         (error) => {
           console.log('update email error', error);
           this.setState({ isLoading: false });
-        },
+        }
       );
     } else {
       alert("Invalid Email")
@@ -115,94 +125,97 @@ class AccountSettings extends Component {
     let { user, theme } = this.props.state;
 
     return (
-      <ScrollView style={{ flex: 1, paddingTop: 10 }}>
-        <View style={[styles.AccountSettingsContainer, {height: height + 25}]}>
-            <QRCode
-              size={220}
-              value={user.code}
-            />
-          {this.state.isLoading ? <Spinner mode="overlay" /> : null}
-
-          <TextInputWithLabel 
-            variable={user.username}
-            onChange={(value) => {}}
-            label={'Username'}
-            selectTextOnFocus={false}
-            onError={false}
-            editable={false}
-            required={false}
-          />
-
-          <TextInputWithLabel 
-            variable={this.state.email}
-            onChange={(value) => {this.setState({email: value})}}
-            label={'Email Address'}
-            onError={false}
-            placeholder={'Enter Email address'}
-            required={true}
-            editable={true}
-          />
-
-          <Button
-            style={{
-              backgroundColor: theme ? theme.secondary : Color.secondary,
-              marginTop: 15,
-              marginBottom: 15
-            }}
-            title={'Update Email'}
-            onClick={() => this.updateEmail()}/>
-
-          { this.state.error === true && (
-            <Text style={{color: Color.danger}}>Password must be atleast 8 alphanumeric characters. It should contain 1 number, 1 special character and 1 capital letter.</Text>
-          )}
-          
-          <Text style={{
-            fontSize: BasicStyles.standardFontSize,
-            paddingBottom: 10,
-            textAlign: 'left',
-            width: '100%'
-          }}>
-            Password
-          </Text>
-          <PasswordWithIcon
-            onTyping={(input) =>
-              this.validPassword(input)
-            }
-            style={{
-              width: '100%'
-            }}
-            />
-
-          <Text style={{
-            fontSize: BasicStyles.standardFontSize,
-            paddingBottom: 10,
-            textAlign: 'left',
-            width: '100%'
-          }}>
-            Confirm Password
-          </Text>
-          <PasswordWithIcon
-            onTyping={(input) =>
-              this.setState({
-                confirmPassword: input,
-              })
-            }
+      <SafeAreaView>
+        <ScrollView style={{ flex: 1, paddingTop: 10 }}>
+          <View style={[styles.AccountSettingsContainer, {height: height + 25}]}>
+              <QRCode
+                size={220}
+                value={user.code}
+              />
             
-            style={{
-              paddingBottom: 20,
+
+            <TextInputWithLabel 
+              variable={user.username}
+              onChange={(value) => {}}
+              label={'Username'}
+              selectTextOnFocus={false}
+              onError={false}
+              editable={false}
+              required={false}
+            />
+
+            <TextInputWithLabel 
+              variable={this.state.email}
+              onChange={(value) => {this.setState({email: value})}}
+              label={'Email Address'}
+              onError={false}
+              placeholder={'Enter Email address'}
+              required={true}
+              editable={true}
+            />
+
+            <Button
+              style={{
+                backgroundColor: theme ? theme.secondary : Color.secondary,
+                marginTop: 15,
+                marginBottom: 15
+              }}
+              title={'Update Email'}
+              onClick={() => this.updateEmail()}/>
+
+            { this.state.error === true && (
+              <Text style={{color: Color.danger}}>Password must be atleast 8 alphanumeric characters. It should contain 1 number, 1 special character and 1 capital letter.</Text>
+            )}
+            
+            <Text style={{
+              fontSize: BasicStyles.standardFontSize,
+              paddingBottom: 10,
+              textAlign: 'left',
               width: '100%'
-            }}
-          />
+            }}>
+              Password
+            </Text>
+            <PasswordWithIcon
+              onTyping={(input) =>
+                this.validPassword(input)
+              }
+              style={{
+                width: '100%'
+              }}
+              />
 
-          <Button 
-            style={{
-              backgroundColor: theme ? theme.secondary : Color.secondary
-            }}
-            title={'Change Password'}
-            onClick={() => this.updatePassword()}/>
+            <Text style={{
+              fontSize: BasicStyles.standardFontSize,
+              paddingBottom: 10,
+              textAlign: 'left',
+              width: '100%'
+            }}>
+              Confirm Password
+            </Text>
+            <PasswordWithIcon
+              onTyping={(input) =>
+                this.setState({
+                  confirmPassword: input,
+                })
+              }
+              
+              style={{
+                paddingBottom: 20,
+                width: '100%'
+              }}
+            />
 
-        </View>
-      </ScrollView>
+            <Button 
+              style={{
+                backgroundColor: theme ? theme.secondary : Color.secondary
+              }}
+              title={'Change Password'}
+              onClick={() => this.updatePassword()}/>
+
+          </View>
+        </ScrollView>
+        {this.state.isLoading ? <Spinner mode="overlay" /> : null}
+      </SafeAreaView>
     );
   }
 }
@@ -211,8 +224,12 @@ const mapStateToProps = (state) => ({
   state
 })
 
-const mapDispatchToProps = {
 
-}
+const mapDispatchToProps = dispatch => {
+  const { actions } = require('@redux');
+  return {
+    updateUser: (user) => dispatch(actions.updateUser(user))
+  };
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(AccountSettings);
