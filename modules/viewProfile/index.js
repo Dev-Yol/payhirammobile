@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView, Image, TouchableOpacity, TouchableHighlight, Dimensions } from 'react-native';
+import { View, Text, ScrollView, Image, TouchableOpacity, TouchableHighlight, Dimensions, Alert } from 'react-native';
 import { BasicStyles, Color, Routes } from 'common';
 import UserImage from 'components/User/Image.js';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faStar, faCheckCircle, faUserCircle, faChevronLeft, faAddressCard } from '@fortawesome/free-solid-svg-icons';
+import { faStar, faCheckCircle, faUserCircle, faChevronLeft, faAddressCard, faWallet } from '@fortawesome/free-solid-svg-icons';
 import { faStar as faStarRegular, faAddressCard as faAddressCardOutline, faSmile as empty } from '@fortawesome/free-regular-svg-icons';
 import styles from './Style';
 import Config from 'src/config';
@@ -71,23 +71,34 @@ class ViewProfile extends Component {
   };
 
   updateRequest = (status) => {
-    let parameter = {
-      id: this.state.user?.account_id,
-      status: status
-    }
-    this.setState({isLoading: true})
-    Api.request(Routes.circleUpdate, parameter, response => {
-      this.setState({isLoading: false})
-      this.retrieveAccount();
-      this.retrieveConnections();
-    });
+    Alert.alert(
+      "Confirmation Message",
+      'Are you sure you want to ' + (status == 'accepted' ? 'accept' : 'decline') + ' this request?',
+      [
+        { text: "Cancel", onPress: () => {
+        }},
+        { text: "Ok", onPress: () => {
+          let parameter = {
+            id: this.state.user?.account_id,
+            status: status
+          }
+          this.setState({isLoading: true})
+          Api.request(Routes.circleUpdate, parameter, response => {
+            this.setState({isLoading: false})
+            console.log(response, "===================response upon updating request===============");
+            this.retrieveAccount();
+            this.retrieveConnections();
+          });
+        }}
+      ],
+      { cancelable: false }
+    );
   }
 
-  removeRequest = () => {
+  removeRequest = (id) => {
     let parameter = {
-      id: this.state.connection?.id,
+      id: id
     }
-    console.log(this.state.connection);
     this.setState({isLoading: true})
     Api.request(Routes.circleDelete, parameter, response => {
       this.setState({isLoading: false})
@@ -107,6 +118,7 @@ class ViewProfile extends Component {
     this.setState({ isLoading: true });
     Api.request(Routes.circleCreate, parameter, response => {
       this.setState({ isLoading: false })
+      console.log(response, "================response upon sending request,===============");
       this.retrieveAccount();
       this.retrieveConnections();
       
@@ -157,7 +169,6 @@ class ViewProfile extends Component {
   render() {
     const { user } = this.state
     const { theme } = this.props.state;
-    console.log(user && user.account_id, this.state.connection && this.state.connection.account_id, this.state.connection && this.state.connection.status, this.props.state.user && this.props.state.user.id, "====================comparing=============");
     return (
       <View>
         <View>
@@ -202,7 +213,7 @@ class ViewProfile extends Component {
                     <Rating ratings={user.rating} label={null}></Rating>
                   </View>
                 )}
-                <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 5 }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 5, marginBottom: 15 }}>
                   <FontAwesomeIcon
                     icon={faCheckCircle}
                     size={16}
@@ -214,6 +225,35 @@ class ViewProfile extends Component {
                   />
                   <Text style={{ color: Color.white, fontStyle: 'italic' }}>  Verified</Text>
                 </View>
+                <View>
+                <TouchableOpacity
+                  onPress={() => this.props.navigation.navigate('directTransferDrawer', {
+                    data: {
+                      payload: 'transfer',
+                      code: this.props.navigation.state.params.user ? this.props.navigation.state.params.user.account.code : this.props.navigation.state.params.code,
+                      success: false
+                    }
+                  })}
+                  style={{
+                    flexDirection: 'row',
+                    width: '90%',
+                    backgroundColor: theme ? theme.secondary : Color.secondary,
+                    marginTop: 5,
+                    borderRadius: 45,
+                    padding: 13
+                  }}
+                >
+                  <FontAwesomeIcon
+                    icon={faWallet}
+                    size={16}
+                    style={{
+                      color: Color.white,
+                      borderRadius: 20,
+                    }}
+                  />
+                  <Text style={{color: Color.white}}>   Send To Wallet (Free)</Text>
+                </TouchableOpacity>
+              </View>
 
               </View>
               {
@@ -247,8 +287,8 @@ class ViewProfile extends Component {
                   flexDirection: 'row'
                 }}>
                 <Button
-                  title={'Cancel'}
-                  onClick={this.removeRequest}
+                  title={'Cancel Request'}
+                  onClick={() => this.removeRequest(user.id)}
                   style={{
                     width: '90%',
                     marginRight: '1%',
@@ -263,23 +303,23 @@ class ViewProfile extends Component {
                   flexDirection: 'row'
                 }}>
                 <Button
-                  title={'Accept'}
+                  title={'Decline Request'}
                   style={{
                     width: '45%',
                     marginRight: '1%',
                     marginLeft: '5%',
-                    backgroundColor: Color.secondary
-                  }}
-                  onClick={() => this.updateRequest('accepted')}
-                />
-                <Button
-                  title={'Decline'}
-                  style={{
-                    width: '45%',
-                    marginRight: '5%',
                     backgroundColor: Color.danger
                   }}
                   onClick={() => this.updateRequest('declined')}
+                />
+                <Button
+                  title={'Accept Request'}
+                  style={{
+                    width: '45%',
+                    marginRight: '5%',
+                    backgroundColor: theme ? theme.secondary : Color.secondary
+                  }}
+                  onClick={() => this.updateRequest('accepted')}
                 />
               </View>
             )}
@@ -289,8 +329,8 @@ class ViewProfile extends Component {
                   flexDirection: 'row'
                 }}>
                 <Button
-                  title={'Cancel'}
-                  onClick={this.removeRequest}
+                  title={'Cancel Request'}
+                  onClick={() => this.removeRequest(this.state.connection.id)}
                   style={{
                     width: '90%',
                     marginRight: '1%',
@@ -304,24 +344,24 @@ class ViewProfile extends Component {
                 style={{
                   flexDirection: 'row'
                 }}>
-                <Button
-                  title={'Accept'}
+                  <Button
+                  title={'Decline Request'}
                   style={{
                     width: '45%',
                     marginRight: '1%',
                     marginLeft: '5%',
-                    backgroundColor: Color.secondary
-                  }}
-                  onClick={() => this.updateRequest('accepted')}
-                />
-                <Button
-                  title={'Decline'}
-                  style={{
-                    width: '45%',
-                    marginRight: '5%',
                     backgroundColor: Color.danger
                   }}
                   onClick={() => this.updateRequest('declined')}
+                />
+                <Button
+                  title={'Accept Request'}
+                  style={{
+                    width: '45%',
+                    marginRight: '5%',
+                    backgroundColor: theme ? theme.secondary : Color.secondary
+                  }}
+                  onClick={() => this.updateRequest('accepted')}
                 />
               </View>
             )}
@@ -341,28 +381,6 @@ class ViewProfile extends Component {
                   }}
                 />
               </View>)}
-              <View
-                style={{
-                  flexDirection: 'row'
-                }}>
-                <Button
-                  title={'Direct Transfer'}
-                  onClick={() => this.props.navigation.navigate('directTransferDrawer', {
-                    data: {
-                      payload: 'transfer',
-                      code: this.props.navigation.state.params.user ? this.props.navigation.state.params.user.account.code : this.props.navigation.state.params.code,
-                      success: false
-                    }
-                  })}
-                  style={{
-                    width: '90%',
-                    marginRight: '1%',
-                    marginLeft: '5%',
-                    backgroundColor: Color.secondary,
-                    marginTop: 5
-                  }}
-                />
-              </View>
           </View>
         </View>
       </View >
