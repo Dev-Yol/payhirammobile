@@ -185,7 +185,8 @@ class AccountSettings extends Component {
                 this.validPassword(input)
               }
               style={{
-                width: '100%'
+                width: '100%',
+                marginBottom: '5%'
               }}
               />
 
@@ -205,8 +206,9 @@ class AccountSettings extends Component {
               }
               
               style={{
-                paddingBottom: 20,
-                width: '100%'
+                // paddingBottom: 20,
+                width: '100%',
+                marginBottom: '5%'
               }}
             />
 
