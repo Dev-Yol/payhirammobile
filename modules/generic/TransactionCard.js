@@ -18,12 +18,15 @@ class TransactionCard extends Component {
             {
               data && (
                 <TouchableOpacity style={Styles.Card}>
-                  <View style={{flexGrow: 1}}>
+                  <View
+                  style={{
+                    flexGrow: 1,
+                    width: '60%'
+                  }}>
                     <Text style={{
                       color: theme ? theme.secondary : Color.secondary,
                       fontSize: BasicStyles.standardFontSize - 1,
-                      paddingTop: 10,
-                      width: '70%'
+                      paddingTop: 10
                     }}>{data.created_at_human}</Text>
                     <Text style={{
                       fontSize: BasicStyles.standardFontSize,
@@ -40,7 +43,7 @@ class TransactionCard extends Component {
                     }
                   </View>
                   <View style={{
-                    width: '30%'
+                    width: '40%'
                   }}>
                     <Text style={{
                       color: theme ? theme.secondary : Color.secondary,
