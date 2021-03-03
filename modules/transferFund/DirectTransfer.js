@@ -30,13 +30,26 @@ class DirectTransfer extends Component {
   
   componentDidMount = () => {
     this.retrieveSummaryLedger()
-    this.retrieveAccount();
+    const { data } = this.props.navigation.state.params;
+    if(data.success == true){
+      this.setState({
+        amount: data.amount,
+        currency: data.currency,
+        selectedLedger: data.selectedLedger,
+        scannedUser: data.to,
+        charge: data.charge,
+        notes: data.notes
+      })
+    }else{
+      this.retrieveAccount();
+    }
   }
 
   retrieveAccount = () => {
+    const { data } = this.props.navigation.state.params;
     let parameter = {
       condition: [{
-        value: this.props.navigation.state.params.code,
+        value: data.code,
         clause: '=',
         column: 'code'
       }]
@@ -82,6 +95,23 @@ class DirectTransfer extends Component {
     });
   };
 
+  navigateToScreen = () => {
+    const navigateAction = NavigationActions.navigate({
+      routeName: 'drawerStack',
+      action: StackActions.reset({
+        index: 0,
+        key: null,
+        actions: [
+          NavigationActions.navigate({routeName: 'Dashboard', params: {
+              initialRouteName: 'Dashboard',
+              index: 0
+          }}),
+        ]
+      })
+    });
+    this.props.navigation.dispatch(navigateAction);
+  }
+
   errorAlert(message){
     Alert.alert(
       'Error',
@@ -105,7 +135,7 @@ class DirectTransfer extends Component {
       return
     }
 
-    const { amount, charge, currency, notes, selectedLedger} = this.state;
+    const { amount, charge, notes, selectedLedger} = this.state;
     if(selectedLedger == null){
       this.errorAlert('Invalid Account')
       return
@@ -132,9 +162,11 @@ class DirectTransfer extends Component {
         from: user,
         to: scannedUser,
         amount: amount,
-        currency: currency,
+        currency: selectedLedger.currency,
         notes: notes,
-        payload: 'directTransfer'
+        payload: 'directTransfer',
+        charge: charge,
+        selectedLedger: selectedLedger
       },
     })
   }
@@ -176,9 +208,37 @@ class DirectTransfer extends Component {
       );
   }
 
+  footerOptionsComplete = (data) => {
+    const { theme } = this.props.state;
+    return (
+      <View style={{
+          alignItems: 'center',
+          backgroundColor: Color.white,
+          width: '100%',
+          flexDirection: 'row',
+          position: 'absolute',
+          bottom: 10,
+          paddingLeft: 20,
+          paddingRight: 20,
+          left: 0
+        }}>
+
+          <Button 
+            title={'Go to Dashboard'}
+            onClick={ () => this.navigateToScreen()}
+            style={{
+              width: '100%',
+              backgroundColor: theme ? theme.secondary : Color.secondary
+            }}
+          />
+        </View>
+      );
+  }
+
 
   renderInput = () => {
     const { selectedLedger } = this.state;
+    const { data } = this.props.navigation.state.params;
     return (
       <View>
         <View style={{
@@ -202,6 +262,7 @@ class DirectTransfer extends Component {
                 amount: input
               })
             }}
+            editable={data.success ? false : true}
             style={{
               alignItems: 'center',
               width: '60%',
@@ -219,6 +280,7 @@ class DirectTransfer extends Component {
             onChange={(value) => this.setState({
               notes: value
             })}
+            editable={data.success ? false : true}
             numberOfLines={5}
             placeholder={'Add notes here (Optional) ...'}
             style={{
@@ -441,6 +503,10 @@ class DirectTransfer extends Component {
         </ScrollView>
         {
           (data && data.success == false) && this.footerOptions(data)
+        }
+
+        {
+          (data && data.success == true) && this.footerOptionsComplete(data)
         }
 
         {isLoading ? <Spinner mode="overlay" /> : null}

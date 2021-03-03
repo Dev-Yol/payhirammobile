@@ -52,7 +52,7 @@ class OTP extends Component {
           console.log('[OTP] On transferFund', data)
           this.sendTransferFund(data.data)
           break;
-        case 'directTranser':
+        case 'directTransfer':
           console.log("[OTP] on Direct Transfer", data)
           this.sendDirectTransfer(data)
           break
@@ -118,19 +118,31 @@ class OTP extends Component {
       },
       amount: data.amount,
       currency: data.currency,
-      notes: data.notes
+      notes: data.notes,
+      charge: data.charge
     }
+    console.log('[SEND directTransfer] parameter', parameter)
     this.setState({isLoading: true});
-    Api.request(Routes.requestCreate, parameter, response => {
+    Api.request(Routes.ledgerDirectTransfer, parameter, response => {
         this.setState({isLoading: false});
         console.log('[OTP] Create Request response', response)
-        if(response.data != null){
-          this.props.navigation.navigate('directTransferDrawer', {
-            data: {
-              ...data,
-              success: true
-            }
+        if(response.error == null){
+          this.navigateToScreen('directTransferDrawer', 'transferFundScreen', {
+            ...data,
+            success: true,
+            code: data.to.code
           })          
+        }else{
+          Alert.alert(
+            "Error Message",
+            response.error,
+            [
+              { text: "Ok", onPress: () => {
+                this.props.navigation.pop()
+              }}
+            ],
+            { cancelable: false }
+          );
         }
       },
       (error) => {
