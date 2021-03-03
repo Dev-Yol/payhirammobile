@@ -126,8 +126,13 @@ class AccountSettings extends Component {
 
     return (
       <SafeAreaView>
-        <ScrollView style={{ flex: 1, paddingTop: 10 }}>
-          <View style={[styles.AccountSettingsContainer, {height: height + 25}]}>
+        <ScrollView
+         showsVerticalScrollIndicator={false}>
+          <View style={{
+            ...styles.AccountSettingsContainer,
+            height: height + 25,
+            paddingTop: 25
+          }}>
               <QRCode
                 size={220}
                 value={user.code}

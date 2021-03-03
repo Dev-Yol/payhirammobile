@@ -6,7 +6,7 @@ import {faStar as Regular} from '@fortawesome/free-regular-svg-icons';
 import Button from 'components/Form/Button';
 import Currency from 'services/Currency';
 import {connect} from 'react-redux';
-import {BasicStyles, Color, Routes} from 'common';
+import {BasicStyles, Color, Routes, Helper} from 'common';
 import Api from 'services/api/index.js';
 import {NavigationActions, StackActions} from 'react-navigation';
 import BalanceCard from 'modules/generic/BalanceCard';import {
@@ -82,6 +82,62 @@ class DirectTransfer extends Component {
     });
   };
 
+  errorAlert(message){
+    Alert.alert(
+      'Error',
+      message,
+      [
+        {text: 'OK', onPress: () => {
+        }},
+      ],
+      { cancelable: false }
+    )
+  }
+  onContinue = () => {
+    const { user } = this.props.state
+    if(user == null){
+      this.errorAlert('Invalid Sender Account')
+      return
+    }
+    const { scannedUser } = this.state;
+    if(scannedUser == null){
+      this.errorAlert('Invalid Receiver Account')
+      return
+    }
+
+    const { amount, charge, currency, notes, selectedLedger} = this.state;
+    if(selectedLedger == null){
+      this.errorAlert('Invalid Account')
+      return
+    }
+
+    if(amount == 0){
+      this.errorAlert('Amount is required')
+      return    
+    }
+
+    if(amount > selectedLedger.available_balance){
+      this.errorAlert('Issuficient Balance')
+      return    
+    }
+
+
+    if(amount > Helper.transactionLimit){
+      this.errorAlert('Greater than transaction limit')
+      return
+    }
+
+    this.props.navigation.navigate('otpStack', {
+      data: {
+        from: user,
+        to: scannedUser,
+        amount: amount,
+        currency: currency,
+        notes: notes,
+        payload: 'directTransfer'
+      },
+    })
+  }
 
   footerOptions = (data) => {
     const { theme } = this.props.state;
@@ -109,23 +165,7 @@ class DirectTransfer extends Component {
 
           <Button 
             title={'Continue'}
-            onClick={ () => this.state.amount > 0 ?
-              this.props.navigation.navigate('otpStack', {
-                data: {
-                  payload: 'directTransfer',
-                  data: data
-                }
-              })
-            :
-              Alert.alert(
-                "Opps",
-                "Invalid amount!",
-                [
-                  { text: "OK"}
-                ],
-                { cancelable: false }
-              )
-            }
+            onClick={ () => this.onContinue()}
             style={{
               width: '45%',
               marginLeft: '5%',
@@ -400,7 +440,7 @@ class DirectTransfer extends Component {
 
         </ScrollView>
         {
-          this.footerOptions(data)
+          (data && data.success == false) && this.footerOptions(data)
         }
 
         {isLoading ? <Spinner mode="overlay" /> : null}

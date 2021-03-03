@@ -348,8 +348,11 @@ class ViewProfile extends Component {
                 <Button
                   title={'Direct Transfer'}
                   onClick={() => this.props.navigation.navigate('directTransferDrawer', {
-                    payload: 'transfer',
-                    code: this.props.navigation.state.params.user ? this.props.navigation.state.params.user.account.code : this.props.navigation.state.params.code
+                    data: {
+                      payload: 'transfer',
+                      code: this.props.navigation.state.params.user ? this.props.navigation.state.params.user.account.code : this.props.navigation.state.params.code,
+                      success: false
+                    }
                   })}
                   style={{
                     width: '90%',
