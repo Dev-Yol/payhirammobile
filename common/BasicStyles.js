@@ -233,6 +233,16 @@ export default {
     shadowRadius: 10, // 2.62
     elevation: 2, // 2
   },
+  loginShadow: {
+    shadowColor: Color.white,
+    shadowOffset: {
+      width: 0,
+      height: 10,
+    },
+    shadowOpacity: 0.23, // 0.23
+    shadowRadius: 10, // 2.62
+    elevation: 15, // 2
+  },
   standardFormControl: {
     height: 50,
     borderColor: Color.lightGray,

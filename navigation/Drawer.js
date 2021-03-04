@@ -119,9 +119,9 @@ const _StackNavigator = createStackNavigator({
     screen: Requests,
     navigationOptions: ({ navigation }) => ({
       title: null ,
-      headerLeft: <MenuDrawerStructure navigationProps={navigation} />,
-      headerRight: <OptionRightRequest navigationProps={navigation} />,
-      ...BasicStyles.headerDrawerStyleStandard
+      headerLeft: null,
+      headerRight: null,
+      headerTransparent: true
     }),
   },
 

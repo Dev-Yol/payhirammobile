@@ -6,7 +6,7 @@ export default {
   primaryDark: '#3F0050',
   primary: primary,
   danger: '#ff0000',
-  warning: '#F2994A',
+  warning: '#ffcc00',
   secondary: secondary,
   tertiary: tertiary,
   white: '#ffffff',

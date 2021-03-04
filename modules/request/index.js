@@ -35,6 +35,7 @@ import ProposalModal from 'modules/generic/ProposalModal';
 import RequestCard from 'modules/generic/RequestCard';
 import _ from 'lodash';
 import Footer from 'modules/generic/Footer'
+import Header from 'modules/generic/Header'
 const height = Math.round(Dimensions.get('window').height);
 class Requests extends Component {
   constructor(props) {
@@ -436,8 +437,8 @@ class Requests extends Component {
               }
             }
           }}>
-          <SystemNotification></SystemNotification>
-          <View style={[Style.MainContainer, {marginTop: Platform.OS == 'android' ? 50 : 50}]}>
+          {/*<SystemNotification></SystemNotification>*/}
+          <View style={[Style.MainContainer, {marginTop: Platform.OS == 'android' ? 100 : 100}]}>
             
             {this._flatList()}
             {data.length == 0 && isLoading == false && (
@@ -491,6 +492,9 @@ class Requests extends Component {
             }></ProposalModal>
           )
         }
+        <Header
+          {...this.props}
+        />
         <Footer
           {...this.props}
           selected={this.state.page} onSelect={(value) => {
