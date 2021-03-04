@@ -163,6 +163,23 @@ export default {
       fontWeight: 'bold',
     },  
   },
+  headerDrawerStyleStandard: {
+    headerStyle: {
+      elevation: 10,
+      backgroundColor: Color.white,
+      justifyContent: 'center',
+      alignItems: 'center',
+      fontSize: 18
+    },
+    headerTitleContainerStyle: {
+      justifyContent: 'center',
+      alignItems: 'center',
+      paddingRight: 64
+    },
+    headerTitleStyle: {
+      fontWeight: 'bold',
+    },  
+  },
   standardDivider: {
     width: '90%',
     height: 0.5,

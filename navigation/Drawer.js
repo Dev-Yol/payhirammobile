@@ -16,6 +16,7 @@ import { Product, Marketplace, Checkout } from 'components';
 import Billing from 'modules/profile/Billing.js';
 import Circle from 'modules/circle/index.js';
 import OptionRight from './OptionRight';
+import OptionRightRequest from './OptionRightRequest';
 import TermsAndConditions from 'modules/termsAndConditions';
 import Support from 'components/Support';
 import UpdateTicket from 'components/Support/UpdateTicket';
@@ -117,10 +118,10 @@ const _StackNavigator = createStackNavigator({
   Requests: {
     screen: Requests,
     navigationOptions: ({ navigation }) => ({
-      title: null,
+      title: null ,
       headerLeft: <MenuDrawerStructure navigationProps={navigation} />,
-      headerRight: <OptionRight navigationProps={navigation} />,
-      headerTransparent: true
+      headerRight: <OptionRightRequest navigationProps={navigation} />,
+      ...BasicStyles.headerDrawerStyleStandard
     }),
   },
 
