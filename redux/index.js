@@ -23,6 +23,7 @@ const types = {
   SET_SEARCH_PARAMETER: 'SET_SEARCH_PARAMETER',
   SET_REQUESTS: 'SET_REQUESTS',
   UPDATE_REQUESTS: 'UPDATE_REQUESTS',
+  SET_UNREAD_REQUESTS: 'SET_UNREAD_REQUESTS',
   SET_PIN_FLAG: 'SET_PIN_FLAG',
   SET_SYSTEM_NOTIFICATION: 'SET_SYSTEM_NOTIFICATION',
   SET_SELECTED_PRODUCT_ID: 'SET_SELECTED_PRODUCT_ID',
@@ -139,6 +140,9 @@ export const actions = {
   },
   setUnReadPeerRequest(message) {
     return {type: types.SET_UNREAD_PEER_REQUEST, messages}
+  },
+  setUnReadRequests(requests) {
+    return {type: types.SET_UNREAD_REQUESTS, requests}
   }
 };
 
@@ -179,7 +183,8 @@ const initialState = {
   isViewing: false,
   isShow: false,
   defaultAddress: null,
-  unReadPeerRequest: []
+  unReadPeerRequest: [],
+  unReadRequests: []
 };
 
 storeData = async (key, value) => {
@@ -515,6 +520,11 @@ const reducer = (state = initialState, action) => {
         ...state,
         unReadPeerRequest: newUnreadPeerRequest
       }
+    case types.SET_UNREAD_REQUESTS:
+      return {
+        ...state,
+        unReadRequests: requests,
+      };
     default:
       return {...state, nav: state.nav};
   }
