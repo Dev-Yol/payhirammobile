@@ -66,7 +66,9 @@ class Requests extends Component {
       offset: 0,
       tempData: [],
       data: [],
-      page: 'public'
+      page: 'public',
+      unReadPeerRequests: [],
+      unReadRequests: []
     };
   }
 
@@ -99,6 +101,7 @@ class Requests extends Component {
   setRetrieveParameter = (flag) => {
     const {setSearchParameter} = this.props;
     const {user, searchParameter} = this.props.state;
+    console.log("[user]", user);
     if (flag == false) {
       setSearchParameter(null);
       this.setState({activePage: 0});
@@ -109,6 +112,7 @@ class Requests extends Component {
       let searchParameter = {
         column: 'account_id',
         value: user.id,
+        type: user.account_type
       };
       this.setState({activePage: 1});
       setSearchParameter(searchParameter);
@@ -121,6 +125,7 @@ class Requests extends Component {
   retrieve = (scroll, flag, loading = true, page = null) => {
     console.log("[Request Retrieve] On Sending Request")
     const {user, searchParameter} = this.props.state;
+    console.log("[searchParameter]", this.props.state);
     const { data, tempData } = this.state;
     if (user == null) {
       return;
