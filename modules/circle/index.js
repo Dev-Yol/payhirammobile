@@ -88,7 +88,6 @@ class Circle extends Component{
       ],
       { cancelable: false }
     );
-
   }
 
   removeItem(item){
@@ -179,6 +178,7 @@ class Circle extends Component{
 
   renderCircles(data, status) {
     const { user } = this.props.state;
+    console.log('[data]', data)
     return (
       data.map((item, index) => {
         return (

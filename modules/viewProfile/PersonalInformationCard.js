@@ -6,21 +6,35 @@ import { faUserCircle, faEnvelope, faPhoneAlt, faCalendarAlt, faMapMarkerAlt, fa
 import { } from '@fortawesome/free-regular-svg-icons';
 import styles from './Style';
 class PersonalInformationCard extends Component {
-  _renderTextIcon = (icon, text) => {
+  _renderTextIcon = (icon, text, label) => {
     return (
       <View style={{
-          flexDirection: 'row',
+        flexDirection: 'row',
+        alignItems: 'center',
+        width: '90%',
+        marginLeft: '5%',
+        marginRight: '5%',
+        paddingTop: 15
+      }}>
+        <View style={{
+          backgroundColor:'#ededed',
+          justifyContent: 'center',
           alignItems: 'center',
-          width: '90%',
-          marginLeft: '5%',
+          padding: 10,
           marginRight: '5%',
-          paddingTop: 12,
-          paddingBottom: 12,
+          borderRadius: 100
         }}>
-        <FontAwesomeIcon icon={icon} style={{ marginRight: 5 }} size={20} />
+          <FontAwesomeIcon icon={icon} size={20} />
+        </View>
         <Text style={{
-          fontSize: BasicStyles.standardFontSize
+          fontSize: 16
         }}>{text}</Text>
+        <Text style={{
+          fontSize: 12,
+          position: 'absolute',
+          left: 60,
+          bottom: -7
+        }}>{'\n\n'}{label}</Text>
       </View>
     )
   }
@@ -33,15 +47,13 @@ class PersonalInformationCard extends Component {
           flexWrap: 'wrap',
           alignItems: 'flex-start'
         }}>
-          <View style={{width: '50%'}}>
-            {_renderTextIcon(faUserCircle, user.information.first_name || 'No data')}
-            {_renderTextIcon(faEnvelope, user.email || 'No data')}
-            {_renderTextIcon(faUserCircle,  user.information.sex || 'No data')}
-          </View>
-          <View style={{width: '50%'}}>
-            {_renderTextIcon(faPhoneAlt, user.information.cellular_number || 'No data')}
-            {_renderTextIcon(faCalendarAlt, user.information.birth_date_human || 'No data')}
-            {_renderTextIcon(faMapMarkerAlt, user.information.address || 'No data')}
+          <View style={{width: '100%'}}>
+            {_renderTextIcon(faUserCircle, user.information.first_name + ' ' + user.information.last_name || 'No data', 'Full Name')}
+            {_renderTextIcon(faEnvelope, user.email || 'No data', 'Email')}
+            {_renderTextIcon(faUserCircle,  user.information.sex || 'No data', 'Gender')}
+            {_renderTextIcon(faPhoneAlt, user.information.cellular_number || 'No data', 'Phone Number')}
+            {_renderTextIcon(faCalendarAlt, user.information.birth_date_human || 'No data', 'Birth Date')}
+            {_renderTextIcon(faMapMarkerAlt, user.information.address || 'No data', 'Address')}
           </View>
         </View>
     )

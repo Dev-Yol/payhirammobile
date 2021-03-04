@@ -175,7 +175,7 @@ class RequestItem extends Component {
 
   delete(data){
     let parameter = {
-      id: data?.id,
+      id: data.id,
     }
     this.setState({isLoading: true})
     Api.request(Routes.requestDelete, parameter, response => {
@@ -189,7 +189,7 @@ class RequestItem extends Component {
     console.log('[deleteRequest]', data.id);
     Alert.alert(
       'Confirmation',
-      'Are you sure you want to delete this request?',
+      'Are you sure you want to cancel this request?',
       [
         {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
         {text: 'OK', onPress: () => this.delete(data)},
@@ -197,11 +197,6 @@ class RequestItem extends Component {
       { cancelable: false }
     )
   }
-
-  editRequest(data){
-    console.log('[editRequest]', data.id);
-  }
-
 
   renderProposals = (data) => {
     return (
@@ -240,7 +235,6 @@ class RequestItem extends Component {
   render() {
     const {user, theme} = this.props.state;
     const { data, isLoading } = this.state;
-    console.log('[dataRequestItem]', user, 'paramsssssss', this.props.navigation.state.params.data);
     const { connectModal, modalStatus } = this.state;
     return (
       <View>
@@ -277,29 +271,18 @@ class RequestItem extends Component {
               width: '100%',
               flexDirection: 'row',
               alignItems: 'center',
-              justifyContent: 'space-evenly',
               position: 'absolute',
               bottom: 5
             }}>
               <Button 
                 style={{
                   backgroundColor: Color.danger,
-                  width: '48%',
-                  marginRight: '1%',
-                  marginLeft: '1%'
+                  width: '90%',
+                  marginRight: '5%',
+                  marginLeft: '5%'
                 }}
                 title={'Cancel'}
                 onClick={() => this.deleteRequest(this.props.navigation.state.params.data)}
-              />
-              <Button 
-                style={{
-                  backgroundColor: theme ? theme.secondary : Color.secondary,
-                  width: '48%',
-                  marginRight: '1%',
-                  marginLeft: '1%'
-                }}
-                title={'Edit'}
-                onClick={() => this.editRequest(this.props.navigation.state.params.data)}
               />
             </View>
           )

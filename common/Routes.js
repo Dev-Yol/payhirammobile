@@ -17,6 +17,7 @@ export default {
   messagesRetrieve: apiUrl + 'messenger_groups/retrieve_summary_payhiram',
   ledgerSummary: apiUrl + 'ledger/summary',
   ledgerHistory: apiUrl + 'ledger/history',
+  ledgerDirectTransfer: apiUrl + 'ledger/direct_transfer',
   requestRetrieve: apiUrl + 'requests/retrieve',
   requestRetrieveItem: apiUrl + 'requests/retrieve_item',
   requestRetrieveByPayloadValue: apiUrl + 'requests/retrieve_by_payload_value',

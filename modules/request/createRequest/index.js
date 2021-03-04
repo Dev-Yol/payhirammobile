@@ -36,10 +36,12 @@ class CreateRequest extends Component {
       money_type: null,
       isLoading: false,
       target: 'partners',
-      currentDate: null
+      currentDate: null,
+      edited: false
     };
   }
   componentDidMount() {
+
     this.retrieveSummaryLedger()
     const { params } = this.props.navigation.state;
     if(params && params.data){
