@@ -189,7 +189,7 @@ class RequestItem extends Component {
     console.log('[deleteRequest]', data.id);
     Alert.alert(
       'Confirmation',
-      'Are you sure you want to delete this request?',
+      'Are you sure you want to cancel this request?',
       [
         {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
         {text: 'OK', onPress: () => this.delete(data)},

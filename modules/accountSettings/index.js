@@ -87,6 +87,7 @@ class AccountSettings extends Component {
     }
   }
   updatePassword = () => {
+    console.log('[password hjere]');
     if (
       this.state.password != null &&
       this.state.password != '' &&
@@ -94,12 +95,13 @@ class AccountSettings extends Component {
       this.state.confirmPassword != '' &&
       this.state.password === this.state.confirmPassword &&
       this.state.error === false
-    ) {
-      const { user } = this.props.state;
-      let parameters = {
-        id: user.id,
-        password: this.state.password,
-      };
+      ) {
+        const { user } = this.props.state;
+        let parameters = {
+          id: user.id,
+          password: this.state.password,
+        };
+      console.log('[password parameters]', parameters);
       this.setState({ isLoading: true });
       Api.request(
         Routes.accountUpdatePassword,

@@ -156,11 +156,14 @@ class EditProfile extends Component {
           Alert.alert('Notice', 'File size exceeded to 1MB')
           return
         }
-        console.log("{File Name}", response);
         this.setState({ photo: response })
         let formData = new FormData();
         let uri = Platform.OS == "android" ? response.uri : response.uri.replace("file://", "");
-        formData.append("file", response);
+        formData.append("file", {
+          name: response.fileName,
+          type: response.type,
+          uri: uri
+        });
         formData.append('file_url', response.fileName);
         formData.append('account_id', user.id);
 
@@ -171,6 +174,7 @@ class EditProfile extends Component {
           console.log("+++++++++++++++++++++++",response);
           this.state.profile = response.data.data
           if(response.data !== null) {
+            this.retrieve();
             Alert.alert(
               'Message',
               'Image successfully uploaded',
@@ -179,7 +183,6 @@ class EditProfile extends Component {
               ],
               { cancelable: false }
             )
-            // this.retrieve();
           }
         })
       }
