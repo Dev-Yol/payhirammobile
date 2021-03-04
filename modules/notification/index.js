@@ -35,19 +35,17 @@ class Notifications extends Component{
       this.props.navigation.navigate('messagesStack', {
         data: this.state.data
       })
-      console.log("[Data]", this.state.data);
     }else{
       let parameter = {
         payload_value: this.state.data.payload_value
       }
       Api.request(Routes.requestRetrieveByPayloadValue, parameter, response => {
-        console.log("[RESPONSE]", response.data);
         this.setState({data: response.data[0]})
       })
       this.props.navigation.navigate('requestItemStack', {
         data: this.state.data
       })
-      console.log("[Data]", this.state.data);
+
     }
   }
   
