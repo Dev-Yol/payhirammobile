@@ -20,6 +20,7 @@ export default {
   ledgerDirectTransfer: apiUrl + 'ledger/direct_transfer',
   requestRetrieve: apiUrl + 'requests/retrieve',
   requestRetrieveItem: apiUrl + 'requests/retrieve_item',
+  requestRetrieveByPayloadValue: apiUrl + 'requests/retrieve_by_payload_value',
   transactionRetrieve: apiUrl + 'ledger/summary_ledger',
   requestCreate: apiUrl + 'requests/create',
   requestDelete: apiUrl + 'requests/delete',
