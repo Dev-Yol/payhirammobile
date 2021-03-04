@@ -43,9 +43,7 @@ class CreateRequest extends Component {
   componentDidMount() {
 
     this.retrieveSummaryLedger()
-    console.log('[paramssssssss]', this.props.navigation.state.params.editData.data);
     const { params } = this.props.navigation.state;
-    const { data } = this.props.navigation.state.params.editData;
     if(params && params.data){
       this.handleSelectFulfillment(params.data)
     }
