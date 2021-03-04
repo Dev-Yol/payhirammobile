@@ -60,7 +60,7 @@ class ViewProfile extends Component {
   checkStatus = (array) => {
     const { user } = this.state
     array.map((item, index) => {
-      if(item.account.id === user.id) {
+      if(item.account_id === user.id) {
         this.setState({connection: item})
       }
     })
@@ -70,7 +70,7 @@ class ViewProfile extends Component {
     this.props.navigation.pop();
   };
 
-  updateRequest = (status) => {
+  updateRequest = (status, user) => {
     Alert.alert(
       "Confirmation Message",
       'Are you sure you want to ' + (status == 'accepted' ? 'accept' : 'decline') + ' this request?',
@@ -79,15 +79,15 @@ class ViewProfile extends Component {
         }},
         { text: "Ok", onPress: () => {
           let parameter = {
-            id: this.state.user?.account_id,
+            id: user.id,
             status: status
           }
+          console.log(parameter, "========================parameter");
           this.setState({isLoading: true})
           Api.request(Routes.circleUpdate, parameter, response => {
             this.setState({isLoading: false})
             console.log(response, "===================response upon updating request===============");
             this.retrieveAccount();
-            this.retrieveConnections();
           });
         }}
       ],
@@ -104,7 +104,7 @@ class ViewProfile extends Component {
       this.setState({isLoading: false})
       console.log(response, "remove request response");
       if(response.data !== null) {
-        this.setState({title: 'Send Request'})
+        this.props.navigation.goBack(null)
       }
     });
   }
@@ -120,7 +120,6 @@ class ViewProfile extends Component {
       this.setState({ isLoading: false })
       console.log(response, "================response upon sending request,===============");
       this.retrieveAccount();
-      this.retrieveConnections();
       
     });
   }
@@ -169,13 +168,14 @@ class ViewProfile extends Component {
   render() {
     const { user } = this.state
     const { theme } = this.props.state;
+    console.log(this.props.state.user.id, this.state.connection && this.state.connection.account_id, this.state.connection && this.state.connection.status, "=================user");
     return (
       <View>
         <View>
           <ScrollView >
             <View style={styles.container}>
               <View style={{
-                height: height / 3,
+                height: '35%',
                 justifyContent: 'center',
                 alignItems: 'center',
                 backgroundColor: theme ? theme.primary : Color.primary
@@ -213,6 +213,7 @@ class ViewProfile extends Component {
                     <Rating ratings={user.rating} label={null}></Rating>
                   </View>
                 )}
+                { this.state.status === true && (
                 <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 5, marginBottom: 15 }}>
                   <FontAwesomeIcon
                     icon={faCheckCircle}
@@ -224,7 +225,8 @@ class ViewProfile extends Component {
                     }}
                   />
                   <Text style={{ color: Color.white, fontStyle: 'italic' }}>  Verified</Text>
-                </View>
+                </View>)}
+                { this.state.status === true && (
                 <View>
                 <TouchableOpacity
                   onPress={() => this.props.navigation.navigate('directTransferDrawer', {
@@ -253,7 +255,7 @@ class ViewProfile extends Component {
                   />
                   <Text style={{color: Color.white}}>   Send To Wallet (Free)</Text>
                 </TouchableOpacity>
-              </View>
+              </View>)}
 
               </View>
               {
@@ -282,7 +284,7 @@ class ViewProfile extends Component {
             left: 0,
             width: '100%'
           }}>
-            { this.state.status === true && user && this.props.state.user && user.account_id === this.props.state.user.id && (user.status === 'accepted' || user.status === 'pending') && (<View
+            { this.state.status === true && user && this.props.state.user && user.account_id === this.props.state.user.id && user.status === 'pending' && (<View
                 style={{
                   flexDirection: 'row'
                 }}>
@@ -297,7 +299,37 @@ class ViewProfile extends Component {
                   }}
                 />
               </View>)}
-             {this.state.status === true && user && this.props.state.user && user.account_id !== this.props.state.user.id && (user.status === 'pending' || user.status === 'accepted') && (
+              { this.state.status === true && user && this.props.state.user && user.account_id === this.props.state.user.id && user.status === 'accepted' && (<View
+                style={{
+                  flexDirection: 'row'
+                }}>
+                <Button
+                  title={'Remove From Circle'}
+                  onClick={() => this.removeRequest(user.id)}
+                  style={{
+                    width: '90%',
+                    marginRight: '1%',
+                    marginLeft: '5%',
+                    backgroundColor: Color.danger
+                  }}
+                />
+              </View>)}
+              { this.state.status === true && user && this.props.state.user && user.account_id !== this.props.state.user.id && user.status === 'accepted' && (<View
+                style={{
+                  flexDirection: 'row'
+                }}>
+                <Button
+                  title={'Remove From Circle'}
+                  onClick={() => this.removeRequest(user.id)}
+                  style={{
+                    width: '90%',
+                    marginRight: '1%',
+                    marginLeft: '5%',
+                    backgroundColor: Color.danger
+                  }}
+                />
+              </View>)}
+             {this.state.status === true && user && this.props.state.user && user.account_id !== this.props.state.user.id && (user.status === 'pending') && (
               <View
                 style={{
                   flexDirection: 'row'
@@ -310,7 +342,7 @@ class ViewProfile extends Component {
                     marginLeft: '5%',
                     backgroundColor: Color.danger
                   }}
-                  onClick={() => this.updateRequest('declined')}
+                  onClick={() => this.updateRequest('declined', user)}
                 />
                 <Button
                   title={'Accept Request'}
@@ -319,11 +351,11 @@ class ViewProfile extends Component {
                     marginRight: '5%',
                     backgroundColor: theme ? theme.secondary : Color.secondary
                   }}
-                  onClick={() => this.updateRequest('accepted')}
+                  onClick={() => this.updateRequest('accepted', user)}
                 />
               </View>
             )}
-            { this.state.status === true && this.props.state.user && this.state.connection && this.state.connection.account_id === this.props.state.user.id && (this.state.connection.status === 'pending' || this.state.connection.status === 'accepted') && (
+            { this.state.status === true && this.props.state.user && this.state.connection && this.state.connection.account_id === this.props.state.user.id && this.state.connection.status === 'pending' && (
             <View
                 style={{
                   flexDirection: 'row'
@@ -339,7 +371,39 @@ class ViewProfile extends Component {
                   }}
                 />
               </View>)}
-             {this.state.status === true && this.props.state.user && this.state.connection && this.state.connection.account_id !== this.props.state.user.id && (this.state.connection.status === 'pending' || this.state.connection.status === 'accepted') && (
+              { this.state.status === true && this.props.state.user && this.state.connection && this.state.connection.account_id === this.props.state.user.id && this.state.connection.status === 'accepted' && (
+            <View
+                style={{
+                  flexDirection: 'row'
+                }}>
+                <Button
+                  title={'Remove From Circle'}
+                  onClick={() => this.removeRequest(this.state.connection.id)}
+                  style={{
+                    width: '90%',
+                    marginRight: '1%',
+                    marginLeft: '5%',
+                    backgroundColor: Color.danger
+                  }}
+                />
+              </View>)}
+              { this.state.status === true && this.props.state.user && this.state.connection && this.state.connection.account_id !== this.props.state.user.id && this.state.connection.status === 'accepted' && (
+            <View
+                style={{
+                  flexDirection: 'row'
+                }}>
+                <Button
+                  title={'Remove From Circle'}
+                  onClick={() => this.removeRequest(this.state.connection.id)}
+                  style={{
+                    width: '90%',
+                    marginRight: '1%',
+                    marginLeft: '5%',
+                    backgroundColor: Color.danger
+                  }}
+                />
+              </View>)}
+             {this.state.status === true && this.props.state.user && this.state.connection && this.state.connection.account_id !== this.props.state.user.id && (this.state.connection.status === 'pending') && (
               <View
                 style={{
                   flexDirection: 'row'
@@ -352,7 +416,7 @@ class ViewProfile extends Component {
                     marginLeft: '5%',
                     backgroundColor: Color.danger
                   }}
-                  onClick={() => this.updateRequest('declined')}
+                  onClick={() => this.updateRequest('declined', this.state.connection)}
                 />
                 <Button
                   title={'Accept Request'}
@@ -361,7 +425,7 @@ class ViewProfile extends Component {
                     marginRight: '5%',
                     backgroundColor: theme ? theme.secondary : Color.secondary
                   }}
-                  onClick={() => this.updateRequest('accepted')}
+                  onClick={() => this.updateRequest('accepted', this.state.connection)}
                 />
               </View>
             )}

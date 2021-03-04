@@ -138,7 +138,24 @@ class Circle extends Component{
               )
           }
           {
-            item.account_id != user.id && (
+            item.account_id !== user.id && item.status === 'accepted' && (
+                <Button 
+                  style={{
+                    backgroundColor: Color.lightGray,
+                    width: 120,
+                    height: 40,
+                    borderRadius: 20,
+                    marginRight: 5
+                  }}
+                  textStyle = {{
+                    color: Color.black
+                  }}
+                  title={'Cancel'}
+                  onClick={() => {this.removeItem(item)}}/>
+              )
+          }
+          {
+            item.account_id != user.id && item.status === 'pending' && (
               <View style={{
                 flexDirection: 'row'
               }}>
@@ -183,7 +200,7 @@ class Circle extends Component{
       data.map((item, index) => {
         return (
           <View>
-          {status === 'circle' && user.id === item.account_id && (
+          {status === 'circle' && (item.status === 'accepted' || item.status === 'pending') && (
           <TouchableHighlight 
             onPress={() => {
               this.redirect(item)
@@ -211,13 +228,13 @@ class Circle extends Component{
                   fontSize: BasicStyles.standardFontSize
                 }}>{item.account.information.address}</Text>
               {
-                item.status == 'pending' && this.action(item)
+                item.status == 'pending' || item.status === 'accepted' && this.action(item)
               }
               </View>
             </View>
           </TouchableHighlight>
           )}
-          {status === 'invitation' && user.id !== item.account_id && (
+          {status === 'invitation' && user.id !== item.account_id && item.status === 'pending' && (
           <TouchableHighlight 
             onPress={() => {
               this.redirect(item)
