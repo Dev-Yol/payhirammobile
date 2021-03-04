@@ -149,6 +149,7 @@ class RequestItem extends Component {
   };
   
   acceptRequest = (data) => {
+    console.log("[data]", data);
     this.setState({peer: data})
     Alert.alert(
       'Confirmation',
@@ -283,6 +284,28 @@ class RequestItem extends Component {
                 }}
                 title={'Cancel'}
                 onClick={() => this.deleteRequest(this.props.navigation.state.params.data)}
+              />
+            </View>
+          )
+        }
+        {
+          (user.username == this.props.navigation.state.params.data.account.username) && (this.props.navigation.state.params.data.status > 0) && (
+            <View style={{
+              width: '100%',
+              flexDirection: 'row',
+              alignItems: 'center',
+              position: 'absolute',
+              bottom: 5
+            }}>
+              <Button 
+                style={{
+                  backgroundColor: Color.secondary,
+                  width: '90%',
+                  marginRight: '5%',
+                  marginLeft: '5%'
+                }}
+                title={'See Conversation'}
+                onClick={() => console.log('see conversation')}
               />
             </View>
           )
