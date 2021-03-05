@@ -32,7 +32,6 @@ class Reviews extends Component {
   retrieve = () => {
     const { data } = this.props.navigation.state.params;
     const { user } = this.props.state;
-    console.log('data', data)
     if(user == null || data == null){
       Alert.alert(
         "Error Message",
@@ -48,7 +47,6 @@ class Reviews extends Component {
     }
     let parameter = null
     if(data.account_id == user.id && data.peer != null){
-      console.log('[peer]', data);
       parameter = {
         condition: [{
           column: 'payload',
@@ -89,15 +87,12 @@ class Reviews extends Component {
           value: data.account_id
         }]
       }
-      console.log('[reatirnga]', parameter);
       this.setState({
         data: data.account
       })
     }
-    console.log('[dataaaaaaa]', data.account);
     Api.request(Routes.ratingsRetrieve, parameter, response => {
         this.setState({isLoading: false});
-        console.log('response', response)
       },
       (error) => {
         this.setState({isLoading: false});
@@ -134,7 +129,6 @@ class Reviews extends Component {
   submit = () => {
     const { data } = this.props.navigation.state.params;
     const { user } = this.props.state;
-    console.log('[data]', data, '[user]', user);
     if(user == null || data == null){
       Alert.alert(
         "Error Message",
@@ -158,10 +152,8 @@ class Reviews extends Component {
       value: this.state.selectedStar,
       status: 'full',
     };
-    console.log('[params]', parameters);
     this.setState({isLoading: true});
     Api.request(Routes.ratingsCreate, parameters, response => {
-      console.log('[response]', response);
         this.setState({isLoading: false}, () => {
           this.props.navigation.pop();
         });

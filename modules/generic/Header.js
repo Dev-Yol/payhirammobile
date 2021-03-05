@@ -137,12 +137,12 @@ class Header extends Component {
             style={{
               width: width,
               marginLeft: 10,
-              marginTop: 5,
+              marginTop: 5
             }}>
             <Text style={{
               fontSize: BasicStyles.standardFontSize,
               fontWeight: 'bold',
-              color: theme ? theme.primary : Color.white
+              color: theme ? theme.primary : Color.primary
             }}>{location ? 'Location: ' + location.route + ', ' + location.locality + ', ' + location.country : 'Current location'}</Text>
           </TouchableOpacity>
       </View>

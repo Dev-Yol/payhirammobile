@@ -41,9 +41,9 @@ class RequestItem extends Component {
     this.retrieve()
   }
 
-  // redirect = (route) => {
-  //   this.props.navigation.navigate(route);
-  // };
+  redirect = (route) => {
+    this.props.navigation.navigate(route);
+  };
 
   retrieve(){
     const { user } = this.props.state;
@@ -57,10 +57,8 @@ class RequestItem extends Component {
       account_request_code: data.account.code
     };
     this.setState({isLoading: true});
-    console.log('[RequestItem] Retrieve parameter', parameter)
     Api.request(Routes.requestPeerRetrieveItem, parameter, (response) => {
       this.setState({isLoading: false});
-      console.log('response', response)
       if (response.data.length > 0) {
         this.setState({
           data: response.data
@@ -149,7 +147,6 @@ class RequestItem extends Component {
   };
   
   acceptRequest = (data) => {
-    console.log("[data]", data);
     this.setState({peer: data})
     Alert.alert(
       'Confirmation',
@@ -181,13 +178,11 @@ class RequestItem extends Component {
     this.setState({isLoading: true})
     Api.request(Routes.requestDelete, parameter, response => {
       this.setState({isLoading: false})
-      console.log(response, "remove request");
-      // this.redirect("dashboardStack")
+      this.redirect("dashboardStack")
     });
   }
 
   deleteRequest(data){
-    console.log('[deleteRequest]', data.id);
     Alert.alert(
       'Confirmation',
       'Are you sure you want to cancel this request?',
@@ -267,7 +262,7 @@ class RequestItem extends Component {
             </View>
         </ScrollView>
         {
-          (user.username == this.props.navigation.state.params.data.account.username) && (this.props.navigation.state.params.data.status != 2 || this.props.navigation.state.params.data.status != 3) && (
+          (user.username == this.props.navigation.state.params.data.account.username) && (this.props.navigation.state.params.data.status == 0) && (
             <View style={{
               width: '100%',
               flexDirection: 'row',
@@ -305,7 +300,18 @@ class RequestItem extends Component {
                   marginLeft: '5%'
                 }}
                 title={'See Conversation'}
-                onClick={() => console.log('see conversation')}
+                onClick={() => this.props.navigation.navigate('messagesStack', {
+                  data: {
+                    id: this.props.navigation.state.params.data.id,
+                    title: this.props.navigation.state.params.data.code,
+                    payload: 'request',
+                    account_id: user.id,
+                    request: this.props.navigation.state.params.data,
+                    currency: this.props.navigation.state.params.data.currency,
+                    amount: this.props.navigation.state.params.data.amount,
+                    status: 1
+                  }
+                })}
               />
             </View>
           )

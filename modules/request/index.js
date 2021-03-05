@@ -115,6 +115,7 @@ class Requests extends Component {
         value: user.id,
         type: user.account_type
       };
+      console.log('[searchParameter]', searchParameter);
       this.setState({activePage: 1});
       setSearchParameter(searchParameter);
       setTimeout(() => {
@@ -147,10 +148,11 @@ class Requests extends Component {
           column: 'created_at',
           value: 'desc',
         },
-        value: searchParameter == null ? '%' : searchParameter.value + '%',
+        value: searchParameter == null ? '%' : '%' + searchParameter.value + '%',
         column: searchParameter == null ? 'created_at' : searchParameter.column,
-        type: user.account_type,
+        type: user.account_type
       };
+      console.log('[parameter]', parameter);
     }
     if((page != null && page == 'personal') || (page == null && this.state.page == 'personal')){
       parameter = {
@@ -163,13 +165,15 @@ class Requests extends Component {
         },
         value: user.id,
         column: 'account_id',
-        type: user.account_type
+        type: user.account_type,
+        isPersonal: true
       };
     }
-    this.setState({isLoading: (loading == false && page == null) ? false : true}); 
-    // console.log("[Request Retrieve] parameter", parameter)
+    this.setState({isLoading: (loading == false && page == null) ? false : true});
+    console.log("[Request Retrieve] parameter", parameter)
     Api.request( Routes.requestRetrieve, parameter, (response) => {
-        console.log("[Request Retrieve] parameter", response.data[0].account)
+        // console.log("[Request Retrieve]", response.data[0].account)
+        console.log("[Request Retrieve]", response)
         this.setState({
           size: response.size ? response.size : 0,
           isLoading: false
