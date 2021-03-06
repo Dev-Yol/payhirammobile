@@ -255,13 +255,13 @@ class CreateRequest extends Component {
       }}>
         {this.state.isLoading ? <Spinner mode="overlay" /> : null}
         <ScrollView showsVerticalScrollIndicator={false}>
-          {
+          {/*
             ledger && (
               <BalanceCard
                 data={ledger}
               />
             )
-          }
+          */}
           <View style={{
             ...BasicStyles.standardContainer
           }}>
