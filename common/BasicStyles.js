@@ -197,14 +197,14 @@ export default {
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 5
+    borderRadius: 25
   },
   standardTextInput: {
     height: 50,
     borderColor: Color.lightGray,
     borderWidth: 1,
     width: '100%',
-    borderRadius: 5,
+    borderRadius: 25,
     paddingLeft: 10,
     justifyContent: 'center'
   },
@@ -213,14 +213,14 @@ export default {
     borderColor: Color.lightGray,
     borderWidth: 1,
     width: '100%',
-    borderRadius: 5,
+    borderRadius: 25,
     paddingLeft: 10,
   },
   standardTextInputMultiline: {
     borderColor: Color.lightGray,
     borderWidth: 1,
     width: '100%',
-    borderRadius: 5,
+    borderRadius: 25,
     paddingLeft: 10
   },
   standardShadow: {
@@ -248,7 +248,7 @@ export default {
     borderColor: Color.lightGray,
     borderWidth: 1,
     width: '100%',
-    borderRadius: 5,
-    paddingLeft: 25
+    borderRadius: 25,
+    paddingLeft: 10
   },
 }
