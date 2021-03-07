@@ -387,6 +387,7 @@ class Requests extends Component {
             ItemSeparatorComponent={this.FlatListItemSeparator}
             renderItem={({item, index}) => (
               <View style={{
+                marginTop: (index == 0) ? 70 : 0
               }}>
                 <RequestCard 
                   onConnectRequest={(item) => {this.connectRequest(item)}}
@@ -414,7 +415,7 @@ class Requests extends Component {
     const { data } = this.state;
     return (
       <SafeAreaView style={{
-        height: height
+        flex: 1
       }}>
         {isRequestOptions && (
           <RequestOptions
@@ -500,9 +501,6 @@ class Requests extends Component {
             }></ProposalModal>
           )
         }
-        {/*<Header
-                  {...this.props}
-                />*/}
         <Footer
           {...this.props}
           selected={this.state.page} onSelect={(value) => {
