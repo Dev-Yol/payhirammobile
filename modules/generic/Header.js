@@ -42,9 +42,6 @@ class Header extends Component {
       <View
         style={{
           width: width,
-          position: 'absolute',
-          top: Platform.OS == 'ios' ? 10 : 0,
-          zIndex: 0,
           paddingTop: 10,
           paddingBottom: 10,
           backgroundColor: Color.white,

@@ -498,9 +498,9 @@ class Requests extends Component {
             }></ProposalModal>
           )
         }
-        <Header
-          {...this.props}
-        />
+        {/*<Header
+                  {...this.props}
+                />*/}
         <Footer
           {...this.props}
           selected={this.state.page} onSelect={(value) => {
