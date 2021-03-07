@@ -43,8 +43,8 @@ class Header extends Component {
         style={{
           width: width,
           position: 'absolute',
-          top: Platform.OS == 'ios' ? 10 : 0,
-          zIndex: 0,
+          top: Platform.OS == 'ios' ? 20 : 0,
+          zIndex: 1000,
           paddingTop: 10,
           paddingBottom: 10,
           backgroundColor: Color.white,

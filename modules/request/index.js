@@ -10,7 +10,8 @@ import {
   ScrollView,
   BackHandler,
   ToastAndroid,
-  Platform
+  Platform,
+  SafeAreaView
 } from 'react-native';
 import {FlatList, TouchableOpacity} from 'react-native';
 import { Picker } from '@react-native-community/picker';
@@ -386,7 +387,6 @@ class Requests extends Component {
             ItemSeparatorComponent={this.FlatListItemSeparator}
             renderItem={({item, index}) => (
               <View style={{
-                marginTop: index == 0 ? (Platform.OS == 'ios' ? 140 : 100) : 0
               }}>
                 <RequestCard 
                   onConnectRequest={(item) => {this.connectRequest(item)}}
@@ -413,7 +413,9 @@ class Requests extends Component {
     const {theme, user} = this.props.state;
     const { data } = this.state;
     return (
-      <View style={Style.MainContainer}>
+      <SafeAreaView style={{
+        height: height
+      }}>
         {isRequestOptions && (
           <RequestOptions
             visible={isRequestOptions}
@@ -511,7 +513,7 @@ class Requests extends Component {
           }}
           from={'request'}
         />  
-      </View>
+      </SafeAreaView>
     );
   }
 }
