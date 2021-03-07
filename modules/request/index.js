@@ -386,7 +386,7 @@ class Requests extends Component {
             ItemSeparatorComponent={this.FlatListItemSeparator}
             renderItem={({item, index}) => (
               <View style={{
-                marginTop: Platform.OS == 'ios' && index == 0 ? 140 : 0
+                marginTop: index == 0 ? (Platform.OS == 'ios' ? 140 : 100) : 0
               }}>
                 <RequestCard 
                   onConnectRequest={(item) => {this.connectRequest(item)}}
