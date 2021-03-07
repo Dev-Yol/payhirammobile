@@ -385,7 +385,9 @@ class Requests extends Component {
             extraData={selected}
             ItemSeparatorComponent={this.FlatListItemSeparator}
             renderItem={({item, index}) => (
-              <View>
+              <View style={{
+                marginTop: Platform.OS == 'ios' && index == 0 ? 140 : 0
+              }}>
                 <RequestCard 
                   onConnectRequest={(item) => {this.connectRequest(item)}}
                   data={item}
@@ -442,7 +444,7 @@ class Requests extends Component {
             }
           }}>
           {/*<SystemNotification></SystemNotification>*/}
-          <View style={[Style.MainContainer, {marginTop: Platform.OS == 'android' ? 100 : 100}]}>
+          <View style={Style.MainContainer}>
             
             {this._flatList()}
             {data.length == 0 && isLoading == false && (
