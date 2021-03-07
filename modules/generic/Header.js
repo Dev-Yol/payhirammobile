@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {View, Text, TouchableOpacity, Platform, Image, Dimensions} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faFilter, faBell} from '@fortawesome/free-solid-svg-icons';
+import {faFilter, faBell, faBars} from '@fortawesome/free-solid-svg-icons';
 import {NavigationActions, StackActions} from 'react-navigation';
 import {BasicStyles, Color, Helper} from 'common';
 import {connect} from 'react-redux';
@@ -58,14 +58,12 @@ class Header extends Component {
               style={{
                 flexDirection: 'row',
                 paddingTop: 5,
-                width: width - 100
+                width: width - 100,
+                alignItems: 'center',
+                paddingLeft: 10
               }}
               >
-              <Image source={require('assets/logo.png')} style={{
-                width: 30,
-                height: 30,
-                marginLeft: 10
-              }}/>
+              <FontAwesomeIcon icon={faBars} size={22} color={theme ? theme.primary : Color.primary}/>
               <Text style={{
                 fontSize: 20,
                 color: theme ? theme.primary : Color.primary,
