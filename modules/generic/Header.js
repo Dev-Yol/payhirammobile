@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {View, Text, TouchableOpacity, Platform, Image, Dimensions} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faFilter, faBell} from '@fortawesome/free-solid-svg-icons';
+import {faFilter, faBell, faBars} from '@fortawesome/free-solid-svg-icons';
 import {NavigationActions, StackActions} from 'react-navigation';
 import {BasicStyles, Color, Helper} from 'common';
 import {connect} from 'react-redux';
@@ -42,9 +42,6 @@ class Header extends Component {
       <View
         style={{
           width: width,
-          position: 'absolute',
-          top: 0,
-          zIndex: 0,
           paddingTop: 10,
           paddingBottom: 10,
           backgroundColor: Color.white,
@@ -61,14 +58,12 @@ class Header extends Component {
               style={{
                 flexDirection: 'row',
                 paddingTop: 5,
-                width: width - 100
+                width: width - 100,
+                alignItems: 'center',
+                paddingLeft: 10
               }}
               >
-              <Image source={require('assets/logo.png')} style={{
-                width: 30,
-                height: 30,
-                marginLeft: 10
-              }}/>
+              <FontAwesomeIcon icon={faBars} size={22} color={theme ? theme.primary : Color.primary}/>
               <Text style={{
                 fontSize: 20,
                 color: theme ? theme.primary : Color.primary,
@@ -137,12 +132,12 @@ class Header extends Component {
             style={{
               width: width,
               marginLeft: 10,
-              marginTop: 5,
+              marginTop: 5
             }}>
             <Text style={{
               fontSize: BasicStyles.standardFontSize,
               fontWeight: 'bold',
-              color: theme ? theme.primary : Color.white
+              color: theme ? theme.primary : Color.primary
             }}>{location ? 'Location: ' + location.route + ', ' + location.locality + ', ' + location.country : 'Current location'}</Text>
           </TouchableOpacity>
       </View>

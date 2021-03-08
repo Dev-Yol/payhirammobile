@@ -255,13 +255,13 @@ class CreateRequest extends Component {
       }}>
         {this.state.isLoading ? <Spinner mode="overlay" /> : null}
         <ScrollView showsVerticalScrollIndicator={false}>
-          {
+          {/*
             ledger && (
               <BalanceCard
                 data={ledger}
               />
             )
-          }
+          */}
           <View style={{
             ...BasicStyles.standardContainer
           }}>
@@ -275,7 +275,7 @@ class CreateRequest extends Component {
               </Text>
             </View>
 
-            <View style={styles.SelectFulfillmentContainer}>
+            {/* <View style={styles.SelectFulfillmentContainer}>
               <Text
                 style={[
                   styles.SelectFulfillmentTextStyle,
@@ -299,7 +299,7 @@ class CreateRequest extends Component {
                   selected={this.state.target}
                   />
               </ScrollView>
-            </View>
+            </View> */}
 
             <View style={styles.SelectFulfillmentContainer}>
               <Text

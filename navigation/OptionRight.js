@@ -64,17 +64,16 @@ class NavigationDrawerStructureRight extends Component {
     const { messenger, notifications, theme } = this.props.state;
     const { routeName } = this.props.navigationProps.state;
     return (
-      <View style={{ flexDirection: 'row', width: width }}>
+      <View style={{ flexDirection: 'row', width: width, alignItems: 'center' }}>
         <TouchableOpacity
           style={{
-            height: 50,
-            width: 50,
+            height: 40,
+            width: 40,
             backgroundColor: theme ? theme.primary : Color.primary,
             borderRadius: 50,
             justifyContent: 'center',
             alignItems: 'center',
             marginLeft: 10,
-            marginTop: 10
           }}
           onPress={this.toggleDrawer.bind(this)}
           underlayColor={Color.secondary}
@@ -94,15 +93,14 @@ class NavigationDrawerStructureRight extends Component {
                   borderRadius: 50,
                   justifyContent: 'center',
                   alignItems: 'center',
-                  marginLeft:  width - 170,
-                  marginTop: 10
+                  marginLeft:  width - 170
                 }}
                 onPress={() => this.onShare()}
                 underlayColor={Color.secondary}
                 >
                   <FontAwesomeIcon
                     icon={faShare}
-                    size={30}
+                    size={22}
                     style={{ color: theme ? theme.primary : Color.primary }}
                   />
               </TouchableOpacity>
@@ -117,15 +115,14 @@ class NavigationDrawerStructureRight extends Component {
                   borderRadius: 50,
                   justifyContent: 'center',
                   alignItems: 'center',
-                  marginLeft:  width - 170,
-                  marginTop: 10
+                  marginLeft:  width - 170
                 }}
                 onPress={() => this.goTo('qrCodeScannerStack')}
                 underlayColor={Color.secondary}
                 >
                   <FontAwesomeIcon
                     icon={faQrcode}
-                    size={30}
+                    size={22}
                     style={{ color: theme ? theme.primary : Color.primary }}
                   />
               </TouchableOpacity>
@@ -138,8 +135,7 @@ class NavigationDrawerStructureRight extends Component {
             borderRadius: 50,
             justifyContent: 'center',
             alignItems: 'center',
-            marginLeft: (routeName == 'Circle' || routeName == 'Dashboard') ? 10 : width - 110,
-            marginTop: 10
+            marginLeft: (routeName == 'Circle' || routeName == 'Dashboard') ? 10 : width - 110
           }}
           onPress={() => this.props.navigationProps.navigate('notificationStack')}
           underlayColor={Color.secondary}
@@ -151,7 +147,7 @@ class NavigationDrawerStructureRight extends Component {
             }}>
               <FontAwesomeIcon
                 icon={faBell}
-                size={30}
+                size={22}
                 style={{ color: theme ? theme.primary : Color.primary }}
               />
               {
@@ -165,7 +161,7 @@ class NavigationDrawerStructureRight extends Component {
                       alignItems: 'center',
                       position: 'absolute',
                       zIndex: 1,
-                      right: 10,
+                      right: 15,
                       bottom: 1
                     }}>
                       <Text style={{

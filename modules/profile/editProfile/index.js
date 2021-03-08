@@ -78,11 +78,7 @@ class EditProfile extends Component {
       return
     }
     let parameter = {
-      condition: [{
-        value: user.id,
-        column: 'account_id',
-        clause: '='
-      }]
+      account_id: user.id
     }
     let parameter2 = {
       condition: [{
@@ -99,7 +95,11 @@ class EditProfile extends Component {
       this.setState({isLoading: false})
       if(response.data.length > 0){
         const { data } = response
-        console.log("[RESPONSEs]", data);
+        let profile = {
+          url: data[0].profile[0].url
+        }
+        data[0].profile = profile
+        console.log("[RESPONSE s]", data[0]);
         this.setState({
           id: data[0].account_id,
           first_name: data[0].first_name,
@@ -108,7 +108,7 @@ class EditProfile extends Component {
           sex:  data[0].sex,
           cellular_number:  data[0].cellular_number,
           address: data[0].address,
-          // birthDate:  account.information.birth_date,
+          profile: data[0]
 
         })
         // if(data.birth_date != null){
@@ -130,10 +130,6 @@ class EditProfile extends Component {
         })
       }
     });
-    Api.request(Routes.accountRetrieve, parameter2, response => {
-      const {profile} = response.data[0]
-      console.log("[images]", response.data);
-    })
   }
 
   upload = () => {

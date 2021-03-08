@@ -10,7 +10,7 @@ export default {
     width: width - 40,
     paddingLeft: 10,
     marginBottom: 20,
-    borderRadius: 5
+    borderRadius: 25
   },
   formControlModal: {
     height: 50,
@@ -28,7 +28,7 @@ export default {
     borderWidth: 1,
     width: '100%',
     marginBottom: 20,
-    borderRadius: 5,
+    borderRadius: 25,
     paddingLeft: 10
   },
   pickerStyle: {
@@ -97,7 +97,7 @@ export default {
     color: Color.white
   },
   iconSize: 24,
-  headerBackIconSize: 30,
+  headerBackIconSize: 22,
   iconStyle: {
     color: Color.primary,
     paddingLeft: 20,
@@ -197,14 +197,14 @@ export default {
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 5
+    borderRadius: 25
   },
   standardTextInput: {
     height: 50,
     borderColor: Color.lightGray,
     borderWidth: 1,
     width: '100%',
-    borderRadius: 5,
+    borderRadius: 25,
     paddingLeft: 10,
     justifyContent: 'center'
   },
@@ -213,14 +213,14 @@ export default {
     borderColor: Color.lightGray,
     borderWidth: 1,
     width: '100%',
-    borderRadius: 5,
+    borderRadius: 25,
     paddingLeft: 10,
   },
   standardTextInputMultiline: {
     borderColor: Color.lightGray,
     borderWidth: 1,
     width: '100%',
-    borderRadius: 5,
+    borderRadius: 25,
     paddingLeft: 10
   },
   standardShadow: {
@@ -248,7 +248,7 @@ export default {
     borderColor: Color.lightGray,
     borderWidth: 1,
     width: '100%',
-    borderRadius: 5,
+    borderRadius: 25,
     paddingLeft: 10
   },
 }

@@ -30,9 +30,12 @@ class Notifications extends Component{
     this.retrieve()
   }
 
-  async redirect(payload, item, payloadValue){
+  async redirect(payload, item, payloadValue, items){
     const { user } = this.props.state;
     if(payload === 'thread'){
+      this.props.navigation.navigate('messagesStack', {
+        data: items
+      })
       // const { notifications } = this.props.state.notifications
       // notifications.map(el => {
       //   // console.log("[PROPS]",itemID,  el.id == itemID);
@@ -42,21 +45,23 @@ class Notifications extends Component{
       //     })
       //   }
       // })
-      let parameter = {
-        payload_value: payloadValue,
-        to: user.id
-      }
-      this.setState({isLoading: true})
-      await Api.request(Routes.requestRetrieveByPayloadValue, parameter, response => {
-        this.setState({isLoading: false})
-        let array = []
-        array.push(item)
-        // awatthis.setState({data: response.data[0]})
-        // let data = a
-        console.log("[response]", response.data[0]);
-      })
-      // this.props.navigation.navigate('messagesStack', {
-      //   data: this.state.data
+      // let parameter = {
+      //   payload_value: payloadValue,
+      //   to: user.id,
+      //   id: item
+      // }
+      // console.log("[REQUEST]", payloadValue, item);
+      // this.setState({isLoading: true})
+      // Api.request(Routes.requestRetrieveByPayloadValue, parameter, async response => {
+      //   this.setState({isLoading: false})
+      //   let array = []
+      //   array.push(item)
+      //   // awatthis.setState({data: response.data[0]})
+      //   // let data = a
+      //   console.log("[response]", response.data[0]);
+      //   await this.props.navigation.navigate('messagesStack', {
+      //     data: item
+      //   })
       // })
     }else{
       let parameter = {
@@ -88,10 +93,10 @@ class Notifications extends Component{
       limit: 10,
       offset: 0
     }
-    this.setState({isLoading: true})
+    // this.setState({isLoading: true})
     Api.request(Routes.notificationsRetrieve, parameter, notifications => {
       console.log("[RESTRIEVE]", notifications.data[0])
-      this.setState({isLoading: false})
+      // this.setState({isLoading: false})
       this.setState({data: notifications.data[0]})
       setNotifications(notifications.size, notifications.data)
     }, error => {
@@ -133,7 +138,7 @@ class Notifications extends Component{
             {
               notifications && notifications.notifications.map((item, index) => (
                 <TouchableHighlight
-                  onPress={() => this.redirect(item.payload, item, item.payload_value)}
+                  onPress={() => this.redirect(item.payload, item.id, item.payload_value, item)}
                   underlayColor={Color.gray}
                   style={{
                     borderBottomColor: Color.lightGray,

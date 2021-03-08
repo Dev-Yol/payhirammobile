@@ -22,6 +22,7 @@ import Support from 'components/Support';
 import UpdateTicket from 'components/Support/UpdateTicket';
 import Style from './Style.js';
 import { connect } from 'react-redux'
+import HeaderRequest from 'modules/generic/Header.js'
 
 const width = Math.round(Dimensions.get('window').width);
 class MenuDrawerStructure extends Component {
@@ -119,7 +120,7 @@ const _StackNavigator = createStackNavigator({
     screen: Requests,
     navigationOptions: ({ navigation }) => ({
       title: null ,
-      headerLeft: null,
+      headerLeft: <HeaderRequest navigation={navigation}/>,
       headerRight: null,
       headerTransparent: true
     }),
