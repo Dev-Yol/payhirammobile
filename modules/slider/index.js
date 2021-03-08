@@ -51,6 +51,7 @@ class Slider extends Component {
 
   render () {
     const { user, theme } = this.props.state;
+    console.log('[userStatus]', user);
     return (
       <View style={styles.container}>
         <ScrollView>
@@ -120,7 +121,7 @@ class Slider extends Component {
                     onPress={() => {this.redirect("editProfileStack")}}
                   >
                   {
-                    user.status == 'verified' ?
+                    user.status == 'VERIFIED' || user.status == 'GRANTED' ?
                       <Text style={{
                       fontWeight: 'bold',
                       color: Color.white}}>

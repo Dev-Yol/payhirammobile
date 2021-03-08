@@ -151,15 +151,18 @@ class Requests extends Component {
         },
         value: searchParameter == null ? '%' : '%' + searchParameter.value + '%',
         column: searchParameter == null ? 'created_at' : searchParameter.column,
-        type: user.account_type
+        type: user.account_type,
+        isPersonal: false
       };
       console.log('[parameter]', parameter);
     }
+    console.log('offset', this.state.offset, '[limit]', this.state.limit);
     if((page != null && page == 'personal') || (page == null && this.state.page == 'personal')){
+      console.log('[offset]', this.state.offset, '[limit]', this.state.limit);
       parameter = {
         account_id: user.id,
         offset: flag == true && this.state.offset > 0 ? (this.state.offset * this.state.limit) : this.state.offset,
-        limit: this.state.limit,
+        limit: 10,
         sort: {
           column: 'created_at',
           value: 'desc',
@@ -179,9 +182,11 @@ class Requests extends Component {
           size: response.size ? response.size : 0,
           isLoading: false
         });
+        console.log('[size]', response.size);
         if(response.data.length > 0){
           if(page == null){
             this.setState({
+              // data: flag == false ? response.data : response.data,
               data: flag == false ? response.data : _.uniqBy([...this.state.data, ...response.data], 'id'),
               numberOfPages: parseInt(response.size / this.state.limit) + (response.size % this.state.limit ? 1 : 0),
               offset: flag == false ? 1 : (this.state.offset + 1)
@@ -413,6 +418,7 @@ class Requests extends Component {
     } = this.state;
     const {theme, user} = this.props.state;
     const { data } = this.state;
+    console.log('[data]', this.state.data);
     return (
       <SafeAreaView style={{
         flex: 1
