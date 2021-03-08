@@ -36,13 +36,8 @@ class Header extends Component {
   }
 
   render (){
-    const { selected, from, setLocation } = this.props;
+    const { selected, from, setDefaultAddress } = this.props;
     const { theme, notifications, location, defaultAddress } = this.props.state;
-    // if (defaultAddress != null) {
-      // setLocation(defaultAddress)
-    // }else{
-    //   setLocation(location)
-    // }
     return(
       <View
         style={{
@@ -158,7 +153,7 @@ const mapStateToProps = state => ({state: state});
 const mapDispatchToProps = dispatch => {
   const {actions} = require('@redux');
   return {
-    setLocation: (location) => dispatch(actions.setLocation(location))
+    setDefaultAddress: (defaultAddress) => dispatch(actions.setDefaultAddress(defaultAddress))
   };
 };
 

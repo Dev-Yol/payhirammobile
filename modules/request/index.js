@@ -162,7 +162,7 @@ class Requests extends Component {
       parameter = {
         account_id: user.id,
         offset: flag == true && this.state.offset > 0 ? (this.state.offset * this.state.limit) : this.state.offset,
-        limit: 10,
+        limit: this.state.limit,
         sort: {
           column: 'created_at',
           value: 'desc',
