@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Style from './Style.js';
-import { View, TouchableHighlight, Text, ScrollView, FlatList, Platform} from 'react-native';
+import { View, TouchableHighlight, Text, ScrollView, FlatList, Platform, SafeAreaView} from 'react-native';
 import { Routes, Color, Helper, BasicStyles } from 'common';
 import { Spinner, Empty, UserImage } from 'components';
 import { connect } from 'react-redux';
@@ -13,7 +13,9 @@ class Groups extends Component{
     this.state = {
       isLoading: false,
       selected: null,
-      data: null
+      data: null,
+      limit: 10,
+      offset: 0,
     }
   }
 
@@ -190,27 +192,31 @@ class Groups extends Component{
   render() {
     const { isLoading, data } = this.state;
     return (
-      <ScrollView 
-        style={Style.ScrollViewGroup}
-        onScroll={(event) => {
-          if(event.nativeEvent.contentOffset.y <= 0) {
-            if(this.state.isLoading == false){
-              this.retrieve()
+      <SafeAreaView style={{
+        flex: 1
+      }}>
+        <ScrollView 
+          style={Style.ScrollViewGroup}
+          onScroll={(event) => {
+            if(event.nativeEvent.contentOffset.y <= 0) {
+              if(this.state.isLoading == false){
+                this.retrieve()
+              }
             }
-          }
-        }}
-        showsVerticalScrollIndicator={false}
-        >
-        <View stle={{
-          flexDirection: 'row',
-          width: '100%',
-          minHeight: height
-        }}>
-          {this._flatList()}
-        </View>
-        {data == null && (<Empty refresh={true} onRefresh={() => this.retrieve()}/>)}
+          }}
+          showsVerticalScrollIndicator={false}
+          >
+          <View stle={{
+            flexDirection: 'row',
+            width: '100%',
+            minHeight: height
+          }}>
+            {this._flatList()}
+          </View>
+          {data == null && (<Empty refresh={true} onRefresh={() => this.retrieve()}/>)}
+        </ScrollView>
         {isLoading ? <Spinner mode="overlay"/> : null }
-      </ScrollView>
+      </SafeAreaView>
     );
   }
 }
