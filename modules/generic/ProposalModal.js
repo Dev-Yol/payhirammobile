@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Text, View, TouchableHighlight, ScrollView, TextInput, Dimensions, Alert } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faAsterisk } from '@fortawesome/free-solid-svg-icons';
+import { faAsterisk, faRedo } from '@fortawesome/free-solid-svg-icons';
 import { Picker } from '@react-native-community/picker';
 import { connect } from 'react-redux';
 import BalanceCard from 'modules/generic/BalanceCard';
@@ -364,6 +364,50 @@ class ProposalModal extends Component {
     );
   }
 
+  renderError(){
+    return(
+       <View style={[Style.CreateRequestContainer, {
+          width: '100%',
+          height: '100%',
+          flex: 1
+      }]}>
+          <ScrollView style={{
+              width: '100%',
+              height: '100%',
+            }}
+            showsVerticalScrollIndicator={false}
+            >
+            <View style={{
+              width: '100%',
+              alignItems: 'center',
+              flex: 1,
+              justifyContent: 'center'
+            }}>
+              <Text>Invalid Accessed, please refresh!</Text>
+              <TouchableHighlight
+                onPress={() => this.retrieveSummaryLedger()}>
+                <FontAwesomeIcon icon={faRedo} size={32}/>
+              </TouchableHighlight>
+            </View>
+          </ScrollView>
+          <View
+            style={Style.BottomContainer}>
+              
+            <Button 
+              title={'Close'}
+              onClick={() => this.props.closeModal()}
+              style={{
+                width: '90%',
+                marginRight: '5%',
+                marginLeft: '5%',
+                backgroundColor: Color.danger,
+              }}
+            />
+          </View>
+      </View>
+    )
+  }
+
   render(){
     const { closeModal, visible } = this.props;
     const { ledger } = this.props.state;
@@ -379,6 +423,9 @@ class ProposalModal extends Component {
             style={{ padding: 0 }}>
             <View style={[Style.container]}>
                 {(ledger && summaryLoading == false) && this.renderContent()}
+                {(isLoading == true && (!ledger || (ledger && ledger.length == 0))) && (
+                  this.renderError()
+                )}
             </View>
 
         {isLoading ? <Spinner mode="overlay" /> : null}
