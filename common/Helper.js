@@ -286,7 +286,7 @@ export default {
       case 3:
         return 'Cash In';
       case 4:
-        return 'Bills and Paymets';
+        return 'Bills and Payments';
       case 5:
         return 'Others';
       case 101:
