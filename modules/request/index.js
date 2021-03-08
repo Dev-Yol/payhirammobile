@@ -103,7 +103,6 @@ class Requests extends Component {
   setRetrieveParameter = (flag) => {
     const {setSearchParameter} = this.props;
     const {user, searchParameter} = this.props.state;
-    console.log("[user]", user);
     if (flag == false) {
       setSearchParameter(null);
       this.setState({activePage: 0});
@@ -116,7 +115,6 @@ class Requests extends Component {
         value: user.id,
         type: user.account_type
       };
-      console.log('[searchParameter]', searchParameter);
       this.setState({activePage: 1});
       setSearchParameter(searchParameter);
       setTimeout(() => {
@@ -126,7 +124,6 @@ class Requests extends Component {
   };
 
   retrieve = (scroll, flag, loading = true, page = null) => {
-    console.log("[Request Retrieve] On Sending Request")
     const {user, searchParameter} = this.props.state;
     console.log("[searchParameter]", this.props.state);
     const { data, tempData } = this.state;
@@ -154,11 +151,8 @@ class Requests extends Component {
         type: user.account_type,
         isPersonal: false
       };
-      console.log('[parameter]', parameter);
     }
-    console.log('offset', this.state.offset, '[limit]', this.state.limit);
     if((page != null && page == 'personal') || (page == null && this.state.page == 'personal')){
-      console.log('[offset]', this.state.offset, '[limit]', this.state.limit);
       parameter = {
         account_id: user.id,
         offset: flag == true && this.state.offset > 0 ? (this.state.offset * this.state.limit) : this.state.offset,
@@ -174,15 +168,12 @@ class Requests extends Component {
       };
     }
     this.setState({isLoading: (loading == false && page == null) ? false : true});
-    console.log("[Request Retrieve] parameter", parameter)
     Api.request( Routes.requestRetrieve, parameter, (response) => {
         // console.log("[Request Retrieve]", response.data[0].account)
-        console.log("[Request Retrieve]", response)
         this.setState({
           size: response.size ? response.size : 0,
           isLoading: false
         });
-        console.log('[size]', response.size);
         if(response.data.length > 0){
           if(page == null){
             this.setState({
@@ -418,7 +409,6 @@ class Requests extends Component {
     } = this.state;
     const {theme, user} = this.props.state;
     const { data } = this.state;
-    console.log('[data]', this.state.data);
     return (
       <SafeAreaView style={{
         flex: 1
