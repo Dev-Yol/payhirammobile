@@ -39,6 +39,7 @@ class HeaderOptions extends Component {
     const { theme } = this.props.state;
     const width = Math.round(Dimensions.get('window').width);
     // {Helper.showRequestType(messengerGroup.request.type)} -
+    console.log("[Data]", data);
     const { data } = this.props.navigationProps.state.params;
     return (
       <View>

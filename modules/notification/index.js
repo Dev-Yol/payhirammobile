@@ -30,11 +30,34 @@ class Notifications extends Component{
     this.retrieve()
   }
 
-  redirect(payload){
+  async redirect(payload, item, payloadValue){
+    const { user } = this.props.state;
     if(payload === 'thread'){
-      this.props.navigation.navigate('messagesStack', {
-        data: this.state.data
+      // const { notifications } = this.props.state.notifications
+      // notifications.map(el => {
+      //   // console.log("[PROPS]",itemID,  el.id == itemID);
+      //   if(itemID == el.id){
+      //     this.props.navigation.navigate('messagesStack', {
+      //         data: el
+      //     })
+      //   }
+      // })
+      let parameter = {
+        payload_value: payloadValue,
+        to: user.id
+      }
+      this.setState({isLoading: true})
+      await Api.request(Routes.requestRetrieveByPayloadValue, parameter, response => {
+        this.setState({isLoading: false})
+        let array = []
+        array.push(item)
+        // awatthis.setState({data: response.data[0]})
+        // let data = a
+        console.log("[response]", response.data[0]);
       })
+      // this.props.navigation.navigate('messagesStack', {
+      //   data: this.state.data
+      // })
     }else{
       let parameter = {
         payload_value: this.state.data.payload_value
@@ -110,7 +133,7 @@ class Notifications extends Component{
             {
               notifications && notifications.notifications.map((item, index) => (
                 <TouchableHighlight
-                  onPress={() => this.redirect(item.payload)}
+                  onPress={() => this.redirect(item.payload, item, item.payload_value)}
                   underlayColor={Color.gray}
                   style={{
                     borderBottomColor: Color.lightGray,
@@ -150,7 +173,7 @@ class Notifications extends Component{
             }
           </View>
         </ScrollView>
-        {/*isLoading ? <Spinner mode="overlay"/> : null */}  
+        {isLoading ? <Spinner mode="overlay"/> : null }
       </SafeAreaView>
     );
   }
