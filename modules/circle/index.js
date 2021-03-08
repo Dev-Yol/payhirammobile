@@ -1,18 +1,19 @@
 import React, {Component} from 'react';
-import { View, Text, ScrollView, TouchableHighlight, Dimensions, Alert, Share, SafeAreaView } from 'react-native';
+import { View, Text, ScrollView, TouchableHighlight, Dimensions, Alert, Share, SafeAreaView, TextInput, TouchableOpacity } from 'react-native';
 const height = Math.round(Dimensions.get('window').height);
 import { UserImage, Spinner, Empty } from 'components';
 // import Share from 'components/Share'
 import { Rating } from 'components/index.js';
 import { Routes, Color, BasicStyles } from 'common';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faCheckCircle, faTimesCircle, faEllipsisH} from '@fortawesome/free-solid-svg-icons';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { connect } from 'react-redux';
 import Api from 'services/api/index.js';
 import _ from 'lodash';
 import Button from 'components/Form/Button';
 import Footer from 'modules/generic/Footer'
 import { Pager, PagerProvider } from '@crowdlinker/react-native-pager';
+// import { TouchableOpacity } from 'react-native-gesture-handler';
 class Circle extends Component{
   constructor(props){
     super(props);
@@ -22,12 +23,35 @@ class Circle extends Component{
       offset: 0,
       isLoading: false,
       page: 'circle',
-      activeIndex: 0
+      activeIndex: 0,
+      search: null,
+      status: false,
+      d: []
     }
   }
 
   componentDidMount() {
     this.retrieve(false)
+  }
+
+  searchHandler = (value) => {
+    this.setState({search: value});
+  }
+  
+  searchCircle = () => {
+    this.setState({status: false})
+    const { data, search, d } = this.state;
+    let temp = [];
+    if(search) {
+      data.map((item, index) => {
+          if(item.account && item.account.information && item.account.information.first_name && item.account.information.first_name.toLowerCase().includes(search.toLowerCase()) === true || 
+            item.account && item.account.information && item.account.information.last_name && item.account.information.last_name.toLowerCase().includes(search.toLowerCase()) === true || 
+            item.account && item.account.information && item.account.information.address && item.account.information.address.toLowerCase().includes(search.toLowerCase()) === true) {
+            temp.push(item)
+            }
+      })
+    }
+    this.setState({data: search ? temp : d})
   }
 
   retrieve(flag){
@@ -52,16 +76,21 @@ class Circle extends Component{
     this.setState({isLoading: true})
     Api.request(Routes.circleRetrieve, parameter, response => {
       console.log('parameter', response.data)
-      this.setState({isLoading: false})
+      this.setState({
+        isLoading: false,
+        status: true
+      })
       if (response != null) {
         this.setState({
           data: flag == false ? response.data : _.uniqBy([...this.state.data, ...response.data], 'id'),
-          offset: flag == false ? 1 : (this.state.offset + 1)
+          offset: flag == false ? 1 : (this.state.offset + 1),
+          d: flag == false ? response.data : _.uniqBy([...this.state.data, ...response.data], 'id')
         })
       } else {
         this.setState({
           data: flag == false ? [] : this.state.data,
-          offset: flag == false ? 0 : this.state.offset
+          offset: flag == false ? 0 : this.state.offset,
+          d: flag == false ? [] : this.state.data
         })
       }
     });
@@ -305,12 +334,47 @@ class Circle extends Component{
           }}
           showsVerticalScrollIndicator={false}>
           <View style={{
-            height: height
+            height: height,
+            padding: 10
           }}>
+            <View style={{
+                height: 50,
+                borderColor: Color.gray,
+                borderWidth: 1,
+                borderRadius: 25,
+                paddingRight: 10,
+                paddingLeft: 10
+              }}>
+              <TouchableOpacity style={{
+                  position: 'absolute',
+                  right: 15,
+                  top: 10
+                }}
+                onPress={() => {this.searchCircle()}}>
+                <FontAwesomeIcon
+                icon={faSearch}
+                size={30}
+                color={Color.primary}/>
+              </TouchableOpacity>
+            <TextInput
+              style={{
+                height: 45,
+                width: '85%'
+              }}
+              onChangeText={text => this.searchHandler(text)}
+              value={this.state.search}
+              placeholder='Search circle...'
+            />
+          </View>
             {(data && user) && this.renderCircles(data, status)}
+              {data.length === 0 && this.state.status === false && (<Text style={{
+                marginTop: '10%',
+                marginLeft: 20,
+                color: Color.gray
+              }}>No data.</Text>)}
           </View>
         </ScrollView>
-        {data.length < 1 && this.state.isLoading == false && (<Empty refresh={true} onRefresh={() => this.retrieve(true)} />)}
+        {data.length < 1 && this.state.isLoading == false && status === true && (<Empty refresh={true} onRefresh={() => this.retrieve(true)} />)}
         {this.state.isLoading ? <Spinner mode="overlay"/> : null }
       </View>
     );
