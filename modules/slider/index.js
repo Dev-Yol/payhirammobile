@@ -15,7 +15,6 @@ class Slider extends Component {
     super(props);
   }
   navigateToScreen = (route) => {
-    console.log('[nav]', route);
     this.props.navigation.toggleDrawer();
     const navigateAction = NavigationActions.navigate({
       routeName: 'drawerStack',
@@ -51,7 +50,6 @@ class Slider extends Component {
 
   render () {
     const { user, theme } = this.props.state;
-    console.log('[userStatus]', user);
     return (
       <View style={styles.container}>
         <ScrollView>
