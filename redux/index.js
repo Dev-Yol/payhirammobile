@@ -96,8 +96,8 @@ export const actions = {
   setRequest(request) {
     return {type: types.SET_REQUEST, request};
   },
-  updateRequests(requests) {
-    return {type: types.UPDATE_REQUESTS, requests};
+  updateRequests(request) {
+    return {type: types.UPDATE_REQUESTS, request};
   },
   setPinFlag(pinFlag) {
     return {type: types.SET_PIN_FLAG, pinFlag};
@@ -436,10 +436,18 @@ const reducer = (state = initialState, action) => {
         request
       };
     case types.UPDATE_REQUESTS:
-      state.requests.push(...requests);
+      let newRequests = state.requests.map((item, index) => {
+        if(item.code == request.code){
+          return {
+            ...item,
+            status: request.status
+          }
+        }
+        return
+      })
       return {
         ...state,
-        requests: state.requests,
+        requests: newRequests,
       };
     case types.SET_PIN_FLAG:
       return {
