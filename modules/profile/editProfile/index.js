@@ -78,30 +78,26 @@ class EditProfile extends Component {
       return
     }
     let parameter = {
-      value: user.id,
-      clause: '=',
-      column: 'account_id'
-    }
-    let parameter2 = {
       condition: [{
         value: user.id,
         clause: '=',
-        column: 'id'
+        column: 'account_id'
       }]
     }
     this.setState({
       isLoading: true, 
       showDatePicker: false
     })
+    console.log("[PARAMETER]", parameter);
     Api.request(Routes.accountProfileRetrieve, parameter, response => {
       this.setState({isLoading: false})
+      console.log("[RESPONSE s]", response.data);
       if(response.data.length > 0){
         const { data } = response
         let profile = {
           url: data[0].profile[0].url
         }
         data[0].profile = profile
-        console.log("[RESPONSE s]", data[0]);
         this.setState({
           id: data[0].account_id,
           first_name: data[0].first_name,
