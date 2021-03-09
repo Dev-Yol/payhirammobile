@@ -423,7 +423,7 @@ class ProposalModal extends Component {
             style={{ padding: 0 }}>
             <View style={[Style.container]}>
                 {(ledger && summaryLoading == false) && this.renderContent()}
-                {(isLoading == true && (!ledger || (ledger && ledger.length == 0))) && (
+                {(isLoading == false && (!ledger || (ledger && ledger.length == 0))) && (
                   this.renderError()
                 )}
             </View>

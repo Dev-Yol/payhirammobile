@@ -103,7 +103,6 @@ class Requests extends Component {
   setRetrieveParameter = (flag) => {
     const {setSearchParameter} = this.props;
     const {user, searchParameter} = this.props.state;
-    console.log("[user]", user);
     if (flag == false) {
       setSearchParameter(null);
       this.setState({activePage: 0});
@@ -116,7 +115,6 @@ class Requests extends Component {
         value: user.id,
         type: user.account_type
       };
-      console.log('[searchParameter]', searchParameter);
       this.setState({activePage: 1});
       setSearchParameter(searchParameter);
       setTimeout(() => {
@@ -126,7 +124,6 @@ class Requests extends Component {
   };
 
   retrieve = (scroll, flag, loading = true, page = null) => {
-    console.log("[Request Retrieve] On Sending Request")
     const {user, searchParameter} = this.props.state;
     console.log("[searchParameter]", this.props.state);
     const { data, tempData } = this.state;
@@ -151,9 +148,9 @@ class Requests extends Component {
         },
         value: searchParameter == null ? '%' : '%' + searchParameter.value + '%',
         column: searchParameter == null ? 'created_at' : searchParameter.column,
-        type: user.account_type
+        type: user.account_type,
+        isPersonal: false
       };
-      console.log('[parameter]', parameter);
     }
     if((page != null && page == 'personal') || (page == null && this.state.page == 'personal')){
       parameter = {
@@ -171,10 +168,8 @@ class Requests extends Component {
       };
     }
     this.setState({isLoading: (loading == false && page == null) ? false : true});
-    console.log("[Request Retrieve] parameter", parameter)
     Api.request( Routes.requestRetrieve, parameter, (response) => {
         // console.log("[Request Retrieve]", response.data[0].account)
-        console.log("[Request Retrieve]", response)
         this.setState({
           size: response.size ? response.size : 0,
           isLoading: false
@@ -182,6 +177,7 @@ class Requests extends Component {
         if(response.data.length > 0){
           if(page == null){
             this.setState({
+              // data: flag == false ? response.data : response.data,
               data: flag == false ? response.data : _.uniqBy([...this.state.data, ...response.data], 'id'),
               numberOfPages: parseInt(response.size / this.state.limit) + (response.size % this.state.limit ? 1 : 0),
               offset: flag == false ? 1 : (this.state.offset + 1)

@@ -62,7 +62,7 @@ class Footer extends Component {
                   style={{
                     justifyContent: 'center',
                     alignItems: 'center',
-                    width: '50%',
+                    width: '33%',
                     flexDirection: 'row'
                   }}
                   >
@@ -77,17 +77,13 @@ class Footer extends Component {
                       },
                     ]}
                   />
-                  <Text style={{
-                    paddingLeft: 5,
-                    color: selected == 'public' ? Color.white : gray,
-                  }}>Public</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => this.props.onSelect('personal')}
                   style={{
                     justifyContent: 'center',
                     alignItems: 'center',
-                    width: '50%',
+                    width: '34%',
                     flexDirection: 'row'
                   }}
                   >
@@ -101,10 +97,26 @@ class Footer extends Component {
                       },
                     ]}
                   />
-                  <Text style={{
-                    paddingLeft: 5,
-                    color: selected == 'personal' ? Color.white : gray,
-                  }}>Personal</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => this.props.onSelect('history')}
+                  style={{
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    width: '33%',
+                    flexDirection: 'row'
+                  }}
+                  >
+                  <FontAwesomeIcon
+                    icon={faClock}
+                    size={BasicStyles.iconSize}
+                    style={[
+                      BasicStyles.iconStyle,
+                      {
+                        color: selected == 'history' ? Color.white : gray,
+                      },
+                    ]}
+                  />
                 </TouchableOpacity>
               </View>
             )

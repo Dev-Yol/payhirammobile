@@ -36,8 +36,8 @@ class Header extends Component {
   }
 
   render (){
-    const { selected, from } = this.props;
-    const { theme, notifications, location } = this.props.state;
+    const { selected, from, setDefaultAddress } = this.props;
+    const { theme, notifications, location, defaultAddress } = this.props.state;
     return(
       <View
         style={{
@@ -138,7 +138,9 @@ class Header extends Component {
               fontSize: BasicStyles.standardFontSize,
               fontWeight: 'bold',
               color: theme ? theme.primary : Color.primary
-            }}>{location ? 'Location: ' + location.route + ', ' + location.locality + ', ' + location.country : 'Current location'}</Text>
+            }}>{defaultAddress ? defaultAddress.route + ', ' + defaultAddress.locality + ', ' + defaultAddress.country : 'Click here to set Location.'}</Text>
+            {/* }}>{defaultAddress ? defaultAddress.route + ', ' + defaultAddress.locality + ', ' + defaultAddress.country : 'Default: ' + location.route + ', ' + location.locality + ', ' + location.country}</Text> */}
+            {/* }}>{location ? 'Location: ' + location.route + ', ' + location.locality + ', ' + location.country : 'Current location'}</Text> */}
           </TouchableOpacity>
       </View>
         
@@ -151,6 +153,7 @@ const mapStateToProps = state => ({state: state});
 const mapDispatchToProps = dispatch => {
   const {actions} = require('@redux');
   return {
+    setDefaultAddress: (defaultAddress) => dispatch(actions.setDefaultAddress(defaultAddress))
   };
 };
 

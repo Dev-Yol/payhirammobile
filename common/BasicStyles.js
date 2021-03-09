@@ -96,7 +96,7 @@ export default {
   textWhite: {
     color: Color.white
   },
-  iconSize: 24,
+  iconSize: 22,
   headerBackIconSize: 22,
   iconStyle: {
     color: Color.primary,
@@ -137,7 +137,7 @@ export default {
     width: 30,
     borderRadius: 15
   },
-  profileIconSize: 30,
+  profileIconSize: 22,
   standardFontSize: 12,
   standardTitleFontSize: 16,
   standardTitle2FontSize: 14,

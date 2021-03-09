@@ -160,6 +160,16 @@ const initialState = {
   },
   unReadMessages: [],
   searchParameter: null,
+  // location: {
+  //   id: null,
+  //   account_id: null,
+  //   latitude: null,
+  //   latitude: null,
+  //   route: null,
+  //   locality: null,
+  //   region: null,
+  //   country: null
+  // },
   location: {
     id: 1,
     account_id: 1,
@@ -170,7 +180,7 @@ const initialState = {
     region: 'test',
     country: 'test'
   },
-  requests: null,
+  requests: [],
   request: null,
   nav: null,
   pinFlag: false,
