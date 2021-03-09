@@ -180,7 +180,7 @@ const initialState = {
     region: 'test',
     country: 'test'
   },
-  requests: null,
+  requests: [],
   request: null,
   nav: null,
   pinFlag: false,
