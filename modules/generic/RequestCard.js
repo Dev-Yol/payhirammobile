@@ -228,7 +228,13 @@ class RequestCard extends Component {
         {this._subHeader(data)}
         {this._body(data)}
         <View>
-          <Rating ratings={data.rating}></Rating>
+          {
+            data.rating != null ? (
+              <Rating ratings={data?.rating}></Rating>
+            ):(
+              <View></View>
+            )
+          }
         </View>
         {(data.account.code != user.code && this.props.from == 'request') && this._footer(data)}
         {(data.account.code != user.code && this.props.from == 'request_item') && this._footerRequestItem(data)}

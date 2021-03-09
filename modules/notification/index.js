@@ -36,40 +36,15 @@ class Notifications extends Component{
       this.props.navigation.navigate('messagesStack', {
         data: items
       })
-      // const { notifications } = this.props.state.notifications
-      // notifications.map(el => {
-      //   // console.log("[PROPS]",itemID,  el.id == itemID);
-      //   if(itemID == el.id){
-      //     this.props.navigation.navigate('messagesStack', {
-      //         data: el
-      //     })
-      //   }
-      // })
-      // let parameter = {
-      //   payload_value: payloadValue,
-      //   to: user.id,
-      //   id: item
-      // }
-      // console.log("[REQUEST]", payloadValue, item);
-      // this.setState({isLoading: true})
-      // Api.request(Routes.requestRetrieveByPayloadValue, parameter, async response => {
-      //   this.setState({isLoading: false})
-      //   let array = []
-      //   array.push(item)
-      //   // awatthis.setState({data: response.data[0]})
-      //   // let data = a
-      //   console.log("[response]", response.data[0]);
-      //   await this.props.navigation.navigate('messagesStack', {
-      //     data: item
-      //   })
-      // })
     }else{
       let parameter = {
         payload_value: payloadValue,
         id: item
       }
       console.log("[PEER]", items);
+      this.setState({isLoading: true})
       Api.request(Routes.requestRetrieveByPayloadValue, parameter, async response => {
+        this.setState({isLoading: false})
         console.log("[RESPONSE]", response.data);
         this.setState({data: response.data[0]})
         await this.props.navigation.navigate('requestItemStack', {
