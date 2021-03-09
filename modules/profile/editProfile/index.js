@@ -78,7 +78,9 @@ class EditProfile extends Component {
       return
     }
     let parameter = {
-      account_id: user.id
+      value: user.id,
+      clause: '=',
+      column: 'account_id'
     }
     let parameter2 = {
       condition: [{
