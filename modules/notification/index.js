@@ -30,20 +30,27 @@ class Notifications extends Component{
     this.retrieve()
   }
 
-  redirect(payload){
+  async redirect(payload, item, payloadValue, items){
+    const { user } = this.props.state;
     if(payload === 'thread'){
       this.props.navigation.navigate('messagesStack', {
-        data: this.state.data
+        data: items
       })
     }else{
       let parameter = {
-        payload_value: this.state.data.payload_value
+        payload_value: payloadValue,
+        id: item
       }
-      Api.request(Routes.requestRetrieveByPayloadValue, parameter, response => {
+      console.log("[PEER]", items);
+      this.setState({isLoading: true})
+      Api.request(Routes.requestRetrieveByPayloadValue, parameter, async response => {
+        this.setState({isLoading: false})
+        console.log("[RESPONSE]", response.data);
         this.setState({data: response.data[0]})
-      })
-      this.props.navigation.navigate('requestItemStack', {
-        data: this.state.data
+        await this.props.navigation.navigate('requestItemStack', {
+          data: response.data[0],
+          from: 'notification'
+        })
       })
 
     }
@@ -65,10 +72,10 @@ class Notifications extends Component{
       limit: 10,
       offset: 0
     }
-    this.setState({isLoading: true})
+    // this.setState({isLoading: true})
     Api.request(Routes.notificationsRetrieve, parameter, notifications => {
       console.log("[RESTRIEVE]", notifications.data[0])
-      this.setState({isLoading: false})
+      // this.setState({isLoading: false})
       this.setState({data: notifications.data[0]})
       setNotifications(notifications.size, notifications.data)
     }, error => {
@@ -110,7 +117,7 @@ class Notifications extends Component{
             {
               notifications && notifications.notifications.map((item, index) => (
                 <TouchableHighlight
-                  onPress={() => this.redirect(item.payload)}
+                  onPress={() => this.redirect(item.payload, item.id, item.payload_value, item)}
                   underlayColor={Color.gray}
                   style={{
                     borderBottomColor: Color.lightGray,
@@ -150,7 +157,7 @@ class Notifications extends Component{
             }
           </View>
         </ScrollView>
-        {/*isLoading ? <Spinner mode="overlay"/> : null */}  
+        {isLoading ? <Spinner mode="overlay"/> : null }
       </SafeAreaView>
     );
   }

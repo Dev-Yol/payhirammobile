@@ -9,7 +9,7 @@ export default {
   accountRetrieve: apiUrl + 'accounts/retrieve',
   accountUpdate: apiUrl + 'accounts/update',
   accountCreate: apiUrl + 'accounts/create',
-  accountProfileRetrieve: apiUrl + 'account_informations/retrieve',
+  accountProfileRetrieve: apiUrl + 'account_informations/retrieve_account_info',
   accountProfileCreate: apiUrl + 'images/upload',
   accountUpdatePassword: apiUrl + 'accounts/update_password',
   notificationsRetrieve: apiUrl + 'notifications/retrieve',
