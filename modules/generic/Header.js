@@ -54,7 +54,7 @@ class Header extends Component {
             alignItems: 'center',
           }}>
             <TouchableOpacity
-              onPress={() => this.props.navigation.toggleDrawer()}
+              onPress={() => {this.props.navigation.toggleDrawer()}}
               style={{
                 flexDirection: 'row',
                 paddingTop: 5,
@@ -78,7 +78,7 @@ class Header extends Component {
                 justifyContent: 'center',
                 alignItems: 'center'
               }}
-              onPress={() => {}}
+              onPress={() => {this.props.navigation.toggleDrawer()}}
               underlayColor={Color.secondary}
               >
               <FontAwesomeIcon icon={faFilter} size={18} color={theme ? theme.primary : Color.primary}/>

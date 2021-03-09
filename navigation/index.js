@@ -4,6 +4,7 @@ import FingerprintScan from '../modules/basics/FingerPrintScanner';
 import ForgotPassword from 'modules/basics/rounded/ForgotPassword';
 import Register from 'modules/basics/rounded/Register';
 import Drawer from './Drawer';
+import Filter from './Filter';
 import NotificationStack from 'modules/notification/Drawer.js';
 import MessagesStack from 'modules/messenger/MessagesDrawer.js';
 import LedgerStack from 'modules/dashboard/LedgerDrawer.js';
@@ -96,6 +97,7 @@ const PrimaryNav = createStackNavigator(
     forgotPasswordStack: {screen: ForgotPasswordStack},
     registerStack: {screen: RegisterStack},
     drawerStack: {screen: Drawer},
+    filterStack: {screen: Filter},
     notificationStack: {screen: NotificationStack},
     messagesStack: {screen: MessagesStack},
     ledgerStack: {screen: LedgerStack},
