@@ -329,7 +329,7 @@ class CreateRequest extends Component {
             </View>
 
             <LocationTextInput 
-              variable={defaultAddress !== null ? defaultAddress.address_type : null}
+              variable={defaultAddress !== null ? defaultAddress.route : null}
               label={'Select Location'}
               placeholder={'Select Location'}
               onError={false}
