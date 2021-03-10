@@ -52,7 +52,7 @@ class FulfilmentCard extends Component {
         marginTop: 10
       }}>
         {
-          Data && Data.map((item, index) => (
+          Helper.fulfillmentTypes && Helper.fulfillmentTypes.map((item, index) => (
            
             <TouchableOpacity
               style={[styles.CardContainer, {backgroundColor: (selected && selected.id == item.id) ? (theme ? theme.primary : Color.primary) : (theme ? theme.secondary : Color.secondary)}]}

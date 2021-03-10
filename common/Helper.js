@@ -56,6 +56,9 @@ export default {
   }, {
     title: 'Delivery',
     value: 1
+  }, {
+    title: 'Online transaction',
+    value: 2
   }],
   request: {
     MINIMUM: 1000,
@@ -66,30 +69,28 @@ export default {
   partnerShare: 0.8,
   fulfillmentTypes: [
     {
-      value: 1,
-      label: 'Send',
-      description:
-        'Allow other peer to process your transaction when you want to send money to your family, friends or to businesses.',
-      money_type: 'Cash',
+      id: 1,
+      type: 'Send Cash',
+      description: 'Send cash and allow our partners to process or deliver the cash to your receiver.',
+      money_type: 'cash',
     },
     {
-      value: 2,
-      label: 'Withdrawal',
-      description: 'Allow other peer to process your withdrawals.',
-      money_type: 'Cash',
+      id: 2,
+      type: 'Withdrawal',
+      description: 'Withdraw cash from your wallet and let our partners nearby process or deliver the cash to your specified location.',
+      money_type: 'cash',
     },
     {
-      value: 3,
-      label: 'Deposit',
-      description: 'Allow other peer to process your deposits.',
-      money_type: 'Wallet',
+      id: 3,
+      type: 'Cash In',
+      description: 'Cash In to your wallet and let our nearby partners process or pickup the cash from your specified location.',
+      money_type: 'e-wallet',
     },
     {
-      value: 4,
-      label: 'Bills and Payments',
-      description:
-        "Don't have time and want to pay your bills? Allow other peer to fulfil your bills.",
-      money_type: 'Cash',
+      id: 4,
+      type: 'Bills and Payments',
+      description: "Don't have time and want to pay your bills either online or onsite? Our partners will handle your payments",
+      money_type: 'cash',
     },
   ],
   fulfillmentBorrowTypes: [
