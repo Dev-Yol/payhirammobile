@@ -50,7 +50,7 @@ class CreateRequest extends Component {
     }
     let date = new Date()
     this.setState({
-      currentDate: date.setDate(date.getDate() + 1)
+      currentDate: date.setDate(date.getDate())
     })
   }
 
@@ -329,7 +329,7 @@ class CreateRequest extends Component {
             </View>
 
             <LocationTextInput 
-              variable={defaultAddress !== null ? defaultAddress.route : null}
+              variable={defaultAddress !== null ? defaultAddress.route : 'Select Location'}
               label={'Select Location'}
               placeholder={'Select Location'}
               onError={false}
