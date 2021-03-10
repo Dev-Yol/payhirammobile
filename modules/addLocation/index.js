@@ -54,6 +54,7 @@ class AddLocation extends Component {
     const {setDefaultAddress} = this.props;
     this.setState({ selectedAddress: index });
     setDefaultAddress(this.state.addresses[index]);
+    this.props.navigation.pop()
   };
 
   renderAddresses = () => {
