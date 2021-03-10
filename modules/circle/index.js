@@ -24,7 +24,6 @@ class Circle extends Component{
       isLoading: false,
       page: 'circle',
       activeIndex: 0,
-      search: null,
       status: false,
       d: []
     }
@@ -32,26 +31,6 @@ class Circle extends Component{
 
   componentDidMount() {
     this.retrieve(false)
-  }
-
-  searchHandler = (value) => {
-    this.setState({search: value});
-  }
-  
-  searchCircle = () => {
-    this.setState({status: false})
-    const { data, search, d } = this.state;
-    let temp = [];
-    if(search) {
-      data.map((item, index) => {
-          if(item.account && item.account.information && item.account.information.first_name && item.account.information.first_name.toLowerCase().includes(search.toLowerCase()) === true || 
-            item.account && item.account.information && item.account.information.last_name && item.account.information.last_name.toLowerCase().includes(search.toLowerCase()) === true || 
-            item.account && item.account.information && item.account.information.address && item.account.information.address.toLowerCase().includes(search.toLowerCase()) === true) {
-            temp.push(item)
-            }
-      })
-    }
-    this.setState({data: search ? temp : d})
   }
 
   retrieve(flag){
@@ -224,80 +203,120 @@ class Circle extends Component{
 
   renderCircles(data, status) {
     const { user } = this.props.state;
-    console.log('[data]', data)
+    console.log('[data]', data, this.props.state.circleSearch);
     return (
       data.map((item, index) => {
         return (
           <View>
-          {status === 'circle' && (item.status === 'accepted' || item.status === 'pending') && (
-          <TouchableHighlight 
-            onPress={() => {
-              this.redirect(item)
-            }}
-            underlayColor={Color.gray}
-            key={index}
-          >
-            <View style={{
-              flexDirection: 'row',
-              paddingTop: 10,
-              paddingBottom: 10,
-              width: '90%',
-              marginLeft: '5%',
-              maginRight: '5%',
-              alignItems: 'center'
-            }}>
-              <UserImage user={item.account}/>
+            {(this.props.state.circleSearch === null || this.props.state.circleSearch === '') ?
+            <View>
+            {status === 'circle' && (item.status === 'accepted' || item.status === 'pending') && (
+            <TouchableHighlight 
+              onPress={() => {
+                this.redirect(item)
+              }}
+              underlayColor={Color.gray}
+              key={index}
+            >
               <View style={{
-                  marginLeft: 5,
-                  width: '90%'
-                }}>
-                <Text style={{fontWeight: 'bold'}}>{item.account.information.first_name + ' ' + item.account.information.last_name}</Text>
-                <Text style={{
-                  marginTop: 10,
-                  fontSize: BasicStyles.standardFontSize
-                }}>{item.account.information.address}</Text>
-              {
-                item.status == 'pending' || item.status === 'accepted' && this.action(item)
-              }
+                flexDirection: 'row',
+                paddingTop: 10,
+                paddingBottom: 10,
+                width: '90%',
+                marginLeft: '5%',
+                maginRight: '5%',
+                alignItems: 'center'
+              }}>
+                <UserImage user={item.account}/>
+                <View style={{
+                    marginLeft: 5,
+                    width: '90%'
+                  }}>
+                  <Text style={{fontWeight: 'bold'}}>{item.account.information.first_name + ' ' + item.account.information.last_name}</Text>
+                  <Text style={{
+                    marginTop: 10,
+                    fontSize: BasicStyles.standardFontSize
+                  }}>{item.account.information.address}</Text>
+                {
+                  item.status == 'pending' || item.status === 'accepted' && this.action(item)
+                }
+                </View>
               </View>
-            </View>
-          </TouchableHighlight>
-          )}
-          {status === 'invitation' && user.id !== item.account_id && item.status === 'pending' && (
-          <TouchableHighlight 
-            onPress={() => {
-              this.redirect(item)
-            }}
-            underlayColor={Color.gray}
-            key={index}
-          >
-            <View style={{
-              flexDirection: 'row',
-              paddingTop: 10,
-              paddingBottom: 10,
-              width: '90%',
-              marginLeft: '5%',
-              maginRight: '5%',
-              alignItems: 'center'
-            }}>
-              <UserImage user={item.account}/>
+            </TouchableHighlight>
+            )}
+            {status === 'invitation' && user.id !== item.account_id && item.status === 'pending' && (
+            <TouchableHighlight 
+              onPress={() => {
+                this.redirect(item)
+              }}
+              underlayColor={Color.gray}
+              key={index}
+            >
               <View style={{
-                  marginLeft: 5,
-                  width: '90%'
-                }}>
-                <Text style={{fontWeight: 'bold'}}>{item.account.information.first_name + ' ' + item.account.information.last_name}</Text>
-                <Text style={{
-                  marginTop: 10,
-                  fontSize: BasicStyles.standardFontSize
-                }}>{item.account.information.address}</Text>
-              {
-                item.status == 'pending' && this.action(item)
-              }
+                flexDirection: 'row',
+                paddingTop: 10,
+                paddingBottom: 10,
+                width: '90%',
+                marginLeft: '5%',
+                maginRight: '5%',
+                alignItems: 'center'
+              }}>
+                <UserImage user={item.account}/>
+                <View style={{
+                    marginLeft: 5,
+                    width: '90%'
+                  }}>
+                  <Text style={{fontWeight: 'bold'}}>{item.account.information.first_name + ' ' + item.account.information.last_name}</Text>
+                  <Text style={{
+                    marginTop: 10,
+                    fontSize: BasicStyles.standardFontSize
+                  }}>{item.account.information.address}</Text>
+                {
+                  item.status == 'pending' && this.action(item)
+                }
+                </View>
               </View>
+            </TouchableHighlight>
+            )}
             </View>
-          </TouchableHighlight>
-          )}
-          </View>
+          : <View>
+            {item.account && item.account.information && item.account.information.first_name && item.account.information.last_name && (item.account.information.first_name + ' ' + item.account.information.last_name).toLowerCase().includes(this.props.state.circleSearch && this.props.state.circleSearch.toLowerCase()) === true
+             && (
+              <TouchableHighlight 
+              onPress={() => {
+                this.redirect(item)
+              }}
+              underlayColor={Color.gray}
+              key={index}
+            >
+              <View style={{
+                flexDirection: 'row',
+                paddingTop: 10,
+                paddingBottom: 10,
+                width: '90%',
+                marginLeft: '5%',
+                maginRight: '5%',
+                alignItems: 'center'
+              }}>
+                <UserImage user={item.account}/>
+                <View style={{
+                    marginLeft: 5,
+                    width: '90%'
+                  }}>
+                  <Text style={{fontWeight: 'bold'}}>{item.account.information.first_name + ' ' + item.account.information.last_name}</Text>
+                  <Text style={{
+                    marginTop: 10,
+                    fontSize: BasicStyles.standardFontSize
+                  }}>{item.account.information.address}</Text>
+                {
+                  this.action(item)
+                }
+                </View>
+              </View>
+            </TouchableHighlight>
+            )}
+          </View>  
+        }</View>
         )
       })
     )
@@ -334,47 +353,17 @@ class Circle extends Component{
           }}
           showsVerticalScrollIndicator={false}>
           <View style={{
-            height: height,
-            padding: 10
+            height: height
           }}>
-            <View style={{
-                height: 50,
-                borderColor: Color.gray,
-                borderWidth: 1,
-                borderRadius: 25,
-                paddingRight: 10,
-                paddingLeft: 10
-              }}>
-              <TouchableOpacity style={{
-                  position: 'absolute',
-                  right: 15,
-                  top: 10
-                }}
-                onPress={() => {this.searchCircle()}}>
-                <FontAwesomeIcon
-                icon={faSearch}
-                size={30}
-                color={Color.primary}/>
-              </TouchableOpacity>
-            <TextInput
-              style={{
-                height: 45,
-                width: '85%'
-              }}
-              onChangeText={text => this.searchHandler(text)}
-              value={this.state.search}
-              placeholder='Search circle...'
-            />
-          </View>
+            {data.length < 1 && (<Text style={{
+              marginTop: '10%',
+              marginLeft: 20,
+              color: Color.gray
+            }}>No data.</Text>)}
             {(data && user) && this.renderCircles(data, status)}
-              {data.length === 0 && this.state.status === false && (<Text style={{
-                marginTop: '10%',
-                marginLeft: 20,
-                color: Color.gray
-              }}>No data.</Text>)}
           </View>
         </ScrollView>
-        {data.length < 1 && this.state.isLoading == false && status === true && (<Empty refresh={true} onRefresh={() => this.retrieve(true)} />)}
+        {/* {data.length < 1 && this.state.isLoading == false && status === true && (<Empty refresh={true} onRefresh={() => this.retrieve(true)} />)} */}
         {this.state.isLoading ? <Spinner mode="overlay"/> : null }
       </View>
     );
