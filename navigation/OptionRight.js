@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, TouchableOpacity, Text, Platform, Dimensions, Share } from 'react-native';
+import { View, TouchableOpacity, Text, Platform, Dimensions, Share, TextInput } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import {
@@ -11,16 +11,20 @@ import {
   faCaretSquareRight,
   faBars,
   faShare,
-  faQrcode
+  faQrcode,
+  faSearch
 } from '@fortawesome/free-solid-svg-icons';
 import { faCopy } from '@fortawesome/free-regular-svg-icons';
 import { Color, BasicStyles } from 'common';
-
+import Circle from 'modules/circle/index.js';
 import { connect } from 'react-redux';
 const width = Math.round(Dimensions.get('window').width);
 class NavigationDrawerStructureRight extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      search: null
+    }
   }
   goTo = (screen) => {
     this.props.navigationProps.navigate(screen);
@@ -36,6 +40,10 @@ class NavigationDrawerStructureRight extends Component {
     });
     this.props.navigationProps.dispatch(navigateAction);
   };
+
+  searchHandler = (value) => {
+   this.setState({search: value});
+  }
 
   onShare = async () => {
     const { user } = this.props.state;
@@ -86,7 +94,42 @@ class NavigationDrawerStructureRight extends Component {
         </TouchableOpacity>
         {
           routeName == 'Circle' && (
-            <TouchableOpacity
+            <View style={{
+              justifyContent: 'center'
+            }}>
+              <View style={{
+                height: 40,
+                borderColor: Color.gray,
+                borderWidth: 1,
+                borderRadius: 25,
+                width: '80%',
+                position: 'absolute',
+                marginLeft: '3%',
+                justifyContent: 'center'
+              }}>
+                <TouchableOpacity style={{
+                    position: 'absolute',
+                    right: 15,
+                    top: 7
+                  }}
+                  onPress={() => {this.props.setCircleSearch(this.state.search)}}
+                >
+                  <FontAwesomeIcon
+                  icon={faSearch}
+                  size={22}
+                  color={Color.primary}/>
+                </TouchableOpacity>
+                <TextInput
+                  style={{
+                    height: 45,
+                    width: '80%'
+                  }}
+                  onChangeText={text => this.searchHandler(text)}
+                  value={this.state.search}
+                  placeholder='Search circle...'
+                />
+              </View>
+              <TouchableOpacity
                 style={{
                   height: 50,
                   width: 50,
@@ -104,6 +147,7 @@ class NavigationDrawerStructureRight extends Component {
                     style={{ color: theme ? theme.primary : Color.primary }}
                   />
               </TouchableOpacity>
+            </View>
           )
         }
         {
@@ -184,6 +228,7 @@ const mapDispatchToProps = (dispatch) => {
   const { actions } = require('@redux');
   return {
     removeProduct: () => dispatch(actions.removeProduct()),
+    setCircleSearch: (circleSearch) => dispatch(actions.setCircleSearch(circleSearch))
   };
 };
 
