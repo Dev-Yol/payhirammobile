@@ -117,7 +117,7 @@ class NavigationDrawerStructureRight extends Component {
                   <FontAwesomeIcon
                   icon={faSearch}
                   size={22}
-                  color={Color.primary}/>
+                  color={{color: theme ? theme.primary : Color.primary}}/>
                 </TouchableOpacity>
                 <TextInput
                   style={{
