@@ -251,4 +251,5 @@ export default {
     borderRadius: 25,
     paddingLeft: 10
   },
+  inputBorderRadius: 25,
 }

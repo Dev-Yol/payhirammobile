@@ -372,7 +372,7 @@ class CreateRequest extends Component {
             /> */}
 
 
-            <View style={styles.SelectFulfillmentContainer}>
+            {/*<View style={styles.SelectFulfillmentContainer}>
               <Text
                 style={[
                   styles.SelectFulfillmentTextStyle,
@@ -403,7 +403,7 @@ class CreateRequest extends Component {
                     style={{paddingLeft: 15, color: Color.primary}}
                   />
                 </View>
-              </View>
+              </View>*/}
 
             <View style={styles.SelectFulfillmentContainer}>
               <Text
