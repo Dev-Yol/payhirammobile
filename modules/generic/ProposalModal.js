@@ -26,7 +26,8 @@ class ProposalModal extends Component {
         charge: 0,
         isLoading: false,
         summaryLoading: false,
-        data: null
+        data: null,
+        deliveryFee: 20
     };
   }
 
@@ -244,6 +245,17 @@ class ProposalModal extends Component {
                     keyboardType={'numeric'}
                     />
 
+
+                    <TextInputWithLabel 
+                    variable={this.state.deliveryFee}
+                    onChange={(value) => this.setState({deliveryFee: value})}
+                    label={'Delivery Fee'}
+                    placeholder={'Delivery Fee'}
+                    onError={false}
+                    editable={false}
+                    required={true}
+                    />
+
                   <View style={{
                     width: '100%',
                     flexDirection: 'row',
@@ -264,6 +276,7 @@ class ProposalModal extends Component {
                         fontWeight: 'bold'
                       }}>
                       {
+                        // Currency.display(parseFloat((this.state.charge + this.state.deliveryFee) * Helper.partnerShare).toFixed(2), 'PHP')
                         Currency.display(parseFloat(this.state.charge * Helper.partnerShare).toFixed(2), 'PHP')
                       }
                     </Text>
@@ -289,6 +302,7 @@ class ProposalModal extends Component {
                         fontWeight: 'bold'
                       }}>
                       {
+                        // Currency.display(parseFloat((this.state.charge + this.state.deliveryFee) * Helper.payhiramShare).toFixed(2), 'PHP')
                         Currency.display(parseFloat(this.state.charge * Helper.payhiramShare).toFixed(2), 'PHP')
                       }
                     </Text>
@@ -320,6 +334,7 @@ class ProposalModal extends Component {
                         color: theme ? theme.secondary : Color.secondary
                       }}>
                       {
+                        // Currency.display(this.state.charge + this.state.deliveryFee, 'PHP')
                         Currency.display(this.state.charge, 'PHP')
                       }
                     </Text>
