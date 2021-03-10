@@ -325,9 +325,10 @@ class OTP extends Component {
             height: 50
           }}
           onChangeText={(code) => this.inputHandler(code, i)}
+          secureTextEntry={true}
           value={otp[i].code}
           maxLength={1}
-          placeholder={'0'}
+          placeholder={'*'}
           keyboardType={'numeric'}
           key={i}
           autoFocus={this.state.activeIndex == i}

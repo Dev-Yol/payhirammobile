@@ -50,6 +50,13 @@ export default {
     title: 'Philippine Peso',
     value: 'PHP'
   }],
+  shipping: [{
+    title: 'Pick-Up',
+    value: 0
+  }, {
+    title: 'Delivery',
+    value: 1
+  }],
   request: {
     MINIMUM: 1000,
   },

@@ -38,6 +38,7 @@ class Header extends Component {
   render (){
     const { selected, from, setDefaultAddress } = this.props;
     const { theme, notifications, location, defaultAddress } = this.props.state;
+    console.log('[TogglerDrawer]', this.props.navigation.toggleDrawer);
     return(
       <View
         style={{
@@ -54,7 +55,7 @@ class Header extends Component {
             alignItems: 'center',
           }}>
             <TouchableOpacity
-              onPress={() => {this.props.navigation.toggleDrawer()}}
+              onPress={() => {this.props.navigation.toggleDrawer(true)}}
               style={{
                 flexDirection: 'row',
                 paddingTop: 5,
@@ -78,7 +79,7 @@ class Header extends Component {
                 justifyContent: 'center',
                 alignItems: 'center'
               }}
-              onPress={() => {this.props.navigation.toggleDrawer()}}
+              onPress={() => {this.props.navigation.toggleDrawer(false)}}
               underlayColor={Color.secondary}
               >
               <FontAwesomeIcon icon={faFilter} size={18} color={theme ? theme.primary : Color.primary}/>

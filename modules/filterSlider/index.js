@@ -15,6 +15,9 @@ import { faBullseye, faMoneyBill, faCalendar, faHandHoldingUsd } from '@fortawes
 class FilterSlider extends Component {
   constructor(props){
     super(props);
+    this.state = {
+      value: 1000
+    }
   }
   navigateToScreen = (route) => {
     this.props.navigation.toggleDrawer();

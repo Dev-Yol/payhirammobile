@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Text, View, StyleSheet, TouchableOpacity, ScrollView, TextInput, Dimensions, Alert} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faStar, faAsterisk} from '@fortawesome/free-solid-svg-icons';
+import {faStar, faAsterisk, faMinusCircle, faPlusCircle} from '@fortawesome/free-solid-svg-icons';
 import {connect} from 'react-redux';
 import Api from 'services/api/index.js';
 import {Spinner} from 'components';
@@ -28,6 +28,7 @@ class CreateRequest extends Component {
     this.state = {
       location: null,
       currency: 'PHP',
+      shipping: 0,
       neededOn: null,
       fulfillmentType: null,
       amount: 0,
@@ -360,16 +361,49 @@ class CreateRequest extends Component {
               required={true}
             />
 
-            <TextInputWithLabel 
+            {/* <TextInputWithLabel 
               variable={this.state.maximumProcessingCharge}
               onChange={(value) => this.handleMaxProcessingChargeChange(value.toString())}
-              label={'Maximum processing charge'}
+              label={'Suggested processing charge'}
               onError={false}
               keyboardType={'numeric'}
               required={false}
               placeholder={'Optional'}
-            />
+            /> */}
 
+
+            <View style={styles.SelectFulfillmentContainer}>
+              <Text
+                style={[
+                  styles.SelectFulfillmentTextStyle,
+                  {fontSize: BasicStyles.standardFontSize},
+                ]}>
+                Suggested processing charge
+              </Text>
+              <FontAwesomeIcon
+                icon={faAsterisk}
+                size={7}
+                style={{paddingLeft: 15, color: '#FF2020'}}
+              />
+            </View>
+                
+              <View>
+                <View style={{alignContent: 'center', marginTop: 15, marginLeft: '30%'}}>
+                  <FontAwesomeIcon
+                    icon={faMinusCircle}
+                    size={30}
+                    style={{paddingLeft: 15, color: Color.primary}}
+                  />
+                </View>
+                <Text style={{marginTop: -20, marginLeft: '51%'}}>1</Text>
+                <View style={{alignContent: 'center', marginTop: -30, marginLeft: '65%'}}>
+                  <FontAwesomeIcon
+                    icon={faPlusCircle}
+                    size={30}
+                    style={{paddingLeft: 15, color: Color.primary}}
+                  />
+                </View>
+              </View>
 
             <View style={styles.SelectFulfillmentContainer}>
               <Text
@@ -391,6 +425,17 @@ class CreateRequest extends Component {
               placeholder="Select date"
               type="date"
               minimumDate={this.state.currentDate}
+            />
+
+            <PickerWithLabel 
+              label={'Select Shipping Option'}
+              data={Helper.shipping}
+              placeholder={'Click to select'}
+              onChange={(value) => this.setState({
+                shipping: value
+              })}
+              required={true}
+              onError={false}
             />
 
 
