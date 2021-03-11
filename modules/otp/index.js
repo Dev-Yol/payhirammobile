@@ -75,34 +75,51 @@ class OTP extends Component {
       }
       if(i === 5 && errorMessage == null){
         console.log('[OTP] Success Message', finalOtp)
-        this.validateOTP(finalOtp)
+        // this.validateOTP(finalOtp)
       }
     }
   }
 
   inputHandler = (value, i) => {
     const { otp } = this.state;
-    console.log('i', i)
     this.setState({
       errorMessage: null
     })
-    let newOtp = otp.map((item, index) => {
-      if(i == index){
-        item.code = value
+    if(!value){
+      let newOtp = otp.map((item, index) => {
+        if(i == index){
+          item.code = value
+        }
+        return item
+      })
+      this.setState({otp: newOtp})
+      if(i > 0){
+        let newIndex = parseInt(i - 1)
+        this.otpTextInput[i - 1].focus();
+        this.setState({activeIndex: newIndex})          
       }
-      return item
-    })
-    this.setState({otp: newOtp})
-    if(i < 5 && (newOtp[i].code != null && newOtp[i].code != '')){
-      let newIndex = parseInt(i + 1)
-      this.otpTextInput[i + 1].focus();
-      this.setState({activeIndex: newIndex})
+      return
     }else{
-      // disabled here
+      let newOtp = otp.map((item, index) => {
+        if(i == index){
+          item.code = value
+        }
+        return item
+      })
+      this.setState({otp: newOtp})
+      if(i < 5 && (newOtp[i].code != null && newOtp[i].code != '')){
+        let newIndex = parseInt(i + 1)
+        this.otpTextInput[i + 1].focus();
+        this.setState({activeIndex: newIndex})
+      }else{
+        // disabled here
+      }
+      if(i == 5){
+        this.completeOTPField(i)      
+      }
+      return  
     }
-    if(i == 5){
-      this.completeOTPField(i)      
-    }
+
   };
 
   sendDirectTransfer = (data) => {
@@ -328,7 +345,7 @@ class OTP extends Component {
           secureTextEntry={true}
           value={otp[i].code}
           maxLength={1}
-          placeholder={'*'}
+          placeholder={'•'}
           keyboardType={'numeric'}
           key={i}
           autoFocus={this.state.activeIndex == i}
