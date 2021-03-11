@@ -122,7 +122,10 @@ const _StackNavigator = createStackNavigator({
       title: null ,
       headerLeft: <HeaderRequest navigation={navigation}/>,
       headerRight: null,
-      headerTransparent: true
+      headerTransparent: true,
+      headerStyle: {
+        height: 80
+      }
     }),
   },
 

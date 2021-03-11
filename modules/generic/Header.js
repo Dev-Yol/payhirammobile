@@ -47,8 +47,7 @@ class Header extends Component {
           paddingBottom: 10,
           backgroundColor: Color.white,
           borderBottomColor: Color.lightGray,
-          borderBottomWidth: 1,
-          marginTop: Platform.OS == 'android' ? 20 : 0
+          borderBottomWidth: 1
         }}>
           <View style={{
             width: width,
