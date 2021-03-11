@@ -133,7 +133,6 @@ class Header extends Component {
             style={{
               width: width,
               marginLeft: 10,
-              marginTop: 5
             }}>
             <Text style={{
               fontSize: BasicStyles.standardFontSize,
