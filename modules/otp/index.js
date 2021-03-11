@@ -75,7 +75,7 @@ class OTP extends Component {
       }
       if(i === 5 && errorMessage == null){
         console.log('[OTP] Success Message', finalOtp)
-        // this.validateOTP(finalOtp)
+        this.validateOTP(finalOtp)
       }
     }
   }
@@ -115,7 +115,7 @@ class OTP extends Component {
         // disabled here
       }
       if(i == 5){
-        this.completeOTPField(i)      
+        // this.completeOTPField(i)      
       }
       return  
     }
@@ -284,6 +284,7 @@ class OTP extends Component {
     this.setState({
       errorMessage: null
     })
+    console.log('[CODE]', code)
     if(user == null || data == null || code == null || (code && code.length < 6)){
       return
     }
@@ -339,7 +340,9 @@ class OTP extends Component {
             fontSize: 16,
             textAlign: 'center',
             borderRadius: 5,
-            height: 50
+            height: 50,
+            borderRadius: 15,
+            fontSize: 20
           }}
           onChangeText={(code) => this.inputHandler(code, i)}
           secureTextEntry={true}
@@ -443,7 +446,7 @@ class OTP extends Component {
                   marginLeft: '1%'
                 }}
                 title={'Continue'}
-                onClick={() => this.validateOTP()}
+                onClick={() => this.completeOTPField()}
               />
             </View>
           )
