@@ -246,7 +246,7 @@ class ProposalModal extends Component {
                     />
 
 
-                    <TextInputWithLabel 
+                    {/* <TextInputWithLabel 
                     variable={this.state.deliveryFee}
                     onChange={(value) => this.setState({deliveryFee: value})}
                     label={'Delivery Fee'}
@@ -254,7 +254,7 @@ class ProposalModal extends Component {
                     onError={false}
                     editable={false}
                     required={true}
-                    />
+                    /> */}
 
                   <View style={{
                     width: '100%',
