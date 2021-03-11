@@ -47,7 +47,8 @@ class Header extends Component {
           paddingBottom: 10,
           backgroundColor: Color.white,
           borderBottomColor: Color.lightGray,
-          borderBottomWidth: 1
+          borderBottomWidth: 1,
+          marginTop: Platform.OS == 'android' ? 20 : 0
         }}>
           <View style={{
             width: width,
@@ -138,8 +139,11 @@ class Header extends Component {
             <Text style={{
               fontSize: BasicStyles.standardFontSize,
               fontWeight: 'bold',
+              width: width - 40,
               color: theme ? theme.primary : Color.primary
-            }}>{defaultAddress ? defaultAddress.route + ', ' + defaultAddress.locality + ', ' + defaultAddress.country : 'Click here to set Location.'}</Text>
+            }}
+            numberOfLines={1}
+            >{defaultAddress ? defaultAddress.route + ', ' + defaultAddress.locality + ', ' + defaultAddress.country : 'Click here to set Location.'}</Text>
             {/* }}>{defaultAddress ? defaultAddress.route + ', ' + defaultAddress.locality + ', ' + defaultAddress.country : 'Default: ' + location.route + ', ' + location.locality + ', ' + location.country}</Text> */}
             {/* }}>{location ? 'Location: ' + location.route + ', ' + location.locality + ', ' + location.country : 'Current location'}</Text> */}
           </TouchableOpacity>
