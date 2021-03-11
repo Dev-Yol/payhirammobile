@@ -56,9 +56,6 @@ export default {
   }, {
     title: 'Delivery',
     value: 1
-  }, {
-    title: 'Online transaction',
-    value: 2
   }],
   request: {
     MINIMUM: 1000,
