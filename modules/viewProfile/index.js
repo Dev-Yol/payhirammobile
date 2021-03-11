@@ -60,7 +60,8 @@ class ViewProfile extends Component {
   checkStatus = (array) => {
     const { user } = this.state
     array.map((item, index) => {
-      if(item.account_id === user.id) {
+      console.log(item.account.id, user);
+      if(item.account.id === user.id) {
         this.setState({connection: item})
       }
     })
@@ -168,7 +169,7 @@ class ViewProfile extends Component {
   render() {
     const { user } = this.state
     const { theme } = this.props.state;
-    console.log(this.props.state.user.id, this.state.connection && this.state.connection.account_id, this.state.connection && this.state.connection.status, "=================user");
+    console.log(this.state.connection && this.state.connection, "=================user");
     return (
       <View>
         <View>
@@ -387,7 +388,7 @@ class ViewProfile extends Component {
                   }}
                 />
               </View>)}
-              { this.state.status === true && this.props.state.user && this.state.connection && this.state.connection.account_id !== this.props.state.user.id && this.state.connection.status === 'accepted' && (
+              {/* { this.state.status === true && this.props.state.user && this.state.connection && this.state.connection.account_id !== this.props.state.user.id && this.state.connection.status === 'accepted' && (
             <View
                 style={{
                   flexDirection: 'row'
@@ -402,7 +403,7 @@ class ViewProfile extends Component {
                     backgroundColor: Color.danger
                   }}
                 />
-              </View>)}
+              </View>)} */}
              {this.state.status === true && this.props.state.user && this.state.connection && this.state.connection.account_id !== this.props.state.user.id && (this.state.connection.status === 'pending') && (
               <View
                 style={{

@@ -107,23 +107,12 @@ class NavigationDrawerStructureRight extends Component {
                 marginLeft: '3%',
                 justifyContent: 'center'
               }}>
-                <TouchableOpacity style={{
-                    position: 'absolute',
-                    right: 15,
-                    top: 7
-                  }}
-                  onPress={() => {this.props.setCircleSearch(this.state.search)}}
-                >
-                  <FontAwesomeIcon
-                  icon={faSearch}
-                  size={22}
-                  color={{color: theme ? theme.primary : Color.primary}}/>
-                </TouchableOpacity>
                 <TextInput
                   style={{
                     height: 45,
                     width: '80%'
                   }}
+                  onSubmitEditing={() => {this.props.setCircleSearch(this.state.search)}}
                   onChangeText={text => this.searchHandler(text)}
                   value={this.state.search}
                   placeholder='Search circle...'

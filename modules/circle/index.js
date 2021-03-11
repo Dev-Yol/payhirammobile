@@ -210,7 +210,8 @@ class Circle extends Component{
           <View>
             {(this.props.state.circleSearch === null || this.props.state.circleSearch === '') ?
             <View>
-            {status === 'circle' && (item.status === 'accepted' || item.status === 'pending') && (
+            {status === 'circle' && (item.status === 'accepted' || item.status === 'pending') && 
+            (item.account_id === user.id || (item.account_id !== user.id && item.status === 'accepted')) && (
             <TouchableHighlight 
               onPress={() => {
                 this.redirect(item)
