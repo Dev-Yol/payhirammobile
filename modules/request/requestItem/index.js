@@ -48,6 +48,7 @@ class RequestItem extends Component {
   retrieve(){
     const { user } = this.props.state;
     const { data } = this.props.navigation.state.params;
+
     if(user == null || data == null){
       return
     }
@@ -302,13 +303,13 @@ class RequestItem extends Component {
                 title={'See Conversation'}
                 onClick={() => this.props.navigation.navigate('messagesStack', {
                   data: {
-                    id: this.props.navigation.state.params.data.id,
-                    title: this.props.navigation.state.params.data.code,
+                    id: data.id,
+                    title: data.code,
                     payload: 'request',
                     account_id: user.id,
-                    request: this.props.navigation.state.params.data,
-                    currency: this.props.navigation.state.params.data.currency,
-                    amount: this.props.navigation.state.params.data.amount,
+                    request: data,
+                    currency: data.currency,
+                    amount: data.amount,
                     status: 1
                   }
                 })}

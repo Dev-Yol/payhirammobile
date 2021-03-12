@@ -19,6 +19,7 @@ class HeaderOptions extends Component {
         const { setMessengerGroup, setMessagesOnGroup } = this.props
         setMessengerGroup(this.props.navigationProps.state.params)
         setMessagesOnGroup(this.props.navigationProps.state.params)
+        console.log(('setMessengerGroup', this.props.navigationProps.state.params));
       }
     }
   }
@@ -39,8 +40,8 @@ class HeaderOptions extends Component {
     const { theme } = this.props.state;
     const width = Math.round(Dimensions.get('window').width);
     // {Helper.showRequestType(messengerGroup.request.type)} -
-    console.log("[Data]", data);
     const { data } = this.props.navigationProps.state.params;
+    console.log("[Data]", data);
     return (
       <View>
         <View style={{
