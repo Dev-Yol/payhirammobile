@@ -48,12 +48,12 @@ class PersonalInformationCard extends Component {
           alignItems: 'flex-start'
         }}>
           <View style={{width: '100%'}}>
-            {_renderTextIcon(faUserCircle, user.information.first_name + ' ' + user.information.last_name || 'No data', 'Full Name')}
-            {_renderTextIcon(faEnvelope, user.email || 'No data', 'Email')}
-            {_renderTextIcon(faUserCircle,  user.information.sex || 'No data', 'Gender')}
-            {_renderTextIcon(faPhoneAlt, user.information.cellular_number || 'No data', 'Phone Number')}
-            {_renderTextIcon(faCalendarAlt, user.information.birth_date_human || 'No data', 'Birth Date')}
-            {_renderTextIcon(faMapMarkerAlt, user.information.address || 'No data', 'Address')}
+            {_renderTextIcon(faUserCircle, user?.information?.first_name + ' ' + user?.information?.last_name || 'No data', 'Full Name')}
+            {_renderTextIcon(faEnvelope, user?.email || 'No data', 'Email')}
+            {_renderTextIcon(faUserCircle,  user?.information?.sex || 'No data', 'Gender')}
+            {_renderTextIcon(faPhoneAlt, user?.information?.cellular_number || 'No data', 'Phone Number')}
+            {_renderTextIcon(faCalendarAlt, user?.information?.birth_date_human || 'No data', 'Birth Date')}
+            {_renderTextIcon(faMapMarkerAlt, user?.information?.address || 'No data', 'Address')}
           </View>
         </View>
     )
