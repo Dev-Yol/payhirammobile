@@ -364,7 +364,7 @@ class Circle extends Component{
             {(data && user) && this.renderCircles(data, status)}
           </View>
         </ScrollView>
-        {/* {data.length < 1 && this.state.isLoading == false && status === true && (<Empty refresh={true} onRefresh={() => this.retrieve(true)} />)} */}
+        {data.length < 1 && this.state.isLoading == false && (<Empty refresh={true} onRefresh={() => this.retrieve(true)} />)}
         {this.state.isLoading ? <Spinner mode="overlay"/> : null }
       </View>
     );

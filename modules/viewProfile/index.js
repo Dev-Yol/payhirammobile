@@ -14,6 +14,7 @@ import { connect } from 'react-redux';
 import { Rating } from 'components';
 import Api from 'services/api/index.js';
 import { Spinner } from 'components';
+import { TouchableHighlightBase } from 'react-native';
 
 const height = Math.round(Dimensions.get('window').height);
 class ViewProfile extends Component {
@@ -169,7 +170,7 @@ class ViewProfile extends Component {
   render() {
     const { user } = this.state
     const { theme } = this.props.state;
-    console.log(this.state.connection && this.state.connection, "=================user");
+    console.log(this.state.connection && this.state.connection, user && user);
     return (
       <View>
         <View>
@@ -271,7 +272,7 @@ class ViewProfile extends Component {
                       }}>
                       PERSONAL INFORMATION
                     </Text>
-                    <PersonalInformationCard user={this.props.navigation.state.params.user ? user.account : user} />
+                    <PersonalInformationCard user={this.props.navigation.state.params.user ? user.account : this.state.status === true && this.state.connection ? this.state.connection.account : user} />
                   </View>
                 )
               }
@@ -300,7 +301,7 @@ class ViewProfile extends Component {
                   }}
                 />
               </View>)}
-              { this.state.status === true && user && this.props.state.user && user.account_id === this.props.state.user.id && user.status === 'accepted' && (<View
+              {/* { this.state.status === true && user && this.props.state.user && user.account_id === this.props.state.user.id && user.status === 'accepted' && (<View
                 style={{
                   flexDirection: 'row'
                 }}>
@@ -314,7 +315,7 @@ class ViewProfile extends Component {
                     backgroundColor: Color.danger
                   }}
                 />
-              </View>)}
+              </View>)} */}
               { this.state.status === true && user && this.props.state.user && user.account_id !== this.props.state.user.id && user.status === 'accepted' && (<View
                 style={{
                   flexDirection: 'row'
@@ -430,7 +431,7 @@ class ViewProfile extends Component {
                 />
               </View>
             )}
-            { this.state.status === true && !this.props.navigation.state.params.code === false && this.state.connection === null && (
+            { this.state.status === true && !this.props.navigation.state.params.code === false && this.state.connection === null && user.id !== this.props.state.user.id   && (
               <View
                 style={{
                   flexDirection: 'row'
