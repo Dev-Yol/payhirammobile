@@ -157,43 +157,44 @@ class EditProfile extends Component {
         formData.append('file_url', response.fileName);
         formData.append('account_id', user.id);
         this.setState({isLoading: true})
-        Api.upload(Routes.imageUpload, formData, async response => {
+        Api.upload(Routes.imageUpload, formData, response => {
           this.setState({isLoading: false})
+          console.log("[FIRST_UPLOAD]", response.data.data);
           let imageData = new FormData()
           imageData.append('account_id', user.id);
           imageData.append('url', response.data.data)
-          if(profile == null){
+          if(profile.profile == null){
             Api.upload(Routes.accountProfileCreate, imageData, response => {
               console.log("[CREATE_IMAGE]", response);
+              if(response.data !== null) {
+                this.retrieve();
+                Alert.alert(
+                  'Message',
+                  'Image successfully uploaded',
+                  [
+                    {text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel'}
+                  ],
+                  { cancelable: false }
+                )
+              }
             })
-            if(response.data !== null) {
-              this.retrieve();
-              Alert.alert(
-                'Message',
-                'Image successfully uploaded',
-                [
-                  {text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel'}
-                ],
-                { cancelable: false }
-              )
-            }
           }else{
-            imageData.append('id', profile.profile.url.id)
+            imageData.append('id', profile.profile.id)
             this.setState({isLoading: true})
             Api.upload(Routes.accountProfileUpdate, imageData, response => {
               console.log("[UPDATE_IMAGE]", response);
+              if(response.data !== null) {
+                this.retrieve();
+                Alert.alert(
+                  'Message',
+                  'Image successfully updated',
+                  [
+                    {text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel'}
+                  ],
+                  { cancelable: false }
+                )
+              }
             })
-            if(response.data !== null) {
-              this.retrieve();
-              Alert.alert(
-                'Message',
-                'Image successfully updated',
-                [
-                  {text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel'}
-                ],
-                { cancelable: false }
-              )
-            }
           }
         })
       }
