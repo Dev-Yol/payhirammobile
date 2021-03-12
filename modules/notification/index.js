@@ -41,7 +41,7 @@ class Notifications extends Component{
         payload_value: payloadValue,
         id: item
       }
-      console.log("[PEER]", items);
+      console.log("[PEER]", parameter);
       this.setState({isLoading: true})
       Api.request(Routes.requestRetrieveByPayloadValue, parameter, async response => {
         this.setState({isLoading: false})

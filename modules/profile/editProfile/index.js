@@ -94,10 +94,6 @@ class EditProfile extends Component {
       console.log("[RESPONSE s]", response.data);
       if(response.data.length > 0){
         const { data } = response
-        let profile = {
-          url: data[0].profile[0].url
-        }
-        data[0].profile = profile
         this.setState({
           id: data[0].account_id,
           first_name: data[0].first_name,
@@ -107,7 +103,6 @@ class EditProfile extends Component {
           cellular_number:  data[0].cellular_number,
           address: data[0].address,
           profile: data[0]
-
         })
         // if(data.birth_date != null){
         //   this.setState({
@@ -132,6 +127,7 @@ class EditProfile extends Component {
 
   upload = () => {
     const { user } = this.props.state
+    const { profile } = this.state
     const options = {
       noData: true
     }
@@ -160,23 +156,44 @@ class EditProfile extends Component {
         });
         formData.append('file_url', response.fileName);
         formData.append('account_id', user.id);
-
         this.setState({isLoading: true})
-        console.log("[FORMDATA]", formData);
-        Api.upload(Routes.imageUpload, formData, response => {
+        Api.upload(Routes.imageUpload, formData, async response => {
           this.setState({isLoading: false})
-          console.log("+++++++++++++++++++++++",response);
-          this.state.profile = response.data.data
-          if(response.data !== null) {
-            this.retrieve();
-            Alert.alert(
-              'Message',
-              'Image successfully uploaded',
-              [
-                {text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel'}
-              ],
-              { cancelable: false }
-            )
+          let imageData = new FormData()
+          imageData.append('account_id', user.id);
+          imageData.append('url', response.data.data)
+          if(profile == null){
+            Api.upload(Routes.accountProfileCreate, imageData, response => {
+              console.log("[CREATE_IMAGE]", response);
+            })
+            if(response.data !== null) {
+              this.retrieve();
+              Alert.alert(
+                'Message',
+                'Image successfully uploaded',
+                [
+                  {text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel'}
+                ],
+                { cancelable: false }
+              )
+            }
+          }else{
+            imageData.append('id', profile.profile.url.id)
+            this.setState({isLoading: true})
+            Api.upload(Routes.accountProfileUpdate, imageData, response => {
+              console.log("[UPDATE_IMAGE]", response);
+            })
+            if(response.data !== null) {
+              this.retrieve();
+              Alert.alert(
+                'Message',
+                'Image successfully updated',
+                [
+                  {text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel'}
+                ],
+                { cancelable: false }
+              )
+            }
           }
         })
       }
@@ -247,19 +264,20 @@ class EditProfile extends Component {
               backgroundColor: theme ? theme.primary : Color.primary,
             }}>
 
-            {
-              this.state.profile && (
+            {/* {
+              this.state.profile && ( */}
                 <UserImage
                   user={this.state.profile}
                   style={{
                     height: 100,
-                    width: 100
+                    width: 100,
+                    borderRadius: 50
                   }}
                   size={100}
                   color={Color.white}
                   />
-              )
-            }
+              {/* )
+            } */}
 
             {
               user.username && (
