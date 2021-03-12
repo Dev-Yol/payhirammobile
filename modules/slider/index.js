@@ -5,14 +5,18 @@ import styles from './Style';
 import {NavigationActions, StackActions} from 'react-navigation';
 import {ScrollView, Text, View, Image, TouchableOpacity} from 'react-native';
 import { connect } from 'react-redux';
-import { Helper, BasicStyles, Color } from 'common';
+import { Helper, BasicStyles, Color, Routes } from 'common';
 import Config from 'src/config.js';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faCheckCircle, faUserCircle } from '@fortawesome/free-solid-svg-icons';
+import Api from 'services/api/index.js';
 
 class Slider extends Component {
   constructor(props){
     super(props);
+    this.state = {
+      data: null
+    }
   }
   navigateToScreen = (route) => {
     this.props.navigation.toggleDrawer();
@@ -36,6 +40,37 @@ class Slider extends Component {
     this.props.navigation.navigate(route);
   };
 
+  componentDidMount() {
+    this.retrieveProfile()
+  }
+
+  retrieveProfile() {
+    const { user } = this.props.state;
+    let parameter = {
+      condition: [{
+        value: user.id,
+        column: 'account_id',
+        clause: '='
+      }]
+    }
+    this.setState({isLoading: true});
+    Api.request(Routes.accountProfileRetrieve, parameter, (response) => {
+      this.setState({isLoading: false});
+      if (response.data.length > 0) {
+        this.setState({
+          data: response.data[0]
+        })
+      } else {
+        this.setState({
+          data: null
+        })
+      }
+    }, error => {
+      console.log('response', error)
+      this.setState({isLoading: false, data: null});
+    });
+  }
+
   logoutAction(){
     
     //clear storage
@@ -50,18 +85,19 @@ class Slider extends Component {
 
   render () {
     const { user, theme } = this.props.state;
+    const { data } = this.state
     return (
       <View style={styles.container}>
         <ScrollView>
           <View>
-            {user != null ? (
+            {data != null ? (
                 <View style={[styles.sectionHeadingStyle, {
                   backgroundColor: theme ? theme.primary : Color.primary
                 }]}>
                   {
-                    user.account_profile != null && user.account_profile.url != null && (
+                    data.profile != null && data.profile.url != null && (
                       <Image
-                        source={{uri: Config.BACKEND_URL  + user.account_profile.url}}
+                        source={{uri: Config.BACKEND_URL  + data.profile.url}}
                         style={[BasicStyles.profileImageSize, {
                           height: 100,
                           width: 100,
@@ -71,7 +107,7 @@ class Slider extends Component {
                   }
 
                   {
-                    (user.account_profile == null || (user.account_profile != null && user.account_profile.url == null)) && (
+                    (data.profile == null || (data.profile != null && data.profile.url == null)) && (
                       <FontAwesomeIcon
                         icon={faUserCircle}
                         size={100}
@@ -81,9 +117,9 @@ class Slider extends Component {
                       />
                     )
                   }
-                  
+
                   {
-                    user.status == 'verified' && (
+                    data.status == 'verified' && (
                       <FontAwesomeIcon
                         icon={faCheckCircle}
                         size={20}
@@ -102,7 +138,7 @@ class Slider extends Component {
                     fontSize: 16,
                     marginTop: 10
                   }}>
-                    Hi {user.username}!
+                    Hi {data.username}!
                   </Text>
                   <TouchableOpacity
                     style={{
@@ -119,7 +155,7 @@ class Slider extends Component {
                     onPress={() => {this.redirect("editProfileStack")}}
                   >
                   {
-                    user.status == 'VERIFIED' || user.status == 'GRANTED' ?
+                    data.status == 'VERIFIED' || data.status == 'GRANTED' ?
                       <Text style={{
                       fontWeight: 'bold',
                       color: Color.white}}>
@@ -132,7 +168,7 @@ class Slider extends Component {
                       </Text>
                   }
                   </TouchableOpacity>
-            
+
                 </View>
               ) : <Text style={[styles.sectionHeadingStyle, {
               paddingTop: 150,
