@@ -5,12 +5,16 @@ import {faFilter, faBell, faBars} from '@fortawesome/free-solid-svg-icons';
 import {NavigationActions, StackActions} from 'react-navigation';
 import {BasicStyles, Color, Helper} from 'common';
 import {connect} from 'react-redux';
+import Filter from 'modules/filter/FilterSlider';
 
 const width = Math.round(Dimensions.get('window').width);
 const gray = '#999';
 class Header extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      filter: false
+    }
   }
 
   redirect(route, layer){
@@ -35,10 +39,18 @@ class Header extends Component {
     this.props.navigation.dispatch(navigateAction);
   }
 
+  showFilter(){
+    console.log('[Filter]')
+    this.setState({
+      filter: !this.state.filter
+    })
+  }
+
   render (){
     const { selected, from, setDefaultAddress } = this.props;
     const { theme, notifications, location, defaultAddress } = this.props.state;
     console.log('[TogglerDrawer]', this.props.navigation.toggleDrawer);
+    const { filter } = this.state;
     return(
       <View
         style={{
@@ -49,6 +61,17 @@ class Header extends Component {
           borderBottomColor: Color.lightGray,
           borderBottomWidth: 1
         }}>
+          {filter && (
+            <Filter
+              navigate={this.props.navigation}
+              visible={filter}
+              close={() => {
+                this.setState({
+                  filter: false
+                })
+              }}
+            />
+          )}
           <View style={{
             width: width,
             flexDirection: 'row',
@@ -79,7 +102,7 @@ class Header extends Component {
                 justifyContent: 'center',
                 alignItems: 'center'
               }}
-              onPress={() => {this.props.navigation.toggleDrawer(false)}}
+              onPress={() => this.showFilter()}
               underlayColor={Color.secondary}
               >
               <FontAwesomeIcon icon={faFilter} size={18} color={theme ? theme.primary : Color.primary}/>

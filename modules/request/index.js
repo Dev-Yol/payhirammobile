@@ -31,9 +31,9 @@ import Config from 'src/config.js';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faStar, faPlus, faSearch} from '@fortawesome/free-solid-svg-icons';
 import {Dimensions} from 'react-native';
-import RequestOptions from './RequestOptions.js';
 import ProposalModal from 'modules/generic/ProposalModal';
 import RequestCard from 'modules/generic/RequestCard';
+import { Pager, PagerProvider } from '@crowdlinker/react-native-pager';
 import _ from 'lodash';
 import Footer from 'modules/generic/Footer'
 import Header from 'modules/generic/Header'
@@ -64,13 +64,13 @@ class Requests extends Component {
       limit: 5,
       active: 1,
       activePage: 0,
-      isRequestOptions: false,
       offset: 0,
       tempData: [],
       data: [],
       page: 'public',
       unReadPeerRequests: [],
-      unReadRequests: []
+      unReadRequests: [],
+      activeIndex: 0
     };
   }
 
@@ -400,12 +400,42 @@ class Requests extends Component {
     );
   };
 
+  renderData(){
+    const { isLoading, data } = this.state;
+    return(
+      <ScrollView
+        style={Style.ScrollView}
+        showsVerticalScrollIndicator={false}
+        onScroll={(event) => {
+          let scrollingHeight = event.nativeEvent.layoutMeasurement.height + event.nativeEvent.contentOffset.y
+          let totalHeight = event.nativeEvent.contentSize.height
+          if(event.nativeEvent.contentOffset.y <= 0) {
+            if(isLoading == false){
+              // this.retrieve(false)
+            }
+          }
+          if(Math.round(scrollingHeight) >= Math.round(totalHeight)) {
+            if(isLoading == false){
+              this.retrieve(true, true, true)
+            }
+          }
+        }}>
+          <View style={Style.MainContainer}>  
+            {this._flatList()}
+            {data.length == 0 && isLoading == false && (
+              <Empty refresh={true} onRefresh={() => this.onRefresh()} />
+            )}
+          </View>
+      </ScrollView>
+    )
+  }
+
   render() {
     const {
       isLoading,
       connectModal,
       connectSelected,
-      isRequestOptions,
+      activeIndex
     } = this.state;
     const {theme, user} = this.props.state;
     const { data } = this.state;
@@ -413,44 +443,22 @@ class Requests extends Component {
       <SafeAreaView style={{
         flex: 1
       }}>
-        {isRequestOptions && (
-          <RequestOptions
-            visible={isRequestOptions}
-            navigate={(route) => this.redirect(route)}
-            close={() =>
-              this.setState({
-                isRequestOptions: false,
-              })
-            }
-          />
-        )}
+        
         {/*this._search()*/}
-        <ScrollView
-          style={Style.ScrollView}
-          showsVerticalScrollIndicator={false}
-          onScroll={(event) => {
-            let scrollingHeight = event.nativeEvent.layoutMeasurement.height + event.nativeEvent.contentOffset.y
-            let totalHeight = event.nativeEvent.contentSize.height
-            if(event.nativeEvent.contentOffset.y <= 0) {
-              if(isLoading == false){
-                // this.retrieve(false)
-              }
-            }
-            if(Math.round(scrollingHeight) >= Math.round(totalHeight)) {
-              if(isLoading == false){
-                this.retrieve(true, true, true)
-              }
-            }
-          }}>
-          {/*<SystemNotification></SystemNotification>*/}
-          <View style={Style.MainContainer}>
-            
-            {this._flatList()}
-            {data.length == 0 && isLoading == false && (
-              <Empty refresh={true} onRefresh={() => this.onRefresh()} />
-            )}
-          </View>
-        </ScrollView>
+
+        <PagerProvider activeIndex={activeIndex}>
+          <Pager panProps={{enabled: false}}>
+            <View>
+              {this.renderData()}
+            </View>
+            <View>
+              {this.renderData()}
+            </View>
+            <View>
+              {this.renderData()}
+            </View>
+          </Pager>
+        </PagerProvider>
 
         <TouchableOpacity
           style={[Style.floatingButton, {
@@ -499,9 +507,10 @@ class Requests extends Component {
         }
         <Footer
           {...this.props}
-          selected={this.state.page} onSelect={(value) => {
+          selected={this.state.page} onSelect={(value, index) => {
             this.setState({
-              page: value
+              page: value,
+              activeIndex: index
             })
             this.retrieve(false, false, false, value)
           }}

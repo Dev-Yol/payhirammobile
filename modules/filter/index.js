@@ -240,9 +240,6 @@ class FilterSlider extends Component {
           </View>
         </ScrollView>
         
-        <View style={styles.footerContainer}>
-          <Text>A product of {Helper.company}</Text>
-        </View>
       </View>
     );
   }

@@ -70,7 +70,10 @@ class Notifications extends Component{
         column: 'to'
       }],
       limit: 10,
-      offset: 0
+      offset: 0,
+      sort: {
+        created_at: 'desc'
+      }
     }
     // this.setState({isLoading: true})
     Api.request(Routes.notificationsRetrieve, parameter, notifications => {

@@ -16,8 +16,15 @@ class RequestCard extends Component {
     const { theme } = this.props.state;
     return (
       <View>
-        <View style={{flexDirection: 'row', marginTop: 10}}>
-          <UserImage user={item.account} color={theme ? theme.primary : Color.primary}/>
+        <View style={{flexDirection: 'row', marginTop: 10, alignItems: 'center'}}>
+          <UserImage
+            user={item.account}
+            color={theme ? theme.primary : Color.primary}
+            style={{
+              width: 22,
+              height: 22
+            }}
+          />
           <Text
             style={{
               color: theme ? theme.primary : Color.primary,

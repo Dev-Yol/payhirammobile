@@ -282,6 +282,28 @@ export default {
       payload: 'credit_card',
     },
   ],
+  filter: {
+    targets: [{
+      value: 'All'
+    }, {
+      value: 'Partners'
+    }, {
+      value: 'Public'
+    }, {
+      value: 'Circles'
+    }],
+    types: [{
+      value: 'All'
+    }, {
+      value: 'Send Cash'
+    }, {
+      value: 'Cash In'
+    }, {
+      value: 'Withdrawals'
+    }, {
+      value: 'Bills Payments'
+    }]
+  },
   showRequestType(type) {
     switch (parseInt(type)) {
       case 1:

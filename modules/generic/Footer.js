@@ -58,7 +58,7 @@ class Footer extends Component {
                 flexDirection: 'row',
               }}>
                 <TouchableOpacity
-                  onPress={() => this.props.onSelect('public')}
+                  onPress={() => this.props.onSelect('public', 0)}
                   style={{
                     justifyContent: 'center',
                     alignItems: 'center',
@@ -79,7 +79,7 @@ class Footer extends Component {
                   />
                 </TouchableOpacity>
                 <TouchableOpacity
-                  onPress={() => this.props.onSelect('personal')}
+                  onPress={() => this.props.onSelect('personal', 1)}
                   style={{
                     justifyContent: 'center',
                     alignItems: 'center',
@@ -99,7 +99,7 @@ class Footer extends Component {
                   />
                 </TouchableOpacity>
                 <TouchableOpacity
-                  onPress={() => this.props.onSelect('history')}
+                  onPress={() => this.props.onSelect('history', 2)}
                   style={{
                     justifyContent: 'center',
                     alignItems: 'center',
