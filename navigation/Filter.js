@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { View, TouchableOpacity, Dimensions, Share } from 'react-native';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createDrawerNavigator } from 'react-navigation-drawer';
-import FilterSlider from 'modules/filterSlider';
 import { Color, BasicStyles } from 'common';
 import Requests from 'modules/request';
 import Dashboard from 'modules/dashboard';
