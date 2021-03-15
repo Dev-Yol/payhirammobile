@@ -18,7 +18,10 @@ class FilterSlider extends Component {
       showTypes: false,
       target: 'All',
       type: 'All',
-      date: (new Date().getMonth() + 1) + new Date().getDate() + new Date().getFullYear(),
+      // day: new Date().getDate(),
+      // month: new Date().getMonth() + 1,
+      // year: new Date().getFullYear(),
+      date: 'December 1, 2020',
       filterData: null
     }
   }
