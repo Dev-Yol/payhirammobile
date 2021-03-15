@@ -40,6 +40,7 @@ const types = {
   SET_UNREAD_MESSAGES: 'SET_UNREAD_MESSAGES',
   SET_UNREAD_PEER_REQUEST: 'SET_UNREAD_PEER_REQUEST',
   SET_CIRCLE_SEARCH: 'SET_CIRCLE_SEARCH',
+  SET_FILTER_DATA: 'SET_FILTER_DATA',
 };
 
 export const actions = {
@@ -147,6 +148,9 @@ export const actions = {
   },
   setCircleSearch(circleSearch) {
     return {type: types.SET_CIRCLE_SEARCH, circleSearch}
+  },
+  setFilterData(filterData) {
+    return {type: types.SET_FILTER_DATA, filterData}
   }
 };
 
@@ -199,7 +203,8 @@ const initialState = {
   defaultAddress: null,
   unReadPeerRequest: [],
   unReadRequests: [],
-  circleSearch: null
+  circleSearch: null,
+  filterData: null
 };
 
 storeData = async (key, value) => {
@@ -232,6 +237,7 @@ const reducer = (state = initialState, action) => {
   const {isValidOtp} = action;
   const { isViewing, request, defaultAddress } = action;
   const { circleSearch } = action;
+  const { filterData } = action;
   switch (type) {
     case types.LOGOUT:
       storeData('token', '');
@@ -553,6 +559,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         circleSearch
+      };
+    case types.SET_FILTER_DATA:
+      return {
+        ...state,
+        filterData,
       };
     default:
       return {...state, nav: state.nav};

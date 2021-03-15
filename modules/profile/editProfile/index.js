@@ -525,6 +525,7 @@ class EditProfile extends Component {
                 width: '90%',
                 marginRight: '5%',
                 marginLeft: '5%',
+                marginBottom: '5%',
                 backgroundColor: theme ? theme.secondary : Color.secondary
               }}
             />

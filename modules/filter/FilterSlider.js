@@ -17,17 +17,32 @@ class FilterSlider extends Component {
       showTarget: false,
       showTypes: false,
       target: 'All',
-      type: 'All'
+      type: 'All',
+      date: (new Date().getMonth() + 1) + new Date().getDate() + new Date().getFullYear(),
+      filterData: null
     }
   }
-
-  action = () => {
+  // new Date().getMonth() + 1;
+  // var year = new Date().getFullYear();
+  action = () => {  
     this.props.action()
   }
-
   redirect = (route) => {
     this.props.close()
     this.props.navigate(route);
+  }
+
+  apply() {
+    const { setFilterData } = this.props
+    const { target, type, date, value } = this.state
+    let parameter = {
+      target: target,
+      money_type: type,
+      date: date,
+      amount: value
+    }
+    setFilterData(parameter)
+    console.log('[parameter]', parameter);
   }
 
   amount = () => {
@@ -143,6 +158,7 @@ class FilterSlider extends Component {
                 {
                   Helper.filter.targets.map((item, index) => (
                   <Button
+                    key={index}
                       onClick={() => this.setState({
                         target: item.value
                       })}
@@ -216,6 +232,7 @@ class FilterSlider extends Component {
                 {
                   Helper.filter.types.map((item, index) => (
                   <Button
+                    key={index}
                       onClick={() => this.setState({
                         type: item.value
                       })}
@@ -261,6 +278,11 @@ class FilterSlider extends Component {
       </View>
     );
   }
+
+  dateStyle() {
+
+  }
+
   render(){
     return (
       <Modal
@@ -312,14 +334,37 @@ class FilterSlider extends Component {
                   fontWeight: 'bold'
                 }}>Start Date</Text>
 
-                <Text style={{
-                  fontSize: BasicStyles.standardFontSize,
-                  width: '50%',
-                  textAlign: 'right'
-                }}>August 1, 2020</Text>
+                <DatePicker
+                type={'date'}
+                placeholder={this.state.date}
+                borderColor= {'white'}
+                paddingLeft={20}
+                onFinish={(date) => {
+                  this.setState({
+                    date: date.date
+                  })
+                }} />
               </View>
 
               {this.amount()}
+              <View style={{
+                width: '100%',
+                flexDirection: 'row',
+                alignItems: 'center',
+                position: 'absolute',
+                bottom: 10
+              }}>
+                <Button 
+                  style={{
+                    backgroundColor: Color.secondary,
+                    width: '90%',
+                    marginRight: '5%',
+                    marginLeft: '10%'
+                  }}
+                  title={'Set Filter'}
+                  onClick={() => this.apply()}
+                />
+              </View>
             </View>
           </View>
       </Modal>
@@ -332,7 +377,8 @@ const mapStateToProps = state => ({state: state});
 const mapDispatchToProps = dispatch => {
   const {actions} = require('@redux');
   return {
-    setDefaultAddress: (defaultAddress) => dispatch(actions.setDefaultAddress(defaultAddress))
+    setDefaultAddress: (defaultAddress) => dispatch(actions.setDefaultAddress(defaultAddress)),
+    setFilterData: (filterData) => dispatch(actions.setFilterData(filterData))
   };
 };
 
