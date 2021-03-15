@@ -11,7 +11,7 @@ export default {
   accountCreate: apiUrl + 'accounts/create',
   accountProfileRetrieve: apiUrl + 'account_informations/retrieve_account_info',
   accountUpdatePassword: apiUrl + 'accounts/update_password',
-  notificationsRetrieve: apiUrl + 'notifications/retrieve',
+  notificationsRetrieve: apiUrl + 'notifications/retrieve_new',
   notificationUpdate: apiUrl + 'notifications/update',
   messagesRetrieve: apiUrl + 'messenger_groups/retrieve_summary_payhiram',
   ledgerSummary: apiUrl + 'ledger/summary',

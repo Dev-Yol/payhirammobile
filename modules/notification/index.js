@@ -37,22 +37,10 @@ class Notifications extends Component{
         data: items
       })
     }else{
-      let parameter = {
-        payload_value: payloadValue,
-        id: item
-      }
-      console.log("[PEER]", parameter);
-      this.setState({isLoading: true})
-      Api.request(Routes.requestRetrieveByPayloadValue, parameter, async response => {
-        this.setState({isLoading: false})
-        console.log("[RESPONSE]", response.data);
-        this.setState({data: response.data[0]})
-        await this.props.navigation.navigate('requestItemStack', {
-          data: response.data[0],
-          from: 'notification'
-        })
+      this.props.navigation.navigate('requestItemStack', {
+        data: items.request[0],
+        from: 'notification'
       })
-
     }
   }
   

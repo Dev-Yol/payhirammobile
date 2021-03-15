@@ -39,6 +39,7 @@ class NavigationDrawerStructureRight extends Component {
 
   onShare = async () => {
     const { user } = this.props.state;
+    console.log("[SHARE]", user);
     if(user == null){
       return
     }
