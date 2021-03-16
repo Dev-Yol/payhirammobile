@@ -134,6 +134,53 @@ class RequestItem extends Component {
       console.log({ messenger_groups_error: error })
     })
   }
+  retrieveThread = (account) => {
+    const { user } = this.props.state;
+    const { data } = this.props.navigation.state.params;
+    if(user == null || account == null || data == null){
+      return
+    }
+    this.setState({isLoading: true});
+    let parameter = {
+      member: account[0].account.id,
+      creator: user.id,
+      title: data.code,
+      payload: 'request'
+    }
+    Api.request(Routes.customMessengerGroupCreate, parameter, response => {
+      this.setState({ isLoading: false })
+      if (response.error == null) {
+        this.props.navigation.navigate('messagesStack', {
+          data: {
+            id: response.data,
+            title: data.code,
+            payload: 'request',
+            account_id: user.id,
+            request: data,
+            currency: data.currency,
+            amount: data.amount,
+            status: 1
+          }
+        });
+      }else{
+        this.props.navigation.navigate('messagesStack', {
+          data: {
+            id: response.data,
+            title: data.code,
+            payload: 'request',
+            account_id: user.id,
+            request: data,
+            currency: data.currency,
+            amount: data.amount,
+            status: 1
+          }
+        });
+      }
+    }, error => {
+      this.setState({ isLoading: false })
+      console.log({ messenger_groups_error: error })
+    })
+  }
   
   connectRequest = (item) => {
     const { data } = this.props.navigation.state.params;
@@ -301,18 +348,7 @@ class RequestItem extends Component {
                   marginLeft: '5%'
                 }}
                 title={'See Conversation'}
-                onClick={() => this.props.navigation.navigate('messagesStack', {
-                  data: {
-                    id: data.id,
-                    title: data.code,
-                    payload: 'request',
-                    account_id: user.id,
-                    request: data,
-                    currency: data.currency,
-                    amount: data.amount,
-                    status: 1
-                  }
-                })}
+                onClick={() => this.retrieveThread(this.state.data)}
               />
             </View>
           )
