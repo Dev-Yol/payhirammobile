@@ -47,8 +47,8 @@ class Header extends Component {
   }
 
   render (){
-    const { selected, from, setDefaultAddress } = this.props;
-    const { theme, notifications, location, defaultAddress } = this.props.state;
+    const { selected, from, setDeviceLocation } = this.props;
+    const { theme, notifications, location, deviceLocation } = this.props.state;
     console.log('[TogglerDrawer]', this.props.navigation.toggleDrawer);
     const { filter } = this.state;
     return(
@@ -152,7 +152,7 @@ class Header extends Component {
             </TouchableOpacity>
           </View>
           <TouchableOpacity
-            onPress={() => this.redirect('addLocationStack')}
+            onPress={() => this.redirect('locationWithMapStack')}
             style={{
               width: width,
               marginLeft: 10,
@@ -164,7 +164,7 @@ class Header extends Component {
               color: theme ? theme.primary : Color.primary
             }}
             numberOfLines={1}
-            >{defaultAddress ? defaultAddress.route + ', ' + defaultAddress.locality + ', ' + defaultAddress.country : 'Click here to set Location.'}</Text>
+            >{deviceLocation ? deviceLocation.address + ', ' + deviceLocation.locality + ', ' + deviceLocation.country : 'Click here to set Location.'}</Text>
             {/* }}>{defaultAddress ? defaultAddress.route + ', ' + defaultAddress.locality + ', ' + defaultAddress.country : 'Default: ' + location.route + ', ' + location.locality + ', ' + location.country}</Text> */}
             {/* }}>{location ? 'Location: ' + location.route + ', ' + location.locality + ', ' + location.country : 'Current location'}</Text> */}
           </TouchableOpacity>
@@ -179,7 +179,7 @@ const mapStateToProps = state => ({state: state});
 const mapDispatchToProps = dispatch => {
   const {actions} = require('@redux');
   return {
-    setDefaultAddress: (defaultAddress) => dispatch(actions.setDefaultAddress(defaultAddress))
+    setDeviceLocation: (deviceLocation) => dispatch(actions.setDeviceLocation(deviceLocation))
   };
 };
 

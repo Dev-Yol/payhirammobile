@@ -151,8 +151,10 @@ class Requests extends Component {
         type: user.account_type,
         isPersonal: false
       };
+      console.log('[public]', parameter);
     }
     if((page != null && page == 'personal') || (page == null && this.state.page == 'personal')){
+      console.log('[off]', this.state.offset);
       parameter = {
         account_id: user.id,
         offset: flag == true && this.state.offset > 0 ? (this.state.offset * this.state.limit) : this.state.offset,
@@ -166,22 +168,24 @@ class Requests extends Component {
         type: user.account_type,
         isPersonal: true
       };
+      console.log('[personal]', parameter);
     }
     this.setState({isLoading: (loading == false && page == null) ? false : true});
     Api.request( Routes.requestRetrieve, parameter, (response) => {
-        // console.log("[Request Retrieve]", response.data[0].account)
-        this.setState({
-          size: response.size ? response.size : 0,
-          isLoading: false
-        });
-        if(response.data.length > 0){
-          if(page == null){
-            this.setState({
-              // data: flag == false ? response.data : response.data,
-              data: flag == false ? response.data : _.uniqBy([...this.state.data, ...response.data], 'id'),
-              numberOfPages: parseInt(response.size / this.state.limit) + (response.size % this.state.limit ? 1 : 0),
-              offset: flag == false ? 1 : (this.state.offset + 1)
-            })
+      // console.log("[Request Retrieve]", response.data[0].account)
+      this.setState({
+        size: response.size ? response.size : 0,
+        isLoading: false
+      });
+      if(response.data.length > 0){
+        if(page == null){
+          this.setState({
+            // data: flag == false ? response.data : response.data,
+            data: flag == false ? response.data : _.uniqBy([...this.state.data, ...response.data], 'id'),
+            numberOfPages: parseInt(response.size / this.state.limit) + (response.size % this.state.limit ? 1 : 0),
+            offset: flag == false ? 1 : (this.state.offset + 1)
+          })
+          console.log('[perdsonal]', this.state.data);
           }else{
             this.setState({
               data: response.data,
@@ -507,10 +511,11 @@ class Requests extends Component {
         }
         <Footer
           {...this.props}
-          selected={this.state.page} onSelect={(value, index) => {
-            this.setState({
+          selected={this.state.page} onSelect={async (value, index) => {
+            await this.setState({
               page: value,
-              activeIndex: index
+              activeIndex: index,
+              offset: 0
             })
             this.retrieve(false, false, false, value)
           }}
