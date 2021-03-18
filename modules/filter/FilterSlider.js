@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
-import styles from './Style.js';
 import { View, TouchableOpacity, TouchableHighlight, Text, Dimensions, ScrollView} from 'react-native';
 import Modal from "react-native-modal";
 import { Color , BasicStyles, Helper} from 'common';
 import Config from 'src/config.js';
 import {connect} from 'react-redux';
 import { SliderPicker } from 'react-native-slider-picker';
+import PickerWithLabel from 'components/Form/PickerWithLabel';
 import DatePicker from 'components/DateTime/index.js';
 import Button from 'components/Form/Button';
 const height = Math.round(Dimensions.get('window').height);
@@ -13,20 +13,16 @@ class FilterSlider extends Component {
   constructor(props){
     super(props);
     this.state = {
-      value: 0,
+      value: 1000,
       showTarget: false,
       showTypes: false,
       target: 'All',
       type: 'All',
-      // day: new Date().getDate(),
-      // month: new Date().getMonth() + 1,
-      // year: new Date().getFullYear(),
       date: 'December 1, 2020',
-      filterData: null
+      filterData: null,
+      currency: 'PHP'
     }
   }
-  // new Date().getMonth() + 1;
-  // var year = new Date().getFullYear();
   action = () => {  
     this.props.action()
   }
@@ -37,14 +33,17 @@ class FilterSlider extends Component {
 
   apply() {
     const { setFilterData } = this.props
-    const { target, type, date, value } = this.state
+    const { target, type, date, value, currency } = this.state
     let parameter = {
       target: target,
       money_type: type,
       date: date,
-      amount: value
+      amount: value,
+      currency: currency
     }
     setFilterData(parameter)
+    this.props.close()
+    // this.redirect() requestStack
     console.log('[parameter]', parameter);
   }
 
@@ -69,27 +68,27 @@ class FilterSlider extends Component {
           callback={position => {
             this.setState({ value: position })
           }}
+          minLabel={'1000'}
+          maxLabel={'50000'}
+          maxValue={50000}
           defaultValue={this.state.value}
           labelFontColor={Color.black}
           labelFontWeight={'600'}
           showFill={true}
-          fillColor={'red'}
+          fillColor={'white'}
           labelFontWeight={'bold'}
           showNumberScale={true}
           showSeparatorScale={true}
-          buttonBackgroundColor={'#fff'}
           buttonBorderColor={theme ? theme.primary : Color.primary}
           buttonBorderWidth={2}
           scaleNumberFontWeight={'300'}
           buttonDimensionsPercentage={6}
           labelFontSize={BasicStyles.standardFontSize}
-          heightPercentage={.5}
+          buttonDimensionsPercentage={6}
+          heightPercentage={1}
           widthPercentage={70}
           sliderInnerBackgroundColor={theme ? theme.primary : Color.primary}
-          minLabel={'1000'}
-          maxLabel={'50000'}
-          maxValue={50000}
-        />
+          />
       </View>
     )
   } 
@@ -338,10 +337,10 @@ class FilterSlider extends Component {
                 }}>Start Date</Text>
 
                 <DatePicker
-                type={'date'}
+                type={'datetime'}
                 placeholder={this.state.date}
                 borderColor= {'white'}
-                paddingLeft={20}
+                paddingLeft={'-50%'}
                 onFinish={(date) => {
                   this.setState({
                     date: date.date
@@ -349,7 +348,36 @@ class FilterSlider extends Component {
                 }} />
               </View>
 
+              <View style={{
+                width: '100%',
+                flexDirection: 'row',
+                height: 50,
+                alignItems: 'center',
+                borderBottomWidth: 1,
+                borderBottomColor: Color.lightGray
+              }}>
+                <Text style={{
+                  fontSize: BasicStyles.standardFontSize,
+                  width: '50%',
+                  fontWeight: 'bold'
+                }}>Currency</Text>
+
+              <PickerWithLabel 
+                // label={'Currency'}
+                marginBottom={'15%'}
+                paddingLeft={15}
+                borderColor={'white'}
+                data={Helper.currency}
+                placeholder={'Click to select'}
+                onChange={(value) => this.setState({
+                  currency: value
+                })}
+                onError={false}
+              />
+              </View>
+
               {this.amount()}
+
               <View style={{
                 width: '100%',
                 flexDirection: 'row',
