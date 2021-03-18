@@ -220,8 +220,9 @@ class Summary extends Component {
           }}>
 
             {
-              (ledger != null && ledger.length > 0) && ledger.map(item => (
+              (ledger != null && ledger.length > 0) && ledger.map((item, index) => (
                 <BalanceCard
+                  key={index}
                   data={item}
                 />
               ))

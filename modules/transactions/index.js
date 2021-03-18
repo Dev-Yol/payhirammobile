@@ -98,7 +98,7 @@ class Transactions extends Component {
             <View style={Styles.MainContainer}>
               {
                 data && data.map((item, index) => (
-                  <TransactionCard data={item}/>
+                  <TransactionCard key={index} data={item}/>
                 ))
               }
             </View>

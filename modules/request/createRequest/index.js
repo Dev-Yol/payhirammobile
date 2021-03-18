@@ -145,12 +145,13 @@ class CreateRequest extends Component {
       needed_on: this.state.neededOn,
       reason: this.state.reason,
       type: this.state.type,
-      money_type: this.state.money_type
+      money_type: this.state.money_type,
+      target: this.state.target
     };
     console.log('[Initial parameters]', testParameters)
     if(user == null){
       return
-    }else if(this.state.type == null || this.state.money_type == null || this.state.amount == null || this.state.neededOn == null || this.state.reason == null || defaultAddress == null || this.state.target == null) {
+    }else if(this.state.target == null || this.state.type == null || this.state.money_type == null || this.state.amount == null || this.state.neededOn == null || this.state.reason == null || defaultAddress == null || this.state.target == null) {
       Alert.alert(
         'Error Message',
         'All fields with (*) are required.',
@@ -184,7 +185,8 @@ class CreateRequest extends Component {
       needed_on: this.state.neededOn,
       reason: this.state.reason,
       type: this.state.type,
-      money_type: this.state.money_type
+      money_type: this.state.money_type,
+      target: this.state.target
     };
     console.log('[Create Requests] Create parameters', parameters)
     // this.props.setRequestInput(parameters);
@@ -276,7 +278,7 @@ class CreateRequest extends Component {
               </Text>
             </View>
 
-            {/* <View style={styles.SelectFulfillmentContainer}>
+            <View style={styles.SelectFulfillmentContainer}>
               <Text
                 style={[
                   styles.SelectFulfillmentTextStyle,
@@ -300,7 +302,7 @@ class CreateRequest extends Component {
                   selected={this.state.target}
                   />
               </ScrollView>
-            </View> */}
+            </View>
 
             <View style={styles.SelectFulfillmentContainer}>
               <Text

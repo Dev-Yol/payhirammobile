@@ -149,7 +149,10 @@ class Requests extends Component {
         value: searchParameter == null ? '%' : '%' + searchParameter.value + '%',
         column: searchParameter == null ? 'created_at' : searchParameter.column,
         type: user.account_type,
-        isPersonal: false
+        isPersonal: false,
+        amount: 1000,
+        currency: 'PHP',
+        start_date: "2020-12-07 04:17:22"
       };
       console.log('[public]', parameter);
     }
@@ -166,9 +169,33 @@ class Requests extends Component {
         value: user.id,
         column: 'account_id',
         type: user.account_type,
-        isPersonal: true
+        amount: 1000,
+        isPersonal: true,
+        currency: 'PHP',
+        start_date: "2020-12-07 04:17:22"
       };
       console.log('[personal]', parameter);
+    }
+    if((page != null && page == 'history') || (page == null && this.state.page == 'history')){
+      console.log('[offs]', this.state.offset);
+      parameter = {
+        active_index: 2,
+        account_id: user.id,
+        offset: flag == true && this.state.offset > 0 ? (this.state.offset * this.state.limit) : this.state.offset,
+        limit: this.state.limit,
+        sort: {
+          column: 'created_at',
+          value: 'desc',
+        },
+        value: user.id,
+        column: 'account_id',
+        type: user.account_type,
+        amount: 1000,
+        isPersonal: true,
+        currency: 'PHP',
+        start_date: "2020-12-07 04:17:22"
+      };
+      console.log('[history]', parameter);
     }
     this.setState({isLoading: (loading == false && page == null) ? false : true});
     Api.request( Routes.requestRetrieve, parameter, (response) => {
