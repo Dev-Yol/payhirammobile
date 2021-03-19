@@ -18,10 +18,14 @@ class FilterSlider extends Component {
       showTypes: false,
       target: 'All',
       type: 'All',
-      date: 'December 1, 2020',
       filterData: null,
-      currency: 'PHP'
+      currency: 'PHP',
+      day: new Date().getDate(),
+      month: new Date().getMonth() + 1,
+      year: new Date().getFullYear(),
+      date: null
     }
+    this.setState({date: this.state.month + this.state.day + this.state.year})
   }
   action = () => {  
     this.props.action()
@@ -31,24 +35,56 @@ class FilterSlider extends Component {
     this.props.navigate(route);
   }
 
+  navigateToScreen = (route) => {
+    this.props.navigation.toggleDrawer();
+    const navigateAction = NavigationActions.navigate({
+      routeName: 'drawerStack',
+      action: StackActions.reset({
+        index: 0,
+        key: null,
+        actions: [
+            NavigationActions.navigate({routeName: route, params: {
+              initialRouteName: route,
+              index: 0
+            }}),
+        ]
+      })
+    });
+    this.props.navigation.dispatch(navigateAction);
+  }
+
   apply() {
     const { setFilterData } = this.props
-    const { target, type, date, value, currency } = this.state
-    let parameter = {
-      target: target,
-      money_type: type,
-      date: date,
-      amount: value,
-      currency: currency
-    }
-    setFilterData(parameter)
-    this.props.close()
-    // this.redirect() requestStack
+    const { user, parameter } = this.props.state
     console.log('[parameter]', parameter);
+    const { target, type, date, value, currency } = this.state
+    let parameters = {
+      target: target,
+      types: type,
+      starting_date: date,
+      amount: value,
+      currency: currency,
+      active_index: parameter.active_index,
+      account_id: parameter.account_id,
+      offset: parameter,
+      limit: parameter.limit,
+      sort: {
+        column: parameter.sort.column,
+        value: parameter.sort.value,
+      },
+      value: parameter.value,
+      column: parameter.column,
+      type: parameter.type,
+      isPersonal: parameter.isPersonal,
+    }
+    setFilterData(parameters)
+    this.props.close()
+    this.navigateToScreen('Requests')
   }
 
   amount = () => {
     const { theme } = this.props.state;
+    const { value } = this.state
     return(
       <View style={{
         width: '100%'
@@ -63,6 +99,11 @@ class FilterSlider extends Component {
             fontWeight: 'bold',
             width: '100%'
           }}>Amount</Text>
+          <Text style={{
+            fontSize: BasicStyles.standardFontSize,
+            fontWeight: 'bold',
+            width: '100%'
+          }}>{value}</Text>
         </View>
         <SliderPicker 
           callback={position => {
@@ -337,10 +378,10 @@ class FilterSlider extends Component {
                 }}>Start Date</Text>
 
                 <DatePicker
-                type={'datetime'}
+                type={'date'}
                 placeholder={this.state.date}
                 borderColor= {'white'}
-                paddingLeft={'-50%'}
+                paddingLeft={'20%'}
                 onFinish={(date) => {
                   this.setState({
                     date: date.date

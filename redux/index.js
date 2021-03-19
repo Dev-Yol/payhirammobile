@@ -41,7 +41,8 @@ const types = {
   SET_UNREAD_PEER_REQUEST: 'SET_UNREAD_PEER_REQUEST',
   SET_CIRCLE_SEARCH: 'SET_CIRCLE_SEARCH',
   SET_FILTER_DATA: 'SET_FILTER_DATA',
-  SET_DEVICE_LOCATION: 'SET_DEVICE_LOCATION'
+  SET_DEVICE_LOCATION: 'SET_DEVICE_LOCATION',
+  SET_PARAMETER: 'SET_PARAMETER'
 };
 
 export const actions = {
@@ -155,6 +156,9 @@ export const actions = {
   },
   setDeviceLocation(deviceLocation) {
     return {type: types.SET_DEVICE_LOCATION, deviceLocation}
+  },
+  setParameter(parameter) {
+    return {type: types.SET_PARAMETER, parameter}
   }
 };
 
@@ -172,6 +176,7 @@ const initialState = {
   },
   unReadMessages: [],
   searchParameter: null,
+  parameter: null,
   // location: {
   //   id: null,
   //   account_id: null,
@@ -244,6 +249,7 @@ const reducer = (state = initialState, action) => {
   const { circleSearch } = action;
   const { filterData } = action;
   const { deviceLocation } = action;
+  const { parameter } = action;
   switch (type) {
     case types.LOGOUT:
       storeData('token', '');
@@ -575,6 +581,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         deviceLocation,
+      };
+    case types.SET_PARAMETER:
+      return {
+        ...state,
+        parameter,
       };
     default:
       return {...state, nav: state.nav};

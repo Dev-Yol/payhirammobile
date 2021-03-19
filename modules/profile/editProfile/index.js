@@ -215,7 +215,7 @@ class EditProfile extends Component {
         { cancelable: false }
       )
       return
-    }else if(this.state.cellular_number.length != 11 || (this.state.cellular_number.substr(0, 2) != '09')){
+    }else if(this.state.cellular_number.length != 11 || (this.state.cellular_number.substr(0, 3) != '09')){
       Alert.alert(
         'Error Message',
         'Please input a valid phone number.',
