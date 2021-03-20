@@ -124,13 +124,13 @@ class Requests extends Component {
   };
 
   retrieve = (scroll, flag, loading = true, page = null) => {
-    const {user, searchParameter} = this.props.state;
-    console.log("[searchParameter]", this.props.state);
+    const { setParameter } = this.props
+    const {user, searchParameter, parameter} = this.props.state;
     const { data, tempData } = this.state;
     if (user == null) {
       return;
     }
-    let parameter = null
+    let parameters = null
     if(page != null){
       this.setState({
         data: [],
@@ -138,7 +138,8 @@ class Requests extends Component {
       })
     }
     if((page != null && page == 'public') || (page == null && this.state.page == 'public')){
-      parameter = {
+      parameters = {
+        active_index: 0,
         account_id: user.id,
         offset: flag == true && this.state.offset > 0 ? (this.state.offset * this.state.limit) : this.state.offset,
         limit: this.state.limit,
@@ -152,13 +153,14 @@ class Requests extends Component {
         isPersonal: false,
         amount: 1000,
         currency: 'PHP',
-        start_date: "2020-12-07 04:17:22"
+        starting_date: "2020-12-07 00:00:00",
+        target: "all",
+        types: "all"
       };
-      console.log('[public]', parameter);
+      console.log('[public]', parameters);
     }
     if((page != null && page == 'personal') || (page == null && this.state.page == 'personal')){
-      console.log('[off]', this.state.offset);
-      parameter = {
+      parameters = {
         account_id: user.id,
         offset: flag == true && this.state.offset > 0 ? (this.state.offset * this.state.limit) : this.state.offset,
         limit: this.state.limit,
@@ -172,13 +174,14 @@ class Requests extends Component {
         amount: 1000,
         isPersonal: true,
         currency: 'PHP',
-        start_date: "2020-12-07 04:17:22"
+        starting_date: "2020-12-07 00:00:00",
+        target: "all",
+        types: "all"
       };
-      console.log('[personal]', parameter);
+      console.log('[personal]', parameters);
     }
     if((page != null && page == 'history') || (page == null && this.state.page == 'history')){
-      console.log('[offs]', this.state.offset);
-      parameter = {
+      parameters = {
         active_index: 2,
         account_id: user.id,
         offset: flag == true && this.state.offset > 0 ? (this.state.offset * this.state.limit) : this.state.offset,
@@ -186,20 +189,22 @@ class Requests extends Component {
         sort: {
           column: 'created_at',
           value: 'desc',
-        },
+        },  
         value: user.id,
         column: 'account_id',
         type: user.account_type,
         amount: 1000,
-        isPersonal: true,
+        isPersonal: false,
         currency: 'PHP',
-        start_date: "2020-12-07 04:17:22"
+        starting_date: "2020-12-07 00:00:00",
+        target: "all",
+        types: "all"
       };
-      console.log('[history]', parameter);
+      console.log('[history]', parameters);
     }
     this.setState({isLoading: (loading == false && page == null) ? false : true});
+    setParameter(parameters)
     Api.request( Routes.requestRetrieve, parameter, (response) => {
-      // console.log("[Request Retrieve]", response.data[0].account)
       this.setState({
         size: response.size ? response.size : 0,
         isLoading: false
@@ -212,7 +217,6 @@ class Requests extends Component {
             numberOfPages: parseInt(response.size / this.state.limit) + (response.size % this.state.limit ? 1 : 0),
             offset: flag == false ? 1 : (this.state.offset + 1)
           })
-          console.log('[perdsonal]', this.state.data);
           }else{
             this.setState({
               data: response.data,
@@ -564,6 +568,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(actions.setSearchParameter(searchParameter)),
     setLedger: (ledger) => dispatch(actions.setLedger(ledger)),
     setRequest: (request) => dispatch(actions.setRequest(request)),
+    setParameter: (parameter) => dispatch(actions.setParameter(parameter))
   };
 };
 
