@@ -40,37 +40,6 @@ class Slider extends Component {
     this.props.navigation.navigate(route);
   };
 
-  componentDidMount() {
-    this.retrieveProfile()
-  }
-
-  retrieveProfile() {
-    const { user } = this.props.state;
-    let parameter = {
-      condition: [{
-        value: user.id,
-        column: 'account_id',
-        clause: '='
-      }]
-    }
-    this.setState({isLoading: true});
-    Api.request(Routes.accountProfileRetrieve, parameter, (response) => {
-      this.setState({isLoading: false});
-      if (response.data.length > 0) {
-        this.setState({
-          data: response.data[0]
-        })
-      } else {
-        this.setState({
-          data: null
-        })
-      }
-    }, error => {
-      console.log('response', error)
-      this.setState({isLoading: false, data: null});
-    });
-  }
-
   logoutAction(){
     
     //clear storage
@@ -85,20 +54,18 @@ class Slider extends Component {
 
   render () {
     const { user, theme } = this.props.state;
-    const { data } = this.state
-    console.log('[data]', data);
     return (
       <View style={styles.container}>
         <ScrollView>
           <View>
-            {data != null ? (
+            {user != null ? (
                 <View style={[styles.sectionHeadingStyle, {
                   backgroundColor: theme ? theme.primary : Color.primary
                 }]}>
                   {
-                    data.profile != null && data.profile.url != null && (
+                    user.profile != null && user.profile.url != null && (
                       <Image
-                        source={{uri: Config.BACKEND_URL  + data.profile.url}}
+                        source={{uri: Config.BACKEND_URL  + user.profile.url}}
                         style={[BasicStyles.profileImageSize, {
                           height: 100,
                           width: 100,
@@ -108,7 +75,7 @@ class Slider extends Component {
                   }
 
                   {
-                    (data.profile == null || (data.profile != null && data.profile.url == null)) && (
+                    (user.profile == null || (user.profile != null && user.profile.url == null)) && (
                       <FontAwesomeIcon
                         icon={faUserCircle}
                         size={100}
@@ -120,7 +87,7 @@ class Slider extends Component {
                   }
 
                   {
-                    data.status == 'verified' && (
+                    user.status == 'verified' && (
                       <FontAwesomeIcon
                         icon={faCheckCircle}
                         size={20}
@@ -139,7 +106,7 @@ class Slider extends Component {
                     fontSize: 16,
                     marginTop: 10
                   }}>
-                    Hi {data.username}!
+                    Hi {user.username}!
                   </Text>
                   <TouchableOpacity
                     style={{
@@ -156,7 +123,7 @@ class Slider extends Component {
                     onPress={() => {this.redirect("editProfileStack")}}
                   >
                   {
-                    data.status == 'VERIFIED' || data.status == 'GRANTED' ?
+                    user.status == 'VERIFIED' || user.status == 'GRANTED' ?
                       <Text style={{
                       fontWeight: 'bold',
                       color: Color.white}}>

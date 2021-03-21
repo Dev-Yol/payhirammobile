@@ -46,19 +46,25 @@ class Dashboard extends Component {
               minHeight: height,
               width: '100%'
             }}>
-              <Summary onChange={(value) => this.setState({
-                page: value,
-                activeIndex: value == 'summary' ? 0 : 1
-              })}
-              navigation={this.props.navigation}
-              />
+              {
+                activeIndex == 0 && (
+                  <Summary onChange={(value) => this.setState({
+                    page: value,
+                    activeIndex: value == 'summary' ? 0 : 1
+                  })}
+                  navigation={this.props.navigation}
+                  />
+                )
+              }
             </View>
             <View style={{
               flex: 1,
               minHeight: height,
               width: '100%'
             }}>
-              <History />
+              {
+                activeIndex == 1 && (<History />)
+              }
             </View>
           </Pager>
         </PagerProvider>     

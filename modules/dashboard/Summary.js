@@ -46,7 +46,6 @@ class Summary extends Component {
     const {user} = this.props.state;
     if (user != null) {
       this.retrieveSummaryLedger();
-      this.retrieveLedgerHistory();
     }
   }
 
@@ -71,10 +70,13 @@ class Summary extends Component {
       account_code: user.code
     };
     this.setState({isLoading: true});
-    Api.request(Routes.ledgerSummary, parameter, (response) => {
+    Api.request(Routes.ledgerDashboard, parameter, (response) => {
       this.setState({isLoading: false});
       if (response != null) {
-        setLedger(response.data);
+        setLedger(response.data.ledger);
+        this.setState({
+          history: response.data.history
+        })
       } else {
         setLedger(null);
       }
