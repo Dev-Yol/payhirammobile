@@ -102,7 +102,9 @@ class FilterSlider extends Component {
           <Text style={{
             fontSize: BasicStyles.standardFontSize,
             fontWeight: 'bold',
-            width: '100%'
+            width: '100%',
+            marginLeft: '90%',
+            marginTop: '-6%'
           }}>{value}</Text>
         </View>
         <SliderPicker 
