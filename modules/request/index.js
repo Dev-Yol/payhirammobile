@@ -176,7 +176,8 @@ class Requests extends Component {
         currency: 'PHP',
         starting_date: "2020-12-07 00:00:00",
         target: "all",
-        types: "all"
+        types: "all",
+        active_index: 1
       };
       console.log('[personal]', parameters);
     }
@@ -202,9 +203,10 @@ class Requests extends Component {
       };
       console.log('[history]', parameters);
     }
-    this.setState({isLoading: (loading == false && page == null) ? false : true});
     setParameter(parameters)
-    Api.request( Routes.requestRetrieve, parameter, (response) => {
+    this.setState({isLoading: (loading == false && page == null) ? false : true});
+    Api.request( Routes.requestRetrieve, parameters, (response) => {
+      // console.log('[parameterssss]', parameter);
       this.setState({
         size: response.size ? response.size : 0,
         isLoading: false

@@ -42,7 +42,6 @@ class CreateRequest extends Component {
     };
   }
   componentDidMount() {
-
     this.retrieveSummaryLedger()
     const { params } = this.props.navigation.state;
     if(params && params.data){
@@ -132,26 +131,26 @@ class CreateRequest extends Component {
 
   createRequest = () => {
     const {user, defaultAddress} = this.props.state;
-    let testParameters = {
-      account_id: user.id,
-      amount: this.state.amount,
-      comaker: null,
-      coupon: null,
-      currency: this.state.currency,
-      interest: null,
-      location_id: defaultAddress.id,
-      max_charge: this.state.maximumProcessingCharge,
-      months_payable: null,
-      needed_on: this.state.neededOn,
-      reason: this.state.reason,
-      type: this.state.type,
-      money_type: this.state.money_type,
-      target: this.state.target
-    };
-    console.log('[Initial parameters]', testParameters)
+    // let testParameters = {
+    //   account_id: user.id,
+    //   amount: this.state.amount,
+    //   comaker: null,
+    //   coupon: null,
+    //   currency: this.state.currency,
+    //   interest: null,
+    //   location_id: defaultAddress.id,
+    //   max_charge: this.state.maximumProcessingCharge,
+    //   months_payable: null,
+    //   needed_on: this.state.neededOn,
+    //   reason: this.state.reason,
+    //   type: this.state.type,
+    //   money_type: this.state.money_type,
+    //   target: this.state.target
+    // };
+    // console.log('[Initial parameters]', testParameters)
     if(user == null){
       return
-    }else if(this.state.target == null || this.state.type == null || this.state.money_type == null || this.state.amount == null || this.state.neededOn == null || this.state.reason == null || defaultAddress == null || this.state.target == null) {
+    }else if(this.state.target == null || this.state.type == null || this.state.money_type == null || this.state.amount == null ||  this.state.amount == "" || this.state.neededOn == null || this.state.reason == null || this.state.reason == "" || defaultAddress == null || this.state.target == null) {
       Alert.alert(
         'Error Message',
         'All fields with (*) are required.',
@@ -282,7 +281,7 @@ class CreateRequest extends Component {
               <Text
                 style={[
                   styles.SelectFulfillmentTextStyle,
-                  {fontSize: BasicStyles.standardFontSize},
+                  {fontSize: BasicStyles.standardFontSize}
                 ]}>
                 Visible to
               </Text>

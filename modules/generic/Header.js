@@ -151,7 +151,7 @@ class Header extends Component {
                 </View>
             </TouchableOpacity>
           </View>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             onPress={() => this.redirect('locationWithMapStack')}
             style={{
               width: width,
@@ -164,10 +164,10 @@ class Header extends Component {
               color: theme ? theme.primary : Color.primary
             }}
             numberOfLines={1}
-            >{deviceLocation ? deviceLocation.address + ', ' + deviceLocation.locality + ', ' + deviceLocation.country : 'Click here to set Location.'}</Text>
+            >{deviceLocation ? deviceLocation.address + ', ' + deviceLocation.locality + ', ' + deviceLocation.country : 'Click here to set Location.'}</Text> */}
             {/* }}>{defaultAddress ? defaultAddress.route + ', ' + defaultAddress.locality + ', ' + defaultAddress.country : 'Default: ' + location.route + ', ' + location.locality + ', ' + location.country}</Text> */}
             {/* }}>{location ? 'Location: ' + location.route + ', ' + location.locality + ', ' + location.country : 'Current location'}</Text> */}
-          </TouchableOpacity>
+          {/* </TouchableOpacity> */}
       </View>
         
     )
