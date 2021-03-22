@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import { View, TouchableOpacity, TouchableHighlight, Text, Dimensions, ScrollView} from 'react-native';
 import Modal from "react-native-modal";
 import { Color , BasicStyles, Helper} from 'common';
+import {NavigationActions, StackActions} from 'react-navigation';
 import Config from 'src/config.js';
 import {connect} from 'react-redux';
 import { SliderPicker } from 'react-native-slider-picker';
@@ -36,7 +37,6 @@ class FilterSlider extends Component {
   }
 
   navigateToScreen = (route) => {
-    this.props.navigation.toggleDrawer();
     const navigateAction = NavigationActions.navigate({
       routeName: 'drawerStack',
       action: StackActions.reset({
@@ -50,7 +50,7 @@ class FilterSlider extends Component {
         ]
       })
     });
-    this.props.navigation.dispatch(navigateAction);
+    this.props.navigate.dispatch(navigateAction);
   }
 
   apply() {
