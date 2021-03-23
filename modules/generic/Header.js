@@ -5,6 +5,8 @@ import {faFilter, faBell, faBars} from '@fortawesome/free-solid-svg-icons';
 import {NavigationActions, StackActions} from 'react-navigation';
 import {BasicStyles, Color, Helper} from 'common';
 import {connect} from 'react-redux';
+import Geolocation from '@react-native-community/geolocation';
+import Geocoder from 'react-native-geocoding';
 import Filter from 'modules/filter/FilterSlider';
 
 const width = Math.round(Dimensions.get('window').width);
@@ -13,8 +15,52 @@ class Header extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      filter: false
+      filter: false,
+      region: {
+        latitude: 0,
+        longitude: 0,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421,
+        formatted_address: null,
+      },
+      pinnedLocation: false,
+      address: null
     }
+  }
+
+  getCurrentLocation = () => {
+    Geocoder.init('AIzaSyAxT8ShiwiI7AUlmRdmDp5Wg_QtaGMpTjg');
+    let watchID = Geolocation.getCurrentPosition(
+      //Will give you the current location
+      position => {
+        //getting the Longitude from the location json
+        const currentLongitude = JSON.stringify(position.coords.longitude);
+
+        //getting the Latitude from the location json
+        const currentLatitude = JSON.stringify(position.coords.latitude);
+        const currentLocation = {
+          longitude: currentLongitude,
+          latitude: currentLatitude,
+        };
+        this.setState({
+          region: {
+            ...this.state.region,
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+          },
+          pinnedLocation: true,
+          address: null,
+        });
+        // this.onRegionChange(this.state.region);
+        console.log('-------------------------------------------TESTING----------------------------------------------', position)
+      },
+      error => alert(error.message),
+      {
+        enableHighAccuracy: true,
+        timeout: 20000,
+        maximumAge: 1000,
+      },
+    )
   }
 
   redirect(route, layer){
@@ -151,8 +197,8 @@ class Header extends Component {
                 </View>
             </TouchableOpacity>
           </View>
-          {/* <TouchableOpacity
-            onPress={() => this.redirect('locationWithMapStack')}
+          <TouchableOpacity
+            // onPress={() => this.redirect('locationWithMapStack')}
             style={{
               width: width,
               marginLeft: 10,
@@ -164,10 +210,11 @@ class Header extends Component {
               color: theme ? theme.primary : Color.primary
             }}
             numberOfLines={1}
-            >{deviceLocation ? deviceLocation.address + ', ' + deviceLocation.locality + ', ' + deviceLocation.country : 'Click here to set Location.'}</Text> */}
-            {/* }}>{defaultAddress ? defaultAddress.route + ', ' + defaultAddress.locality + ', ' + defaultAddress.country : 'Default: ' + location.route + ', ' + location.locality + ', ' + location.country}</Text> */}
+            >Click here to set Location</Text>
+            {/* >{deviceLocation ? deviceLocation.address + ', ' + deviceLocation.locality + ', ' + deviceLocation.country : 'Click here to set Location.'}</Text> */}
+            {/* {defaultAddress ? defaultAddress.route + ', ' + defaultAddress.locality + ', ' + defaultAddress.country : 'Default: ' + location.route + ', ' + location.locality + ', ' + location.country}</Text> */}
             {/* }}>{location ? 'Location: ' + location.route + ', ' + location.locality + ', ' + location.country : 'Current location'}</Text> */}
-          {/* </TouchableOpacity> */}
+          </TouchableOpacity>
       </View>
         
     )

@@ -92,6 +92,7 @@ class RequestItem extends Component {
     console.log('[Create Messenger Thread] parameter', parameter)
     Api.request(Routes.customMessengerGroupCreate, parameter, response => {
       this.setState({ isLoading: false })
+      console.log('[Create Messenge', response)
       if (response.error == null) {
         this.props.navigation.navigate('messagesStack', {
           data: {
@@ -105,6 +106,7 @@ class RequestItem extends Component {
             status: 1
           }
         });
+        console.log('[Create parameter', response)
       }else{
         Alert.alert(
           'Thread already existed!',

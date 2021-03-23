@@ -35,6 +35,7 @@ import ProposalModal from 'modules/generic/ProposalModal';
 import RequestCard from 'modules/generic/RequestCard';
 import { Pager, PagerProvider } from '@crowdlinker/react-native-pager';
 import _ from 'lodash';
+import Geocoder from 'react-native-geocoding';
 import Footer from 'modules/generic/Footer'
 import Header from 'modules/generic/Header'
 const height = Math.round(Dimensions.get('window').height);
@@ -75,11 +76,11 @@ class Requests extends Component {
   }
 
   componentDidMount() {
+    this.retrieve(false, true);
     this.backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
       this.handleBackPress,
     );
-    this.retrieve(false, true);
   }
 
   componentWillUnmount() {
@@ -138,7 +139,7 @@ class Requests extends Component {
       })
     }
     if((page != null && page == 'public') || (page == null && this.state.page == 'public')){
-      parameters = {
+       parameters = {
         active_index: 0,
         account_id: user.id,
         offset: flag == true && this.state.offset > 0 ? (this.state.offset * this.state.limit) : this.state.offset,
@@ -153,9 +154,9 @@ class Requests extends Component {
         isPersonal: false,
         amount: 1000,
         currency: 'PHP',
-        starting_date: "2020-12-07 00:00:00",
-        target: "all",
-        types: "all"
+        starting_date: '2020-12-07 00:00:00',
+        target: 'all',
+        types: 'all'
       };
       console.log('[public]', parameters);
     }
@@ -174,10 +175,10 @@ class Requests extends Component {
         amount: 1000,
         isPersonal: true,
         currency: 'PHP',
-        starting_date: "2020-12-07 00:00:00",
-        target: "all",
-        types: "all",
-        active_index: 1
+        starting_date: '2020-12-07 00:00:00',
+        target: 'all',
+        types: 'all',
+        active_index: 0
       };
       console.log('[personal]', parameters);
     }
@@ -197,16 +198,16 @@ class Requests extends Component {
         amount: 1000,
         isPersonal: false,
         currency: 'PHP',
-        starting_date: "2020-12-07 00:00:00",
-        target: "all",
-        types: "all"
+        starting_date: '2020-12-07 00:00:00',
+        target: 'all',
+        types: 'all'
       };
       console.log('[history]', parameters);
     }
     setParameter(parameters)
+    // console.log('[parameter]', parameter);
     this.setState({isLoading: (loading == false && page == null) ? false : true});
     Api.request( Routes.requestRetrieve, parameters, (response) => {
-      // console.log('[parameterssss]', parameter);
       this.setState({
         size: response.size ? response.size : 0,
         isLoading: false

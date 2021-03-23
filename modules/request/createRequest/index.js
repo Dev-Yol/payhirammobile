@@ -104,6 +104,7 @@ class CreateRequest extends Component {
 
 
   handleSelectFulfillment = (item) => {
+    console.log('[item]', item);
     this.setState({
       fulfillmentType: item,
       money_type: item.money_type,
@@ -318,7 +319,7 @@ class CreateRequest extends Component {
               />
             </View>
 
-            <View style={{height: 200, width: '100%'}}>
+            <View style={{width: '100%'}}>
               <ScrollView
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}>
