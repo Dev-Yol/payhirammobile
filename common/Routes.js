@@ -83,5 +83,9 @@ export default {
   removeAddress: apiUrl + 'locations/delete',
   uploadImage: apiUrl + 'payloads/create',
   retrieveImage: apiUrl + 'payloads/retrieve',
-  transferFund: apiUrl + 'fund_transfer_charges/update'
+  transferFund: apiUrl + 'fund_transfer_charges/update',
+  enableSupportCreate: apiUrl + 'enable_supports/create',
+  commentCreate: apiUrl + 'comments/create',
+  commentsRetrieve: apiUrl + 'comments/retrieve',
+  replyCreate: apiUrl + 'comment_replies/create'
 };
