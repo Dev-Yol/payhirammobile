@@ -30,11 +30,11 @@ export default {
       route: 'Circle',
       icon: faUsers
     },
-    // {
-    //   title: 'Messages',
-    //   route: 'Messenger',
-    //   icon: faComment
-    // }, 
+    {
+      title: 'Messages',
+      route: 'Messenger',
+      icon: faComment
+    }, 
     {
       title: 'Settings',
       route: 'Settings',

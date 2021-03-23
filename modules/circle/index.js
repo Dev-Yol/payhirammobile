@@ -47,6 +47,10 @@ class Circle extends Component{
         value: user.id,
         column: 'account',
         clause: 'or'
+      }, {
+        value: 'declined',
+        column: 'status',
+        clause: '!='
       }],
       limit: this.state.limit,
       offset: flag == true && this.state.offset > 0 ? (this.state.offset * this.state.limit) : this.state.offset,
@@ -54,12 +58,11 @@ class Circle extends Component{
     console.log('parameter', parameter)
     this.setState({isLoading: true})
     Api.request(Routes.circleRetrieve, parameter, response => {
-      console.log('parameter', response.data)
       this.setState({
         isLoading: false,
         status: true
       })
-      if (response != null) {
+      if (response.data.length > 0) {
         this.setState({
           data: flag == false ? response.data : _.uniqBy([...this.state.data, ...response.data], 'id'),
           offset: flag == false ? 1 : (this.state.offset + 1),
@@ -364,7 +367,7 @@ class Circle extends Component{
             {(data && user) && this.renderCircles(data, status)}
           </View>
         </ScrollView>
-        {data.length < 1 && this.state.isLoading == false && (<Empty refresh={true} onRefresh={() => this.retrieve(true)} />)}
+        {data.length === 0 && (<Empty refresh={true} onRefresh={() => this.retrieve(true)} />)}
         {this.state.isLoading ? <Spinner mode="overlay"/> : null }
       </View>
     );

@@ -20,7 +20,7 @@ import TransactionsStack from 'modules/transactions/Drawer.js';
 import TransferFundStack from 'modules/transferFund/TransferFundDrawer.js';
 import DirectTransferStack from 'modules/transferFund/DirectTransferDrawer.js';
 import NotificationSettingsStack from 'modules/notification/settings/NotificationSettingsDrawer.js';
-import CreateTicketStack from 'modules/createTicket/CreateTicketDrawer.js';
+import CreateTicketStack from 'components/Support/createTicket/CreateTicketDrawer.js';
 import DisplayStack from 'modules/display/DisplayDrawer.js';
 import ReviewsStack from 'modules/reviews/ReviewsDrawer.js';
 import AddPaymentStack from 'modules/payment/add/AddPaymentDrawer.js';

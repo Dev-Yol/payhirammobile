@@ -115,7 +115,7 @@ class ViewProfile extends Component {
     let parameter = {
       account_id: this.props.state.user.id,
       to_email: this.state.user && this.state.user.email,
-      content: "test"
+      content: "Sending you an invitation to join my circle."
     }
     this.setState({ isLoading: true });
     Api.request(Routes.circleCreate, parameter, response => {
@@ -223,7 +223,7 @@ class ViewProfile extends Component {
                     style={{
                       backgroundColor: Color.white,
                       color: Color.info,
-                      borderRadius: 20,
+                      borderRadius: 20, 
                     }}
                   />
                   <Text style={{ color: Color.white, fontStyle: 'italic' }}>  Verified</Text>
