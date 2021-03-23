@@ -53,10 +53,9 @@ class FilterSlider extends Component {
     this.props.navigate.dispatch(navigateAction);
   }
 
-  apply() {
+  async apply() {
     const { setFilterData } = this.props
     const { user, parameter } = this.props.state
-    console.log('[parameter]', parameter);
     const { target, type, date, value, currency } = this.state
     let parameters = {
       target: target,
@@ -77,7 +76,7 @@ class FilterSlider extends Component {
       type: parameter.type,
       isPersonal: parameter.isPersonal,
     }
-    setFilterData(parameters)
+    await setFilterData(parameters)
     this.props.close()
     this.navigateToScreen('Requests')
   }
