@@ -144,8 +144,6 @@ class ProposalCard extends Component {
                     title={'View Profile'}
                     onClick={() => {this.props.navigation.navigate('viewProfileStack', {
                       code: item.account.code
-                      // user: item.account,
-                      // rating: item.rating
                     })}}
                     style={{
                       width: '45%',
@@ -172,31 +170,24 @@ class ProposalCard extends Component {
                     flexDirection: 'row'
                   }}>
                   <Button
-                    title={'Approved'}
-                    onClick={() => {}}
-                    style={{
-                      width: '45%',
-                      backgroundColor: Color.white,
-                      borderColor: Color.lightGray,
-                      borderWidth: 1,
-                      marginRight: '5%'
-                    }}
-                    textStyle={{
-                      color: Color.black
-                    }}
-                  />
-
-                  <Button
                     title={'View Profile'}
                     onClick={() => {this.props.navigation.navigate('viewProfileStack', {
-                      user: item.account,
-                      rating: item.rating
+                      code: item.account.code
                     })}}
                     style={{
-                      width: '45%',
+                      width: '47%',
                       marginRight: '5%'
                     }}
                   />
+                    <Button
+                      title={'See Conversations'}
+                      onClick={() => {this.props.viewConversation(item)}}
+                      style={{
+                        width: '50%',
+                        backgroundColor: theme ? theme.secondary : Color.secondary,
+                        marginRight: '5%'
+                      }}
+                    />
                 </View>
               )
             }
@@ -255,6 +246,7 @@ class ProposalCard extends Component {
         {
           (data) && data.map((item, index) => (
             <TouchableOpacity
+              key={index}
               onPress={() =>
                 this.props.navigation.navigate('requestItemStack', {
                   data: item,

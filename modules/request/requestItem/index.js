@@ -92,7 +92,6 @@ class RequestItem extends Component {
     console.log('[Create Messenger Thread] parameter', parameter)
     Api.request(Routes.customMessengerGroupCreate, parameter, response => {
       this.setState({ isLoading: false })
-      console.log('[Create Messenge', response)
       if (response.error == null) {
         this.props.navigation.navigate('messagesStack', {
           data: {
@@ -105,53 +104,14 @@ class RequestItem extends Component {
             amount: data.amount,
             status: 1
           }
-        });
-        console.log('[Create parameter', response)
+        })
       }else{
-        Alert.alert(
-          'Thread already existed!',
-          'Do you want to view the existing thread?',
-          [
-            {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-            {text: 'OK', onPress: () => {
-              this.props.navigation.navigate('messagesStack', {
-                data: {
-                  id: response.data,
-                  title: data.code,
-                  payload: 'request',
-                  account_id: user.id,
-                  request: data,
-                  currency: data.currency,
-                  amount: data.amount,
-                  status: 1
-                }
-              });
-            }},
-          ],
-          { cancelable: false }
-        )
-      }
-    }, error => {
-      this.setState({ isLoading: false })
-      console.log({ messenger_groups_error: error })
-    })
-  }
-  retrieveThread = (account) => {
-    const { user } = this.props.state;
-    const { data } = this.props.navigation.state.params;
-    if(user == null || account == null || data == null){
-      return
-    }
-    this.setState({isLoading: true});
-    let parameter = {
-      member: account[0].account.id,
-      creator: user.id,
-      title: data.code,
-      payload: 'request'
-    }
-    Api.request(Routes.customMessengerGroupCreate, parameter, response => {
-      this.setState({ isLoading: false })
-      if (response.error == null) {
+        // Alert.alert(
+        //   'Thread already existed!',
+        //   'Do you want to view the existing thread?',
+        //   [
+        //     {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+        //     {text: 'OK', onPress: () => {
         this.props.navigation.navigate('messagesStack', {
           data: {
             id: response.data,
@@ -164,19 +124,10 @@ class RequestItem extends Component {
             status: 1
           }
         });
-      }else{
-        this.props.navigation.navigate('messagesStack', {
-          data: {
-            id: response.data,
-            title: data.code,
-            payload: 'request',
-            account_id: user.id,
-            request: data,
-            currency: data.currency,
-            amount: data.amount,
-            status: 1
-          }
-        });
+            // }},
+          // ],
+          // { cancelable: false }
+        // )
       }
     }, error => {
       this.setState({ isLoading: false })
@@ -265,6 +216,7 @@ class RequestItem extends Component {
             data={data}
             navigation={this.props.navigation}
             onAcceptRequest={this.acceptRequest}
+            viewConversation={this.createThread}
             onChangeTerms={(params) => this.onChangeTerms(params)}
             onLoading={(flag) => this.setState({
               isLoading: flag
@@ -333,7 +285,7 @@ class RequestItem extends Component {
             </View>
           )
         }
-        {
+        {/* {
           (user.username == this.props.navigation.state.params.data.account.username) && (this.props.navigation.state.params.data.status > 0) && (
             <View style={{
               width: '100%',
@@ -354,7 +306,7 @@ class RequestItem extends Component {
               />
             </View>
           )
-        }
+        } */}
         {isLoading ? <Spinner mode="overlay" /> : null}
         {
           connectModal && (

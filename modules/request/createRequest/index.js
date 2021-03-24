@@ -546,7 +546,6 @@ const mapDispatchToProps = (dispatch) => {
   const {actions} = require('@redux');
   return {
     // updateUser: (user) => dispatch(actions.updateUser(user)),
-    setLocation: (location) => dispatch(actions.setLocation(location)),
     setRequestInput: (requestInput) => dispatch(actions.setRequestInput(requestInput)),
     setLedger: (ledger) => dispatch(actions.setLedger(ledger)),
   };

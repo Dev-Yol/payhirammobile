@@ -35,7 +35,6 @@ import ProposalModal from 'modules/generic/ProposalModal';
 import RequestCard from 'modules/generic/RequestCard';
 import { Pager, PagerProvider } from '@crowdlinker/react-native-pager';
 import _ from 'lodash';
-import Geocoder from 'react-native-geocoding';
 import Footer from 'modules/generic/Footer'
 import Header from 'modules/generic/Header'
 const height = Math.round(Dimensions.get('window').height);
@@ -475,8 +474,9 @@ class Requests extends Component {
       connectSelected,
       activeIndex
     } = this.state;
-    const {theme, user} = this.props.state;
+    const {theme, user, location} = this.props.state;
     const { data } = this.state;
+    console.log('[location]', location);
     return (
       <SafeAreaView style={{
         flex: 1
