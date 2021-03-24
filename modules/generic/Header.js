@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, TouchableOpacity, Platform, Image, Dimensions} from 'react-native';
+import {View, Text, TouchableOpacity, Platform, Image, Dimensions, PermissionsAndroid} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faFilter, faBell, faBars} from '@fortawesome/free-solid-svg-icons';
 import {NavigationActions, StackActions} from 'react-navigation';
@@ -8,6 +8,7 @@ import {connect} from 'react-redux';
 import Geolocation from '@react-native-community/geolocation';
 import Geocoder from 'react-native-geocoding';
 import Filter from 'modules/filter/FilterSlider';
+import CurrentLoc from 'components/Location/location.js'
 
 const width = Math.round(Dimensions.get('window').width);
 const gray = '#999';
@@ -15,52 +16,8 @@ class Header extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      filter: false,
-      region: {
-        latitude: 0,
-        longitude: 0,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
-        formatted_address: null,
-      },
-      pinnedLocation: false,
-      address: null
+      filter: false
     }
-  }
-
-  getCurrentLocation = () => {
-    Geocoder.init('AIzaSyAxT8ShiwiI7AUlmRdmDp5Wg_QtaGMpTjg');
-    let watchID = Geolocation.getCurrentPosition(
-      //Will give you the current location
-      position => {
-        //getting the Longitude from the location json
-        const currentLongitude = JSON.stringify(position.coords.longitude);
-
-        //getting the Latitude from the location json
-        const currentLatitude = JSON.stringify(position.coords.latitude);
-        const currentLocation = {
-          longitude: currentLongitude,
-          latitude: currentLatitude,
-        };
-        this.setState({
-          region: {
-            ...this.state.region,
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-          },
-          pinnedLocation: true,
-          address: null,
-        });
-        // this.onRegionChange(this.state.region);
-        console.log('-------------------------------------------TESTING----------------------------------------------', position)
-      },
-      error => alert(error.message),
-      {
-        enableHighAccuracy: true,
-        timeout: 20000,
-        maximumAge: 1000,
-      },
-    )
   }
 
   redirect(route, layer){
@@ -93,9 +50,8 @@ class Header extends Component {
   }
 
   render (){
-    const { selected, from, setDeviceLocation } = this.props;
-    const { theme, notifications, location, deviceLocation } = this.props.state;
-    console.log('[TogglerDrawer]', this.props.navigation.toggleDrawer);
+    const { selected, from } = this.props;
+    const { theme, notifications, location } = this.props.state;
     const { filter } = this.state;
     return(
       <View
@@ -197,12 +153,13 @@ class Header extends Component {
                 </View>
             </TouchableOpacity>
           </View>
-          <TouchableOpacity
+          <View
             // onPress={() => this.redirect('locationWithMapStack')}
             style={{
               width: width,
               marginLeft: 10,
             }}>
+            <CurrentLoc />
             <Text style={{
               fontSize: BasicStyles.standardFontSize,
               fontWeight: 'bold',
@@ -210,11 +167,8 @@ class Header extends Component {
               color: theme ? theme.primary : Color.primary
             }}
             numberOfLines={1}
-            >Click here to set Location</Text>
-            {/* >{deviceLocation ? deviceLocation.address + ', ' + deviceLocation.locality + ', ' + deviceLocation.country : 'Click here to set Location.'}</Text> */}
-            {/* {defaultAddress ? defaultAddress.route + ', ' + defaultAddress.locality + ', ' + defaultAddress.country : 'Default: ' + location.route + ', ' + location.locality + ', ' + location.country}</Text> */}
-            {/* }}>{location ? 'Location: ' + location.route + ', ' + location.locality + ', ' + location.country : 'Current location'}</Text> */}
-          </TouchableOpacity>
+            >{location ? location.address : 'Cannot find Location.'}</Text>
+          </View>
       </View>
         
     )
@@ -226,7 +180,6 @@ const mapStateToProps = state => ({state: state});
 const mapDispatchToProps = dispatch => {
   const {actions} = require('@redux');
   return {
-    setDeviceLocation: (deviceLocation) => dispatch(actions.setDeviceLocation(deviceLocation))
   };
 };
 

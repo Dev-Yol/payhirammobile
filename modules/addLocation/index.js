@@ -119,12 +119,12 @@ class AddLocation extends Component {
     console.log("parameters: ", parameters)
     this.setState({isLoading: true, executing: true})
     Api.request(Routes.addAddress, parameters, response => {
-      const {setLocation} = this.props
+      // const {setLocation} = this.props
       console.log('=================== \nAdding Address Response: \n===================', response)
       this.retrieveAddresses();
-      this.setState({isAddingAddressName: false})
+      this.setState({isAddingAddressName: false, addingAddress: false})
       this.setState({isLoading: false, executing: false, value: ''})
-      setLocation(null)
+      // setLocation(null)
     }, error => {
       console.log('Adding Address Error: ', error)
     })

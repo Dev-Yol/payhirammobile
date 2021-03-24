@@ -374,7 +374,7 @@ class FilterSlider extends Component {
               }}>
                 <Text style={{
                   fontSize: BasicStyles.standardFontSize,
-                  width: '50%',
+                  width: '53%',
                   fontWeight: 'bold'
                 }}>Start Date</Text>
 
@@ -382,7 +382,7 @@ class FilterSlider extends Component {
                 type={'date'}
                 placeholder={this.state.date}
                 borderColor= {'white'}
-                paddingLeft={'20%'}
+                // paddingLeft={'-5%'}
                 onFinish={(date) => {
                   this.setState({
                     date: date.date
