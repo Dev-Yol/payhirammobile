@@ -45,9 +45,15 @@ class ViewProfile extends Component {
         value: this.props.state.user.id,
         column: "account_id",
         clause: "or"
-      }]
+      }, {
+        value: 'declined',
+        column: "status",
+        clause: "!="
+      }],
+      offset: 0
     }
     this.setState({isLoading: true})
+    console.log(parameter, Routes.circleRetrieve, "============================test");
     Api.request(Routes.circleRetrieve, parameter, response => {
       this.setState({isLoading: false})
       this.setState({ connections: response.data })
