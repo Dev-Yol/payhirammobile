@@ -43,7 +43,6 @@ class Header extends Component {
   }
 
   showFilter(){
-    console.log('[Filter]')
     this.setState({
       filter: !this.state.filter
     })
@@ -51,7 +50,7 @@ class Header extends Component {
 
   render (){
     const { selected, from } = this.props;
-    const { theme, notifications, location } = this.props.state;
+    const { theme, notifications, location, defaultAddress } = this.props.state;
     const { filter } = this.state;
     return(
       <View
@@ -153,13 +152,13 @@ class Header extends Component {
                 </View>
             </TouchableOpacity>
           </View>
-          <View
-            // onPress={() => this.redirect('locationWithMapStack')}
+          <CurrentLoc />
+          <TouchableOpacity
+            onPress={() => this.redirect('locationWithMapStack')}
             style={{
               width: width,
               marginLeft: 10,
             }}>
-            <CurrentLoc />
             <Text style={{
               fontSize: BasicStyles.standardFontSize,
               fontWeight: 'bold',
@@ -167,8 +166,18 @@ class Header extends Component {
               color: theme ? theme.primary : Color.primary
             }}
             numberOfLines={1}
-            >{location ? location.address : 'Cannot find Location.'}</Text>
-          </View>
+            >{
+              defaultAddress !== null 
+              ? 
+                defaultAddress.address
+              :
+                location !== null
+                ? 
+                  location.address 
+                : 
+                  'Set Location'
+            }</Text>
+          </TouchableOpacity>
       </View>
         
     )

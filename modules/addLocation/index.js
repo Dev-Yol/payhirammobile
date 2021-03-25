@@ -30,7 +30,6 @@ class AddLocation extends Component {
      * Executed each time we enter in this component &&
      * will be executed after going back to this component 
     */
-   console.log('[location]', this.props.state.location);
     if (this.state.addingAddress && this.props.state.location != null) {
       this.setState({ isAddingAddressName: true })
     }
@@ -54,6 +53,7 @@ class AddLocation extends Component {
     const {setDefaultAddress} = this.props;
     this.setState({ selectedAddress: index });
     setDefaultAddress(this.state.addresses[index]);
+    console.log('[default]', this.props.state.defaultAddress);
     this.props.navigation.pop()
   };
 

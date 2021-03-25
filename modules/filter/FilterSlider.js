@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { View, TouchableOpacity, TouchableHighlight, Text, Dimensions, ScrollView} from 'react-native';
 import Modal from "react-native-modal";
-import { Color , BasicStyles, Helper} from 'common';
+import { Color , BasicStyles, Helper, Routes} from 'common';
 import {NavigationActions, StackActions} from 'react-navigation';
 import Config from 'src/config.js';
 import {connect} from 'react-redux';
@@ -9,6 +9,7 @@ import { SliderPicker } from 'react-native-slider-picker';
 import PickerWithLabel from 'components/Form/PickerWithLabel';
 import DatePicker from 'components/DateTime/index.js';
 import Button from 'components/Form/Button';
+import Api from 'services/api/index.js';
 const height = Math.round(Dimensions.get('window').height);
 class FilterSlider extends Component {
   constructor(props){
@@ -37,6 +38,7 @@ class FilterSlider extends Component {
   }
 
   navigateToScreen = (route) => {
+    const { parameter } = this.props.state
     const navigateAction = NavigationActions.navigate({
       routeName: 'drawerStack',
       action: StackActions.reset({
@@ -45,7 +47,7 @@ class FilterSlider extends Component {
         actions: [
             NavigationActions.navigate({routeName: route, params: {
               initialRouteName: route,
-              index: 0
+              parameter: parameter
             }}),
         ]
       })
@@ -53,9 +55,9 @@ class FilterSlider extends Component {
     this.props.navigate.dispatch(navigateAction);
   }
 
-  async apply() {
-    const { setFilterData } = this.props
-    const { user, parameter } = this.props.state
+  apply() {
+    const { setParameter } = this.props
+    const { user, parameter, filterData } = this.props.state
     const { target, type, date, value, currency } = this.state
     let parameters = {
       target: target,
@@ -76,7 +78,7 @@ class FilterSlider extends Component {
       type: parameter.type,
       isPersonal: parameter.isPersonal,
     }
-    await setFilterData(parameters)
+    setParameter(parameters)
     this.props.close()
     this.navigateToScreen('Requests')
   }
@@ -451,7 +453,7 @@ const mapDispatchToProps = dispatch => {
   const {actions} = require('@redux');
   return {
     setDefaultAddress: (defaultAddress) => dispatch(actions.setDefaultAddress(defaultAddress)),
-    setFilterData: (filterData) => dispatch(actions.setFilterData(filterData))
+    setParameter: (parameter) => dispatch(actions.setParameter(parameter))
   };
 };
 

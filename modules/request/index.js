@@ -131,6 +131,7 @@ class Requests extends Component {
       return;
     }
     let parameters = null
+    parameter == null
     if(page != null){
       this.setState({
         data: [],
@@ -206,7 +207,7 @@ class Requests extends Component {
     setParameter(parameters)
     // console.log('[parameter]', parameter);
     this.setState({isLoading: (loading == false && page == null) ? false : true});
-    Api.request( Routes.requestRetrieve, parameters, (response) => {
+    Api.request( Routes.requestRetrieve, parameter, (response) => {
       this.setState({
         size: response.size ? response.size : 0,
         isLoading: false
@@ -474,9 +475,8 @@ class Requests extends Component {
       connectSelected,
       activeIndex
     } = this.state;
-    const {theme, user, location} = this.props.state;
+    const {theme, user} = this.props.state;
     const { data } = this.state;
-    console.log('[location]', location);
     return (
       <SafeAreaView style={{
         flex: 1
