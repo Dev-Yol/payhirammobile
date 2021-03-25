@@ -103,7 +103,7 @@ class Groups extends Component{
               <Text style={{
                 fontSize: BasicStyles.standardFontSize,
                 fontWeight: 'bold'
-              }}>{item.title.length > 29 ? '********' + item.title.substr(item.title.length - 8, item.title.length - 1) + ' - ' + item.currency + ' ' + item.amount  : item.title}</Text>
+              }}>{item.title.length > 29 ? '********' + item.title.substr(item.title.length - 8, item.title.length - 1) + ' - ' + item?.currency + ' ' + item?.amount  : item?.title}</Text>
               {
                 parseInt(item.total_unread_messages) > 0 && Platform.OS == 'android' && (
                   <Text style={{
