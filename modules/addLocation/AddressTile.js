@@ -22,7 +22,7 @@ class AddressTile extends Component {
         onPress={() => {
           this.props.onPress(this.props.index);
         }}>
-        <View style={styles.AddressTypeContainer}>
+        {/* <View style={styles.AddressTypeContainer}>
           <Text
             style={[
               styles.AddressTypeTextStyle,
@@ -33,12 +33,13 @@ class AddressTile extends Component {
             ]}>
             {this.props.addressType}
           </Text>
-        </View>
+        </View> */}
         <View style={styles.AddressContainer}>
           <Text
             style={[styles.AddressTextStyle, {
                 color: this.props.fontColor,
-                fontSize: BasicStyles.standardFontSize - 2,
+                fontWeight: 'bold',
+                fontSize: BasicStyles.standardFontSize - 1,
                 marginTop: 5,
                 marginBottom: 5
               }

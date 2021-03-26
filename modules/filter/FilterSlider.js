@@ -61,10 +61,6 @@ class FilterSlider extends Component {
     const { target, type, date, value, currency } = this.state
     let parameters = {
       target: target,
-      types: type,
-      starting_date: date,
-      amount: value,
-      currency: currency,
       active_index: parameter.active_index,
       account_id: parameter.account_id,
       offset: parameter,
@@ -73,8 +69,6 @@ class FilterSlider extends Component {
         column: parameter.sort.column,
         value: parameter.sort.value,
       },
-      value: parameter.value,
-      column: parameter.column,
       type: parameter.type,
       isPersonal: parameter.isPersonal,
     }
