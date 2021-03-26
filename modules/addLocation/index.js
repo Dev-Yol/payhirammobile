@@ -26,12 +26,25 @@ class AddLocation extends Component {
   }
 
   onFocusFunction = () => {
+    const { location } = this.props.state
     /**
      * Executed each time we enter in this component &&
      * will be executed after going back to this component 
     */
     if (this.state.addingAddress && this.props.state.location != null) {
-      this.setState({ isAddingAddressName: true })
+      // this.setState({ isAddingAddressName: true })
+      if(location.latitude == null || location.longtitude == null || location.route == null || location.locality == null || location.region == null || location.country == null){
+        Alert.alert(
+          'Error Message',
+          'Invalid Pinned Location',
+          [
+            {text: 'Ok', onPress: () => console.log('Cancel'), style: 'cancel'}
+          ],
+          { cancelable: false }
+        )
+      }else{
+        this.addAddress()
+      }
     }
   }
 
@@ -64,7 +77,7 @@ class AddLocation extends Component {
         <AddressTile
           key={index}
           index={index}
-          addressType={address.address_type}
+          // addressType={address.address_type}
           address={address.route}
           country={address.country}
           onPress={this.selectHandler}
@@ -114,7 +127,7 @@ class AddLocation extends Component {
       locality: location.locality,
       region: location.region,
       country: location.country,
-      address_type: value
+      address_type: 'NULL'
     }
     console.log("parameters: ", parameters)
     this.setState({isLoading: true, executing: true})

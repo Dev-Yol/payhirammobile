@@ -131,7 +131,6 @@ class Requests extends Component {
       return;
     }
     let parameters = null
-    parameter == null
     if(page != null){
       this.setState({
         data: [],
@@ -152,11 +151,7 @@ class Requests extends Component {
         column: searchParameter == null ? 'created_at' : searchParameter.column,
         type: user.account_type,
         isPersonal: false,
-        amount: 1000,
-        currency: 'PHP',
-        starting_date: '2020-12-07 00:00:00',
-        target: 'all',
-        types: 'all'
+        target: 'all'
       };
       console.log('[public]', parameters);
     }
@@ -172,12 +167,8 @@ class Requests extends Component {
         value: user.id,
         column: 'account_id',
         type: user.account_type,
-        amount: 1000,
         isPersonal: true,
-        currency: 'PHP',
-        starting_date: '2020-12-07 00:00:00',
         target: 'all',
-        types: 'all',
         active_index: 0
       };
       console.log('[personal]', parameters);
@@ -191,28 +182,43 @@ class Requests extends Component {
         sort: {
           column: 'created_at',
           value: 'desc',
-        },  
-        value: user.id,
-        column: 'account_id',
-        type: user.account_type,
-        amount: 1000,
-        isPersonal: false,
-        currency: 'PHP',
-        starting_date: '2020-12-07 00:00:00',
-        target: 'all',
-        types: 'all'
+        },
+        target: 'all'
       };
       console.log('[history]', parameters);
     }
     setParameter(parameters)
-    // console.log('[parameter]', parameter);
     this.setState({isLoading: (loading == false && page == null) ? false : true});
-    Api.request( Routes.requestRetrieve, parameter, (response) => {
+    Api.request( Routes.requestRetrieve, parameters, (response) => {
       this.setState({
         size: response.size ? response.size : 0,
         isLoading: false
       });
       if(response.data.length > 0){
+        // if((page != null && page == 'public') || (page == null && this.state.page == 'public')){
+        //   response.data.map(element => {
+        //     if(element.status == 0){
+        //       // console.log('[public]');
+        //       this.setState({
+        //         data: flag == false ? element : _.uniqBy([...this.state.data, ...element], 'id'),
+        //         numberOfPages: parseInt(response.size / this.state.limit) + (response.size % this.state.limit ? 1 : 0),
+        //         offset: flag == false ? 1 : (this.state.offset + 1)
+        //       })
+        //     }
+        //   });
+        // }else if((page != null && page == 'history') || (page == null && this.state.page == 'history')){
+        //   response.data.map(el => {
+        //     console.log('[push]');
+        //     if(el.status > 0){
+        //       console.log('[history]');
+        //       this.setState({
+        //         data: flag == false ? el : _.uniqBy([...this.state.data, ...el], 'id'),
+        //         numberOfPages: parseInt(response.size / this.state.limit) + (response.size % this.state.limit ? 1 : 0),
+        //         offset: flag == false ? 1 : (this.state.offset + 1)
+        //       })
+        //     }
+        //   });
+        // }
         if(page == null){
           this.setState({
             // data: flag == false ? response.data : response.data,

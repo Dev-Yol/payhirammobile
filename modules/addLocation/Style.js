@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
   AddressTypeTextStyle: {},
   AddressContainer: {},
   AddressTextStyle: {
-    fontSize: 15,
+    fontSize: 17,
   },
   CountryContainer: {},
   CountryTextStyle: {},
