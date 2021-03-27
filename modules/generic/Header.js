@@ -162,8 +162,7 @@ class Header extends Component {
             <Text style={{
               fontSize: BasicStyles.standardFontSize,
               fontWeight: 'bold',
-              width: width - 40,
-              color: theme ? theme.primary : Color.primary
+              width: width - 40
             }}
             numberOfLines={1}
             >{
