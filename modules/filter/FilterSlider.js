@@ -10,6 +10,8 @@ import PickerWithLabel from 'components/Form/PickerWithLabel';
 import DatePicker from 'components/DateTime/index.js';
 import Button from 'components/Form/Button';
 import Api from 'services/api/index.js';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
 const height = Math.round(Dimensions.get('window').height);
 class FilterSlider extends Component {
   constructor(props){
@@ -309,13 +311,27 @@ class FilterSlider extends Component {
         justifyContent: 'center',
         borderBottomWidth: 1,
         borderBottomColor: Color.lightGray,
-        marginTop: Platform.OS == 'ios' ? 50 : 0
+        marginTop: Platform.OS == 'ios' ? 50 : 0,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
       }}>
         <Text style={{
           fontSize: BasicStyles.standardFontSize,
           fontWeight: 'bold',
+          height: 50,
+          lineHeight: 50,
           color: theme ? theme.primary : Color.primary
         }}>Filter</Text>
+        <TouchableOpacity style={{
+          width: 50,
+          height: 50,
+          justifyContent: 'center',
+          alignItems: 'flex-end'
+        }}
+        onPress={() => this.props.close()}
+        >
+          <FontAwesomeIcon icon={faTimes} />
+        </TouchableOpacity>
       </View>
     );
   }
@@ -379,6 +395,7 @@ class FilterSlider extends Component {
                 type={'date'}
                 placeholder={this.state.date}
                 borderColor= {'white'}
+                height={40}
                 style={{
                   borderColor: 0,
                   borderWidth: 0,
@@ -386,11 +403,11 @@ class FilterSlider extends Component {
                   width: '50%',
                   alignItems: 'flex-end',
                   justifyContent: 'center',
-                  paddingRight: 20
                 }}
                 textStyle={{
                   textAlign: 'right',
-                  width: '100%'
+                  width: '100%',
+                  color: Color.black
                 }}
                 icon={false}
                 onFinish={(date) => {
