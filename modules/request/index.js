@@ -96,143 +96,61 @@ class Requests extends Component {
     }
   };
 
-  redirect = (route) => {
-    this.props.navigation.navigate(route);
-  };
-
-  setRetrieveParameter = (flag) => {
-    const {setSearchParameter} = this.props;
-    const {user, searchParameter} = this.props.state;
-    if (flag == false) {
-      setSearchParameter(null);
-      this.setState({activePage: 0});
-      setTimeout(() => {
-        this.retrieve(false, true);
-      }, 100);
-    } else {
-      let searchParameter = {
-        column: 'account_id',
-        value: user.id,
-        type: user.account_type
-      };
-      this.setState({activePage: 1});
-      setSearchParameter(searchParameter);
-      setTimeout(() => {
-        this.retrieve(false, true);
-      }, 100);
-    }
-  };
-
-  retrieve = (scroll, flag, loading = true, page = null) => {
+  retrieve = (scroll, flag, loading = true) => {
     const { setParameter } = this.props
     const {user, searchParameter, parameter} = this.props.state;
-    const { data, tempData } = this.state;
+    const { data, tempData, page } = this.state;
     if (user == null) {
       return;
     }
-    let parameters = null
-    if(page != null){
+    let parameters = {
+      account_id: user.id,
+      offset: flag == true && this.state.offset > 0 ? (this.state.offset * this.state.limit) : this.state.offset,
+      limit: this.state.limit,
+      sort: {
+        column: 'created_at',
+        order: 'desc'
+      },
+      mode: 'all'
+    }
+    if(page == 'personal'){
+      parameters['request_account_id'] = user.id
+    }
+    if(parameter && parameter.target.toLowerCase() != 'all'){
+      parameters['target'] = parameter.target
+    }
+    if(parameter && parameter.type.toLowerCase() != 'all'){
+      parameters['type'] = Helper.getRequestTypeCode(parameter.type)
+    }
+    if(parameter && parameter.currency != 'all'){
+      parameters['currency'] = parameter.currency
+    }
+    if(parameter && parameter.amount > 0){
+      parameters['amount'] = parameter.amount
+    }
+    if(parameter && parameter.needed_on != null){
+      parameters['needed_on'] = parameter.needed_on
+    }
+    if(page == 'public'){
+      parameters['status'] = 0
+    }
+    if(page == 'history'){
+      parameters['mode'] = 'history'
+    }
+    console.log('parameters', parameters)
+    this.setState({isLoading: (loading == false) ? false : true});
+    Api.request(Routes.requestRetrieveMobile, parameters, response => {
       this.setState({
-        data: [],
-        offset: 0
-      })
-    }
-    if((page != null && page == 'public') || (page == null && this.state.page == 'public')){
-       parameters = {
-        active_index: 0,
-        account_id: user.id,
-        offset: flag == true && this.state.offset > 0 ? (this.state.offset * this.state.limit) : this.state.offset,
-        limit: this.state.limit,
-        sort: {
-          column: 'created_at',
-          value: 'desc',
-        },
-        value: searchParameter == null ? '%' : '%' + searchParameter.value + '%',
-        column: searchParameter == null ? 'created_at' : searchParameter.column,
-        type: user.account_type,
-        isPersonal: false,
-        target: 'all'
-      };
-      console.log('[public]', parameters);
-    }
-    if((page != null && page == 'personal') || (page == null && this.state.page == 'personal')){
-      parameters = {
-        account_id: user.id,
-        offset: flag == true && this.state.offset > 0 ? (this.state.offset * this.state.limit) : this.state.offset,
-        limit: this.state.limit,
-        sort: {
-          column: 'created_at',
-          value: 'desc',
-        },
-        value: user.id,
-        column: 'account_id',
-        type: user.account_type,
-        isPersonal: true,
-        target: 'all',
-        active_index: 0
-      };
-      console.log('[personal]', parameters);
-    }
-    if((page != null && page == 'history') || (page == null && this.state.page == 'history')){
-      parameters = {
-        active_index: 2,
-        account_id: user.id,
-        offset: flag == true && this.state.offset > 0 ? (this.state.offset * this.state.limit) : this.state.offset,
-        limit: this.state.limit,
-        sort: {
-          column: 'created_at',
-          value: 'desc',
-        },
-        target: 'all'
-      };
-      console.log('[history]', parameters);
-    }
-    setParameter(parameters)
-    this.setState({isLoading: (loading == false && page == null) ? false : true});
-    Api.request( Routes.requestRetrieve, parameters, (response) => {
-      this.setState({
-        size: response.size ? response.size : 0,
+        // size: response.size ? response.size : 0,
         isLoading: false
       });
-      if(response.data.length > 0){
-        // if((page != null && page == 'public') || (page == null && this.state.page == 'public')){
-        //   response.data.map(element => {
-        //     if(element.status == 0){
-        //       // console.log('[public]');
-        //       this.setState({
-        //         data: flag == false ? element : _.uniqBy([...this.state.data, ...element], 'id'),
-        //         numberOfPages: parseInt(response.size / this.state.limit) + (response.size % this.state.limit ? 1 : 0),
-        //         offset: flag == false ? 1 : (this.state.offset + 1)
-        //       })
-        //     }
-        //   });
-        // }else if((page != null && page == 'history') || (page == null && this.state.page == 'history')){
-        //   response.data.map(el => {
-        //     console.log('[push]');
-        //     if(el.status > 0){
-        //       console.log('[history]');
-        //       this.setState({
-        //         data: flag == false ? el : _.uniqBy([...this.state.data, ...el], 'id'),
-        //         numberOfPages: parseInt(response.size / this.state.limit) + (response.size % this.state.limit ? 1 : 0),
-        //         offset: flag == false ? 1 : (this.state.offset + 1)
-        //       })
-        //     }
-        //   });
-        // }
-        if(page == null){
+        if(response.data.length > 0){
           this.setState({
             // data: flag == false ? response.data : response.data,
-            data: flag == false ? response.data : _.uniqBy([...this.state.data, ...response.data], 'id'),
+            data: flag == false ? response.data : _.uniqBy([...this.state.data, ...response.data], 'code'),
             numberOfPages: parseInt(response.size / this.state.limit) + (response.size % this.state.limit ? 1 : 0),
             offset: flag == false ? 1 : (this.state.offset + 1)
           })
-          }else{
-            this.setState({
-              data: response.data,
-              numberOfPages: 1,
-              offset: 1
-            })
-          }
         }else{
           this.setState({
             data: flag == false ? [] : this.state.data,
@@ -318,16 +236,6 @@ class Requests extends Component {
     }, 500);
   };
 
-  connectAction = (flag) => {
-    if (flag == false) {
-      this.setState({connectModal: false, connectSelected: null});
-    } else {
-      // process charges
-      this.setState({connectModal: false, connectSelected: null});
-      this.retrieve(false, true);
-    }
-  };
-
   validate = () => {
     Alert.alert(
       'Message',
@@ -338,75 +246,6 @@ class Requests extends Component {
       { cancelable: false }
     )
   }
-
-  _search = () => {
-    const {searchParameter} = this.props.state;
-    return (
-      <View>
-        <View
-          style={{
-            flexDirection: 'row',
-            borderBottomColor: Color.primary,
-            borderBottomWidth: 1,
-          }}>
-          <Picker
-            selectedValue={this.state.searchType}
-            onValueChange={(searchType) => this.setState({searchType})}
-            style={[
-              BasicStyles.pickerStyleCreate,
-              {
-                width: '40%',
-                transform: [{scaleX: 0.77}, {scaleY: 0.77}],
-                textAlign: 'left',
-                left: -15,
-                marginRight: 0,
-                paddingRight: 0,
-              },
-            ]}
-            itemStyle={{fontSize: 11}}>
-            {this.state.filterOptions.map((item, index) => {
-              return (
-                <Picker.Item
-                  key={index}
-                  label={item.title}
-                  value={item.value}
-                />
-              );
-            })}
-          </Picker>
-          <TextInput
-            style={{
-              height: 50,
-              width: '50%',
-              marginLeft: 0,
-              paddingLeft: 0,
-              left: -30,
-            }}
-            onChangeText={(searchValue) => this.setState({searchValue})}
-            value={this.state.searchValue}
-            placeholder={'Find something here...'}
-          />
-          <TouchableOpacity
-            onPress={() => this.search()}
-            style={{
-              height: 50,
-              justifyContent: 'center',
-              alignItems: 'center',
-              width: '10%',
-            }}>
-            <FontAwesomeIcon
-              icon={faSearch}
-              size={BasicStyles.iconSize}
-              style={{
-                color: Color.primary,
-              }}
-            />
-          </TouchableOpacity>
-        </View>
-      </View>
-    );
-  };
-
 
   FlatListItemSeparator = () => {
     return <View style={Style.Separator} />;
@@ -450,6 +289,7 @@ class Requests extends Component {
       <ScrollView
         style={Style.ScrollView}
         showsVerticalScrollIndicator={false}
+        scrollEventThrottle={16}
         onScroll={(event) => {
           let scrollingHeight = event.nativeEvent.layoutMeasurement.height + event.nativeEvent.contentOffset.y
           let totalHeight = event.nativeEvent.contentSize.height
@@ -465,9 +305,27 @@ class Requests extends Component {
           }
         }}>
           <View style={Style.MainContainer}>  
-            {this._flatList()}
+            {
+              (data && data.length > 0) && data.map((item, index) => (
+                <View style={{
+                  marginTop: (index == 0) ? 70 : 0,
+                  marginBottom: (index == data.length - 1) ? 100 : 0
+                }}>
+                  <RequestCard 
+                    onConnectRequest={(item) => {this.connectRequest(item)}}
+                    data={item}
+                    navigation={this.props.navigation}
+                    from={'request'}
+                    />
+                </View>
+              ))
+            }
             {data.length == 0 && isLoading == false && (
-              <Empty refresh={true} onRefresh={() => this.onRefresh()} />
+              <View style={{
+                marginTop: 100
+              }}>
+                <Empty refresh={true} onRefresh={() => this.onRefresh()} />
+              </View>
             )}
           </View>
       </ScrollView>
@@ -488,7 +346,6 @@ class Requests extends Component {
         flex: 1
       }}>
         
-        {/*this._search()*/}
 
         <PagerProvider activeIndex={activeIndex}>
           <Pager panProps={{enabled: false}}>
@@ -555,9 +412,10 @@ class Requests extends Component {
             await this.setState({
               page: value,
               activeIndex: index,
-              offset: 0
+              offset: 0,
+              data: []
             })
-            this.retrieve(false, false, false, value)
+            this.retrieve(false, false, true)
           }}
           from={'request'}
         />  

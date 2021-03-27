@@ -322,6 +322,24 @@ export default {
         return 'Installment';
     }
   },
+  getRequestTypeCode(type) {
+    switch (type) {
+      case 'Send Cash':
+        return 1;
+      case 'Withdrawals':
+        return 2;
+      case 'Cash In':
+        return 3;
+      case 'Bills and Payments':
+        return 4;
+      case 'Others':
+        return 5;
+      case 'Lending':
+        return 101;
+      case 'Installment':
+        return 102;
+    }
+  },
   showStatus(type) {
     switch (parseInt(type)) {
       case 0:

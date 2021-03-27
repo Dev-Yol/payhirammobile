@@ -19,6 +19,7 @@ export default {
   ledgerDashboard: apiUrl + 'ledger/dashboard',
   ledgerDirectTransfer: apiUrl + 'ledger/direct_transfer',
   requestRetrieve: apiUrl + 'requests/retrieve',
+  requestRetrieveMobile: apiUrl + 'requests/retrieve_mobile',
   requestRetrieveItem: apiUrl + 'requests/retrieve_item',
   requestRetrieveByPayloadValue: apiUrl + 'requests/retrieve_by_payload_value',
   transactionRetrieve: apiUrl + 'ledger/summary_ledger',

@@ -12,28 +12,45 @@ import Button from 'components/Form/Button';
 import Api from 'services/api/index.js';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import Countries from 'common/Countries';
 const height = Math.round(Dimensions.get('window').height);
 class FilterSlider extends Component {
   constructor(props){
     super(props);
     this.state = {
-      value: 1000,
+      amount: 1000,
       showTarget: false,
       showTypes: false,
-      target: 'All',
-      type: 'All',
+      target: 'all',
+      type: 'all',
       filterData: null,
       currency: 'PHP',
+      showCurrency: false,
       day: new Date().getDate(),
       month: new Date().getMonth() + 1,
       year: new Date().getFullYear(),
-      date: null
+      needed_on: null
     }
-    this.setState({date: this.state.month + this.state.day + this.state.year})
+    this.setState({needed_on: this.state.month + this.state.day + this.state.year})
   }
+
+  componentDidMount(){
+    const { parameter } = this.props.state;
+    if(parameter){
+      this.setState({
+        type: parameter.type,
+        target: parameter.target,
+        needed_on: parameter.needed_on,
+        amount: parameter.amount,
+        currency: parameter.currency
+      })
+    }
+  }
+
   action = () => {  
     this.props.action()
   }
+
   redirect = (route) => {
     this.props.close()
     this.props.navigate(route);
@@ -57,22 +74,21 @@ class FilterSlider extends Component {
     this.props.navigate.dispatch(navigateAction);
   }
 
+  reset(){
+    const { setParameter } = this.props
+    setParameter(null)
+    this.props.close()
+    this.navigateToScreen('Requests')
+  }
   apply() {
     const { setParameter } = this.props
-    const { user, parameter, filterData } = this.props.state
-    const { target, type, date, value, currency } = this.state
+    const { target, type, needed_on, amount, currency } = this.state
     let parameters = {
       target: target,
-      active_index: parameter.active_index,
-      account_id: parameter.account_id,
-      offset: parameter,
-      limit: parameter.limit,
-      sort: {
-        column: parameter.sort.column,
-        value: parameter.sort.value,
-      },
-      type: parameter.type,
-      isPersonal: parameter.isPersonal,
+      type: type,
+      currency: currency,
+      amount: amount,
+      needed_on: needed_on
     }
     setParameter(parameters)
     this.props.close()
@@ -81,7 +97,7 @@ class FilterSlider extends Component {
 
   amount = () => {
     const { theme } = this.props.state;
-    const { value } = this.state
+    const { amount } = this.state
     return(
       <View style={{
         width: '100%'
@@ -102,16 +118,16 @@ class FilterSlider extends Component {
             width: '100%',
             marginLeft: '90%',
             marginTop: '-6%'
-          }}>{value}</Text>
+          }}>{amount}</Text>
         </View>
         <SliderPicker 
           callback={position => {
-            this.setState({ value: position })
+            this.setState({ amount: position })
           }}
           minLabel={'1000'}
           maxLabel={'50000'}
           maxValue={50000}
-          defaultValue={this.state.value}
+          defaultValue={this.state.amount}
           labelFontColor={Color.black}
           labelFontWeight={'600'}
           showFill={true}
@@ -185,7 +201,7 @@ class FilterSlider extends Component {
             fontSize: BasicStyles.standardFontSize,
             width: '50%',
             textAlign: 'right'
-          }}>{target}</Text>
+          }}>{target.toUpperCase()}</Text>
         </View>
         {
           showTarget && (
@@ -206,7 +222,7 @@ class FilterSlider extends Component {
                       })}
                       title={item.value}
                       style={{
-                        backgroundColor: target == item.value ? (theme ? theme.primary : Color.primary) : Color.white,
+                        backgroundColor: target.toLowerCase() == item.value.toLowerCase() ? (theme ? theme.primary : Color.primary) : Color.white,
                         width: index == 0 ? 40 : 80,
                         height: 40,
                         borderRadius: 20,
@@ -214,7 +230,7 @@ class FilterSlider extends Component {
                         borderColor: theme ? theme.primary : Color.primary
                       }}
                       textStyle={{
-                        color: target == item.value ? Color.white : (theme ? theme.primary : Color.primary),
+                        color: target.toLowerCase() == item.value.toLowerCase() ? Color.white : (theme ? theme.primary : Color.primary),
                         fontSize: BasicStyles.standardFontSize
                       }}
                     />
@@ -259,7 +275,7 @@ class FilterSlider extends Component {
             fontSize: BasicStyles.standardFontSize,
             width: '50%',
             textAlign: 'right'
-          }}>{type}</Text>
+          }}>{type.toUpperCase()}</Text>
         </View>
         {
           showTypes && (
@@ -280,7 +296,7 @@ class FilterSlider extends Component {
                       })}
                       title={item.value}
                       style={{
-                        backgroundColor: type == item.value ? (theme ? theme.primary : Color.primary) : Color.white,
+                        backgroundColor: type.toLowerCase() == item.value.toLowerCase() ? (theme ? theme.primary : Color.primary) : Color.white,
                         width: index == 0 ? 40 : 80,
                         height: 40,
                         borderRadius: 20,
@@ -288,7 +304,7 @@ class FilterSlider extends Component {
                         borderColor: theme ? theme.primary : Color.primary
                       }}
                       textStyle={{
-                        color: type == item.value ? Color.white : (theme ? theme.primary : Color.primary),
+                        color: type.toLowerCase() == item.value.toLowerCase() ? Color.white : (theme ? theme.primary : Color.primary),
                         fontSize: BasicStyles.standardFontSize
                       }}
                     />
@@ -301,6 +317,79 @@ class FilterSlider extends Component {
       </TouchableOpacity>
     );
   }
+
+  renderCurrency = () => {
+    const { theme } = this.props.state;
+    const { showCurrency, currency } = this.state;
+    return (
+      <TouchableOpacity style={{
+          width: '100%',
+          borderBottomWidth: 1,
+          borderBottomColor: Color.lightGray,
+        }}
+        onPress={() => this.setState({
+          showCurrency: !this.state.showCurrency
+        })}
+        >
+        <View style={{
+            width: '100%',
+            height: 50,
+            alignItems: 'center',
+            flexDirection: 'row'
+          }}>
+          <Text style={{
+            fontSize: BasicStyles.standardFontSize,
+            width: '50%',
+            fontWeight: 'bold'
+          }}>Currency</Text>
+
+          <Text style={{
+            fontSize: BasicStyles.standardFontSize,
+            width: '50%',
+            textAlign: 'right'
+          }}>{currency.toUpperCase()}</Text>
+        </View>
+        {
+          showCurrency && (
+            <View style={{
+              width: '100%',
+              flexDirection: 'row',
+              marginBottom: 20
+            }}>
+              <ScrollView
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}>
+                {
+                  Countries.list.map((item, index) => (
+                  <Button
+                    key={index}
+                      onClick={() => this.setState({
+                        currency: item.currency
+                      })}
+                      title={item.currency}
+                      style={{
+                        backgroundColor: currency.toLowerCase() == item.currency.toLowerCase() ? (theme ? theme.primary : Color.primary) : Color.white,
+                        width: index == 0 ? 40 : 80,
+                        height: 40,
+                        borderRadius: 20,
+                        borderWidth: 0.5,
+                        borderColor: theme ? theme.primary : Color.primary
+                      }}
+                      textStyle={{
+                        color: currency.toLowerCase() == item.currency.toLowerCase() ? Color.white : (theme ? theme.primary : Color.primary),
+                        fontSize: BasicStyles.standardFontSize
+                      }}
+                    />
+                  ))
+                }
+              </ScrollView>
+            </View>
+          )
+        }
+      </TouchableOpacity>
+    );
+  }
+
 
   header(){
     const { theme } = this.props.state;
@@ -341,6 +430,7 @@ class FilterSlider extends Component {
   }
 
   render(){
+    const { theme } = this.props.state;
     return (
       <Modal
         animationType="slide"
@@ -393,7 +483,7 @@ class FilterSlider extends Component {
 
                 <DatePicker
                 type={'date'}
-                placeholder={this.state.date}
+                placeholder={this.state.needed_on}
                 borderColor= {'white'}
                 height={40}
                 style={{
@@ -412,60 +502,43 @@ class FilterSlider extends Component {
                 icon={false}
                 onFinish={(date) => {
                   this.setState({
-                    date: date.date
+                    needed_on: date.date
                   })
                 }} />
               </View>
 
-              <View style={{
-                width: '100%',
-                flexDirection: 'row',
-                height: 50,
-                alignItems: 'center',
-                borderBottomWidth: 1,
-                borderBottomColor: Color.lightGray
-              }}>
-                <Text style={{
-                  fontSize: BasicStyles.standardFontSize,
-                  width: '50%',
-                  fontWeight: 'bold'
-                }}>Currency</Text>
-
-              <PickerWithLabel 
-                // label={'Currency'}
-                marginBottom={'15%'}
-                paddingLeft={15}
-                borderColor={'white'}
-                data={Helper.currency}
-                placeholder={'Click to select'}
-                onChange={(value) => this.setState({
-                  currency: value
-                })}
-                onError={false}
-              />
-              </View>
+              {this.renderCurrency()}
 
               {this.amount()}
-
-              <View style={{
+            </View>
+            <View style={{
                 width: '100%',
                 flexDirection: 'row',
                 alignItems: 'center',
                 position: 'absolute',
+                paddingLeft: 20,
+                paddingRight: 20,
                 bottom: 10
               }}>
                 <Button 
                   style={{
-                    backgroundColor: Color.secondary,
-                    width: '90%',
-                    marginRight: '5%',
-                    marginLeft: '10%'
+                    backgroundColor: Color.danger,
+                    width: '49%',
+                    marginRight: '1%',
                   }}
-                  title={'Set Filter'}
+                  title={'Reset'}
+                  onClick={() => this.reset()}
+                />
+                <Button 
+                  style={{
+                    backgroundColor: theme ? theme.secondary : Color.secondary,
+                    width: '49%',
+                    marginLeft: '1%',
+                  }}
+                  title={'Apply'}
                   onClick={() => this.apply()}
                 />
               </View>
-            </View>
           </View>
       </Modal>
     );

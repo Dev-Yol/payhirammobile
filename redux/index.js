@@ -162,6 +162,7 @@ export const actions = {
   }
 };
 
+const date = new Date()
 const initialState = {
   token: null,
   user: null,
@@ -177,16 +178,6 @@ const initialState = {
   unReadMessages: [],
   searchParameter: null,
   parameter: null,
-  // location: {
-  //   id: null,
-  //   account_id: null,
-  //   latitude: null,
-  //   latitude: null,
-  //   route: null,
-  //   locality: null,
-  //   region: null,
-  //   country: null
-  // },
   location: {
     id: 1,
     account_id: 1,
