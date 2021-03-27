@@ -42,23 +42,30 @@ class RequestCard extends Component {
               <Text
                 style={{
                   color: Color.normalGray,
-                  lineHeight: 30,
                   paddingLeft: 10,
                   fontWeight: 'bold',
                   fontSize: BasicStyles.standardFontSize
                 }}>
                 {item.account?.information ? item.account.information.first_name + ' ' + item.account.information.last_name : item.account.username}
               </Text>
-
-              <Text
-                style={{
-                  ...Style.text,
-                  paddingLeft: 10,
-                  fontSize: BasicStyles.standardFontSize
-                }}
-                >
-                {item.needed_on_human}
-              </Text>
+              <View style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                paddingLeft: 10,
+              }}>
+                <FontAwesomeIcon icon={faCalendar} size={BasicStyles.standardFontSize} color={Color.gray}/>
+                <Text
+                  style={{
+                    ...Style.text,
+                    paddingLeft: 10,
+                    fontSize: BasicStyles.standardFontSize - 1,
+                    paddingTop: 2,
+                  }}
+                  >
+                  {item.needed_on_human}
+                </Text>
+              </View>
+              
             </View>
           </View>
           <View
@@ -69,7 +76,6 @@ class RequestCard extends Component {
                 style={{
                   fontWeight: 'bold',
                   textAlign: 'right',
-                  lineHeight: 30,
                   width: '100%',
                   fontSize: BasicStyles.standardFontSize
                 }}>
@@ -80,7 +86,8 @@ class RequestCard extends Component {
                   color: Color.normalGray,
                   width: '100%',
                   textAlign: 'right',
-                  fontSize: BasicStyles.standardFontSize
+                  paddingTop: 2,
+                  fontSize: BasicStyles.standardFontSize - 1
                 }}>
                 {Helper.showRequestType(item.type) + ' - ' + Helper.showStatus(item.status)}
               </Text>
@@ -164,8 +171,8 @@ class RequestCard extends Component {
   _body = (item) => {
     return (
       <View style={{
-        paddingTop: 10,
-        paddingBottom: 10,
+        paddingTop: 20,
+        paddingBottom: 20,
         justifyContent: 'center'
       }}>
         <Text
