@@ -7,7 +7,7 @@ import Rating from 'components/Rating'
 import UserImage from 'components/User';
 import {connect} from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faMapMarkerAlt, faCalendar } from '@fortawesome/free-solid-svg-icons';
+import { faMapMarkerAlt, faCalendar, faCircle } from '@fortawesome/free-solid-svg-icons';
 class RequestCard extends Component {
   constructor(props) {
     super(props);
@@ -44,9 +44,10 @@ class RequestCard extends Component {
                   color: Color.normalGray,
                   lineHeight: 30,
                   paddingLeft: 10,
-                  fontWeight: 'bold'
+                  fontWeight: 'bold',
+                  fontSize: BasicStyles.standardFontSize
                 }}>
-                {item?.account?.username}
+                {item.account?.information ? item.account.information.first_name + ' ' + item.account.information.last_name : item.account.username}
               </Text>
 
               <Text
@@ -69,7 +70,8 @@ class RequestCard extends Component {
                   fontWeight: 'bold',
                   textAlign: 'right',
                   lineHeight: 30,
-                  width: '100%'
+                  width: '100%',
+                  fontSize: BasicStyles.standardFontSize
                 }}>
                 {Currency.display(item.amount, item.currency)}
               </Text>
@@ -118,15 +120,30 @@ class RequestCard extends Component {
           item.location != null && (
             <View style={{
               flexDirection: 'row',
-              paddingTop: 2
+              paddingTop: 2,
+              justifyContent: 'center',
+              alignItems: 'center'
             }}>
+              <FontAwesomeIcon
+                icon={faCircle}
+                style={{color: theme ? theme.secondary : Color.secondary}}
+                size={10}
+              />
+              <Text style={{
+                fontSize: BasicStyles.standardFontSize,
+                ...Style.text,
+                paddingLeft: 5,
+                paddingRight: 5
+              }}>
+                {item.distance}
+              </Text>
               <FontAwesomeIcon icon={faMapMarkerAlt} color={Color.gray} />
               <Text style={{
                 ...Style.text,
-                paddingLeft: 10,
+                paddingLeft: 5,
                 fontStyle: 'italic',
                 fontSize: BasicStyles.standardFontSize,
-                width: '90%'
+                width: '80%'
               }}
               numberOfLines={1}
               >

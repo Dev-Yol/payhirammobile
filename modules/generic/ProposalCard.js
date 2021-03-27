@@ -62,7 +62,7 @@ class ProposalCard extends Component {
               width: '20%',
               justifyContent: 'center'
             }}>
-              <UserImage user={item.account} />
+              <UserImage user={item.account} color={theme ? theme.primary : Color.primary}/>
             </View>
             <View style={{
               width: '80%'
@@ -70,9 +70,10 @@ class ProposalCard extends Component {
               <Text
                 style={{
                   width: '100%',
-                  fontWeight: 'bold'
+                  fontWeight: 'bold',
+                  fontSize: BasicStyles.standardFontSize
                 }}>
-                {item?.account?.username}
+                {item.account?.information ? item.account.information.first_name + ' ' + item.account.information.last_name : item.account.username}
               </Text>
               {
                 item.status == 'approved' && (
@@ -97,9 +98,10 @@ class ProposalCard extends Component {
                   fontWeight: 'bold',
                   textAlign: 'right',
                   width: '100%',
-                  color: theme ? theme.secondary : Color.secondary
+                  color: theme ? theme.secondary : Color.secondary,
+                  fontSize: BasicStyles.standardFontSize
                 }}>
-                {Currency.display(item.charge, item.currency)}
+                Charge - {Currency.display(item.charge, item.currency)}
               </Text>
             )}
             {type == 'rating' && (
@@ -118,6 +120,7 @@ class ProposalCard extends Component {
   };
 
   _body = (item) => {
+    const { theme } = this.props.state;
     return (
       <View style={{flexDirection: 'row', marginTop: 10}}>
         <View style={{
@@ -135,7 +138,7 @@ class ProposalCard extends Component {
         }}>
           <FontAwesomeIcon
             icon={faCircle}
-            style={{color: Color.secondary, marginHorizontal: 10}}
+            style={{color: theme ? theme.secondary : Color.secondary, marginHorizontal: 10}}
             size={10}
           />
           <Text style={{
@@ -172,7 +175,8 @@ class ProposalCard extends Component {
                     })}}
                     style={{
                       width: '45%',
-                      marginRight: '5%'
+                      marginRight: '5%',
+                      backgroundColor: theme ? theme.primary : Color.primary
                     }}
                   />
                   <Button

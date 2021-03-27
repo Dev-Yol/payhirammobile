@@ -35,6 +35,7 @@ class HeaderOptions extends Component {
 
   };
   render() {
+    const { theme } = this.props.state;
     return (
       <View style={{flexDirection: 'row'}}>
         <TouchableOpacity onPress={this.back.bind(this)}>
@@ -43,6 +44,7 @@ class HeaderOptions extends Component {
             icon={faChevronLeft}
             size={BasicStyles.iconSize}
             style={styles.iconStyle}
+            color={theme ? theme.primary : Color.primary}
           />
         </TouchableOpacity>
       </View>
@@ -59,12 +61,14 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
+let HeaderOptionsConnect = connect(mapStateToProps, mapDispatchToProps)(HeaderOptions);
+
 const RequestItemStack = createStackNavigator({
   requestItemScreen: {
     screen: RequestItem,
     navigationOptions: ({navigation}) => ({
       title: 'Request Item',
-      headerLeft: <HeaderOptions navigationProps={navigation} />,
+      headerLeft: <HeaderOptionsConnect navigationProps={navigation} />,
       ...BasicStyles.headerDrawerStyle
     }),
   },
