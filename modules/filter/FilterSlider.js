@@ -518,7 +518,7 @@ class FilterSlider extends Component {
                 position: 'absolute',
                 paddingLeft: 20,
                 paddingRight: 20,
-                bottom: 10
+                bottom: 20
               }}>
                 <Button 
                   style={{
