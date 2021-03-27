@@ -5,7 +5,7 @@ import Currency from 'services/Currency';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faCircle } from '@fortawesome/free-solid-svg-icons';
 import {connect} from 'react-redux';
-import { Color, Routes } from 'common';
+import { Color, Routes, BasicStyles } from 'common';
 import Rating from 'components/Rating'
 import UserImage from 'components/User';
 import Button from 'components/Form/Button';
@@ -49,20 +49,44 @@ class ProposalCard extends Component {
 
 
   _header = (item, type) => {
-    console.log('item', item)
+    const { theme } = this.props.state;
     return (
       <View>
         <View style={{flexDirection: 'row', marginTop: 10}}>
-          <UserImage user={item.account} />
-          <Text
-            style={{
-              color: Color.primary,
-              lineHeight: 30,
-              paddingLeft: 10,
-              width: '40%',
+          <View style={{
+            flexDirection: 'row',
+            justifyContent: 'center',
+            width: '50%'
+          }}>
+            <View style={{
+              width: '20%',
+              justifyContent: 'center'
             }}>
-            {item?.account?.username}
-          </Text>
+              <UserImage user={item.account} />
+            </View>
+            <View style={{
+              width: '80%'
+            }}>
+              <Text
+                style={{
+                  width: '100%',
+                  fontWeight: 'bold'
+                }}>
+                {item?.account?.username}
+              </Text>
+              {
+                item.status == 'approved' && (
+                  <View style={{
+                    width: '100%'
+                  }}>
+                    <Text style={{
+                      fontSize: BasicStyles.standardFontSize
+                    }}>{item.status.toUpperCase()}</Text>
+                  </View>
+                )
+            }
+            </View>
+          </View>
           <View
             style={{
               width: '50%',
@@ -70,11 +94,10 @@ class ProposalCard extends Component {
             {type == 'amount' && (
               <Text
                 style={{
-                  color: Color.secondary,
                   fontWeight: 'bold',
                   textAlign: 'right',
-                  lineHeight: 30,
                   width: '100%',
+                  color: theme ? theme.secondary : Color.secondary
                 }}>
                 {Currency.display(item.charge, item.currency)}
               </Text>
@@ -90,13 +113,6 @@ class ProposalCard extends Component {
             )}
           </View>
         </View>
-        {
-          item.status == 'approved' && (
-            <View>
-              <Text>{item.status.toUpperCase()}</Text>
-            </View>
-          )
-        }
       </View>
     );
   };
@@ -122,7 +138,9 @@ class ProposalCard extends Component {
             style={{color: Color.secondary, marginHorizontal: 10}}
             size={10}
           />
-          <Text>{item.distance}</Text>
+          <Text style={{
+            fontSize: BasicStyles.standardFontSize
+          }}>{item.distance}</Text>
         </View>
       </View>
     );

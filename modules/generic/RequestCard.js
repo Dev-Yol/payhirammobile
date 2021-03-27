@@ -20,12 +20,12 @@ class RequestCard extends Component {
         <View style={{flexDirection: 'row', marginTop: 10, alignItems: 'center', marginBottom: 10}}>
           <View style={{
             width: '50%',
-            alignItems: 'center',
             flexDirection: 'row',
             justifyContent: 'center'
           }}>
             <View style={{
-              width: '10%'
+              width: '10%',
+              justifyContent: 'center'
             }}>
               <UserImage
                 user={item.account}
