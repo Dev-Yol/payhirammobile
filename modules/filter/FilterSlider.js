@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { View, TouchableOpacity, TouchableHighlight, Text, Dimensions, ScrollView} from 'react-native';
+import { View, TouchableOpacity, TouchableHighlight, Text, Dimensions, ScrollView, Platform} from 'react-native';
 import Modal from "react-native-modal";
 import { Color , BasicStyles, Helper, Routes} from 'common';
 import {NavigationActions, StackActions} from 'react-navigation';
@@ -124,7 +124,7 @@ class FilterSlider extends Component {
           labelFontSize={BasicStyles.standardFontSize}
           buttonDimensionsPercentage={6}
           heightPercentage={1}
-          widthPercentage={70}
+          widthPercentage={80}
           sliderInnerBackgroundColor={theme ? theme.primary : Color.primary}
           />
       </View>
@@ -308,7 +308,8 @@ class FilterSlider extends Component {
         height: 50,
         justifyContent: 'center',
         borderBottomWidth: 1,
-        borderBottomColor: Color.lightGray
+        borderBottomColor: Color.lightGray,
+        marginTop: Platform.OS == 'ios' ? 50 : 0
       }}>
         <Text style={{
           fontSize: BasicStyles.standardFontSize,
@@ -338,21 +339,21 @@ class FilterSlider extends Component {
             width: '100%',
             height: height
           }}>
-            <TouchableOpacity style={{
-                justifyContent: 'center',
-                alignItems: 'center',
-                width: '20%',
-                backgroundColor: 'transparent',
-                height: height
-              }}
-              onPress={() => this.props.close()}
-              >
-            </TouchableOpacity>
+           {/*<TouchableOpacity style={{
+                           justifyContent: 'center',
+                           alignItems: 'center',
+                           width: '20%',
+                           backgroundColor: 'transparent',
+                           height: height
+                         }}
+                         onPress={() => this.props.close()}
+                         >
+                       </TouchableOpacity>*/}
             <View style={{
-              width: '80%',
+              width: '100%',
               backgroundColor: Color.white,
               height: height,
-              paddingLeft: 10,
+              paddingLeft: 20,
               paddingRight: 20,
               paddingTop: 20
             }}>
@@ -370,7 +371,7 @@ class FilterSlider extends Component {
               }}>
                 <Text style={{
                   fontSize: BasicStyles.standardFontSize,
-                  width: '53%',
+                  width: '50%',
                   fontWeight: 'bold'
                 }}>Start Date</Text>
 
@@ -378,7 +379,20 @@ class FilterSlider extends Component {
                 type={'date'}
                 placeholder={this.state.date}
                 borderColor= {'white'}
-                // paddingLeft={'-5%'}
+                style={{
+                  borderColor: 0,
+                  borderWidth: 0,
+                  height: 40,
+                  width: '50%',
+                  alignItems: 'flex-end',
+                  justifyContent: 'center',
+                  paddingRight: 20
+                }}
+                textStyle={{
+                  textAlign: 'right',
+                  width: '100%'
+                }}
+                icon={false}
                 onFinish={(date) => {
                   this.setState({
                     date: date.date
