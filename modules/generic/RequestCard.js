@@ -6,7 +6,8 @@ import { Helper, Color, BasicStyles } from 'common';
 import Rating from 'components/Rating'
 import UserImage from 'components/User';
 import {connect} from 'react-redux';
-
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faMapMarkerAlt, faCalendar } from '@fortawesome/free-solid-svg-icons';
 class RequestCard extends Component {
   constructor(props) {
     super(props);
@@ -16,49 +17,71 @@ class RequestCard extends Component {
     const { theme } = this.props.state;
     return (
       <View>
-        <View style={{flexDirection: 'row', marginTop: 10, alignItems: 'center'}}>
-          <UserImage
-            user={item.account}
-            color={theme ? theme.primary : Color.primary}
-            style={{
-              width: 22,
-              height: 22
-            }}
-          />
-          <Text
-            style={{
-              color: theme ? theme.primary : Color.primary,
-              lineHeight: 30,
-              paddingLeft: 10,
-              width: '40%',
+        <View style={{flexDirection: 'row', marginTop: 10, alignItems: 'center', marginBottom: 10}}>
+          <View style={{
+            width: '50%',
+            alignItems: 'center',
+            flexDirection: 'row',
+            justifyContent: 'center'
+          }}>
+            <View style={{
+              width: '10%'
             }}>
-            {item?.account?.username}
-          </Text>
-          <View
-            style={{
-              width: '50%',
+              <UserImage
+                user={item.account}
+                color={theme ? theme.primary : Color.primary}
+                style={{
+                  width: 22,
+                  height: 22
+                }}
+            />
+            </View>
+            <View style={{
+              width: '90%'
             }}>
-            {type == 'amount' && (
               <Text
                 style={{
-                  color: theme ? theme.secondary : Color.secondary,
+                  color: Color.normalGray,
+                  lineHeight: 30,
+                  paddingLeft: 10,
+                  fontWeight: 'bold'
+                }}>
+                {item?.account?.username}
+              </Text>
+
+              <Text
+                style={{
+                  ...Style.text,
+                  paddingLeft: 10,
+                  fontSize: BasicStyles.standardFontSize
+                }}
+                >
+                {item.needed_on_human}
+              </Text>
+            </View>
+          </View>
+          <View
+            style={{
+              width: '50%'
+            }}>
+              <Text
+                style={{
                   fontWeight: 'bold',
                   textAlign: 'right',
                   lineHeight: 30,
-                  width: '100%',
+                  width: '100%'
                 }}>
                 {Currency.display(item.amount, item.currency)}
               </Text>
-            )}
-            {type == 'rating' && (
-              <View
+              <Text
                 style={{
+                  color: Color.normalGray,
                   width: '100%',
-                  alignItems: 'flex-end',
+                  textAlign: 'right',
+                  fontSize: BasicStyles.standardFontSize
                 }}>
-                <Rating ratings={item.rating}></Rating>
-              </View>
-            )}
+                {Helper.showRequestType(item.type) + ' - ' + Helper.showStatus(item.status)}
+              </Text>
           </View>
         </View>
       </View>
@@ -69,14 +92,11 @@ class RequestCard extends Component {
     const {user, theme} = this.props.state;
     return (
       <View>
-        <Text
-          style={{
-            color: theme ? theme.primary : Color.primary,
-          }}>
-          {Helper.showRequestType(item.type) + ' - ' + Helper.showStatus(item.status)}
-        </Text>
         {item.coupon != null && parseInt(item.account_id) == user.id && (
-          <Text style={Style.text}>
+          <Text style={{
+            ...Style.text,
+            fontSize: BasicStyles.standardFontSize
+          }}>
             {item.coupon.type === 'percentage'
               ? item.coupon.amount + '% '
               : Currency.display(item.coupon.amount, item.coupon.currency) +
@@ -85,35 +105,56 @@ class RequestCard extends Component {
           </Text>
         )}
         {item.max_charge !== null && item.max_charge > 0 && (
-          <Text style={Style.text}>
+          <Text style={{
+            ...Style.text,
+            fontSize: BasicStyles.standardFontSize
+            }}>
             Suggested Charge -{' '}
             {Currency.display(item.max_charge, item.currency)}
           </Text>
         )}
-        <Text style={Style.text}>Posted on {item.created_at_human}</Text>
-        {item.location != null && (
-          <Text style={Style.text}>
-            {item.location.route +
-              ', ' +
-              item.location.locality +
-              ', ' +
-              item.location.country}
-          </Text>
-        )}
-        <Text style={Style.text}>Needed on {item.needed_on_human}</Text>
+        {/*<Text style={Style.text}>Posted on {item.created_at_human}</Text>*/}
+        {
+          item.location != null && (
+            <View style={{
+              flexDirection: 'row',
+              paddingTop: 2
+            }}>
+              <FontAwesomeIcon icon={faMapMarkerAlt} color={Color.gray} />
+              <Text style={{
+                ...Style.text,
+                paddingLeft: 10,
+                fontStyle: 'italic',
+                fontSize: BasicStyles.standardFontSize,
+                width: '90%'
+              }}
+              numberOfLines={1}
+              >
+                {item.location.route +
+                  ', ' +
+                  item.location.locality +
+                  ', ' +
+                  item.location.country}
+              </Text>
+            </View>
+          )
+        }
+        
       </View>
     );
   };
 
   _body = (item) => {
     return (
-      <View>
+      <View style={{
+        paddingTop: 10,
+        paddingBottom: 10,
+        justifyContent: 'center'
+      }}>
         <Text
           style={[
             Style.text,
             {
-              paddingTop: 10,
-              paddingBottom: 10,
               textAlign: 'justify',
             },
           ]}>
@@ -138,12 +179,12 @@ class RequestCard extends Component {
           style={{
             flexDirection: 'row',
             marginBottom: 10,
+            marginTop: 10
           }}>
           {(user.account_type != 'USER') && (
             <View
               style={{
-                width: '50%',
-                marginLeft: '50%'
+                width: '100%'
               }}>
               <TouchableHighlight
                 onPress={() => {
@@ -164,6 +205,7 @@ class RequestCard extends Component {
                 <Text
                   style={{
                     color: Color.white,
+                    fontSize: BasicStyles.standardFontSize
                   }}>
                   {item.peer_flag == true ? 'View Proposal' : 'Send Proposal'}
                 </Text>
@@ -184,12 +226,12 @@ class RequestCard extends Component {
           style={{
             flexDirection: 'row',
             marginBottom: 10,
+            marginTop: 10
           }}>
           {(user.account_type != 'USER' && item.peer_flag == false) && (
             <View
               style={{
-                width: '50%',
-                marginLeft: '50%'
+                width: '100%'
               }}>
               <TouchableHighlight
                 onPress={() => {
@@ -230,11 +272,21 @@ class RequestCard extends Component {
             data: data,
             from: 'request'
           })
-        }>
+        }
+        >
         {this._header(data, 'amount')}
         {this._subHeader(data)}
         {this._body(data)}
-        <View>
+        <View style={{
+          flexDirection: 'row',
+          borderTopWidth: 1,
+          borderTopColor: Color.lightGray
+        }}>
+          <View style={{
+            width: '50%',
+            height: 70,
+            justifyContent: 'center'
+          }}>
           {
             data.rating != null ? (
               <Rating ratings={data?.rating}></Rating>
@@ -242,9 +294,15 @@ class RequestCard extends Component {
               <View></View>
             )
           }
+          </View>
+          <View style={{
+            width: '50%'
+          }}>
+            {(user && data.account.code != user.code && this.props.from == 'request') && this._footer(data)}
+            {(user && data.account.code != user.code && this.props.from == 'request_item') && this._footerRequestItem(data)}
+          </View>
         </View>
-        {(data.account.code != user.code && this.props.from == 'request') && this._footer(data)}
-        {(data.account.code != user.code && this.props.from == 'request_item') && this._footerRequestItem(data)}
+        
       </TouchableOpacity>
     );
   }

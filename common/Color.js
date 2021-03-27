@@ -13,7 +13,7 @@ export default {
   gray: '#cccccc',
   lightGray: '#eeeeee',
   darkGray: '#555555',
-  normalGray: '#999',
+  normalGray: '#000',
   black: '#000',
   success: '#22B173',
   info:'#0066FF',

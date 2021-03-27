@@ -90,6 +90,13 @@ class ProposalCard extends Component {
             )}
           </View>
         </View>
+        {
+          item.status == 'approved' && (
+            <View>
+              <Text>{item.status.toUpperCase()}</Text>
+            </View>
+          )
+        }
       </View>
     );
   };
@@ -233,6 +240,24 @@ class ProposalCard extends Component {
               />
             </View>
           )}
+            {
+              (item.status == 'approved') && (
+                <View
+                  style={{
+                    width: '100%',
+                    flexDirection: 'row'
+                  }}>
+                    <Button
+                      title={'See Conversations'}
+                      onClick={() => {this.props.viewConversation(item)}}
+                      style={{
+                        width: '50%',
+                        backgroundColor: theme ? theme.secondary : Color.secondary
+                      }}
+                    />
+                </View>
+              )
+            }
         </View>
       </View>
     );
@@ -241,6 +266,7 @@ class ProposalCard extends Component {
   render() {
     const { data } = this.props;
     const { user } = this.props.state;
+    console.log('user', user)
     return (
       <View>
         {

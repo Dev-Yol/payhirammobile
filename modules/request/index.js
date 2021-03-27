@@ -137,6 +137,10 @@ class Requests extends Component {
     if(page == 'history'){
       parameters['mode'] = 'history'
     }
+    if(user.scope_location != null){
+      parameters['scope'] = user.scope_location
+    }
+
     console.log('parameters', parameters)
     this.setState({isLoading: (loading == false) ? false : true});
     Api.request(Routes.requestRetrieveMobile, parameters, response => {
@@ -266,7 +270,8 @@ class Requests extends Component {
             ItemSeparatorComponent={this.FlatListItemSeparator}
             renderItem={({item, index}) => (
               <View style={{
-                marginTop: (index == 0) ? 70 : 0
+                marginTop: (index == 0) ? 70 : 0,
+                border
               }}>
                 <RequestCard 
                   onConnectRequest={(item) => {this.connectRequest(item)}}
@@ -287,7 +292,6 @@ class Requests extends Component {
     const { isLoading, data } = this.state;
     return(
       <ScrollView
-        style={Style.ScrollView}
         showsVerticalScrollIndicator={false}
         scrollEventThrottle={16}
         onScroll={(event) => {
@@ -309,7 +313,11 @@ class Requests extends Component {
               (data && data.length > 0) && data.map((item, index) => (
                 <View style={{
                   marginTop: (index == 0) ? 70 : 0,
-                  marginBottom: (index == data.length - 1) ? 100 : 0
+                  marginBottom: (index == data.length - 1) ? 100 : 0,
+                  borderBottomWidth: 10,
+                  borderBottomColor: Color.lightGray,
+                  paddingLeft: 20,
+                  paddingRight: 20
                 }}>
                   <RequestCard 
                     onConnectRequest={(item) => {this.connectRequest(item)}}
@@ -322,7 +330,9 @@ class Requests extends Component {
             }
             {data.length == 0 && isLoading == false && (
               <View style={{
-                marginTop: 100
+                marginTop: 100,
+                paddingLeft: 10,
+                paddingRight: 10
               }}>
                 <Empty refresh={true} onRefresh={() => this.onRefresh()} />
               </View>

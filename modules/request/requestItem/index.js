@@ -197,7 +197,10 @@ class RequestItem extends Component {
 
   renderProposals = (data) => {
     return (
-      <View>
+      <View style={{
+        paddingLeft: 20,
+        paddingRight: 20
+      }}>
         <View style={{
             borderBottomWidth: 0.5,
             borderBottomColor: Color.lightGray
@@ -239,13 +242,17 @@ class RequestItem extends Component {
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={{
             height: height + 25,
-            width: '90%',
-            marginLeft: '5%',
-            marginRight: '5%'
+            width: '100%'
           }}>
             {
               this.props.navigation.state.params.data && (
-                <View style={{alignItems: 'center'}}>
+                <View style={{
+                  alignItems: 'center',
+                  borderBottomWidth: 10,
+                  borderBottomColor: Color.lightGray,
+                  paddingLeft: 20,
+                  paddingRight: 20
+                }}>
                   <RequestCard 
                     onConnectRequest={(item) => this.connectRequest(item)}
                     data={this.props.navigation.state.params.data}

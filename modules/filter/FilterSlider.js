@@ -174,7 +174,7 @@ class FilterSlider extends Component {
   }
 
   target = () => {
-    const { theme } = this.props.state;
+    const { theme, user } = this.props.state;
     const { showTarget, target } = this.state;
     return (
       <TouchableOpacity style={{

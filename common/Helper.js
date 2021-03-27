@@ -286,11 +286,11 @@ export default {
     targets: [{
       value: 'All'
     }, {
-      value: 'Partners'
+      value: 'Partner'
     }, {
       value: 'Public'
     }, {
-      value: 'Circles'
+      value: 'Circle'
     }],
     types: [{
       value: 'All'
@@ -307,7 +307,7 @@ export default {
   showRequestType(type) {
     switch (parseInt(type)) {
       case 1:
-        return 'Send';
+        return 'Send Cash';
       case 2:
         return 'Withdrawal';
       case 3:
