@@ -475,8 +475,7 @@ class ProposalModal extends Component {
 
         {isLoading ? <Spinner mode="overlay" /> : null}
         </ScrollView>
-    </Modal>
-
+      </Modal>
     );
   }
 }
