@@ -45,6 +45,11 @@ class ProposalModal extends Component {
       })
     }
     const { request } = this.props;
+    if(request){
+      this.setState({
+        currency: request.currency
+      })
+    }
     if(request && parseInt(request.type) == 3){
       this.retrieveSummaryLedger()
     }
@@ -245,9 +250,10 @@ class ProposalModal extends Component {
                 height: height,
                 width: '90%',
                 marginLeft: '5%',
-                marginRight: '5%'
+                marginRight: '5%',
+                paddingTop: 20
               }}>
-                  <PickerWithLabel
+                  {/*<PickerWithLabel
                     label={'Select Currency'}
                     data={Helper.currency}
                     placeholder={'Click to select'}
@@ -256,12 +262,12 @@ class ProposalModal extends Component {
                     })}
                     required={true}
                     onError={false}
-                  />
+                  />*/}
 
                     <TextInputWithLabel 
                     variable={this.state.charge}
                     onChange={(value) => this.setState({charge: value})}
-                    label={'Amount'}
+                    label={'Your processing fee'}
                     placeholder={'Amount'}
                     onError={false}
                     required={true}
