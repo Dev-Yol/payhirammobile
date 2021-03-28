@@ -122,7 +122,7 @@ class AddLocation extends Component {
     let parameters = {
       account_id: user.id,
       latitude: location.latitude,
-      longitude: location.longtitude,
+      longitude: location.longitude,
       route: location.address,
       locality: location.locality,
       region: location.region,

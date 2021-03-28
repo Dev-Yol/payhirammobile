@@ -400,7 +400,7 @@ class FilterSlider extends Component {
         justifyContent: 'center',
         borderBottomWidth: 1,
         borderBottomColor: Color.lightGray,
-        marginTop: Platform.OS == 'ios' ? 50 : 0,
+        marginTop: Platform.OS == 'ios' ? 10 : 0,
         flexDirection: 'row',
         justifyContent: 'space-between',
       }}>

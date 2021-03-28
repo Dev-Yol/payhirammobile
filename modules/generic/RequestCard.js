@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, TouchableHighlight } from 'react-native';
+import { View, Text, TouchableOpacity, TouchableHighlight, Dimensions } from 'react-native';
 import Style from './RequestCardStyle';
 import Currency from 'services/Currency';
 import { Helper, Color, BasicStyles } from 'common';
@@ -8,6 +8,7 @@ import UserImage from 'components/User';
 import {connect} from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faMapMarkerAlt, faCalendar, faCircle } from '@fortawesome/free-solid-svg-icons';
+const width = Math.round(Dimensions.get('window').width);
 class RequestCard extends Component {
   constructor(props) {
     super(props);
@@ -89,7 +90,7 @@ class RequestCard extends Component {
                   paddingTop: 2,
                   fontSize: BasicStyles.standardFontSize - 1
                 }}>
-                {Helper.showRequestType(item.type) + ' - ' + Helper.showStatus(item.status)}
+                {Helper.showRequestType(item.type) + '(' + item.shipping.toUpperCase() +') - ' + Helper.showStatus(item.status)}
               </Text>
           </View>
         </View>
@@ -128,8 +129,8 @@ class RequestCard extends Component {
             <View style={{
               flexDirection: 'row',
               paddingTop: 2,
-              justifyContent: 'center',
-              alignItems: 'center'
+              alignItems: 'center',
+              width: '100%'
             }}>
               <FontAwesomeIcon
                 icon={faCircle}
@@ -150,15 +151,11 @@ class RequestCard extends Component {
                 paddingLeft: 5,
                 fontStyle: 'italic',
                 fontSize: BasicStyles.standardFontSize,
-                width: '80%'
+                width: '75%'
               }}
               numberOfLines={1}
               >
-                {item.location.route +
-                  ', ' +
-                  item.location.locality +
-                  ', ' +
-                  item.location.country}
+                {item.location.route}
               </Text>
             </View>
           )

@@ -98,7 +98,7 @@ class Requests extends Component {
 
   retrieve = (scroll, flag, loading = true) => {
     const { setParameter } = this.props
-    const {user, searchParameter, parameter} = this.props.state;
+    const {user, searchParameter, parameter, location, defaultAddress} = this.props.state;
     const { data, tempData, page } = this.state;
     if (user == null) {
       return;
@@ -141,6 +141,14 @@ class Requests extends Component {
       parameters['scope'] = user.scope_location
     }
 
+    if(defaultAddress && defaultAddress.longitude && defaultAddress.latitude){
+      parameters['location'] = defaultAddress;
+    }
+
+    if(!defaultAddress && location && location.longitude && location.latitude){
+      parameters['location'] = location;
+    }
+
     console.log('parameters', parameters)
     this.setState({isLoading: (loading == false) ? false : true});
     Api.request(Routes.requestRetrieveMobile, parameters, response => {
@@ -164,6 +172,7 @@ class Requests extends Component {
         }
       },
       (error) => {
+        console.log('error', error)
         this.setState({isLoading: false});
       }
     ); 
@@ -318,7 +327,9 @@ class Requests extends Component {
                   borderBottomColor: Color.lightGray,
                   paddingLeft: 20,
                   paddingRight: 20
-                }}>
+                }}
+                  key={index}
+                  >
                   <RequestCard 
                     onConnectRequest={(item) => {this.connectRequest(item)}}
                     data={item}

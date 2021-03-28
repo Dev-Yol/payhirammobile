@@ -13,6 +13,7 @@ import Button from 'components/Form/Button';
 import Modal from 'react-native-modal';
 import Currency from 'services/Currency';
 import Api from 'services/api/index.js';
+import RequestCard from 'modules/generic/RequestCard';
 import {
   Spinner
 } from 'components';
@@ -32,7 +33,6 @@ class ProposalModal extends Component {
   }
 
   componentDidMount(){
-    this.retrieveSummaryLedger()
     if(this.props.from == 'update' && this.props.peerRequest != null){
       this.setState({
         data: this.props.peerRequest,
@@ -43,6 +43,10 @@ class ProposalModal extends Component {
         data: null,
         charge: 0
       })
+    }
+    const { request } = this.props;
+    if(request && parseInt(request.type) == 3){
+      this.retrieveSummaryLedger()
     }
   }
 
@@ -192,6 +196,7 @@ class ProposalModal extends Component {
 
   renderContent() {
     const { ledger, theme } = this.props.state;
+    const { request } = this.props;
     const { data } = this.state; 
     return (
       <View style={[Style.CreateRequestContainer, {
@@ -208,12 +213,31 @@ class ProposalModal extends Component {
           <View style={{
             height: height,
           }}>
-              {
+              {/*
                 (ledger != null && ledger.length > 0) && ledger.map(item => (
                   <BalanceCard
                     data={item}
                   />
                 ))
+              */}
+              {
+                request && (
+                  <View style={{
+                    marginTop: 10,
+                    paddingLeft: 20,
+                    paddingRight: 20,
+                    borderBottomWidth: 10,
+                    borderBottomColor: Color.lightGray
+                  }}
+                  >
+                    <RequestCard 
+                      onConnectRequest={(data) => {}}
+                      data={request}
+                      navigation={this.props.navigation}
+                      from={'proposal'}
+                      />
+                  </View>
+                )
               }
             
 
@@ -424,7 +448,7 @@ class ProposalModal extends Component {
   }
 
   render(){
-    const { closeModal, visible } = this.props;
+    const { closeModal, visible, request } = this.props;
     const { ledger } = this.props.state;
     const { isLoading, summaryLoading } = this.state;
     return(
@@ -437,8 +461,8 @@ class ProposalModal extends Component {
         <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'flex-end', flexDirection: 'column' }}
             style={{ padding: 0 }}>
             <View style={[Style.container]}>
-                {(ledger && summaryLoading == false) && this.renderContent()}
-                {(isLoading == false && (!ledger || (ledger && ledger.length == 0))) && (
+                {this.renderContent()}
+                {(isLoading == false && (!ledger || (ledger && ledger.length == 0)) && (request && request.type == 3)) && (
                   this.renderError()
                 )}
             </View>
