@@ -16,6 +16,7 @@ import {
 import {FlatList, TouchableOpacity} from 'react-native';
 import { Picker } from '@react-native-community/picker';
 import {Routes, Color, Helper, BasicStyles} from 'common';
+import Skeleton from 'components/Loading/Skeleton';
 import {
   Spinner,
   Rating,
@@ -339,6 +340,9 @@ class Requests extends Component {
                 </View>
               ))
             }
+            {
+              isLoading && (<Skeleton size={6}/>)
+            }
             {data.length == 0 && isLoading == false && (
               <View style={{
                 marginTop: 100,
@@ -406,7 +410,7 @@ class Requests extends Component {
           />
         </TouchableOpacity>
 
-        {isLoading ? <Spinner mode="overlay" /> : null}
+        {/* {isLoading ? <Spinner mode="overlay" /> : null} */}
         {
           connectModal && (
             <ProposalModal

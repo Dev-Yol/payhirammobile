@@ -9,8 +9,6 @@ import {
   Alert,
   Dimensions
 } from 'react-native';
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faCircle, faEllipsisH} from '@fortawesome/free-solid-svg-icons';
 import {BasicStyles, Color, Routes} from 'common';
 import {UserImage, Rating, Spinner} from 'components';
 import Skeleton from 'components/Loading/Skeleton';
@@ -18,6 +16,7 @@ import Button from 'components/Form/Button.js';
 import RequestCard from 'modules/generic/RequestCard';
 import ProposalCard from 'modules/generic/ProposalCard';
 import ProposalModal from 'modules/generic/ProposalModal';
+import {NavigationActions, StackActions} from 'react-navigation';
 import Api from 'services/api/index.js';
 
 const width = Math.round(Dimensions.get('window').width);
@@ -42,6 +41,23 @@ class RequestItem extends Component {
     this.retrieve()
   }
 
+  navigateToScreen = (route) => {
+    const navigateAction = NavigationActions.navigate({
+      routeName: 'drawerStack',
+      action: StackActions.reset({
+        index: 0,
+        key: null,
+        actions: [
+          NavigationActions.navigate({routeName: route, params: {
+            initialRouteName: route,
+            index: 0
+          }}),
+        ]
+      })
+    });
+    this.props.navigation.dispatch(navigateAction);
+  }
+
   redirect = (route) => {
     this.props.navigation.navigate(route);
   };
@@ -60,7 +76,7 @@ class RequestItem extends Component {
     };
     this.setState({isLoading: true});
     Api.request(Routes.requestPeerRetrieveItem, parameter, (response) => {
-      console.log('response', JSON.stringify(response));
+      // console.log('response', JSON.stringify(response));
       this.setState({isLoading: false});
       if (response.data.length > 0) {
         this.setState({
@@ -90,8 +106,6 @@ class RequestItem extends Component {
       title: data.code,
       payload: 'request'
     }
-
-    console.log('[Create Messenger Thread] parameter', parameter)
     Api.request(Routes.customMessengerGroupCreate, parameter, response => {
       this.setState({ isLoading: false })
       if (response.error == null) {
@@ -105,15 +119,10 @@ class RequestItem extends Component {
             currency: data.currency,
             amount: data.amount,
             status: 1
+            // location: data.location
           }
         })
       }else{
-        // Alert.alert(
-        //   'Thread already existed!',
-        //   'Do you want to view the existing thread?',
-        //   [
-        //     {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-        //     {text: 'OK', onPress: () => {
         this.props.navigation.navigate('messagesStack', {
           data: {
             id: response.data,
@@ -124,12 +133,9 @@ class RequestItem extends Component {
             currency: data.currency,
             amount: data.amount,
             status: 1
+            // location: data.location
           }
         });
-            // }},
-          // ],
-          // { cancelable: false }
-        // )
       }
     }, error => {
       this.setState({ isLoading: false })
@@ -181,7 +187,7 @@ class RequestItem extends Component {
     this.setState({isLoading: true})
     Api.request(Routes.requestDelete, parameter, response => {
       this.setState({isLoading: false})
-      this.redirect("dashboardStack")
+      this.navigateToScreen('Requests')
     });
   }
 

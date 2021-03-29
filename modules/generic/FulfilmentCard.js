@@ -20,7 +20,7 @@ const Data = [{
     id: 3,
     money_type: 'e-wallet'
   }, {
-    type: 'Bills and Payment',
+    type: 'Bills Payment',
     description: "Don't have time and want to pay your bills? Allow other peers to pay your bills.",
     id: 4,
     money_type: 'cash'

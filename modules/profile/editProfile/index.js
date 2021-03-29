@@ -36,13 +36,13 @@ class EditProfile extends Component {
     super(props);
     this.state = {
       email: null,
-      cellular_number: null,
+      // cellular_number: null,
       first_name: null,
       middle_name: null,
       last_name: null,
       sex: null,
       id: null,
-      address: null,
+      // address: null,
       // birthDate: null,
       profile: null,
       url: null,
@@ -53,8 +53,8 @@ class EditProfile extends Component {
   componentDidMount = () => {
     const { user } = this.props.state
     this.retrieve()
-    if((this.state.email != null || this.state.cellular_number != null || this.state.first_name != null || this.state.middle_name != null || this.state.last_name != null ||
-      this.state.sex != null || this.state.address != null) && user.status != 'granted'){
+    if((this.state.email != null || this.state.first_name != null || this.state.middle_name != null || this.state.last_name != null ||
+      this.state.sex != null) && user.status != 'granted'){
       // this.state.sex != null || this.state.address != null || this.state.birthDate != null) && user.status != 'granted'){
         Alert.alert(
           'Verification Link',
@@ -100,8 +100,8 @@ class EditProfile extends Component {
           middle_name:  data[0].middle_name,
           last_name:  data[0].last_name,
           sex:  data[0].sex,
-          cellular_number:  data[0].cellular_number,
-          address: data[0].address,
+          // cellular_number:  data[0].cellular_number,
+          // address: data[0].address,
           profile: data[0]
         })
         // if(data.birth_date != null){
@@ -117,8 +117,8 @@ class EditProfile extends Component {
           middle_name: null,
           last_name: null,
           sex: null,
-          cellular_number: null,
-          address: null
+          // cellular_number: null,
+          // address: null
           // birthDate: new Date(),
         })
       }
@@ -205,7 +205,7 @@ class EditProfile extends Component {
     const { user } = this.props.state;
     if(user == null){
       return
-    }else if(this.state.first_name == null || this.state.middle_name == null || this.state.last_name == null || this.state.cellular_number == null || this.state.sex == null || this.state.address == null){
+    }else if(this.state.first_name == null || this.state.middle_name == null || this.state.last_name == null || this.state.sex == null){
       Alert.alert(
         'Error Message',
         'Please fill in all the fields.',
@@ -215,26 +215,26 @@ class EditProfile extends Component {
         { cancelable: false }
       )
       return
-    }else if(this.state.cellular_number.length != 11 || (this.state.cellular_number.substr(0, 2) != '09')){
-      Alert.alert(
-        'Error Message',
-        'Please input a valid phone number.',
-        [
-          {text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel'}
-        ],
-        { cancelable: false }
-      )
-      return
-    } 
+    }
+    // }else if(this.state.cellular_number.length != 11 || (this.state.cellular_number.substr(0, 2) != '09')){
+    //   Alert.alert(
+    //     'Error Message',
+    //     'Please input a valid phone number.',
+    //     [
+    //       {text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel'}
+    //     ],
+    //     { cancelable: false }
+    //   )
+    //   return
+    // } 
     let parameters = {
       id: this.state.id,
       account_id: user.id,
       first_name: this.state.first_name,
       middle_name: this.state.middle_name,
       last_name: this.state.last_name,
-      cellular_number: this.state.cellular_number,
       sex: this.state.sex,
-      address: this.state.address,
+      // address: this.state.address,
       // birth_date: this.state.birthDate,
       email: this.state.email
     };
@@ -347,7 +347,7 @@ class EditProfile extends Component {
               value={this.state.last_name}
               required={true}
             />
-            <Text style={{marginLeft: 20}}>Phone Number</Text>
+            {/* <Text style={{marginLeft: 20}}>Phone Number</Text>
             <TextInput
               style={[BasicStyles.formControl, {alignSelf: 'center'}]}
               placeholder={'Enter Phone Number'}
@@ -356,7 +356,7 @@ class EditProfile extends Component {
               keyboardType={'numeric'}
               maxLength = {11}
               required={true}
-            />
+            /> */}
             {/* <Text style={{marginLeft: 20}}>Email</Text>
             <TextInput
               style={[BasicStyles.formControl, {alignSelf: 'center'}]}
@@ -411,14 +411,14 @@ class EditProfile extends Component {
                 </View>
               </View>
             {/* </View> */}
-            <Text style={{marginLeft: 20}}>Address</Text>
+            {/* <Text style={{marginLeft: 20}}>Address</Text>
             <TextInput
               style={[BasicStyles.formControl, {alignSelf: 'center'}]}
               onChangeText={(address) => this.setState({address})}
               value={this.state.address}
               placeholder={'Enter address'}
               required={true}
-            />
+            /> */}
           </View>
           {/* <View>
             <Text

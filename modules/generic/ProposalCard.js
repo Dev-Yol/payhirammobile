@@ -295,7 +295,8 @@ class ProposalCard extends Component {
                 <View
                   style={{
                     width: '100%',
-                    flexDirection: 'row'
+                    flexDirection: 'row',
+                    marginLeft: '50%'
                   }}>
                     <Button
                       title={'See transaction'}

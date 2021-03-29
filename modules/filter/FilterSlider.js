@@ -127,6 +127,7 @@ class FilterSlider extends Component {
           minLabel={'1000'}
           maxLabel={'50000'}
           maxValue={50000}
+          minValue={1000}
           defaultValue={this.state.amount}
           labelFontColor={Color.black}
           labelFontWeight={'600'}
