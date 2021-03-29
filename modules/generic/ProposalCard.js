@@ -122,7 +122,11 @@ class ProposalCard extends Component {
   _location = (item) => {
 
     return(
-      <View style={{
+      <TouchableOpacity
+        onPress={() => this.redirect('locationWithMapStack', {
+          data: item.location
+        })}
+        style={{
           flexDirection: 'row',
           paddingTop: 10,
           alignItems: 'center',
@@ -139,7 +143,7 @@ class ProposalCard extends Component {
           >
             {item.location.route}
           </Text>
-        </View>
+        </TouchableOpacity>
       )
   }
 
@@ -310,7 +314,7 @@ class ProposalCard extends Component {
   };
 
   render() {
-    const { data } = this.props;
+    const { data, request } = this.props;
     const { user } = this.props.state;
     console.log('user', user)
     return (
@@ -326,7 +330,7 @@ class ProposalCard extends Component {
                 })
               }>
               {item.account && this._header(item, 'amount')}
-              {item.location && this._location(item)}
+              {(item.location && request && request.shipping == 'pickup') && this._location(item)}
               {this._body(item)}
               {(item.account_id != user.id) && this._footer(item, index)}
               {(item.account_id == user.id) && this._myFooter(item, index)}
