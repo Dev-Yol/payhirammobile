@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Text, View, TouchableHighlight, ScrollView, TextInput, Dimensions, Alert } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faAsterisk, faRedo } from '@fortawesome/free-solid-svg-icons';
+import { faAsterisk, faRedo, faShippingFast, faPersonBooth } from '@fortawesome/free-solid-svg-icons';
 import { Picker } from '@react-native-community/picker';
 import { connect } from 'react-redux';
 import BalanceCard from 'modules/generic/BalanceCard';
@@ -230,9 +230,7 @@ class ProposalModal extends Component {
                   <View style={{
                     marginTop: 10,
                     paddingLeft: 20,
-                    paddingRight: 20,
-                    borderBottomWidth: 10,
-                    borderBottomColor: Color.lightGray
+                    paddingRight: 20
                   }}
                   >
                     <RequestCard 
@@ -245,6 +243,25 @@ class ProposalModal extends Component {
                 )
               }
             
+              {
+                request && (
+                  <View style={{
+                    height: 50,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    backgroundColor: theme ? theme.primary : Color.primary,
+                    flexDirection: 'row'
+                  }}>
+                    <FontAwesomeIcon icon={request.shipping.toLowerCase() == 'pickup' ? faPersonBooth : faShippingFast} color={Color.white} size={36}/>
+                    <Text style={{
+                      fontWeight: 'bold',
+                      fontSize: BasicStyles.standardFontSize,
+                      color: Color.white,
+                      paddingLeft: 10
+                    }}>FOR {request.shipping.toUpperCase()}</Text>
+                  </View>
+                )
+              }
 
               <View style={{
                 height: height,
@@ -265,14 +282,28 @@ class ProposalModal extends Component {
                   />*/}
 
                     <TextInputWithLabel 
-                    variable={this.state.charge}
-                    onChange={(value) => this.setState({charge: value})}
-                    label={'Your processing fee'}
-                    placeholder={'Amount'}
-                    onError={false}
-                    required={true}
-                    maxLength={4}
-                    keyboardType={'numeric'}
+                      variable={this.state.charge}
+                      onChange={(value) => this.setState({charge: value})}
+                      label={'Your processing fee'}
+                      placeholder={'Amount'}
+                      onError={false}
+                      required={true}
+                      maxLength={4}
+                      keyboardType={'numeric'}
+                      labelStyle={{
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                      }}
+                      style={{
+                        width: '50%',
+                        marginRight: '25%',
+                        marginLeft: '25%'
+                      }}
+                      inputStyle={{
+                        textAlign: 'center',
+                        paddingLeft: 0,
+                        paddingRight: 0
+                      }}
                     />
 
 
