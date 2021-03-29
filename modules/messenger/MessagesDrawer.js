@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, TouchableOpacity, Text, Image, TouchableHighlight } from 'react-native';
 import { createStackNavigator } from 'react-navigation-stack';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faChevronLeft, faEllipsisV } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faEllipsisV, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 import Messages from 'components/Messenger/MessagesV3.js';
 import { Color, BasicStyles, Helper } from 'common';
 import { connect } from 'react-redux';
@@ -19,10 +19,14 @@ class HeaderOptions extends Component {
         const { setMessengerGroup, setMessagesOnGroup } = this.props
         setMessengerGroup(this.props.navigationProps.state.params)
         setMessagesOnGroup(this.props.navigationProps.state.params)
-        console.log(('setMessengerGroup', this.props.navigationProps.state.params));
+        console.log('setMessengerGroup', this.props.navigationProps.state.params);
       }
     }
   }
+
+  redirect = (route) => {
+    this.props.navigationProps.navigate(route);
+  };
 
   back = () => {
     const { setMessagesOnGroup, setMessengerGroup } = this.props;
@@ -41,6 +45,7 @@ class HeaderOptions extends Component {
     const width = Math.round(Dimensions.get('window').width);
     // {Helper.showRequestType(messengerGroup.request.type)} -
     const { data } = this.props.navigationProps.state.params;
+    console.log('[heeeeeeeeeeeeeeeerrrrrr]', data);
     return (
       <View>
         <View style={{
@@ -80,6 +85,28 @@ class HeaderOptions extends Component {
             </TouchableHighlight>
           }
         </View>
+        <TouchableOpacity
+            onPress={() => this.redirect('locationWithMapStack')}
+            style={{
+              width: width,
+              marginLeft: 5,
+              marginTop: 5
+            }}>
+            <FontAwesomeIcon 
+              icon={ faMapMarkerAlt } 
+              style={{color: theme ? theme.primary : Color.primary}}
+              size={11}
+            />
+            <Text style={{
+              fontSize: BasicStyles.standardFontSize,
+              fontWeight: 'bold',
+              marginTop: '-3%',
+              marginLeft: '3%'
+              // width: width - 40
+            }}
+            numberOfLines={1}
+            >{data.location ? data.location : 'No Location'}</Text>
+          </TouchableOpacity>
       </View>
     );
   }
