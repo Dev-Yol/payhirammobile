@@ -14,6 +14,7 @@ import Modal from 'react-native-modal';
 import Currency from 'services/Currency';
 import Api from 'services/api/index.js';
 import RequestCard from 'modules/generic/RequestCard';
+import LocationTextInput from 'components/Form/LocationTextInput';
 import {
   Spinner
 } from 'components';
@@ -200,7 +201,7 @@ class ProposalModal extends Component {
   }
 
   renderContent() {
-    const { ledger, theme } = this.props.state;
+    const { ledger, theme, defaultAddress } = this.props.state;
     const { request } = this.props;
     const { data } = this.state; 
     return (
@@ -246,7 +247,7 @@ class ProposalModal extends Component {
               {
                 request && (
                   <View style={{
-                    height: 50,
+                    height: 75,
                     justifyContent: 'center',
                     alignItems: 'center',
                     backgroundColor: theme ? theme.primary : Color.primary,
@@ -270,17 +271,7 @@ class ProposalModal extends Component {
                 marginRight: '5%',
                 paddingTop: 20
               }}>
-                  {/*<PickerWithLabel
-                    label={'Select Currency'}
-                    data={Helper.currency}
-                    placeholder={'Click to select'}
-                    onChange={(value) => this.setState({
-                      currency: value
-                    })}
-                    required={true}
-                    onError={false}
-                  />*/}
-
+                    {/*
                     <TextInputWithLabel 
                       variable={this.state.charge}
                       onChange={(value) => this.setState({charge: value})}
@@ -305,7 +296,34 @@ class ProposalModal extends Component {
                         paddingRight: 0
                       }}
                     />
+                  */}
 
+                    <TextInputWithLabel 
+                      variable={this.state.charge}
+                      onChange={(value) => this.setState({charge: value})}
+                      label={'Your processing fee'}
+                      placeholder={'Amount'}
+                      onError={false}
+                      required={true}
+                      maxLength={4}
+                      keyboardType={'numeric'}
+                    />
+
+
+                    {
+                      (request && request.shipping.toLowerCase() == 'pickup') && (
+                        <LocationTextInput 
+                          variable={defaultAddress !== null ? defaultAddress.route : null}
+                          label={'Your pick up location'}
+                          placeholder={'Select Location'}
+                          onError={false}
+                          required={true}
+                          route={'addLocationStack'}
+                          closeOnClick={() => this.props.closeModal()}
+                          navigation={this.props.navigation}
+                        />
+                      )
+                    }
 
                     {/* <TextInputWithLabel 
                     variable={this.state.deliveryFee}
