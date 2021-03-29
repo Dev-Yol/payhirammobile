@@ -35,9 +35,13 @@ class ProposalModal extends Component {
 
   componentDidMount(){
     if(this.props.from == 'update' && this.props.peerRequest != null){
+      const { setDefaultAddress } = this.props;
+      if(this.props.peerRequest.location){
+        setDefaultAddress(this.props.peerRequest.location)        
+      }
       this.setState({
         data: this.props.peerRequest,
-        charge: this.props.peerRequest.charge
+        charge: parseInt(this.props.peerRequest.charge)
       })
     }else{
       this.setState({
@@ -180,7 +184,7 @@ class ProposalModal extends Component {
         id: data.id,
         charge: charge
       }
-      if(request && request.shipping.toLowerCase() == 'shipping' && defaultAddress){
+      if(request && request.shipping.toLowerCase() == 'pickup' && defaultAddress){
         console.log('defaultAddress', defaultAddress)
         parameter['location_id'] = defaultAddress.id
       }
@@ -541,6 +545,7 @@ const mapDispatchToProps = (dispatch) => {
   const { actions } = require('@redux');
   return {
     setLedger: (ledger) => dispatch(actions.setLedger(ledger)),
+    setDefaultAddress: (address) => dispatch(actions.setDefaultAddress(address)),
   };
 };
 
