@@ -123,7 +123,7 @@ class ProposalCard extends Component {
 
     return(
       <TouchableOpacity
-        onPress={() => this.redirect('locationWithMapStack', {
+        onPress={() => this.props.navigation.navigate('locationWithMapStack', {
           data: item.location
         })}
         style={{
