@@ -45,6 +45,24 @@ class RequestItem extends Component {
     this.props.navigation.navigate(route);
   };
 
+  navigateToScreen = (route) => {
+    console.log('[here]');
+    const navigateAction = NavigationActions.navigate({
+      routeName: 'drawerStack',
+      action: StackActions.reset({
+        index: 0,
+        key: null,
+        actions: [
+          NavigationActions.navigate({routeName: route, params: {
+            initialRouteName: route
+          }}),
+        ]
+      })
+    });
+    console.log('[hdddddddddddere]')
+    this.props.navigate.dispatch(navigateAction);
+  }
+
   retrieve(){
     const { user } = this.props.state;
     const { data } = this.props.navigation.state.params;
@@ -78,6 +96,7 @@ class RequestItem extends Component {
   createThread = (account) => {
     const { user } = this.props.state;
     const { data } = this.props.navigation.state.params;
+    console.log('[data]', data);
     if(user == null || account == null || data == null){
       return
     }
@@ -91,6 +110,7 @@ class RequestItem extends Component {
 
     console.log('[Create Messenger Thread] parameter', parameter)
     Api.request(Routes.customMessengerGroupCreate, parameter, response => {
+      console.log('[response]', response.data);
       this.setState({ isLoading: false })
       if (response.error == null) {
         this.props.navigation.navigate('messagesStack', {
@@ -102,7 +122,8 @@ class RequestItem extends Component {
             request: data,
             currency: data.currency,
             amount: data.amount,
-            status: 1
+            status: 1,
+            location: data.location
           }
         })
       }else{
@@ -179,7 +200,7 @@ class RequestItem extends Component {
     this.setState({isLoading: true})
     Api.request(Routes.requestDelete, parameter, response => {
       this.setState({isLoading: false})
-      this.redirect("dashboardStack")
+      this.navigateToScreen('Requests')
     });
   }
 

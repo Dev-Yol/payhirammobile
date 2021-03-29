@@ -14,6 +14,10 @@ class RequestCard extends Component {
     super(props);
   }
 
+  redirect = (route) => {
+    this.props.navigation.navigate(route);
+  };
+
   _header = (item, type) => {
     const { theme } = this.props.state;
     return (
@@ -26,7 +30,8 @@ class RequestCard extends Component {
           }}>
             <View style={{
               width: '10%',
-              justifyContent: 'center'
+              justifyContent: 'center',
+              marginTop: '-10%'
             }}>
               <UserImage
                 user={item.account}
@@ -38,7 +43,7 @@ class RequestCard extends Component {
             />
             </View>
             <View style={{
-              width: '90%'
+              width: '100%'
             }}>
               <Text
                 style={{
@@ -53,6 +58,7 @@ class RequestCard extends Component {
                 flexDirection: 'row',
                 alignItems: 'center',
                 paddingLeft: 10,
+                paddingTop: '1%'
               }}>
                 <FontAwesomeIcon icon={faCalendar} size={BasicStyles.standardFontSize} color={Color.gray}/>
                 <Text
@@ -78,6 +84,7 @@ class RequestCard extends Component {
                   fontWeight: 'bold',
                   textAlign: 'right',
                   width: '100%',
+                  paddingTop: '20%',
                   fontSize: BasicStyles.standardFontSize
                 }}>
                 {Currency.display(item.amount, item.currency)}
@@ -86,8 +93,9 @@ class RequestCard extends Component {
                 style={{
                   color: Color.normalGray,
                   width: '100%',
-                  textAlign: 'right',
-                  paddingTop: 2,
+                  textAlign: 'left',
+                  paddingTop: '5%',
+                  marginLeft: '-88%',
                   fontSize: BasicStyles.standardFontSize - 1
                 }}>
                 {Helper.showRequestType(item.type) + '(' + item.shipping.toUpperCase() +') - ' + Helper.showStatus(item.status)}
@@ -126,38 +134,50 @@ class RequestCard extends Component {
         {/*<Text style={Style.text}>Posted on {item.created_at_human}</Text>*/}
         {
           item.location != null && (
-            <View style={{
-              flexDirection: 'row',
-              paddingTop: 2,
-              alignItems: 'center',
-              width: '100%'
-            }}>
-              <FontAwesomeIcon
-                icon={faCircle}
-                style={{color: theme ? theme.secondary : Color.secondary}}
-                size={10}
-              />
-              <Text style={{
-                fontSize: BasicStyles.standardFontSize,
-                ...Style.text,
-                paddingLeft: 5,
-                paddingRight: 5
-              }}>
-                {item.distance}
-              </Text>
-              <FontAwesomeIcon icon={faMapMarkerAlt} color={Color.gray} />
-              <Text style={{
-                ...Style.text,
-                paddingLeft: 5,
-                fontStyle: 'italic',
-                fontSize: BasicStyles.standardFontSize,
-                width: '75%'
+            // <View style={{
+            //   flexDirection: 'row',
+            //   paddingTop: 2,
+            //   alignItems: 'center',
+            //   width: '100%'
+            // }}
+            // onPress={() => this.redirect("LocationWithMap")}>
+              <TouchableOpacity
+              style={{
+                flexDirection: 'row',
+                paddingTop: 2,
+                alignItems: 'center',
+                width: '100%'
               }}
-              numberOfLines={1}
+              onPress={() => this.redirect("locationWithMapStack")}
               >
-                {item.location.route}
-              </Text>
-            </View>
+                <FontAwesomeIcon
+                  icon={faCircle}
+                  style={{color: theme ? theme.secondary : Color.secondary}}
+                  size={10}
+                />
+                <Text style={{
+                  fontSize: BasicStyles.standardFontSize,
+                  ...Style.text,
+                  paddingLeft: 5,
+                  paddingRight: 5
+                }}>
+                  {item.distance}
+                </Text>
+                <FontAwesomeIcon icon={faMapMarkerAlt} color={Color.gray} />
+                <Text style={{
+                  ...Style.text,
+                  paddingLeft: 5,
+                  fontStyle: 'italic',
+                  fontSize: BasicStyles.standardFontSize,
+                  width: '75%',
+                  paddingTop: '-5%'
+                }}
+                numberOfLines={1}
+                >
+                  {item.location.route}
+                </Text>
+              </TouchableOpacity>
+            // </View>
           )
         }
         
@@ -177,7 +197,7 @@ class RequestCard extends Component {
             Style.text,
             {
               textAlign: 'justify',
-            },
+            }
           ]}>
           {item.reason}
         </Text>
