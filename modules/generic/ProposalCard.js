@@ -237,7 +237,7 @@ class ProposalCard extends Component {
                     }}
                   />
                     <Button
-                      title={'See Conversations'}
+                      title={'See transaction'}
                       onClick={() => {this.props.viewConversation(item)}}
                       style={{
                         width: '50%',
@@ -298,7 +298,7 @@ class ProposalCard extends Component {
                     flexDirection: 'row'
                   }}>
                     <Button
-                      title={'See Conversations'}
+                      title={'See transaction'}
                       onClick={() => {this.props.viewConversation(item)}}
                       style={{
                         width: '50%',
