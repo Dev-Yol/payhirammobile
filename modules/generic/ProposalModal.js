@@ -99,12 +99,12 @@ class ProposalModal extends Component {
   } 
 
   submit(){
-    const { user, ledger } = this.props.state;
-    const { request, defaultAddress } = this.props;
+    const { user, ledger, defaultAddress } = this.props.state;
+    const { request } = this.props;
     const { charge, currency, data } = this.state;
 
     console.log('[send proposal] request', request)
-    if(user == null || request == null || ledger == null){
+    if(user == null || request == null || (request && request.type == 3 && ledger == null)){
       return
     }
     if(charge <= 0 || currency == null){
@@ -140,7 +140,7 @@ class ProposalModal extends Component {
         account_id: user.id,
         to: request.account.code
       }
-      if(request && request.shipping.toLowerCase() == 'shipping' && defaultAddress){
+      if(request && request.shipping.toLowerCase() == 'pickup' && defaultAddress){
         parameter['location_id'] = defaultAddress.id
       }
       console.log('[send proposal] parameter', parameter)
@@ -179,6 +179,10 @@ class ProposalModal extends Component {
       let parameter = {
         id: data.id,
         charge: charge
+      }
+      if(request && request.shipping.toLowerCase() == 'shipping' && defaultAddress){
+        console.log('defaultAddress', defaultAddress)
+        parameter['location_id'] = defaultAddress.id
       }
       console.log('[Update proposal]', parameter)
       this.setState({
