@@ -100,7 +100,7 @@ class ProposalModal extends Component {
 
   submit(){
     const { user, ledger } = this.props.state;
-    const { request } = this.props;
+    const { request, defaultAddress } = this.props;
     const { charge, currency, data } = this.state;
 
     console.log('[send proposal] request', request)
@@ -139,6 +139,9 @@ class ProposalModal extends Component {
         status: 'requesting',
         account_id: user.id,
         to: request.account.code
+      }
+      if(request && request.shipping.toLowerCase() == 'shipping' && defaultAddress){
+        parameter['location_id'] = defaultAddress.id
       }
       console.log('[send proposal] parameter', parameter)
       this.setState({
