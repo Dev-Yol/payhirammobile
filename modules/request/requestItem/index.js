@@ -59,6 +59,7 @@ class RequestItem extends Component {
     };
     this.setState({isLoading: true});
     Api.request(Routes.requestPeerRetrieveItem, parameter, (response) => {
+      console.log('response', JSON.stringify(response));
       this.setState({isLoading: false});
       if (response.data.length > 0) {
         this.setState({

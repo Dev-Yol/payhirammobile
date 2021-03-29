@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, TouchableHighlight, Alert } from 'react-n
 import styles from './BalanceCardStyle';
 import Currency from 'services/Currency';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faCircle } from '@fortawesome/free-solid-svg-icons';
+import { faCircle, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 import {connect} from 'react-redux';
 import { Color, Routes, BasicStyles } from 'common';
 import Rating from 'components/Rating'
@@ -118,6 +118,30 @@ class ProposalCard extends Component {
       </View>
     );
   };
+
+  _location = (item) => {
+
+    return(
+      <View style={{
+          flexDirection: 'row',
+          paddingTop: 10,
+          alignItems: 'center',
+          width: '100%'
+        }}>
+          <FontAwesomeIcon icon={faMapMarkerAlt} color={Color.gray} />
+          <Text style={{
+            paddingLeft: 5,
+            fontStyle: 'italic',
+            fontSize: BasicStyles.standardFontSize,
+            width: '90%'
+          }}
+          numberOfLines={1}
+          >
+            {item.location.route}
+          </Text>
+        </View>
+      )
+  }
 
   _body = (item) => {
     const { theme } = this.props.state;
@@ -302,6 +326,7 @@ class ProposalCard extends Component {
                 })
               }>
               {item.account && this._header(item, 'amount')}
+              {item.location && this._location(item)}
               {this._body(item)}
               {(item.account_id != user.id) && this._footer(item, index)}
               {(item.account_id == user.id) && this._myFooter(item, index)}
