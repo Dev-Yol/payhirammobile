@@ -271,15 +271,7 @@ class RequestItem extends Component {
               )
             }
             {
-              isLoading && (<Skeleton />)
-            }
-
-            {
-              isLoading && (<Skeleton />)
-            }
-
-            {
-              isLoading && (<Skeleton />)
+              isLoading && (<Skeleton size={3}/>)
             }
             </View>
         </ScrollView>
