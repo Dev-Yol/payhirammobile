@@ -13,6 +13,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faCircle, faEllipsisH} from '@fortawesome/free-solid-svg-icons';
 import {BasicStyles, Color, Routes} from 'common';
 import {UserImage, Rating, Spinner} from 'components';
+import Skeleton from 'components/Loading/Skeleton';
 import Button from 'components/Form/Button.js';
 import RequestCard from 'modules/generic/RequestCard';
 import ProposalCard from 'modules/generic/ProposalCard';
@@ -77,6 +78,7 @@ class RequestItem extends Component {
     };
     this.setState({isLoading: true});
     Api.request(Routes.requestPeerRetrieveItem, parameter, (response) => {
+      console.log('response', JSON.stringify(response));
       this.setState({isLoading: false});
       if (response.data.length > 0) {
         this.setState({
@@ -289,6 +291,9 @@ class RequestItem extends Component {
                 this.renderProposals(data)
               )
             }
+            {
+              isLoading && (<Skeleton size={3}/>)
+            }
             </View>
         </ScrollView>
         {
@@ -335,7 +340,7 @@ class RequestItem extends Component {
             </View>
           )
         } */}
-        {isLoading ? <Spinner mode="overlay" /> : null}
+        {/*isLoading ? <Spinner mode="overlay" /> : null*/}
         {
           connectModal && (
             <ProposalModal

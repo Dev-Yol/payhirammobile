@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, TouchableHighlight, Alert } from 'react-n
 import styles from './BalanceCardStyle';
 import Currency from 'services/Currency';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faCircle } from '@fortawesome/free-solid-svg-icons';
+import { faCircle, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 import {connect} from 'react-redux';
 import { Color, Routes, BasicStyles } from 'common';
 import Rating from 'components/Rating'
@@ -119,6 +119,34 @@ class ProposalCard extends Component {
     );
   };
 
+  _location = (item) => {
+
+    return(
+      <TouchableOpacity
+        onPress={() => this.props.navigation.navigate('locationWithMapStack', {
+          data: item.location
+        })}
+        style={{
+          flexDirection: 'row',
+          paddingTop: 10,
+          alignItems: 'center',
+          width: '100%'
+        }}>
+          <FontAwesomeIcon icon={faMapMarkerAlt} color={Color.gray} />
+          <Text style={{
+            paddingLeft: 5,
+            fontStyle: 'italic',
+            fontSize: BasicStyles.standardFontSize,
+            width: '90%'
+          }}
+          numberOfLines={1}
+          >
+            {item.location.route}
+          </Text>
+        </TouchableOpacity>
+      )
+  }
+
   _body = (item) => {
     const { theme } = this.props.state;
     return (
@@ -209,7 +237,7 @@ class ProposalCard extends Component {
                     }}
                   />
                     <Button
-                      title={'See Conversations'}
+                      title={'See transaction'}
                       onClick={() => {this.props.viewConversation(item)}}
                       style={{
                         width: '50%',
@@ -270,7 +298,7 @@ class ProposalCard extends Component {
                     flexDirection: 'row'
                   }}>
                     <Button
-                      title={'See Conversations'}
+                      title={'See transaction'}
                       onClick={() => {this.props.viewConversation(item)}}
                       style={{
                         width: '50%',
@@ -286,7 +314,7 @@ class ProposalCard extends Component {
   };
 
   render() {
-    const { data } = this.props;
+    const { data, request } = this.props;
     const { user } = this.props.state;
     console.log('user', user)
     return (
@@ -302,6 +330,7 @@ class ProposalCard extends Component {
                 })
               }>
               {item.account && this._header(item, 'amount')}
+              {(item.location && request && request.shipping == 'pickup') && this._location(item)}
               {this._body(item)}
               {(item.account_id != user.id) && this._footer(item, index)}
               {(item.account_id == user.id) && this._myFooter(item, index)}

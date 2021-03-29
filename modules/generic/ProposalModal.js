@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Text, View, TouchableHighlight, ScrollView, TextInput, Dimensions, Alert } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faAsterisk, faRedo } from '@fortawesome/free-solid-svg-icons';
+import { faAsterisk, faRedo, faShippingFast, faPersonBooth } from '@fortawesome/free-solid-svg-icons';
 import { Picker } from '@react-native-community/picker';
 import { connect } from 'react-redux';
 import BalanceCard from 'modules/generic/BalanceCard';
@@ -14,6 +14,7 @@ import Modal from 'react-native-modal';
 import Currency from 'services/Currency';
 import Api from 'services/api/index.js';
 import RequestCard from 'modules/generic/RequestCard';
+import LocationTextInput from 'components/Form/LocationTextInput';
 import {
   Spinner
 } from 'components';
@@ -98,12 +99,12 @@ class ProposalModal extends Component {
   } 
 
   submit(){
-    const { user, ledger } = this.props.state;
+    const { user, ledger, defaultAddress } = this.props.state;
     const { request } = this.props;
     const { charge, currency, data } = this.state;
 
     console.log('[send proposal] request', request)
-    if(user == null || request == null || ledger == null){
+    if(user == null || request == null || (request && request.type == 3 && ledger == null)){
       return
     }
     if(charge <= 0 || currency == null){
@@ -138,6 +139,9 @@ class ProposalModal extends Component {
         status: 'requesting',
         account_id: user.id,
         to: request.account.code
+      }
+      if(request && request.shipping.toLowerCase() == 'pickup' && defaultAddress){
+        parameter['location_id'] = defaultAddress.id
       }
       console.log('[send proposal] parameter', parameter)
       this.setState({
@@ -176,6 +180,10 @@ class ProposalModal extends Component {
         id: data.id,
         charge: charge
       }
+      if(request && request.shipping.toLowerCase() == 'shipping' && defaultAddress){
+        console.log('defaultAddress', defaultAddress)
+        parameter['location_id'] = defaultAddress.id
+      }
       console.log('[Update proposal]', parameter)
       this.setState({
         isLoading: true
@@ -200,7 +208,7 @@ class ProposalModal extends Component {
   }
 
   renderContent() {
-    const { ledger, theme } = this.props.state;
+    const { ledger, theme, defaultAddress } = this.props.state;
     const { request } = this.props;
     const { data } = this.state; 
     return (
@@ -230,9 +238,7 @@ class ProposalModal extends Component {
                   <View style={{
                     marginTop: 10,
                     paddingLeft: 20,
-                    paddingRight: 20,
-                    borderBottomWidth: 10,
-                    borderBottomColor: Color.lightGray
+                    paddingRight: 20
                   }}
                   >
                     <RequestCard 
@@ -245,6 +251,25 @@ class ProposalModal extends Component {
                 )
               }
             
+              {
+                request && (
+                  <View style={{
+                    height: 75,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    backgroundColor: theme ? theme.primary : Color.primary,
+                    flexDirection: 'row'
+                  }}>
+                    <FontAwesomeIcon icon={request.shipping.toLowerCase() == 'pickup' ? faPersonBooth : faShippingFast} color={Color.white} size={36}/>
+                    <Text style={{
+                      fontWeight: 'bold',
+                      fontSize: BasicStyles.standardFontSize,
+                      color: Color.white,
+                      paddingLeft: 10
+                    }}>FOR {request.shipping.toUpperCase()}</Text>
+                  </View>
+                )
+              }
 
               <View style={{
                 height: height,
@@ -253,28 +278,59 @@ class ProposalModal extends Component {
                 marginRight: '5%',
                 paddingTop: 20
               }}>
-                  {/*<PickerWithLabel
-                    label={'Select Currency'}
-                    data={Helper.currency}
-                    placeholder={'Click to select'}
-                    onChange={(value) => this.setState({
-                      currency: value
-                    })}
-                    required={true}
-                    onError={false}
-                  />*/}
+                    {/*
+                    <TextInputWithLabel 
+                      variable={this.state.charge}
+                      onChange={(value) => this.setState({charge: value})}
+                      label={'Your processing fee'}
+                      placeholder={'Amount'}
+                      onError={false}
+                      required={true}
+                      maxLength={4}
+                      keyboardType={'numeric'}
+                      labelStyle={{
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                      }}
+                      style={{
+                        width: '50%',
+                        marginRight: '25%',
+                        marginLeft: '25%'
+                      }}
+                      inputStyle={{
+                        textAlign: 'center',
+                        paddingLeft: 0,
+                        paddingRight: 0
+                      }}
+                    />
+                  */}
 
                     <TextInputWithLabel 
-                    variable={this.state.charge}
-                    onChange={(value) => this.setState({charge: value})}
-                    label={'Your processing fee'}
-                    placeholder={'Amount'}
-                    onError={false}
-                    required={true}
-                    maxLength={4}
-                    keyboardType={'numeric'}
+                      variable={this.state.charge}
+                      onChange={(value) => this.setState({charge: value})}
+                      label={'Your processing fee'}
+                      placeholder={'Amount'}
+                      onError={false}
+                      required={true}
+                      maxLength={4}
+                      keyboardType={'numeric'}
                     />
 
+
+                    {
+                      (request && request.shipping.toLowerCase() == 'pickup') && (
+                        <LocationTextInput 
+                          variable={defaultAddress !== null ? defaultAddress.route : null}
+                          label={'Your pick up location'}
+                          placeholder={'Select Location'}
+                          onError={false}
+                          required={true}
+                          route={'addLocationStack'}
+                          closeOnClick={() => this.props.closeModal()}
+                          navigation={this.props.navigation}
+                        />
+                      )
+                    }
 
                     {/* <TextInputWithLabel 
                     variable={this.state.deliveryFee}

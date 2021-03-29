@@ -27,7 +27,12 @@ class Notifications extends Component{
   };
 
   componentDidMount(){
-    this.retrieve()
+    const { notifications } = this.props.state;
+    if(notifications && notifications.length > 0){
+      //
+    }else{
+      this.retrieve()
+    }
   }
 
   async redirect(payload, item, payloadValue, items){
@@ -65,9 +70,9 @@ class Notifications extends Component{
     }
     // this.setState({isLoading: true})
     Api.request(Routes.notificationsRetrieve, parameter, notifications => {
-      console.log("[RESTRIEVE]", notifications.data[0])
+      console.log("[RESTRIEVE]", notifications.data)
       // this.setState({isLoading: false})
-      this.setState({data: notifications.data[0]})
+      this.setState({data: notifications.data})
       setNotifications(notifications.size, notifications.data)
     }, error => {
       this.setState({isLoading: false})
