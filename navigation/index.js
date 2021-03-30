@@ -34,6 +34,7 @@ import SupportStack from 'components/Support/SupportDrawer.js';
 import UpdateTicketStack from 'components/Support/UpdateTicket/UpdateTicketDrawer.js';
 import PrivacyStack from 'modules/privacy/Drawer';
 import GuidelinesStack from 'modules/guidelines/GuidelinesDrawer';
+import LocationWithMapViewerStack from 'components/Location/LocationViewerDrawer.js';
 
 // login stack
 const LoginStack = createStackNavigator(
@@ -118,6 +119,7 @@ const PrimaryNav = createStackNavigator(
     qrCodeScannerStack: {screen: QRCodeScannerStack},
     addLocationStack: {screen: AddLocationStack},
     locationWithMapStack: {screen: LocationWithMapStack},
+    locationWithMapViewerStack: {screen: LocationWithMapViewerStack},
     paymentMethodsStack: { screen: PaymentMethodsStack },
     supportStack: { screen: SupportStack },
     updateTicketStack: { screen: UpdateTicketStack },

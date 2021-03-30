@@ -45,7 +45,6 @@ class HeaderOptions extends Component {
     const width = Math.round(Dimensions.get('window').width);
     // {Helper.showRequestType(messengerGroup.request.type)} -
     const { data } = this.props.navigationProps.state.params;
-    console.log('[heeeeeeeeeeeeeeeerrrrrr]', data);
     return (
       <View>
         <View style={{
@@ -85,28 +84,31 @@ class HeaderOptions extends Component {
             </TouchableHighlight>
           }
         </View>
-        <TouchableOpacity
-            onPress={() => this.redirect('locationWithMapStack')}
-            style={{
-              width: width,
-              marginLeft: 5,
-              marginTop: 5
-            }}>
-            <FontAwesomeIcon 
-              icon={ faMapMarkerAlt } 
-              style={{color: theme ? theme.primary : Color.primary}}
-              size={11}
-            />
-            <Text style={{
-              fontSize: BasicStyles.standardFontSize,
-              fontWeight: 'bold',
-              marginTop: '-3%',
-              marginLeft: '3%'
-              // width: width - 40
-            }}
-            numberOfLines={1}
-            >{data.location ? data.location : 'No Location'}</Text>
-          </TouchableOpacity>
+        { data.location != null && (
+          <TouchableOpacity
+              onPress={() => {this.props.navigation.navigate('locationWithMapViewerStack', {data:{latitude: data.location.latitude, longitude: data.location.longitude}})}}
+              style={{
+                width: width,
+                marginLeft: 5,
+                marginTop: 5
+              }}>
+              <FontAwesomeIcon 
+                icon={ faMapMarkerAlt } 
+                style={{color: theme ? theme.primary : Color.primary}}
+                size={11}
+              />
+              <Text style={{
+                fontSize: BasicStyles.standardFontSize,
+                fontWeight: 'bold',
+                marginTop: '-3%',
+                marginLeft: '3%'
+                // width: width - 40
+              }}
+              numberOfLines={1}
+              >{data.location}</Text>
+            </TouchableOpacity>
+          )
+        }
       </View>
     );
   }
