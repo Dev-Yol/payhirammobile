@@ -18,7 +18,13 @@ class RequestCard extends Component {
     this.props.navigation.navigate(route);
   };
 
+
   _header = (item, type) => {
+    if(item.shipping == '1'){
+      item.shipping = 'delivery'
+    }else if(item.shipping == '0'){
+      item.shipping = 'pickup'
+    }
     const { theme } = this.props.state;
     return (
       <View>
@@ -148,34 +154,56 @@ class RequestCard extends Component {
                 alignItems: 'center',
                 width: '100%'
               }}
-              onPress={() => this.redirect("locationWithMapStack")}
+              onPress={() => {this.props.navigation.navigate('locationWithMapViewerStack', {data:{latitude: item.location.latitude, longitude: item.location.longitude}})}}
               >
-                <FontAwesomeIcon
-                  icon={faCircle}
-                  style={{color: theme ? theme.secondary : Color.secondary}}
-                  size={10}
-                />
-                <Text style={{
-                  fontSize: BasicStyles.standardFontSize,
-                  ...Style.text,
-                  paddingLeft: 5,
-                  paddingRight: 5
-                }}>
-                  {item.distance}
-                </Text>
-                <FontAwesomeIcon icon={faMapMarkerAlt} color={Color.gray} />
-                <Text style={{
-                  ...Style.text,
-                  paddingLeft: 5,
-                  fontStyle: 'italic',
-                  fontSize: BasicStyles.standardFontSize,
-                  width: '75%',
-                  paddingTop: '-5%'
-                }}
-                numberOfLines={1}
-                >
-                  {item.location.route}
-                </Text>
+                { (this.props.from == 'request') ? (
+                  <Text>
+                    <FontAwesomeIcon
+                      icon={faCircle}
+                      style={{color: theme ? theme.secondary : Color.secondary}}
+                      size={10}
+                    />
+                    <Text style={{
+                      fontSize: BasicStyles.standardFontSize,
+                      ...Style.text,
+                      paddingLeft: 5,
+                      paddingRight: 5,
+                      marginLeft: '10%'
+                    }}>
+                      {item.distance}
+                    </Text>
+                    <FontAwesomeIcon icon={faMapMarkerAlt} color={Color.gray} />
+                    <Text style={{
+                      ...Style.text,
+                      paddingLeft: 5,
+                      fontStyle: 'italic',
+                      fontSize: BasicStyles.standardFontSize,
+                      width: '100%',
+                      paddingTop: '-5%',
+                    }}
+                    numberOfLines={1}
+                    >
+                      {item.location.route}
+                    </Text>
+                  </Text>
+                  ): (
+                    <Text>
+                    <FontAwesomeIcon icon={faMapMarkerAlt} color={Color.gray} />
+                    <Text style={{
+                      ...Style.text,
+                      paddingLeft: 5,
+                      fontStyle: 'italic',
+                      fontSize: BasicStyles.standardFontSize,
+                      width: '75%',
+                      paddingTop: '-5%'
+                    }}
+                    numberOfLines={1}
+                    >
+                      {item.location.route}
+                    </Text>
+                  </Text>
+                  )
+                }
               </TouchableOpacity>
             // </View>
           )

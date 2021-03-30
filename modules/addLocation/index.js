@@ -33,7 +33,7 @@ class AddLocation extends Component {
     */
     if (this.state.addingAddress && this.props.state.location != null) {
       // this.setState({ isAddingAddressName: true })
-      if(location.latitude == null || location.longtitude == null || location.route == null || location.locality == null || location.region == null || location.country == null){
+      if(location.latitude == null || location.longitude == null || location.route == null || location.locality == null || location.region == null || location.country == null){
         Alert.alert(
           'Error Message',
           'Invalid Pinned Location',
