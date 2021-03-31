@@ -44,7 +44,7 @@ class Footer extends Component {
           width: '100%',
           position: 'absolute',
           bottom: 0,
-          height: 60,
+          height: 40,
           zIndex: 0,
           backgroundColor: theme ? theme.primary : Color.primary,
           borderTopLeftRadius: BasicStyles.standardBorderRadius,
@@ -69,7 +69,7 @@ class Footer extends Component {
 
                   <FontAwesomeIcon
                     icon={faUsers}
-                    size={BasicStyles.iconSize}
+                    size={18}
                     style={[
                       BasicStyles.iconStyle,
                       {
@@ -89,7 +89,7 @@ class Footer extends Component {
                   >
                   <FontAwesomeIcon
                     icon={faUser}
-                    size={BasicStyles.iconSize}
+                    size={18}
                     style={[
                       BasicStyles.iconStyle,
                       {
@@ -109,7 +109,7 @@ class Footer extends Component {
                   >
                   <FontAwesomeIcon
                     icon={faClock}
-                    size={BasicStyles.iconSize}
+                    size={18}
                     style={[
                       BasicStyles.iconStyle,
                       {
@@ -138,7 +138,7 @@ class Footer extends Component {
                 >
                 <FontAwesomeIcon
                   icon={faTachometerAlt}
-                  size={BasicStyles.iconSize}
+                  size={18}
                   style={[
                     BasicStyles.iconStyle,
                     {
@@ -162,7 +162,7 @@ class Footer extends Component {
                 >
                 <FontAwesomeIcon
                   icon={faClock}
-                  size={BasicStyles.iconSize}
+                  size={18}
                   style={[
                     BasicStyles.iconStyle,
                     {
@@ -271,7 +271,7 @@ class Footer extends Component {
                 >
                 <FontAwesomeIcon
                   icon={faTachometerAlt}
-                  size={BasicStyles.iconSize}
+                  size={18}
                   style={[
                     BasicStyles.iconStyle,
                     {
@@ -291,7 +291,7 @@ class Footer extends Component {
                 >
                 <FontAwesomeIcon
                   icon={faUsers}
-                  size={BasicStyles.iconSize}
+                  size={18}
                   style={[
                     BasicStyles.iconStyle,
                     {

@@ -4,14 +4,18 @@ import Style from './RequestCardStyle';
 import Currency from 'services/Currency';
 import { Helper, Color, BasicStyles } from 'common';
 import Rating from 'components/Rating'
-import UserImage from 'components/User';
+import UserImage from 'components/User/Image';
+import Options from 'modules/generic/Dropdown.js';
 import {connect} from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faMapMarkerAlt, faCalendar, faCircle } from '@fortawesome/free-solid-svg-icons';
+import { faMapMarkerAlt, faCalendar, faCircle, faEllipsisH, faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 const width = Math.round(Dimensions.get('window').width);
 class RequestCard extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      option: false
+    }
   }
 
   redirect = (route) => {
@@ -21,9 +25,9 @@ class RequestCard extends Component {
 
   _header = (item, type) => {
     if(item.shipping == '1'){
-      item.shipping = 'delivery'
+      item.shipping = 'for delivery'
     }else if(item.shipping == '0'){
-      item.shipping = 'pickup'
+      item.shipping = 'for pickup'
     }
     const { theme } = this.props.state;
     return (
@@ -32,29 +36,31 @@ class RequestCard extends Component {
           <View style={{
             width: '50%',
             flexDirection: 'row',
-            justifyContent: 'center'
+            justifyContent: 'center',
+            paddingTop: '7%'
           }}>
             <View style={{
               width: '10%',
               justifyContent: 'center',
-              marginTop: '-10%'
             }}>
               <UserImage
                 user={item.account}
                 color={theme ? theme.primary : Color.primary}
                 style={{
-                  width: 22,
-                  height: 22
+                  width: 35,
+                  height: 35
                 }}
-            />
+              /> 
             </View>
             <View style={{
-              width: '100%'
+              width: '100%',
+              marginTop: '-5%',
+              marginLeft: '5%'
             }}>
               <Text
                 style={{
                   color: Color.normalGray,
-                  paddingLeft: 10,
+                  paddingLeft: 15,
                   fontWeight: 'bold',
                   fontSize: BasicStyles.standardFontSize
                 }}>
@@ -63,48 +69,60 @@ class RequestCard extends Component {
               <View style={{
                 flexDirection: 'row',
                 alignItems: 'center',
-                paddingLeft: 10,
-                paddingTop: '1%'
+                paddingLeft: 5
               }}>
-                <FontAwesomeIcon icon={faCalendar} size={BasicStyles.standardFontSize} color={Color.gray}/>
                 <Text
                   style={{
                     ...Style.text,
                     paddingLeft: 10,
                     fontSize: BasicStyles.standardFontSize - 1,
                     paddingTop: 2,
+                    color: Color.primary
                   }}
-                  >
-                  {item.needed_on_human}
+                  > 
+                  {Helper.showRequestType(item.type) + '(' + item.shipping.toUpperCase() +')'}
                 </Text>
               </View>
               
             </View>
           </View>
+          <View style={{marginTop: '-5%', marginLeft: '25%'}}>
+            <Text
+              style={{
+                fontWeight: 'bold',
+                textAlign: 'right',
+                width: '100%',
+                paddingTop: '20%',
+                marginTop: '-5%',
+                fontSize: BasicStyles.standardFontSize
+              }}>
+              {Currency.display(item.amount, item.currency)}
+            </Text>
+          </View>
+          <View style={{marginLeft: '3%', marginTop: '-2%'}}>
+          <TouchableOpacity
+            onPress={() => this.setState({option : !this.state.option})}
+            >
+              <FontAwesomeIcon icon={faEllipsisV} size={BasicStyles.standardFontSize} color={Color.black} style={{marginBottom: '0%'}}/>
+            </TouchableOpacity>
+          </View>
           <View
             style={{
-              width: '50%'
+              width: '50%',
+              marginTop: '16%',
+              marginLeft: '-51%'
             }}>
-              <Text
-                style={{
-                  fontWeight: 'bold',
-                  textAlign: 'right',
-                  width: '100%',
-                  paddingTop: '20%',
-                  fontSize: BasicStyles.standardFontSize
-                }}>
-                {Currency.display(item.amount, item.currency)}
-              </Text>
+              <FontAwesomeIcon icon={faCalendar} size={BasicStyles.standardFontSize} color={Color.gray} style={{marginLeft: '-85%', paddingTop: '-11%', marginBottom: '-11%'}}/>
               <Text
                 style={{
                   color: Color.normalGray,
                   width: '100%',
                   textAlign: 'left',
                   paddingTop: '5%',
-                  marginLeft: '-88%',
+                  marginLeft: '-75%',
                   fontSize: BasicStyles.standardFontSize - 1
                 }}>
-                {Helper.showRequestType(item.type) + '(' + item.shipping.toUpperCase() +') - ' + Helper.showStatus(item.status)}
+                {item.needed_on_human}
               </Text>
           </View>
         </View>
@@ -152,58 +170,38 @@ class RequestCard extends Component {
                 flexDirection: 'row',
                 paddingTop: 2,
                 alignItems: 'center',
-                width: '100%'
+                width: '100%',
+                paddingBottom: '5%'
               }}
               onPress={() => {this.props.navigation.navigate('locationWithMapViewerStack', {data:{latitude: item.location.latitude, longitude: item.location.longitude}})}}
               >
-                { (this.props.from == 'request') ? (
-                  <Text>
-                    <FontAwesomeIcon
-                      icon={faCircle}
-                      style={{color: theme ? theme.secondary : Color.secondary}}
-                      size={10}
-                    />
-                    <Text style={{
-                      fontSize: BasicStyles.standardFontSize,
-                      ...Style.text,
-                      paddingLeft: 5,
-                      paddingRight: 5,
-                      marginLeft: '10%'
-                    }}>
-                      {item.distance}
-                    </Text>
-                    <FontAwesomeIcon icon={faMapMarkerAlt} color={Color.gray} />
-                    <Text style={{
-                      ...Style.text,
-                      paddingLeft: 5,
-                      fontStyle: 'italic',
-                      fontSize: BasicStyles.standardFontSize,
-                      width: '100%',
-                      paddingTop: '-5%',
-                    }}
-                    numberOfLines={1}
-                    >
-                      {item.location.route}
-                    </Text>
-                  </Text>
-                  ): (
-                    <Text>
-                    <FontAwesomeIcon icon={faMapMarkerAlt} color={Color.gray} />
-                    <Text style={{
-                      ...Style.text,
-                      paddingLeft: 5,
-                      fontStyle: 'italic',
-                      fontSize: BasicStyles.standardFontSize,
-                      width: '75%',
-                      paddingTop: '-5%'
-                    }}
-                    numberOfLines={1}
-                    >
-                      {item.location.route}
-                    </Text>
-                  </Text>
-                  )
-                }
+                <FontAwesomeIcon icon={faMapMarkerAlt} color={Color.gray} />
+                <Text style={{
+                  ...Style.text,
+                  paddingLeft: 5,
+                  fontStyle: 'italic',
+                  fontSize: BasicStyles.standardFontSize,
+                  width: '100%',
+                  paddingTop: '-5%',
+                }}
+                numberOfLines={1}
+                >
+                  {item.location.route}
+                </Text>
+                <FontAwesomeIcon
+                  icon={faCircle}
+                  style={{color: theme ? theme.secondary : Color.secondary, marginLeft: '-18%'}}
+                  size={10}
+                />
+                <Text style={{
+                  fontSize: BasicStyles.standardFontSize,
+                  ...Style.text,
+                  paddingLeft: 5,
+                  paddingRight: 0,
+                  marginLeft: '0%'
+                }}>
+                  {item.distance}
+                </Text>
               </TouchableOpacity>
             // </View>
           )
@@ -216,7 +214,7 @@ class RequestCard extends Component {
   _body = (item) => {
     return (
       <View style={{
-        paddingTop: 20,
+        paddingTop: 10,
         paddingBottom: 20,
         justifyContent: 'center'
       }}>
@@ -336,16 +334,17 @@ class RequestCard extends Component {
     const { user } = this.props.state;
     return (
       <TouchableOpacity
-        onPress={() =>
-          this.props.navigation.navigate('requestItemStack', {
-            data: data,
-            from: 'request'
-          })
-        }
-        >
+      onPress={() =>
+        this.props.navigation.navigate('requestItemStack', {
+          data: data,
+          from: 'request'
+        })
+      }
+      >
         {this._header(data, 'amount')}
-        {this._subHeader(data)}
         {this._body(data)}
+        {this._subHeader(data)}
+        <Options value={this.state.option}></Options>
         <View style={{
           flexDirection: 'row',
           borderTopWidth: 1,
@@ -359,10 +358,10 @@ class RequestCard extends Component {
           {
             data.rating != null ? (
               <Rating ratings={data?.rating}></Rating>
-            ):(
-              <View></View>
-            )
-          }
+              ):(
+                <View></View>
+                )
+              }
           </View>
           <View style={{
             width: '50%'
