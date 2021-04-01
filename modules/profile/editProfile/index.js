@@ -226,7 +226,7 @@ class EditProfile extends Component {
     //     { cancelable: false }
     //   )
     //   return
-    // } 
+    // }
     let parameters = {
       id: this.state.id,
       account_id: user.id,
@@ -244,6 +244,7 @@ class EditProfile extends Component {
       parameters, (response) => {
         this.setState({ isLoading: false });
         this.retrieve()
+        console.log('[response]', response);
         alert('Updated Successfully');
       },
       (error) => {

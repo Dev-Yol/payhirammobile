@@ -169,6 +169,7 @@ class RequestItem extends Component {
   }
 
   onChangeTerms(item){
+    console.log('[OnChange]', item);
     this.setState({
       modalStatus: 'update',
       peerRequest: item
@@ -277,7 +278,7 @@ class RequestItem extends Component {
               )
             }
             {
-              isLoading && (<Skeleton size={3}/>)
+              isLoading && (<Skeleton size={1}/>)
             }
             </View>
         </ScrollView>

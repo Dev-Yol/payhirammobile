@@ -33,7 +33,7 @@ class PostCard extends Component{
           paddingLeft: 5,
           justifyContent: 'space-between',
           flexDirection: 'row',
-          width: '90%',
+          width: '100%',
           alignItems: 'center'
         }}>
           <View>
@@ -47,9 +47,9 @@ class PostCard extends Component{
               {data.date}
             </Text>
           </View>
-          <TouchableOpacity>
+          {/* <TouchableOpacity>
             <FontAwesomeIcon icon={faEllipsisH} />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </View>
     )
@@ -151,7 +151,7 @@ class PostCard extends Component{
             ))
           }
 
-          {
+          {/* {
             user && (
               <View style={{
                 width: '90%',
@@ -172,7 +172,7 @@ class PostCard extends Component{
                 />
               </View>
             )
-          }
+          } */}
       </View>
     )
   }
@@ -186,7 +186,7 @@ class PostCard extends Component{
         borderRadius: BasicStyles.standardBorderRadius,
         borderColor: Color.lightGray,
         borderWidth: 1,
-        marginBottom: 20,
+        marginBottom: 10,
         paddingRight: 10,
         paddingLeft: 10
       }}>

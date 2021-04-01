@@ -87,7 +87,6 @@ class AccountSettings extends Component {
     }
   }
   updatePassword = () => {
-    console.log('[password hjere]');
     if (
       this.state.password != null &&
       this.state.password != '' &&
@@ -118,7 +117,9 @@ class AccountSettings extends Component {
           this.setState({ isLoading: false });
         },
       );
-    } else {
+    }else if(this.state.password != this.state.confirmPassword){
+      alert("Password mismatch with the Confirm Password!");
+    }else {
       alert("Invalid Password!");
     }
   };
@@ -187,8 +188,7 @@ class AccountSettings extends Component {
                 this.validPassword(input)
               }
               style={{
-                width: '100%',
-                marginBottom: '5%'
+                width: '100%'
               }}
               />
 
@@ -209,14 +209,14 @@ class AccountSettings extends Component {
               
               style={{
                 // paddingBottom: 20,
-                width: '100%',
-                marginBottom: '5%'
+                width: '100%'
               }}
             />
 
             <Button 
               style={{
-                backgroundColor: theme ? theme.secondary : Color.secondary
+                backgroundColor: theme ? theme.secondary : Color.secondary,
+                marginTop: '5%'
               }}
               title={'Change Password'}
               onClick={() => this.updatePassword()}/>

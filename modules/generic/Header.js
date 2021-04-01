@@ -5,8 +5,6 @@ import {faFilter, faBell, faBars} from '@fortawesome/free-solid-svg-icons';
 import {NavigationActions, StackActions} from 'react-navigation';
 import {BasicStyles, Color, Helper} from 'common';
 import {connect} from 'react-redux';
-import Geolocation from '@react-native-community/geolocation';
-import Geocoder from 'react-native-geocoding';
 import Filter from 'modules/filter/FilterSlider';
 import CurrentLoc from 'components/Location/location.js'
 

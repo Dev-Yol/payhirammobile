@@ -36,14 +36,16 @@ class ProposalModal extends Component {
   componentDidMount(){
     if(this.props.from == 'update' && this.props.peerRequest != null){
       const { setDefaultAddress } = this.props;
+      this.setState({
+        data: this.props.peerRequest,
+        charge: this.props.peerRequest.charge
+      })
       if(this.props.peerRequest.location){
         setDefaultAddress(this.props.peerRequest.location)        
       }
-      this.setState({
-        data: this.props.peerRequest,
-        charge: parseInt(this.props.peerRequest.charge)
-      })
+      console.log('[chargeOnPeerRequest]', this.props.peerRequest.charge);
     }else{
+      console.log('[here]');
       this.setState({
         data: null,
         charge: 0
@@ -214,7 +216,7 @@ class ProposalModal extends Component {
   renderContent() {
     const { ledger, theme, defaultAddress } = this.props.state;
     const { request } = this.props;
-    const { data } = this.state; 
+    const { data, charge } = this.state;
     return (
       <View style={[Style.CreateRequestContainer, {
           width: '100%',
@@ -310,10 +312,10 @@ class ProposalModal extends Component {
                   */}
 
                     <TextInputWithLabel 
-                      variable={this.state.charge}
+                      variable={charge}
                       onChange={(value) => this.setState({charge: value})}
                       label={'Your processing fee'}
-                      placeholder={'Amount'}
+                      placeholder={charge ? charge.toString() : 'Amount'}
                       onError={false}
                       required={true}
                       maxLength={4}
@@ -330,7 +332,7 @@ class ProposalModal extends Component {
                           onError={false}
                           required={true}
                           route={'addLocationStack'}
-                          closeOnClick={() => this.props.closeModal()}
+                          // closeOnClick={() => this.props.closeModal()}
                           navigation={this.props.navigation}
                         />
                       )

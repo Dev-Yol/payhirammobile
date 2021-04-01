@@ -340,9 +340,6 @@ class Requests extends Component {
                 </View>
               ))
             }
-            {
-              isLoading && (<Skeleton size={6}/>)
-            }
             {data.length == 0 && isLoading == false && (
               <View style={{
                 marginTop: 100,
@@ -352,6 +349,9 @@ class Requests extends Component {
                 <Empty refresh={true} onRefresh={() => this.onRefresh()} />
               </View>
             )}
+            {
+              isLoading && (<Skeleton size={2}/>)
+            }
           </View>
       </ScrollView>
     )

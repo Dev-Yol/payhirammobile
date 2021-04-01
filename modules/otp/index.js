@@ -41,7 +41,7 @@ class OTP extends Component {
 
   handleResult = () => {
     const { data } = this.props.navigation.state.params
-    console.log('[OTP] Action Handler')
+    console.log('[OTP] Action Handler', this.props.navigation.state.params)
     if(data){
       switch(data.payload){
         case 'createRequest':
