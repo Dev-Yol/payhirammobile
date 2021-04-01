@@ -44,12 +44,11 @@ class Footer extends Component {
           width: '100%',
           position: 'absolute',
           bottom: 0,
-          height: 40,
+          height: 50,
           zIndex: 0,
           backgroundColor: theme ? theme.primary : Color.primary,
           borderTopLeftRadius: BasicStyles.standardBorderRadius,
-          borderTopRightRadius: BasicStyles.standardBorderRadius,
-          ...BasicStyles.standardShadow
+          borderTopRightRadius: BasicStyles.standardBorderRadius
         }}>
 
         {

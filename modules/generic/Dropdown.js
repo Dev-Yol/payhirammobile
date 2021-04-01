@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableHighlight, Share } from 'react-native'
-import { Color } from 'common';
+import { View, Text, TouchableOpacity, Share } from 'react-native'
 import { connect } from 'react-redux';
-
+import { BasicStyles, Color } from 'common';
 class Dropdown extends Component{
   constructor(props){
     super(props);
@@ -35,57 +34,79 @@ class Dropdown extends Component{
   }
 
   body = () => {
+    const { data } = this.props;
+    const { user } = this.props.state;
     return(
-        <View>
-            <View style={{
-                alignItems: 'center',
-                borderColor: Color.lightGray,
-                borderWidth: 2,
-                padding: 5
-                }}>
-                <Text>COPY LINK</Text>
-            </View>
-            <TouchableHighlight 
-                style={{
-                alignItems: 'center',
-                borderColor: Color.lightGray,
-                borderWidth: 2,
-                padding: 5
-                }}
-                onPress={() => this.onShare()}
-                >
-                <Text>SHARE</Text>
-            </TouchableHighlight>
-            <View style={{
-                alignItems: 'center',
-                borderColor: Color.lightGray,
-                borderWidth: 2,
-                padding: 5
-                }}>
-                <Text>CANCEL</Text>
-            </View>
-        </View>
+      <View style={{
+      }}>
+        <TouchableOpacity 
+          style={{
+            borderBottomColor: Color.lightGray,
+            borderBottomWidth: 1,
+            paddingLeft: 5
+          }}
+          onPress={() => this.onShare()}
+          >
+          <Text style={{
+            fontSize: BasicStyles.standardFontSize,
+            paddingTop: 10,
+            paddingBottom: 10
+          }}>Copy link</Text>
+        </TouchableOpacity>
+        <TouchableOpacity 
+          style={{
+            borderBottomColor: Color.lightGray,
+            borderBottomWidth: 1,
+            paddingLeft: 5
+          }}
+          onPress={() => this.onShare()}
+          >
+          <Text style={{
+            fontSize: BasicStyles.standardFontSize,
+            paddingTop: 10,
+            paddingBottom: 10
+          }}>Share to apps</Text>
+        </TouchableOpacity>
+        {
+          (data && data.account?.code == user.code) && (
+            <TouchableOpacity 
+              style={{
+                borderBottomColor: Color.lightGray,
+                borderBottomWidth: 1,
+                paddingLeft: 5
+              }}
+              onPress={() => this.onShare()}
+              >
+              <Text style={{
+                fontSize: BasicStyles.standardFontSize,
+                paddingTop: 10,
+                paddingBottom: 10,
+                color: Color.danger
+              }}>Delete</Text>
+            </TouchableOpacity>
+          )
+        }
+      </View>
     )
   }
 
 
   render() {
     return (
-		<View style={{
-            position: 'absolute',
-            marginTop: '15%',
-            marginLeft: '70%',
-            zIndex: 10,
-            backgroundColor: 'white'
+  		<View style={{
+        position: 'absolute',
+        marginTop: '15%',
+        marginLeft: '50%',
+        zIndex: 10,
+        width: '50%',
+        backgroundColor: 'white',
+        borderWidth: 1,
+        borderColor: Color.lightGray
         }}>
-            {
-                this.props.value == true ? (
-                    <View>
-                        {this.body()}
-                    </View>
-                ): <View></View>
-            }
-		</View>
+          <View>
+            {this.body()}
+          </View>
+  		</View>
     )
   }
 }

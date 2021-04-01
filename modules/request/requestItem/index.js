@@ -30,7 +30,7 @@ class RequestItem extends Component {
       isLoading: false,
       connectSelected: null,
       connectModal: false,
-      data: null,
+      peers: null,
       peer: null,
       modalStatus: 'create',
       peerRequest: null
@@ -80,16 +80,16 @@ class RequestItem extends Component {
       this.setState({isLoading: false});
       if (response.data.length > 0) {
         this.setState({
-          data: response.data
+          peers: response.data
         })
       } else {
         this.setState({
-          data: null
+          peers: null
         })
       }
     }, error => {
       console.log('response', error)
-      this.setState({isLoading: false, data: null});
+      this.setState({isLoading: false, peers: null});
     });
   }
 
@@ -228,7 +228,6 @@ class RequestItem extends Component {
             data={data}
             navigation={this.props.navigation}
             onAcceptRequest={this.acceptRequest}
-            viewConversation={this.createThread}
             onChangeTerms={(params) => this.onChangeTerms(params)}
             onLoading={(flag) => this.setState({
               isLoading: flag
@@ -244,8 +243,9 @@ class RequestItem extends Component {
 
   render() {
     const {user, theme} = this.props.state;
-    const { data, isLoading } = this.state;
+    const { peers, isLoading } = this.state;
     const { connectModal, modalStatus } = this.state;
+    const { data } = this.props.navigation.state.params;
     return (
       <View>
         <ScrollView showsVerticalScrollIndicator={false}>
@@ -254,7 +254,7 @@ class RequestItem extends Component {
             width: '100%'
           }}>
             {
-              this.props.navigation.state.params.data && (
+              data && (
                 <View style={{
                   alignItems: 'center',
                   borderBottomWidth: 10,
@@ -264,17 +264,33 @@ class RequestItem extends Component {
                 }}>
                   <RequestCard 
                     onConnectRequest={(item) => this.connectRequest(item)}
-                    data={this.props.navigation.state.params.data}
+                    data={data}
                     navigation={this.props.navigation}
                     from={'request_item'}
                     />
                 </View>
               )
             }
+            {
+              (data.status > 0) && (
+                <View style={{
+                  width: '100%',
+                  backgroundColor: Color.danger,
+                  height: 70,
+                  justifyContent: 'center',
+                  alignItems: 'center'
+                }}>
+                  <Text style={{
+                    fontSize: BasicStyles.standardFontSize,
+                    color: Color.white
+                  }}>Proposals to this request was closed.</Text>
+                </View>
+              )
+            }
 
             {
-              (data) && (
-                this.renderProposals(data)
+              (peers) && (
+                this.renderProposals(peers)
               )
             }
             {
@@ -283,7 +299,7 @@ class RequestItem extends Component {
             </View>
         </ScrollView>
         {
-          (user.username == this.props.navigation.state.params.data.account.username) && (this.props.navigation.state.params.data.status == 0) && (
+          (user.username == data.account.username) && (data.status == 0) && (
             <View style={{
               width: '100%',
               flexDirection: 'row',
@@ -299,13 +315,13 @@ class RequestItem extends Component {
                   marginLeft: '5%'
                 }}
                 title={'Cancel'}
-                onClick={() => this.deleteRequest(this.props.navigation.state.params.data)}
+                onClick={() => this.deleteRequest(data)}
               />
             </View>
           )
         }
         {/* {
-          (user.username == this.props.navigation.state.params.data.account.username) && (this.props.navigation.state.params.data.status > 0) && (
+          (user.username == data.account.username) && (data.status > 0) && (
             <View style={{
               width: '100%',
               flexDirection: 'row',
@@ -321,7 +337,7 @@ class RequestItem extends Component {
                   marginLeft: '5%'
                 }}
                 title={'See Conversation'}
-                onClick={() => this.retrieveThread(this.state.data)}
+                onClick={() => this.retrieveThread(data)}
               />
             </View>
           )
@@ -338,7 +354,7 @@ class RequestItem extends Component {
               navigation={this.props.navigation}
               from={modalStatus}
               peerRequest={this.state.peerRequest}
-              request={this.props.navigation.state.params.data}
+              request={data}
               onRetrieve={() => this.retrieve()}
               closeModal={() =>
                 this.setState({

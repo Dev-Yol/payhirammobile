@@ -23,9 +23,9 @@ const dummyThemeData = [
     colors: ['#2f1387', '#FF5765', '#03D5BD', '#000000'],
   },
   {
-    title: 'Concealed Mode',
-    details: 'Dark Green, Green, Light Green, Black',
-    colors: ['#067d68', '#0fbd83', '#3bfeb8', '#000000'],
+    title: 'Insta Mode',
+    details: 'Yellow, Orange, Red - Pink, Black',
+    colors: ['#FFDC80', '#FCAF45', '#E1306C', '#000000'],
   }
 ];
 class Display extends Component {

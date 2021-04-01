@@ -110,15 +110,13 @@ class Slider extends Component {
                   </Text>
                   <TouchableOpacity
                     style={{
-                      borderWidth:1,
                       marginTop: 10,
-                      borderColor:'rgba(0,0,0,0.2)',
                       alignItems:'center',
                       justifyContent:'center',
                       width:110,
                       height:30,
                       borderRadius: 30,
-                      backgroundColor: '#22B173'
+                      backgroundColor: theme ? theme.secondary : Color.secondary
                     }}
                     onPress={() => {this.redirect("editProfileStack")}}
                   >
