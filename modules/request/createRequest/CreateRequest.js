@@ -158,6 +158,12 @@ class CreateRequest extends Component {
           })
           return
         }
+        if(amount < Helper.MINIMUM){
+          this.setState({
+            errorMessage: Helper.MINIMUM + ' is the minimum transaction'
+          })
+          return
+        }
       }
       if(currentPosition == 3){
         this.createRequest()
@@ -266,7 +272,6 @@ class CreateRequest extends Component {
     const { theme } = this.props.state;
     const { shipping, target, fulfillmentType } = this.state;
     return(
-      <ScrollView showsVerticalScrollIndicator={false}>
         <View style={{
           width: '100%',
           paddingLeft: 20,
@@ -363,7 +368,6 @@ class CreateRequest extends Component {
             </View>
 
         </View>
-      </ScrollView>
     )
   }
 
@@ -371,7 +375,6 @@ class CreateRequest extends Component {
     const { location } = this.state;
     const { defaultAddress } = this.props.state;
     return(
-      <ScrollView showsVerticalScrollIndicator={false}>
         <View style={{
           width: '100%',
           paddingLeft: 20,
@@ -408,7 +411,8 @@ class CreateRequest extends Component {
 
           <View style={{
             width: '100%',
-            height: height * 0.6
+            height: height * 0.5,
+            borderRadius: BasicStyles.standardBorderRadius
           }}>
             {
               defaultAddress && (
@@ -417,14 +421,12 @@ class CreateRequest extends Component {
             }
           </View>
         </View>
-      </ScrollView>
     )
   }
 
   thirdStep = () => {
     const { ledger } = this.props.state;
     return(
-      <ScrollView showsVerticalScrollIndicator={false}>
         <View style={{
           width: '100%',
           paddingLeft: 20,
@@ -539,60 +541,61 @@ class CreateRequest extends Component {
           />
 
         </View>
-      </ScrollView>
     )
   }
 
   fourthStep = () => {
     const { user, defaultAddress } = this.props.state;
     return(
-      <ScrollView showsVerticalScrollIndicator={false}>
         <View style={{
           width: '100%',
           paddingLeft: 20,
           paddingRight: 20,
           height: height
         }}>
-          <RequestCard 
-            onConnectRequest={(item) => {
+        {
+          (defaultAddress && user) && (
+            <RequestCard 
+              onConnectRequest={(item) => {
 
-            }}
-            data={{
-              account_id: user.id,
-              amount: this.state.amount,
-              comaker: null,
-              coupon: null,
-              currency: this.state.currency,
-              interest: null,
-              location_id: defaultAddress.id,
-              location: defaultAddress,
-              max_charge: this.state.maximumProcessingCharge,
-              months_payable: null,
-              needed_on: this.state.neededOn,
-              reason: this.state.reason,
-              shipping: this.state.shipping,
-              type: this.state.type,
-              money_type: this.state.money_type,
-              target: this.state.target,
-              status: 0,
-              account: user,
-              needed_on_human: this.state.neededOn,
-              ratings: {
-                size: 0,
-                avg: 0,
-                stars: 0,
-                total: 0
-              },
-              initial_amount: this.state.amount,
-              distance: '0 Km',
-              peer_flag: true,
-              accepted: true
-            }}
-            navigation={this.props.navigation}
-            from={'request'}
+              }}
+              data={{
+                account_id: user.id,
+                amount: this.state.amount,
+                comaker: null,
+                coupon: null,
+                currency: this.state.currency,
+                interest: null,
+                location_id: defaultAddress.id,
+                location: defaultAddress,
+                max_charge: this.state.maximumProcessingCharge,
+                months_payable: null,
+                needed_on: this.state.neededOn,
+                reason: this.state.reason,
+                shipping: this.state.shipping,
+                type: this.state.type,
+                money_type: this.state.money_type,
+                target: this.state.target,
+                status: 0,
+                account: user,
+                needed_on_human: this.state.neededOn,
+                ratings: {
+                  size: 0,
+                  avg: 0,
+                  stars: 0,
+                  total: 0
+                },
+                initial_amount: this.state.amount,
+                distance: '0 Km',
+                peer_flag: true,
+                accepted: true
+              }}
+              navigation={this.props.navigation}
+              from={'create_request'}
             />
+          )
+        }
         </View>
-      </ScrollView>
     )
   }
 
@@ -601,67 +604,72 @@ class CreateRequest extends Component {
     const { currentPosition, errorMessage } = this.state;
     return (
       <View style={{
-        flex: 1,
-        height: height
+        flex: 1
       }}>
-        <View style={{
-          paddingTop: 25,
-          paddingBottom: 25
-        }}>
-          <Stepper 
-            labels={this.state.stepLabels}
-            currentPosition={currentPosition}
-            stepCount={4}
-          />
-        </View>
-        {
-          errorMessage && (
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <View style={{
+            height: height,
+            flex: 1
+          }}>
             <View style={{
-              width: '100%',
-              alignItems: 'center'
+              paddingTop: 25,
+              paddingBottom: 25
             }}>
-              <Text style={{
-                fontSize: BasicStyles.standardFontSize,
-                paddingTop: 10,
-                paddingBottom: 10,
-                color: Color.danger
-              }}>{errorMessage}</Text>
+              <Stepper 
+                labels={this.state.stepLabels}
+                currentPosition={currentPosition}
+                stepCount={4}
+              />
             </View>
-          )
-        }
-        <PagerProvider activeIndex={currentPosition}>
-          <Pager panProps={{enabled: false}}>
-            <View style={{
-              flex: 1,
-              minHeight: height,
-              width: '100%'
-            }}>
-              {this.firstStep()}
-            </View>
-            <View style={{
-              flex: 1,
-              minHeight: height,
-              width: '100%'
-            }}>
-              {this.secondStep()}
-            </View>
-            <View style={{
-              flex: 1,
-              minHeight: height,
-              width: '100%'
-            }}>
-              {this.thirdStep()}
-            </View>
-            <View style={{
-              flex: 1,
-              minHeight: height,
-              width: '100%'
-            }}>
-              {this.fourthStep()}
-            </View>
-          </Pager>
-        </PagerProvider> 
-
+            {
+              errorMessage && (
+                <View style={{
+                  width: '100%',
+                  alignItems: 'center'
+                }}>
+                  <Text style={{
+                    fontSize: BasicStyles.standardFontSize,
+                    paddingTop: 10,
+                    paddingBottom: 10,
+                    color: Color.danger
+                  }}>{errorMessage}</Text>
+                </View>
+              )
+            }
+            <PagerProvider activeIndex={currentPosition}>
+              <Pager panProps={{enabled: false}}>
+                <View style={{
+                  flex: 1,
+                  minHeight: height,
+                  width: '100%'
+                }}>
+                  {this.firstStep()}
+                </View>
+                <View style={{
+                  flex: 1,
+                  minHeight: height,
+                  width: '100%'
+                }}>
+                  {this.secondStep()}
+                </View>
+                <View style={{
+                  flex: 1,
+                  minHeight: height,
+                  width: '100%'
+                }}>
+                  {this.thirdStep()}
+                </View>
+                <View style={{
+                  flex: 1,
+                  minHeight: height,
+                  width: '100%'
+                }}>
+                  {this.fourthStep()}
+                </View>
+              </Pager>
+            </PagerProvider> 
+          </View>
+        </ScrollView>
         {
           this.footer(currentPosition  == 0 ? ['Next'] : ['Previous', 'Next'])
         }
