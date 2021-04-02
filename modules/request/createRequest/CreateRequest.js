@@ -16,10 +16,14 @@ import PickerWithLabel from 'components/Form/PickerWithLabel';
 import styles from './Styles';
 import {BasicStyles, Routes, Helper, Color} from 'common';
 import DateTime from 'components/DateTime';
+import DatePicker from 'components/DateTime/index.js';
 import Currency from 'services/Currency';
 import TextInputWithoutLabel from 'components/Form/TextInputWithoutLabel'
 import Stepper from 'components/Stepper';
 import { Pager, PagerProvider } from '@crowdlinker/react-native-pager';
+import MapViewer from 'components/Location/MapViewer';
+import NumberFormat from 'react-number-format';
+import RequestCard from 'modules/generic/RequestCard';
 
 const width = Math.round(Dimensions.get('window').width);
 const height = Math.round(Dimensions.get('window').height);
@@ -44,21 +48,50 @@ class CreateRequest extends Component {
       currentDate: null,
       edited: false,
       currentPosition: 0,
-      stepLabels: ['Type', 'Location', 'Details', 'Preview']
+      stepLabels: ['Type', 'Location', 'Details', 'Preview'],
+      errorMessage: null
     };
   }
   componentDidMount() {
     const { params } = this.props.navigation.state;
     if(params && params.data){
       this.handleSelectFulfillment(params.data)
-    }    
+    }
+    this.retrieveSummaryLedger()
   }
+
+ retrieveSummaryLedger = () => {
+    const {user} = this.props.state;
+    const { setLedger } = this.props;
+    if (user == null) {
+      return;
+    }
+    let parameter = {
+      account_id: user.id,
+      account_code: user.code
+    };
+    this.setState({isLoading: true});
+    Api.request(Routes.ledgerSummary, parameter, (response) => {
+      this.setState({isLoading: false});
+      if (response != null) {
+        setLedger(response.data[0]);
+      } else {
+        setLedger(null);
+      }
+    }, error => {
+      console.log('response', error)
+      this.setState({isLoading: false});
+    });
+  };
+  
 
   handleTarget = (item) => {
     this.setState({
       target: item.payload
     })
   }
+
+
 
   handleSelectFulfillment = (item) => {
     console.log('[item]', item);
@@ -69,27 +102,138 @@ class CreateRequest extends Component {
     });
   };
 
+  onDateFinish = (datetime) => {
+    console.log('[Selected Date]', datetime)
+    this.setState({
+      neededOn: datetime.date,
+    });
+  };
 
   footerHandler(action){
-    const { currentPosition } = this.state;
+    const { ledger, defaultAddress } = this.props.state;
+    const { currentPosition, fulfillmentType, location } = this.state;
+    const { amount, neededOn, reason, type } = this.state;
+    this.setState({
+      errorMessage: null
+    })
     if(action == 'previous' && currentPosition > 0){
       this.setState({
         currentPosition: currentPosition - 1
       })
     }else if(action == 'next' && currentPosition < this.state.stepLabels.length){
+      if(currentPosition == 0 && fulfillmentType == null){
+        this.setState({
+          errorMessage: 'Fulfilment type is required'
+        })
+        return
+      }
+      if(currentPosition == 1 && defaultAddress == null){
+        this.setState({
+          errorMessage: 'Location is required'
+        })
+        return
+      }
+      if(currentPosition == 2){
+        if(ledger == null && type != 3){
+          this.setState({
+            errorMessage: 'Insufficient Balance'
+          })
+          return
+        }
+        if(ledger && amount > ledger.available_balance){
+          this.setState({
+            errorMessage: 'Insufficient Balance'
+          })
+          return
+        }
+        if(neededOn == null){
+          this.setState({
+            errorMessage: 'Needed on is required'
+          })
+          return
+        }
+        if(reason == null){
+          this.setState({
+            errorMessage: 'Additional information is required.'
+          })
+          return
+        }
+      }
+      if(currentPosition == 3){
+        this.createRequest()
+      }
       this.setState({
         currentPosition: currentPosition + 1
       })
     }
   }
 
-  footer = (data, margin = null) => {
+
+
+  createRequest = () => {
+    const {user, defaultAddress} = this.props.state;
+    if(user == null){
+      return
+    }else if(this.state.target == null || this.state.type == null || this.state.money_type == null || this.state.amount == null ||  this.state.amount == "" || this.state.neededOn == null || this.state.reason == null || this.state.reason == "" || defaultAddress == null || this.state.target == null) {
+      Alert.alert(
+        'Error Message',
+        'All fields with (*) are required.',
+        [
+          {text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel'}
+        ],
+        { cancelable: false }
+      )
+      return
+    }else if(parseInt(this.state.amount) < 1000){
+      Alert.alert(
+        'Error Message',
+        'Amount must not be less than 1000',
+        [
+          {text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel'}
+        ],
+        { cancelable: false }
+      )
+      return
+    }
+    let parameters = {
+      account_id: user.id,
+      amount: this.state.amount,
+      comaker: null,
+      coupon: null,
+      currency: this.state.currency,
+      interest: null,
+      location_id: defaultAddress.id,
+      max_charge: this.state.maximumProcessingCharge,
+      months_payable: null,
+      needed_on: this.state.neededOn,
+      reason: this.state.reason,
+      shipping: this.state.shipping,
+      type: this.state.type,
+      money_type: this.state.money_type,
+      target: this.state.target
+    };
+    console.log('[Create Requests] Create parameters', parameters)
+    // this.props.setRequestInput(parameters);
+    // this.sendRequest()
+    this.props.navigation.navigate('otpStack', {
+      data: {
+        payload: 'createRequest',
+        data: parameters
+      }
+    });
+  };
+
+  footer = (data) => {
     const { theme } = this.props.state;
     return(
       <View style={{
         flexDirection: 'row',
-        marginTop: 25,
-        alignItems: 'space-between'
+        bottom: 20,
+        right: 0,
+        paddingLeft: 20,
+        paddingRight: 20,
+        position: 'absolute',
+        width: '100%'
       }}>
         {
           data.map((item) => (
@@ -103,7 +247,7 @@ class CreateRequest extends Component {
                 width: '40%',
                 height: 50,
                 borderRadius: 25,
-                marginLeft: 'previous' == item.toLowerCase() ? '0%' : margin ? margin : '10%',
+                marginLeft: 'previous' == item.toLowerCase() ? '0%' : data.length == 1 ? '60%' : '10%',
                 marginRight: 'previous' == item.toLowerCase() ? '10%' : '0%',
               }}
               textStyle={{
@@ -117,6 +261,7 @@ class CreateRequest extends Component {
 
     )
   }
+
   firstStep = () => {
     const { theme } = this.props.state;
     const { shipping, target, fulfillmentType } = this.state;
@@ -127,7 +272,7 @@ class CreateRequest extends Component {
           paddingLeft: 20,
           paddingRight: 20,
           alignItems: 'center',
-          justifyContent: 'center'
+          height: height
         }}>
             <View style={{
               flexDirection: 'row',
@@ -142,13 +287,13 @@ class CreateRequest extends Component {
                     }}
                     title={item}
                     style={{
-                      backgroundColor: shipping == item.toLowerCase() ? (theme ? theme.secondary : Color.secondary) : Color.white,
+                      backgroundColor: shipping == item.toLowerCase() ? (theme ? theme.primary : Color.primary) : Color.white,
                       width: '40%',
                       marginRight: '5%',
                       height: 50,
                       borderRadius: 25,
                       borderWidth: 0.5,
-                      borderColor: theme ? theme.secondary : Color.secondary
+                      borderColor: theme ? theme.primary : Color.primary
                     }}
                     textStyle={{
                       color: shipping == item.toLowerCase() ? Color.white : Color.black,
@@ -217,14 +362,14 @@ class CreateRequest extends Component {
               </ScrollView>
             </View>
 
-            {
-              this.footer(['Next'], '60%')
-            }
         </View>
       </ScrollView>
     )
   }
+
   secondStep = () => {
+    const { location } = this.state;
+    const { defaultAddress } = this.props.state;
     return(
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={{
@@ -232,17 +377,52 @@ class CreateRequest extends Component {
           paddingLeft: 20,
           paddingRight: 20,
           alignItems: 'center',
-          justifyContent: 'center'
+          height: height
         }}>
-          {
-            this.footer(['Previous', 'Next'])
-          }
+          <View style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            height: 50,
+          }}>
+            <Text style={{
+              fontSize: BasicStyles.standardFontSize,
+              width: '50%',
+              fontWeight: 'bold'
+            }}>Location *</Text>
+
+            <TouchableOpacity
+              style={{
+                width: '50%'
+              }}
+              onPress={() => {
+                this.props.navigation.navigate('addLocationStack')
+              }}
+              >
+              <Text style={{
+                fontSize: BasicStyles.standardFontSize,
+                width: '100%',
+                textAlign: 'right'
+              }}>{defaultAddress ? defaultAddress.route : 'Select Location'}</Text>
+            </TouchableOpacity>
+          </View>
+
+          <View style={{
+            width: '100%',
+            height: height * 0.6
+          }}>
+            {
+              defaultAddress && (
+                <MapViewer data={defaultAddress}/>
+              )
+            }
+          </View>
         </View>
       </ScrollView>
     )
   }
 
   thirdStep = () => {
+    const { ledger } = this.props.state;
     return(
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={{
@@ -250,29 +430,167 @@ class CreateRequest extends Component {
           paddingLeft: 20,
           paddingRight: 20,
           alignItems: 'center',
-          justifyContent: 'center'
+          height: height
         }}>
+
+          <TextInput
+            value={this.state.amount}
+            keyboardType={'numeric'}
+            onChangeText={(input) => {
+              if(ledger && ledger.available_balance < input){
+                this.setState({
+                  errorMessage: 'Insufficient Balance!'
+                })
+              }else{
+                this.setState({
+                  amount: input
+                })  
+              }
+            }}
+            style={{
+              alignItems: 'center',
+              fontSize: 52
+            }}
+            placeholder={'0.00'}
+          />
+          
           {
-            this.footer(['Previous', 'Next'])
+            ledger && (
+              <TouchableOpacity style={{
+                width: '100%',
+                paddingBottom: 20
+              }}>
+                <View style={{
+                  width: '100%',
+                  alignItems: 'center'
+                }}>
+                  <Text style={{
+                    fontSize: BasicStyles.standardFontSize,
+                    paddingTop: 5,
+                    paddingBottom: 5
+                  }}>{Currency.display(ledger.available_balance, ledger.currency) +  '  >'}</Text>
+                  <Text style={{
+                    fontSize: BasicStyles.standardFontSize,
+                    color: Color.gray
+                  }}>Available Balance</Text>
+                </View>
+              </TouchableOpacity>
+            )
           }
+
+          <View style={{
+            width: '100%',
+            flexDirection: 'row',
+            height: 50,
+            alignItems: 'center',
+            borderBottomWidth: 1,
+            borderBottomColor: Color.lightGray
+          }}>
+            <Text style={{
+              fontSize: BasicStyles.standardFontSize,
+              width: '50%',
+              fontWeight: 'bold'
+            }}>Needed on *</Text>
+
+            <DatePicker
+              type={'date'}
+              placeholder={this.state.needed_on}
+              borderColor= {'white'}
+              minimumDate={this.state.currentDate}
+              height={40}
+              style={{
+                borderColor: 0,
+                borderWidth: 0,
+                height: 40,
+                width: '50%',
+                alignItems: 'flex-end',
+                justifyContent: 'center',
+              }}
+              textStyle={{
+                textAlign: 'right',
+                width: '100%',
+                color: Color.black
+              }}
+              icon={false}
+              onFinish={this.onDateFinish}
+            />
+          </View>
+
+          <View style={{
+            width: '100%',
+            height: 50,
+            justifyContent: 'center'
+          }}>
+            <Text style={{
+              fontSize: BasicStyles.standardFontSize,
+              fontWeight: 'bold'
+            }}>Additional information *</Text>
+          </View>
+
+
+          <TextInputWithoutLabel
+            variable={this.state.reason}
+            multiline={true}
+            onChange={(value) => this.setState({
+              reason: value
+            })}
+            numberOfLines={10}
+            placeholder={'Type the details here ...'}
+          />
+
         </View>
       </ScrollView>
     )
   }
 
   fourthStep = () => {
+    const { user, defaultAddress } = this.props.state;
     return(
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={{
           width: '100%',
           paddingLeft: 20,
           paddingRight: 20,
-          alignItems: 'center',
-          justifyContent: 'center'
+          height: height
         }}>
-          {
-            this.footer(['Previous', 'Next'])
-          }
+          <RequestCard 
+            onConnectRequest={(item) => {
+
+            }}
+            data={{
+              account_id: user.id,
+              amount: this.state.amount,
+              comaker: null,
+              coupon: null,
+              currency: this.state.currency,
+              interest: null,
+              location_id: defaultAddress.id,
+              location: defaultAddress,
+              max_charge: this.state.maximumProcessingCharge,
+              months_payable: null,
+              needed_on: this.state.neededOn,
+              reason: this.state.reason,
+              shipping: this.state.shipping,
+              type: this.state.type,
+              money_type: this.state.money_type,
+              target: this.state.target,
+              status: 0,
+              account: user,
+              needed_on_human: this.state.neededOn,
+              ratings: {
+                size: 0,
+                avg: 0,
+                stars: 0,
+                total: 0
+              },
+              initial_amount: this.state.amount,
+              distance: '0 Km',
+              peer_flag: true,
+              accepted: true
+            }}
+            navigation={this.props.navigation}
+            from={'request'}
+            />
         </View>
       </ScrollView>
     )
@@ -280,10 +598,11 @@ class CreateRequest extends Component {
 
   render() {
     const { ledger, theme } = this.props.state;
-    const { currentPosition } = this.state;
+    const { currentPosition, errorMessage } = this.state;
     return (
       <View style={{
-        flex: 1
+        flex: 1,
+        height: height
       }}>
         <View style={{
           paddingTop: 25,
@@ -295,6 +614,21 @@ class CreateRequest extends Component {
             stepCount={4}
           />
         </View>
+        {
+          errorMessage && (
+            <View style={{
+              width: '100%',
+              alignItems: 'center'
+            }}>
+              <Text style={{
+                fontSize: BasicStyles.standardFontSize,
+                paddingTop: 10,
+                paddingBottom: 10,
+                color: Color.danger
+              }}>{errorMessage}</Text>
+            </View>
+          )
+        }
         <PagerProvider activeIndex={currentPosition}>
           <Pager panProps={{enabled: false}}>
             <View style={{
@@ -327,6 +661,10 @@ class CreateRequest extends Component {
             </View>
           </Pager>
         </PagerProvider> 
+
+        {
+          this.footer(currentPosition  == 0 ? ['Next'] : ['Previous', 'Next'])
+        }
       </View>
     );
   }
