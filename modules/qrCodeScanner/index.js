@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { BasicStyles, Color } from 'common'
 import QRCodeScanner from 'react-native-qrcode-scanner';
+import { RNCamera } from 'react-native-camera';
 const height = Math.round(Dimensions.get('window').height);
 class Scanner extends Component {
   onSuccess = e => {
@@ -21,6 +22,7 @@ class Scanner extends Component {
     return (
       <QRCodeScanner
         onRead={this.onSuccess}
+        flashMode={RNCamera.Constants.FlashMode.torch}
         showMarker
         containerStyle={{
           height: height,
