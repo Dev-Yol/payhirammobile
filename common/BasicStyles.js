@@ -149,8 +149,6 @@ export default {
       elevation: 10,
       backgroundColor: Color.white,
       height: 60,
-      justifyContent: 'center',
-      alignItems: 'center',
       fontSize: 18
     },
     headerTitleContainerStyle: {

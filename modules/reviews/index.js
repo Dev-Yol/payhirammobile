@@ -56,7 +56,8 @@ class Reviews extends Component {
           column: 'payload_value',
           clause: '=',
           value: data.peer.account_id
-        }]
+        }],
+        account_id: data.peer.account_id
       }
       if(data.peer == null){
         Alert.alert(
@@ -85,17 +86,34 @@ class Reviews extends Component {
           column: 'payload_value',
           clause: '=',
           value: data.account_id
-        }]
+        }],
+        account_id: data.peer.account_id
       }
       this.setState({
         data: data.account
       })
     }
+    console.log('retrieve parameter', parameter)
+    this.setState({isLoading: true});
     Api.request(Routes.ratingsRetrieve, parameter, response => {
         this.setState({isLoading: false});
+        console.log('response', response)
+        if(response.data && response.data.length > 0){
+          this.setState({
+            data: response.data[0],
+            comment: response.data[0].comments,
+            selectedStar: parseInt(response.data[0].value)
+          })
+        }else{
+          this.setState({
+            data: null,
+            comment: null,
+            selectedStar: 0
+          })
+        }
       },
       (error) => {
-        this.setState({isLoading: false});
+        this.setState({isLoading: false, data: null});
       }
     );
   }
@@ -153,6 +171,7 @@ class Reviews extends Component {
       status: 'full',
     };
     this.setState({isLoading: true});
+    console.log('parameters', parameters)
     Api.request(Routes.ratingsCreate, parameters, response => {
         this.setState({isLoading: false}, () => {
           this.props.navigation.pop();
@@ -207,9 +226,14 @@ class Reviews extends Component {
     this.setState({comment: value});
   };
 
+  renderUserInfo(account){
+    return (account?.information && account?.information.length > 0 && account?.information[0].first_name !== null) ? account.information.first_name + ' ' + account.information.last_name : account.username;
+  }
+
 
   renderDetails = (data) => {
     const { theme, user } = this.props.state;
+    console.log('data', data)
     return(
       <View style={{
         height: height,
@@ -221,21 +245,17 @@ class Reviews extends Component {
       }}>
         <View 
         style={{marginLeft: '36%'}}>
-        {
-          data && (
-            <UserImage
-              user={data}
-              style={{
-                marginRight: '30%',
-                height: 100,
-                width: 100,
-                borderRadius: 50
-              }}
-              size={100}
-              color={Color.primary}
-              />
-          )
-        }
+          <UserImage
+            user={data.account?.code == user.code ? data.peer?.account : data.account}
+            style={{
+              marginRight: '30%',
+              height: 100,
+              width: 100,
+              borderRadius: 50
+            }}
+            size={100}
+            color={Color.primary}
+            />
         </View>
 
         <Text style={{
@@ -244,7 +264,7 @@ class Reviews extends Component {
           textAlign: 'center',
           marginBottom: 20
         }}>
-          {data.username}
+          {data.account?.code == user.code ? this.renderUserInfo(data?.peer?.account) : this.renderUserInfo(data.account)}
         </Text>
         <View style={styles.textContainer}>
           <Text style={styles.textStyle}>
@@ -275,7 +295,8 @@ class Reviews extends Component {
   }
   render() {
     const { theme } = this.props.state;
-    const { data } = this.state;
+    const { data } = this.props.navigation.state.params;
+    const { isLoading } = this.state;
     return (
       <View>
         <ScrollView showsVerticalScrollIndicator={false}>
@@ -284,12 +305,12 @@ class Reviews extends Component {
             height: height,
             flex: 1
           }}>
-              {data && this.renderDetails(data)}
+              {(data && isLoading == false) && this.renderDetails(data)}
           </View>
         </ScrollView>
-        {this.state.isLoading ? <Spinner mode="overlay" /> : null}
+        {isLoading ? <Spinner mode="overlay" /> : null}
         {
-          data && (
+          (this.state.data == null) && (
             <View style={styles.ButtonContainer}>
             <Button
               style={{
