@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Text, View, StyleSheet, TouchableOpacity, ScrollView, TextInput, Dimensions, Alert} from 'react-native';
+import {Text, View, StyleSheet, TouchableOpacity, ScrollView, TextInput, Dimensions, Alert, KeyboardAvoidingView} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faStar, faAsterisk, faMinusCircle, faPlusCircle} from '@fortawesome/free-solid-svg-icons';
 import {connect} from 'react-redux';
@@ -470,7 +470,7 @@ class CreateRequest extends Component {
                     fontSize: BasicStyles.standardFontSize,
                     paddingTop: 5,
                     paddingBottom: 5
-                  }}>{Currency.display(ledger.available_balance, ledger.currency) +  '  >'}</Text>
+                  }}>{Currency.display(ledger.available_balance, ledger?.currency ? ledger.currency : 'PHP') +  '  >'}</Text>
                   <Text style={{
                     fontSize: BasicStyles.standardFontSize,
                     color: Color.gray
@@ -603,9 +603,12 @@ class CreateRequest extends Component {
     const { ledger, theme } = this.props.state;
     const { currentPosition, errorMessage } = this.state;
     return (
-      <View style={{
+      <KeyboardAvoidingView
+      style={{
         flex: 1
-      }}>
+      }}
+      behavior={'height'}
+      >
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={{
             height: height,
@@ -673,7 +676,7 @@ class CreateRequest extends Component {
         {
           this.footer(currentPosition  == 0 ? ['Next'] : ['Previous', 'Next'])
         }
-      </View>
+      </KeyboardAvoidingView>
     );
   }
 }

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, Alert, Dimensions, TextInput} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, Alert, Dimensions, TextInput, KeyboardAvoidingView} from 'react-native';
 import {NavigationActions, StackActions} from 'react-navigation';
 import Button from 'components/Form/Button.js';
 import styles from 'modules/otp/Styles.js';
@@ -8,6 +8,7 @@ import {Routes, Color, Helper, BasicStyles} from 'common';
 import {Spinner} from 'components';
 import {connect} from 'react-redux';
 import Api from 'services/api';
+
 const height = Math.round(Dimensions.get('window').height);
 
 class OTP extends Component {
@@ -358,7 +359,12 @@ class OTP extends Component {
     }
 
     return (
-      <View style={styles.Container}>
+      <KeyboardAvoidingView
+        style={{
+          flex: 1
+        }}
+        behavior={'height'}
+        >
         {this.state.isLoading ? <Spinner mode="overlay" /> : null}
         {(user) && (
           <View style={{
@@ -451,7 +457,7 @@ class OTP extends Component {
             </View>
           )
         }
-      </View>
+      </KeyboardAvoidingView>
     );
   }
 }
