@@ -314,7 +314,7 @@ class Requests extends Component {
           }
           if(Math.round(scrollingHeight) >= Math.round(totalHeight)) {
             if(isLoading == false){
-              this.retrieve(true, true, false)
+              this.retrieve(true, true, true)
             }
           }
         }}>
@@ -323,7 +323,7 @@ class Requests extends Component {
               (data && data.length > 0) && data.map((item, index) => (
                 <View style={{
                   marginTop: (index == 0) ? 70 : 0,
-                  marginBottom: (index == data.length - 1) ? 100 : 0,
+                  marginBottom: (index == data.length - 1 && isLoading == false) ? 100 : 0,
                   borderBottomWidth: 10,
                   borderBottomColor: Color.lightGray,
                   paddingLeft: 20,

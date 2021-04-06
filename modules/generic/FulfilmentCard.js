@@ -5,7 +5,7 @@ import { BasicStyles, Helper, Color } from 'common';
 import {connect} from 'react-redux';
 
 const Data = [{
-    type: 'Send',
+    type: 'Send Cash',
     description: 'Allow other peers to fulfill your transaction when you to send money to your family, friends, or to businesses',
     id: 1,
     money_type: 'cash'

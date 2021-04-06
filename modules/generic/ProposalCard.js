@@ -123,7 +123,7 @@ class ProposalCard extends Component {
 
     return(
       <TouchableOpacity
-        onPress={() => this.props.navigation.navigate('locationWithMapStack', {
+        onPress={() => this.props.navigation.navigate('locationWithMapViewerStack', {
           data: item.location
         })}
         style={{
@@ -238,7 +238,20 @@ class ProposalCard extends Component {
                   />
                     <Button
                       title={'See transaction'}
-                      onClick={() => {this.props.viewConversation(item)}}
+                      onClick={() => {
+                        this.props.navigation.navigate('messagesStack', {
+                          data: {
+                            id: request.id,
+                            title: request.code,
+                            payload: 'request',
+                            account_id: user.id,
+                            request: request,
+                            currency: request.currency,
+                            amount: request.amount,
+                            status: request.status
+                          }
+                        });
+                      }}
                       style={{
                         width: '50%',
                         backgroundColor: theme ? theme.secondary : Color.secondary,
@@ -257,6 +270,7 @@ class ProposalCard extends Component {
   _myFooter = (item, index) => {
     const {user, theme} = this.props.state;
     const { data, request } = this.props;
+    console.log('[item==============]', item);
     return (
       <View>
         <View
@@ -300,7 +314,20 @@ class ProposalCard extends Component {
                   }}>
                     <Button
                       title={'See transaction'}
-                      onClick={() => {this.props.viewConversation(item)}}
+                      onClick={() => {
+                        this.props.navigation.navigate('messagesStack', {
+                          data: {
+                            id: request.id,
+                            title: request.code,
+                            payload: 'request',
+                            account_id: user.id,
+                            request: request,
+                            currency: request.currency,
+                            amount: request.amount,
+                            status: request.status
+                          }
+                        });
+                      }}
                       style={{
                         width: '50%',
                         backgroundColor: theme ? theme.secondary : Color.secondary
@@ -333,8 +360,8 @@ class ProposalCard extends Component {
               {item.account && this._header(item, 'amount')}
               {(item.location && request && request.shipping == 'pickup') && this._location(item)}
               {this._body(item)}
-              {(item.account_id != user.id) && this._footer(item, index)}
-              {(item.account_id == user.id) && this._myFooter(item, index)}
+              {(item.account?.code != user.code) && this._footer(item, index)}
+              {(item.account?.code == user.code) && this._myFooter(item, index)}
             </TouchableOpacity>
           ))
         }

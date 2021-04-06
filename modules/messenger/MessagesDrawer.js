@@ -29,10 +29,11 @@ class HeaderOptions extends Component {
   };
 
   back = () => {
-    const { setMessagesOnGroup, setMessengerGroup } = this.props;
-    setMessagesOnGroup({groupId: null, messages: null});
-    setMessengerGroup(null);
-    this.props.navigationProps.navigate('drawerStack');
+    // const { setMessagesOnGroup, setMessengerGroup } = this.props;
+    // setMessagesOnGroup({groupId: null, messages: null});
+    // setMessengerGroup(null);
+    // this.props.navigationProps.navigate('drawerStack');
+    this.props.navigationProps.pop()
   };
 
   viewMenu = () => {

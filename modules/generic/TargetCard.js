@@ -9,15 +9,15 @@ const width = Math.round(Dimensions.get('window').width);
 const Data = [{
   title: 'Partners',
   payload: 'partners',
-  description: 'Post will be visible only to partners to nearest location.'
+  description: 'Your request will be visible only to partners in selected location and can be process on by the partner assigned to the selected location.'
 }, {
   title: 'Circle',
   payload: 'circle',
-  description: 'Post will be visible only to your circle.'
+  description: 'Your request will be visible only to your circles and can be process on by your circle.'
 }, {
   title: 'Public',
   payload: 'public',
-  description: 'Post will be visible all.'
+  description: 'All can process your request.'
 }]
 
 

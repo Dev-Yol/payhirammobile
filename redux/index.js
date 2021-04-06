@@ -578,6 +578,11 @@ const reducer = (state = initialState, action) => {
         ...state,
         parameter,
       };
+    case types.SET_SELECTED_LEDGER:
+      return {
+        ...state,
+        ledger,
+      };
     default:
       return {...state, nav: state.nav};
   }

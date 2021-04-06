@@ -62,6 +62,7 @@ export default {
   },
   MAXIMUM_DEPOSIT: 500000,
   MAXIMUM_WITHDRAWAL: 500000,
+  MINIMUM: 1000,
   payhiramShare: 0.2,
   partnerShare: 0.8,
   fulfillmentTypes: [
