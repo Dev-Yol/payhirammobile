@@ -111,7 +111,8 @@ function OTP(props){
         // disabled here
       }
       if(i == 5){
-        // this.completeOTPField(i)      
+        // this.completeOTPField(i)
+        otpTextInput[i].blur()
       }
       return  
     }
@@ -336,7 +337,6 @@ function OTP(props){
         placeholder={'•'}
         keyboardType={'numeric'}
         key={i}
-        autoFocus={activeIndex == i}
         ref={ref => otpTextInput[i] = ref}
       />
     );
@@ -421,7 +421,9 @@ function OTP(props){
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'space-evenly',
-            position: keyboard.keyboardShown ? 'relative' : 'absolute'
+            position: 'absolute',
+            bottom: 10,
+            left: 0
           }}>
             <Button 
               style={{
