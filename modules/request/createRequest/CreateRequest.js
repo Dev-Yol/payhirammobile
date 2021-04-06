@@ -1,29 +1,20 @@
 import React, {Component} from 'react';
 import {Text, View, StyleSheet, TouchableOpacity, ScrollView, TextInput, Dimensions, Alert, KeyboardAvoidingView} from 'react-native';
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faStar, faAsterisk, faMinusCircle, faPlusCircle} from '@fortawesome/free-solid-svg-icons';
 import {connect} from 'react-redux';
 import Api from 'services/api/index.js';
-import {Spinner} from 'components';
-import {NavigationActions, StackActions} from 'react-navigation';
 import FulfillmentCard from 'modules/generic/FulfilmentCard';
 import TargetCard from 'modules/generic/TargetCard';
-import BalanceCard from 'modules/generic/BalanceCard';
 import Button from 'components/Form/Button';
-import TextInputWithLabel from 'components/Form/TextInputWithLabel';
-import LocationTextInput from 'components/Form/LocationTextInput';
-import PickerWithLabel from 'components/Form/PickerWithLabel';
-import styles from './Styles';
 import {BasicStyles, Routes, Helper, Color} from 'common';
-import DateTime from 'components/DateTime';
 import DatePicker from 'components/DateTime/index.js';
 import Currency from 'services/Currency';
 import TextInputWithoutLabel from 'components/Form/TextInputWithoutLabel'
 import Stepper from 'components/Stepper';
 import { Pager, PagerProvider } from '@crowdlinker/react-native-pager';
 import MapViewer from 'components/Location/MapViewer';
-import NumberFormat from 'react-number-format';
 import RequestCard from 'modules/generic/RequestCard';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 
 const width = Math.round(Dimensions.get('window').width);
 const height = Math.round(Dimensions.get('window').height);
@@ -405,10 +396,13 @@ class CreateRequest extends Component {
                 this.props.navigation.navigate('addLocationStack')
               }}
               >
+              { defaultAddress != null ?
+              <Text></Text> :  <FontAwesomeIcon icon={faMapMarkerAlt} size={BasicStyles.standardFontSize} color={Color.black} style={{marginLeft: '45%', marginTop: '3%'}}/>}
               <Text style={{
                 fontSize: BasicStyles.standardFontSize,
                 width: '100%',
-                textAlign: 'right'
+                textAlign: 'right',
+                marginTop: '-8%'
               }}>{defaultAddress ? defaultAddress.route : 'Select Location'}</Text>
             </TouchableOpacity>
           </View>
@@ -465,7 +459,11 @@ class CreateRequest extends Component {
               <TouchableOpacity style={{
                 width: '100%',
                 paddingBottom: 20
-              }}>
+              }}
+              onPress={() => {
+                this.props.navigation.navigate('currencyStack')
+              }}
+              >
                 <View style={{
                   width: '100%',
                   alignItems: 'center'

@@ -41,15 +41,28 @@ class RequestCard extends Component {
             width: '15%',
             justifyContent: 'center'
           }}>
-            <UserImage
-              user={item.account}
-              color={theme ? theme.primary : Color.primary}
-              style={{
-                width: this.getWidth() - 10,
-                height: this.getWidth() - 10,
-                borderRadius: ((this.getWidth() - 10) / 2)
-              }}
-            /> 
+            {
+              user != null && user.profile != null ?
+              <UserImage
+                user={item.account}
+                color={theme ? theme.primary : Color.primary}
+                style={{
+                  width: this.getWidth() - 10,
+                  height: this.getWidth() - 10,
+                  borderRadius: ((this.getWidth() - 10) / 2)
+                }}
+              />
+              :
+              <UserImage
+                user={item.account}
+                color={theme ? theme.primary : Color.primary}
+                style={{
+                  width: this.getWidth() - 10,
+                  height: this.getWidth() - 10,
+                  borderRadius: ((this.getWidth() - 10) / 2)
+                }}
+              />
+            }
           </View>
           <View style={{
             width: '85%'
