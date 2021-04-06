@@ -35,6 +35,7 @@ import UpdateTicketStack from 'components/Support/UpdateTicket/UpdateTicketDrawe
 import PrivacyStack from 'modules/privacy/Drawer';
 import GuidelinesStack from 'modules/guidelines/GuidelinesDrawer';
 import LocationWithMapViewerStack from 'components/Location/LocationViewerDrawer.js';
+import CurrencyStack from 'modules/currency/CurrencyDrawer.js';
 
 // login stack
 const LoginStack = createStackNavigator(
@@ -126,7 +127,8 @@ const PrimaryNav = createStackNavigator(
     paymentMethodsStack: { screen: PaymentMethodsStack },
     privacyStack: { screen: PrivacyStack},
     guidelinesStack: { screen: GuidelinesStack},
-    directTransferDrawer: { screen: DirectTransferStack }
+    directTransferDrawer: { screen: DirectTransferStack },
+    currencyStack: { screen: CurrencyStack }
   },
   {
     // Default config for all screens

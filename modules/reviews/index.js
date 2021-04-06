@@ -97,7 +97,7 @@ class Reviews extends Component {
     this.setState({isLoading: true});
     Api.request(Routes.ratingsRetrieve, parameter, response => {
         this.setState({isLoading: false});
-        console.log('response', response)
+        console.log('[responseInRatings]', response)
         if(response.data && response.data.length > 0){
           this.setState({
             data: response.data[0],
@@ -152,7 +152,7 @@ class Reviews extends Component {
         "Error Message",
         'Invalid request of page.',
         [
-          { text: "Ok", onPress: () => {
+          { text: "Ok", onPress: () => {  
             this.props.navigation.pop()
           }}
         ],

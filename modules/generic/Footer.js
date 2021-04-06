@@ -39,7 +39,8 @@ class Footer extends Component {
     const { theme } = this.props.state;
     return(
       <View
-        style={{          alignItems: 'center',
+        style={{          
+          alignItems: 'center',
           justifyContent: 'center',
           width: '100%',
           position: 'absolute',

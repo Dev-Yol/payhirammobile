@@ -41,15 +41,28 @@ class RequestCard extends Component {
             width: '15%',
             justifyContent: 'center'
           }}>
-            <UserImage
-              user={item.account}
-              color={theme ? theme.primary : Color.primary}
-              style={{
-                width: this.getWidth() - 10,
-                height: this.getWidth() - 10,
-                borderRadius: ((this.getWidth() - 10) / 2)
-              }}
-            /> 
+            {
+              user != null && user.profile != null ?
+              <UserImage
+                user={item.account}
+                color={theme ? theme.primary : Color.primary}
+                style={{
+                  width: this.getWidth() - 10,
+                  height: this.getWidth() - 10,
+                  borderRadius: ((this.getWidth() - 10) / 2)
+                }}
+              />
+              :
+              <UserImage
+                user={item.account}
+                color={theme ? theme.primary : Color.primary}
+                style={{
+                  width: this.getWidth() - 10,
+                  height: this.getWidth() - 10,
+                  borderRadius: ((this.getWidth() - 10) / 2)
+                }}
+              />
+            }
           </View>
           <View style={{
             width: '85%'
@@ -449,7 +462,7 @@ class RequestCard extends Component {
                     }}
                     title={item.peer_flag == true ? 'View Proposal' : 'Send Proposal'}
                     style={{
-                      backgroundColor: titem.peer_flag == true ? (theme ? theme.primary : Color.primary) : (theme ? theme.secondary : Color.secondary),
+                      backgroundColor: item.peer_flag == true ? (theme ? theme.primary : Color.primary) : (theme ? theme.secondary : Color.secondary),
                       width: '60%',
                       marginLeft: '40%',
                       height: 40,
@@ -470,6 +483,7 @@ class RequestCard extends Component {
   };
   render() {
     const { data } = this.props;
+    console.log('[ratings]', data.rating);
     const { user } = this.props.state;
     const { option } = this.state;
     return (

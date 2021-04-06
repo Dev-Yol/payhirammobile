@@ -36,6 +36,7 @@ class Notifications extends Component{
   }
 
   async redirect(payload, item, payloadValue, items){
+    // console.log('[]')
     const { user } = this.props.state;
     if(payload === 'thread'){
       this.props.navigation.navigate('messagesStack', {
@@ -69,6 +70,7 @@ class Notifications extends Component{
       }
     }
     // this.setState({isLoading: true})
+    console.log('[parameter]', parameter)
     Api.request(Routes.notificationsRetrieve, parameter, notifications => {
       console.log("[RESTRIEVE]", notifications.data)
       // this.setState({isLoading: false})

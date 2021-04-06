@@ -153,6 +153,10 @@ class Requests extends Component {
     console.log('parameters', parameters)
     this.setState({isLoading: (loading == false) ? false : true});
     Api.request(Routes.requestRetrieveMobile, parameters, response => {
+      // console.log('response in Requests', response.data[0].rating)
+      response.data.forEach(element => {
+        console.log('[rating]', element.rating)
+      });
       this.setState({
         // size: response.size ? response.size : 0,
         isLoading: false

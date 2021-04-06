@@ -68,7 +68,7 @@ export default {
   fulfillmentTypes: [
     {
       id: 1,
-      type: 'Send Cash',
+      type: 'Pera Padala',
       description: 'Send cash and allow our partners to process or deliver the cash to your receiver.',
       money_type: 'cash',
     },
@@ -88,6 +88,12 @@ export default {
       id: 4,
       type: 'Bills and Payments',
       description: "Don't have time and want to pay your bills either online or onsite? Our partners will handle your payments",
+      money_type: 'cash',
+    },
+    {
+      id: 5,
+      type: 'Accept Payment',
+      description: "Accept Payment",
       money_type: 'cash',
     },
   ],
