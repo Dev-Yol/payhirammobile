@@ -3,7 +3,7 @@ import {View, TouchableOpacity, Text} from 'react-native';
 import {createStackNavigator} from 'react-navigation-stack';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faChevronLeft} from '@fortawesome/free-solid-svg-icons';
-import OTP from 'modules/otp/Otp';
+import OTP from 'modules/otp';
 import {connect} from 'react-redux';
 import {BasicStyles, Color} from 'common';
 class HeaderOptions extends Component {

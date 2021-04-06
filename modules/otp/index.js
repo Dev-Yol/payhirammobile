@@ -116,7 +116,8 @@ class OTP extends Component {
         // disabled here
       }
       if(i == 5){
-        // this.completeOTPField(i)      
+        // this.completeOTPField(i) 
+        this.otpTextInput[i].blur()     
       }
       return  
     }
@@ -420,7 +421,7 @@ class OTP extends Component {
                   onPress={this.generateOTP}>
                   <Text style={{
                     fontSize: BasicStyles.standardFontSize,
-                    color: Color.success,
+                    color: theme ? theme.secondary : Color.secondary,
                     marginLeft: 5
                   }}>
                     Click to resend.
