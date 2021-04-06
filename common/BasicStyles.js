@@ -206,7 +206,9 @@ export default {
     width: '100%',
     borderRadius: 25,
     paddingLeft: 10,
-    justifyContent: 'center'
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: Color.gray
   },
   standardTextInputNotCentered: {
     height: 50,
