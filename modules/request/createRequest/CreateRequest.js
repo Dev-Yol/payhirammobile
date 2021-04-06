@@ -58,6 +58,10 @@ class CreateRequest extends Component {
       this.handleSelectFulfillment(params.data)
     }
     this.retrieveSummaryLedger()
+    let date = new Date()
+    this.setState({
+      currentDate: date.setDate(date.getDate())
+    })
   }
 
  retrieveSummaryLedger = () => {
