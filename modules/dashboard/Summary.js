@@ -273,7 +273,7 @@ class Summary extends Component {
                 onClick={() => {
                   this.props.navigation.navigate('createRequestStack', {
                     data: {
-                      type: 'Send',
+                      type: 'Send Cash',
                       description: 'Allow other peers to fulfill your transaction when you to send money to your family, friends, or to businesses',
                       id: 1,
                       money_type: 'cash'

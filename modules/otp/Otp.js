@@ -35,8 +35,6 @@ function OTP(props){
   const keyboard = useKeyboard()
   
   useEffect(() => {
-    console.log('keyboard height', keyboard.keyboardShown)
-    setDisplayHeight(keyboard.keyboardShown ? height - (keyboard.keyboardHeight + 60) : height)
     generateOTP()
   });
  
@@ -63,6 +61,7 @@ function OTP(props){
   }
 
   const completeOTPField = () => {
+    console.log('errorMessage', errorMessage)
     let finalOtp = '';
     for (var i = 0; i < 6; i++) {
       let item = otp[i]
@@ -293,11 +292,10 @@ function OTP(props){
         clause: '=',
       }]
     };
-    setErrorMessage(false)
+    setIsLoading(true)
     console.log('[OTP] parameters', JSON.stringify(parameters))
     Api.request( Routes.notificationSettingsRetrieve, parameters, (response) => {
         setIsLoading(false)
-        setErrorMessage(false)
         console.log("[OTP] Retrieve OTP", response)
         if(response.data.length > 0){
           console.log('[OTP Success]');
