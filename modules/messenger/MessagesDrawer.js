@@ -11,6 +11,9 @@ import { Dimensions } from 'react-native';
 class HeaderOptions extends Component {
   constructor(props){
     super(props);
+    this.state = {
+      isViewing: false
+    }
   }
 
   componentDidMount = () => {
@@ -37,8 +40,11 @@ class HeaderOptions extends Component {
   };
 
   viewMenu = () => {
-    const { viewMenu } = this.props
-    viewMenu(!this.props.state.isViewing)
+    this.setState({isViewing : !this.state.isViewing})
+    this.props.navigationProps.navigate('messagesStack', {isViewing : this.state.isViewing})
+    // const { viewMenu } = this.props
+    // viewMenu(!this.props.state.isViewing)
+    console.log('[viewWIng]', this.state.isViewing)
   }
 
   _card = () => {
@@ -61,10 +67,10 @@ class HeaderOptions extends Component {
             data ? '****' + data.title.substr(data.title.length - 8, data.title.length - 1) + ' - ' + data.currency + ' ' + data.amount: null
           }</Text>
           {Helper.MessengerMenu != null &&
-            <TouchableHighlight 
+            <TouchableHighlight
               activeOpacity={0.6}
               underlayColor={Color.lightGray}
-              onPress={this.viewMenu.bind(this)} 
+              onPress={() => this.viewMenu()}
               style={
                 {
                   position: 'absolute',
@@ -78,8 +84,8 @@ class HeaderOptions extends Component {
                 }
               }
             >
-              <FontAwesomeIcon 
-                icon={ faEllipsisV } 
+              <FontAwesomeIcon
+                icon={ faEllipsisV }
                 style={{color: theme ? theme.primary : Color.primary}}
               />
             </TouchableHighlight>
@@ -141,8 +147,8 @@ const mapDispatchToProps = dispatch => {
   const { actions } = require('@redux');
   return {
     setMessagesOnGroup: (messagesOnGroup) => dispatch(actions.setMessagesOnGroup(messagesOnGroup)),
-    setMessengerGroup: (messengerGroup) => dispatch(actions.setMessengerGroup(messengerGroup)),
-    viewMenu: (isViewing) => dispatch(actions.viewMenu(isViewing))
+    setMessengerGroup: (messengerGroup) => dispatch(actions.setMessengerGroup(messengerGroup))
+    // viewMenu: (isViewing) => dispatch(actions.viewMenu(isViewing))
   };
 };
 
