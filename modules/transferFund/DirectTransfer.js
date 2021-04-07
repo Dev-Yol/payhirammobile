@@ -13,6 +13,7 @@ import BalanceCard from 'modules/generic/BalanceCard';import {
   Spinner
 } from 'components';
 import TextInputWithoutLabel from 'components/Form/TextInputWithoutLabel'
+import AmountInput from 'modules/generic/AmountInput'
 
 const height = Math.round(Dimensions.get('window').height);
 class DirectTransfer extends Component {
@@ -20,11 +21,11 @@ class DirectTransfer extends Component {
     super(props)
     this.state = {
       charge: 0,
-      selectedLedger: null,
       amount: 0,
       isLoading: false,
       notes: null,
-      scannedUser: null
+      scannedUser: null,
+      currency: 'PHP'
     }
   }
   
@@ -82,10 +83,7 @@ class DirectTransfer extends Component {
       this.setState({isLoading: false, summaryLoading: false});
 
       if (response != null) {
-        setLedger(response.data);
-        this.setState({
-          selectedLedger: response.data[0]
-        })
+        setLedger(response.data[0]);
       } else {
         setLedger(null);
       }
@@ -124,7 +122,7 @@ class DirectTransfer extends Component {
     )
   }
   onContinue = () => {
-    const { user } = this.props.state
+    const { user, ledger } = this.props.state
     if(user == null){
       this.errorAlert('Invalid Sender Account')
       return
@@ -135,8 +133,8 @@ class DirectTransfer extends Component {
       return
     }
 
-    const { amount, charge, notes, selectedLedger} = this.state;
-    if(selectedLedger == null){
+    const { amount, charge, notes, currency} = this.state;
+    if(ledger == null){
       this.errorAlert('Invalid Account')
       return
     }
@@ -146,7 +144,7 @@ class DirectTransfer extends Component {
       return    
     }
 
-    if(amount > selectedLedger.available_balance){
+    if(amount > ledger.available_balance){
       this.errorAlert('Issuficient Balance')
       return    
     }
@@ -162,11 +160,11 @@ class DirectTransfer extends Component {
         from: user,
         to: scannedUser,
         amount: amount,
-        currency: selectedLedger.currency,
+        currency: currency,
         notes: notes,
         payload: 'directTransfer',
         charge: charge,
-        selectedLedger: selectedLedger
+        selectedLedger: ledger
       },
     })
   }
@@ -237,7 +235,7 @@ class DirectTransfer extends Component {
 
 
   renderInput = () => {
-    const { selectedLedger } = this.state;
+    const { ledger } = this.props.state;
     const { data } = this.props.navigation.state.params;
     return (
       <View>
@@ -253,7 +251,13 @@ class DirectTransfer extends Component {
           }}>Amount </Text>
         </View>
 
-        <TextInput
+        <AmountInput
+          onChange={(amount, currency) => this.setState({
+            amount: amount,
+            currency: currency
+          })}
+          />
+          {/*<TextInput
             value={this.state.amount}
             maxLength={7}
             keyboardType={'numeric'}
@@ -271,8 +275,8 @@ class DirectTransfer extends Component {
               marginRight: '20%',
               fontSize: 40
             }}
-            placeholder={selectedLedger.currency + ' 0.00'}
-          />
+            placeholder={ledger.currency + ' 0.00'}
+          />*/}
           
           <TextInputWithoutLabel
             variable={this.state.notes}
@@ -380,7 +384,7 @@ class DirectTransfer extends Component {
     )
   }
 
-  renderSummary = (selectedLedger) => {
+  renderSummary = (ledger) => {
     const { amount, charge } = this.state;
     return(
       <View style={{
@@ -414,7 +418,7 @@ class DirectTransfer extends Component {
             fontSize: BasicStyles.standardFontSize,
             width: '40%',
             textAlign: 'right'
-          }}>{Currency.display(amount, selectedLedger.currency)}</Text>
+          }}>{Currency.display(amount, ledger.currency)}</Text>
         </View>
 
 
@@ -435,7 +439,7 @@ class DirectTransfer extends Component {
             fontSize: BasicStyles.standardFontSize,
             width: '40%',
             textAlign: 'right'
-          }}>{Currency.display(charge, selectedLedger.currency)}</Text>
+          }}>{Currency.display(charge, ledger.currency)}</Text>
         </View>
 
 
@@ -457,7 +461,7 @@ class DirectTransfer extends Component {
             width: '40%',
             fontWeight: 'bold',
             textAlign: 'right'
-          }}>{Currency.display((parseFloat(amount) - parseFloat(charge)), selectedLedger.currency)}</Text>
+          }}>{Currency.display((parseFloat(amount) - parseFloat(charge)), ledger.currency)}</Text>
         </View>
       </View>
     )
@@ -466,7 +470,7 @@ class DirectTransfer extends Component {
   render() {
     const { ledger, user } = this.props.state
     const { data } = this.props.navigation.state.params;
-    const { selectedLedger, amount, isLoading } = this.state;
+    const { amount, isLoading } = this.state;
     return (
       <SafeAreaView key={data}>
         <ScrollView
@@ -481,22 +485,22 @@ class DirectTransfer extends Component {
             }}>
 
 
-              {
+              {/*
                 (ledger != null && ledger.length > 0) && ledger.map(item => (
                   <BalanceCard
                     data={item}
                   />
                 ))
-              }
+              */}
 
               {
-                (selectedLedger ) && this.renderInput()
+                (ledger ) && this.renderInput()
               }
               {
-                (selectedLedger && user ) && this.renderSendTo(user)
+                (ledger && user ) && this.renderSendTo(user)
               }
               {
-                selectedLedger && this.renderSummary(selectedLedger)
+                ledger && this.renderSummary(ledger)
               }
             </View>
 

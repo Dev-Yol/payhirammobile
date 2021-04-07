@@ -15,6 +15,7 @@ import MapViewer from 'components/Location/MapViewer';
 import RequestCard from 'modules/generic/RequestCard';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
+import AmountInput from 'modules/generic/AmountInput'
 
 const width = Math.round(Dimensions.get('window').width);
 const height = Math.round(Dimensions.get('window').height);
@@ -433,29 +434,36 @@ class CreateRequest extends Component {
           alignItems: 'center',
           height: height
         }}>
-
-          <TextInput
-            value={this.state.amount}
-            keyboardType={'numeric'}
-            onChangeText={(input) => {
-              if(ledger && ledger.available_balance < input){
-                this.setState({
-                  errorMessage: 'Insufficient Balance!'
-                })
-              }else{
-                this.setState({
-                  amount: input
-                })  
-              }
-            }}
-            style={{
-              alignItems: 'center',
-              fontSize: 52
-            }}
-            placeholder={'0.00'}
+        
+        <AmountInput
+          onChange={(amount, currency) => this.setState({
+            amount: amount,
+            currency: currency
+          })}
           />
+
+          {/*<TextInput
+                      value={this.state.amount}
+                      keyboardType={'numeric'}
+                      onChangeText={(input) => {
+                        if(ledger && ledger.available_balance < input){
+                          this.setState({
+                            errorMessage: 'Insufficient Balance!'
+                          })
+                        }else{
+                          this.setState({
+                            amount: input
+                          })  
+                        }
+                      }}
+                      style={{
+                        alignItems: 'center',
+                        fontSize: 52
+                      }}
+                      placeholder={'0.00'}
+                    />*/}
           
-          {
+          {/*
             ledger && (
               <TouchableOpacity style={{
                 width: '100%',
@@ -481,7 +489,7 @@ class CreateRequest extends Component {
                 </View>
               </TouchableOpacity>
             )
-          }
+          */}
 
           <View style={{
             width: '100%',
