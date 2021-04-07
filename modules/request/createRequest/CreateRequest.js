@@ -424,6 +424,7 @@ class CreateRequest extends Component {
 
   thirdStep = () => {
     const { ledger } = this.props.state;
+    console.log('[ledger]', ledger)
     return(
         <View style={{
           width: '100%',
