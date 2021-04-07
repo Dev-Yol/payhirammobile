@@ -381,7 +381,7 @@ class RequestCard extends Component {
                     })
                   }
                 }}
-                title={item.status == 0 ? 'See proposals' : 'See transaction'}
+                title={item.status == 0 ? 'View proposals' : 'See transaction'}
                 style={{
                   backgroundColor: item.status == 0 ? (theme ? theme.primary : Color.primary) : (theme ? theme.secondary : Color.secondary),
                   width: '60%',
@@ -482,17 +482,18 @@ class RequestCard extends Component {
     );
   };
   render() {
-    const { data } = this.props;
-    console.log('[ratings]', data.rating);
+    const { data, from } = this.props;
     const { user } = this.props.state;
     const { option } = this.state;
     return (
       <TouchableOpacity
-      onPress={() =>
-        this.props.navigation.navigate('requestItemStack', {
-          data: data,
-          from: 'request'
-        })
+      onPress={() => {
+        from == 'request' && (
+          this.props.navigation.navigate('requestItemStack', {
+            data: data,
+            from: 'request'
+          })
+      )}
       }
       >
         {this._header(data, 'amount')}

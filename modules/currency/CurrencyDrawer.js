@@ -44,7 +44,7 @@ const GuidelinesStack = createStackNavigator({
   guidelinesScreen: {
     screen: Currency,
     navigationOptions: ({navigation}) => ({
-      title: 'Currency',
+      title: 'Balance',
       headerLeft: <HeaderOptionsConnect navigationProps={navigation} />,
       ...BasicStyles.headerDrawerStyle
     }),
