@@ -32,6 +32,7 @@ class ViewProfile extends Component {
     };
   }
   componentDidMount() {
+    console.log("TESTING VIEW")
     this.retrieveAccount();
   }
 

@@ -75,16 +75,32 @@ class Requests extends Component {
     };
   }
 
+  onFocusFunction = () => {
+    const{deepLinkRoute} = this.props.state;
+    console.log(':::REDIRECTING::: ', deepLinkRoute)
+    if(deepLinkRoute !== null) {
+      this.props.navigation.navigate('viewProfileStack', {
+        code: deepLinkRoute.split('/')[2]
+      })
+    }else {
+      this.retrieve(false, true);
+    }
+  }
+
   componentDidMount() {
-    this.retrieve(false, true);
     this.backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
       this.handleBackPress,
     );
+    
+    this.focusListener = this.props.navigation.addListener('didFocus', () => {
+      this.onFocusFunction()
+    })
   }
 
   componentWillUnmount() {
     this.backHandler.remove();
+    this.focusListener.remove()
   }
 
   handleBackPress = () => {

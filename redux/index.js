@@ -42,7 +42,8 @@ const types = {
   SET_CIRCLE_SEARCH: 'SET_CIRCLE_SEARCH',
   SET_FILTER_DATA: 'SET_FILTER_DATA',
   SET_DEVICE_LOCATION: 'SET_DEVICE_LOCATION',
-  SET_PARAMETER: 'SET_PARAMETER'
+  SET_PARAMETER: 'SET_PARAMETER',
+  SET_DEEPLINK_ROUTE: 'SET_DEEPLINK_ROUTE'
 };
 
 export const actions = {
@@ -159,6 +160,9 @@ export const actions = {
   },
   setParameter(parameter) {
     return {type: types.SET_PARAMETER, parameter}
+  },
+  setDeepLinkRoute(deepLinkRoute) {
+    return {type: types.SET_DEEPLINK_ROUTE, deepLinkRoute}
   }
 };
 
@@ -205,7 +209,8 @@ const initialState = {
   unReadRequests: [],
   circleSearch: null,
   filterData: null,
-  deviceLocation: null
+  deviceLocation: null,
+  deepLinkRoute: null
 };
 
 storeData = async (key, value) => {
@@ -240,7 +245,7 @@ const reducer = (state = initialState, action) => {
   const { circleSearch } = action;
   const { filterData } = action;
   const { deviceLocation } = action;
-  const { parameter } = action;
+  const { parameter, deepLinkRoute } = action;
   switch (type) {
     case types.LOGOUT:
       storeData('token', '');
@@ -583,6 +588,11 @@ const reducer = (state = initialState, action) => {
         ...state,
         ledger,
       };
+    case types.SET_DEEPLINK_ROUTE:
+      return {
+        ...state,
+        deepLinkRoute,
+      }
     default:
       return {...state, nav: state.nav};
   }
