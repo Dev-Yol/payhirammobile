@@ -2,16 +2,18 @@ import React, {Component} from 'react';
 import {View, TouchableOpacity, Text} from 'react-native';
 import {createStackNavigator} from 'react-navigation-stack';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faChevronLeft} from '@fortawesome/free-solid-svg-icons';
-import OTP from 'modules/otp';
-import {connect} from 'react-redux';
+import {faChevronLeft, faBars} from '@fortawesome/free-solid-svg-icons';
+import Currency from 'modules/currency';
+import {NavigationActions} from 'react-navigation';
 import {BasicStyles, Color} from 'common';
+import {connect} from 'react-redux';
+
 class HeaderOptions extends Component {
   constructor(props) {
     super(props);
   }
   back = () => {
-    this.props.navigationProps.pop();
+    this.props.navigationProps.pop()
   };
   render() {
     const { theme } = this.props.state;
@@ -22,7 +24,7 @@ class HeaderOptions extends Component {
           <FontAwesomeIcon
             icon={faChevronLeft}
             size={BasicStyles.headerBackIconSize}
-            style={{Color: theme ? theme.primary : Color.primary }}
+            style={{color: theme ? theme.primary : Color.primary }}
           />
         </TouchableOpacity>
       </View>
@@ -34,23 +36,22 @@ const mapStateToProps = (state) => ({state: state});
 
 const mapDispatchToProps = (dispatch) => {
   const {actions} = require('@redux');
-  return {
-    logout: () => dispatch(actions.logout()),
-  };
+  return {};
 };
-
 let HeaderOptionsConnect  = connect(mapStateToProps, mapDispatchToProps)(HeaderOptions);
 
-const OtpStack = createStackNavigator({
-  otpScreen: {
-    screen: OTP,
+const GuidelinesStack = createStackNavigator({
+  guidelinesScreen: {
+    screen: Currency,
     navigationOptions: ({navigation}) => ({
-      title: 'OTP Code',
-      drawerLabel: 'OTP',
+      title: 'Currency',
       headerLeft: <HeaderOptionsConnect navigationProps={navigation} />,
       ...BasicStyles.headerDrawerStyle
     }),
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(OtpStack);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(GuidelinesStack);

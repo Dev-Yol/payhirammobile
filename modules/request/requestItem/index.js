@@ -271,12 +271,20 @@ class RequestItem extends Component {
                 </View>
               )
             }
+
+            {
+              (peers) && (
+                this.renderProposals(peers)
+              )
+            }
             {
               (data.status > 0) && (
                 <View style={{
                   width: '100%',
                   backgroundColor: Color.danger,
                   height: 70,
+                  position: 'absolute',
+                  bottom: 0,
                   justifyContent: 'center',
                   alignItems: 'center'
                 }}>
@@ -285,12 +293,6 @@ class RequestItem extends Component {
                     color: Color.white
                   }}>Proposals to this request was closed.</Text>
                 </View>
-              )
-            }
-
-            {
-              (peers) && (
-                this.renderProposals(peers)
               )
             }
             {

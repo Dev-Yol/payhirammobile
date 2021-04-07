@@ -33,15 +33,16 @@ class AddLocation extends Component {
     */
     if (this.state.addingAddress && this.props.state.location != null) {
       // this.setState({ isAddingAddressName: true })
-      if(location.latitude == null || location.longitude == null || location.route == null || location.locality == null || location.region == null || location.country == null){
-        Alert.alert(
-          'Error Message',
-          'Invalid Pinned Location',
-          [
-            {text: 'Ok', onPress: () => console.log('Cancel'), style: 'cancel'}
-          ],
-          { cancelable: false }
-        )
+      if(location.route == null && location.region != null){
+        location.route = location.locality
+        this.addAddress()
+      }else if(location.route != null && location.region == null){
+        location.region = location.locality
+        this.addAddress()
+      }else if(location.route == null && location.region == null){
+        location.route = location.locality
+        location.region = location.locality
+        this.addAddress()
       }else{
         this.addAddress()
       }

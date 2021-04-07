@@ -57,7 +57,6 @@ class ViewProfile extends Component {
     Api.request(Routes.circleRetrieve, parameter, response => {
       this.setState({isLoading: false})
       this.setState({ connections: response.data })
-      this.setState({status: true});
       if(response.data.length > 0) {
         this.checkStatus(response.data)
       }
@@ -148,6 +147,7 @@ class ViewProfile extends Component {
         this.retrieveEducationalBackground(response.data[0].id);
         this.setState({ user: this.props.navigation.state.params.user ? this.props.navigation.state.params.user : response.data[0] })
         console.log(response.data[0]);
+        this.setState({status: true});
       } else {
         this.setState({ user: null })
       }
