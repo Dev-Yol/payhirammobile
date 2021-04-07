@@ -1,4 +1,5 @@
 import {StyleSheet} from 'react-native';
+import { BasicStyles } from 'common';
 
 const styles = StyleSheet.create({
   ReviewsContainer: {
@@ -6,33 +7,20 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     width: '100%',
   },
-  AvatarContainer: {
-    paddingVertical: 10,
-  },
-  NameContainer: {
-    paddingVertical: 10,
-  },
-  NameTextStyle: {
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
-  RatingTitleContainer: {
-    paddingVertical: 25,
-  },
-  RatingTitleTextStyle: {
-    fontSize: 16,
-  },
-  RatingContainer: {
+  starContainer: {
+    width: '100%',
+    alignItems: 'center',
     flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 20,
+    marginBottom: 20
   },
-  StarContainer: {
-    paddingHorizontal: 8,
+  textContainer: {
+    width: '100%',
+    alignItems: 'center'
   },
-  ExperienceTextContainer: {
-    paddingVertical: 10,
-  },
-  ExperienceTextStyle: {
-    fontSize: 16,
+  textStyle: {
+    fontSize: BasicStyles.standardFontSize,
   },
   CommentContainer: {
     height: 80,
@@ -47,21 +35,10 @@ const styles = StyleSheet.create({
   },
   CommentTextStyle: {},
   ButtonContainer: {
-    width: '90%',
-    alignItems: 'center',
-    marginTop: '50%',
-  },
-  CustomButtonContainer: {
-    borderRadius: 10,
-  },
-  ButtonTextContainer: {
-    paddingVertical: '4%',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  ButtonTextStyle: {
-    textAlign: 'center',
-  },
+    position: 'absolute',
+    bottom: 10,
+    width: '100%',
+  }
 });
 
 export default styles;

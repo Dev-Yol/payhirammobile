@@ -1,4 +1,4 @@
-let LIVE_BACKEND_URL = 'https://api.payhiram.ph/increment/v1'
+let LIVE_BACKEND_URL = 'https://api.payhiram.ph/public/increment/v1'
 let DEV_BACKEND_URL = 'http://192.168.254.102/project123/api/public/increment/v1'
 let isDev = true
 let BACKEND_URL = isDev ? DEV_BACKEND_URL : LIVE_BACKEND_URL

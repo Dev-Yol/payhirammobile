@@ -5,10 +5,12 @@ import {
   faCheck,
   faPaperPlane,
 } from '@fortawesome/free-solid-svg-icons';
+import { faMoneyBillWaveAlt, faCog, faHome, faEnvelope, faUsers, faPalette, faShieldAlt, faHandshake, faTachometerAlt, faHeadset } from '@fortawesome/free-solid-svg-icons';
+import { faComment } from '@fortawesome/free-regular-svg-icons';
 export default {
   company: 'Increment Technologies',
   APP_NAME: '@Payhiram_',
-  APP_NAME_BASIC: 'Payhiram',
+  APP_NAME_BASIC: 'PayHiram',
   APP_EMAIL: 'support@payhiram.ph',
   APP_WEBSITE: 'www.payhiram.increment.ltd',
   APP_HOST: 'com.payhiram',
@@ -16,73 +18,77 @@ export default {
     {
       title: 'Requests',
       route: 'Requests',
+      icon: faMoneyBillWaveAlt
     },
     {
       title: 'Dashboard',
       route: 'Dashboard',
+      icon: faTachometerAlt
     },
     {
       title: 'Circle',
       route: 'Circle',
+      icon: faUsers
     },
-    {
-      title: 'Messages',
-      route: 'Messenger'
-    }, 
+    // {
+    //   title: 'Messages',
+    //   route: 'Messenger',
+    //   icon: faComment
+    // }, 
     {
       title: 'Settings',
       route: 'Settings',
+      icon: faCog
     },
     {
-      title: 'Terms and Conditions',
-      route: 'TermsAndConditions',
-    },
-    
-  ],
-  currency: [
-    {
-      title: 'Philippine Peso',
-      value: 'PHP',
-    },
+      title: 'Ask for help',
+      route: 'Support',
+      icon: faHeadset
+    }
   ],
   currency: [{
     title: 'Philippine Peso',
     value: 'PHP'
+  }],
+  shipping: [{
+    title: 'Pick-Up',
+    value: 0
+  }, {
+    title: 'Delivery',
+    value: 1
   }],
   request: {
     MINIMUM: 1000,
   },
   MAXIMUM_DEPOSIT: 500000,
   MAXIMUM_WITHDRAWAL: 500000,
-  payhiramCharges: {
-    percentage: 0.2,
-  },
+  MINIMUM: 1000,
+  payhiramShare: 0.2,
+  partnerShare: 0.8,
   fulfillmentTypes: [
     {
-      value: 1,
-      label: 'Send',
-      description:
-        'Allow other peer to process your transaction when you want to send money to your family, friends or to businesses.',
-      money_type: 'Cash',
+      id: 1,
+      type: 'Send Cash',
+      description: 'Send cash and allow our partners to process or deliver the cash to your receiver.',
+      money_type: 'cash',
     },
     {
-      value: 2,
-      label: 'Withdrawal',
-      description: 'Allow other peer to process your withdrawals.',
-      money_type: 'Cash',
+      id: 2,
+      type: 'Withdrawal',
+      description: 'Withdraw cash from your wallet and let our partners nearby process or deliver the cash to your specified location.',
+      money_type: 'cash',
     },
     {
-      value: 3,
-      label: 'Deposit',
-      description: 'Allow other peer to process your deposits.',
-      money_type: 'Wallet',
+      id: 3,
+      type: 'Cash In',
+      description: 'Cash In to your wallet and let our nearby partners process or pickup the cash from your specified location.',
+      money_type: 'e-wallet',
     },
     {
-      value: 4,
-      label: 'Bills and Payments',
-      description:
-        "Don't have time and want to pay your bills? Allow other peer to fulfil your bills.",
-      money_type: 'Cash',
+      id: 4,
+      type: 'Bills and Payments',
+      description: "Don't have time and want to pay your bills either online or onsite? Our partners will handle your payments",
+      money_type: 'cash',
     },
   ],
   fulfillmentBorrowTypes: [
@@ -161,6 +167,69 @@ export default {
       colors: [Color.primary, Color.lightGray],
     },
   ],
+  MessengerMenu: [{
+      title: 'Requirements',
+      payload: 'same_page',
+      payload_value: 'requirements',
+      color: Color.black
+    },
+    {
+      title: 'Details',
+      payload: 'redirect',
+      payload_value: 'requestItemStack',
+      color: Color.black
+    },
+    {
+      title: 'Transfer funds',
+      payload: 'redirect',
+      payload_value: 'transferFundStack',
+      color: Color.black
+    },
+    {
+      title: 'Rate',
+      payload: 'redirect',
+      payload_value: 'reviewsStack',
+      color: Color.black
+    },
+    {
+      title: 'Enable Support',
+      payload: 'redirect',
+      payload_value: 'enableSupport',
+      color: Color.black
+    },
+    {
+      title: 'Close',
+      payload: 'same_page',
+      payload_value: 'close',
+      color: Color.danger
+    }
+  ],
+  requirementsMenu: [
+    {
+      title: 'On App Signature',
+      payload: 'same_page',
+      payload_value: 'signature',
+      color: Color.black
+    },
+    {
+      title: 'Receiver Picture',
+      payload: 'redirect',
+      payload_value: 'receiver_picture',
+      color: Color.black
+    },
+    {
+      title: 'Valid ID',
+      payload: 'redirect',
+      payload_value: 'valid_id',
+      color: Color.black
+    },
+    {
+      title: 'Back',
+      payload: 'redirect',
+      payload_value: 'back',
+      color: Color.danger
+    }
+  ],
   payments: [
     {
       title: 'UnionBank of the Philippines',
@@ -214,20 +283,74 @@ export default {
       payload: 'credit_card',
     },
   ],
+  filter: {
+    targets: [{
+      value: 'All'
+    }, {
+      value: 'Partner'
+    }, {
+      value: 'Public'
+    }, {
+      value: 'Circle'
+    }],
+    types: [{
+      value: 'All'
+    }, {
+      value: 'Send Cash'
+    }, {
+      value: 'Cash In'
+    }, {
+      value: 'Withdrawals'
+    }, {
+      value: 'Bills Payments'
+    }]
+  },
   showRequestType(type) {
     switch (parseInt(type)) {
       case 1:
-        return 'Send';
+        return 'Send Cash';
       case 2:
         return 'Withdrawal';
       case 3:
-        return 'Deposit';
+        return 'Cash In';
       case 4:
-        return 'Bills and Paymets';
+        return 'Bills and Payments';
+      case 5:
+        return 'Others';
       case 101:
         return 'Lending';
       case 102:
         return 'Installment';
+    }
+  },
+  getRequestTypeCode(type) {
+    switch (type) {
+      case 'Send Cash':
+        return 1;
+      case 'Withdrawals':
+        return 2;
+      case 'Cash In':
+        return 3;
+      case 'Bills and Payments':
+        return 4;
+      case 'Others':
+        return 5;
+      case 'Lending':
+        return 101;
+      case 'Installment':
+        return 102;
+    }
+  },
+  showStatus(type) {
+    switch (parseInt(type)) {
+      case 0:
+        return 'Pending';
+      case 1: 
+        return 'On Going';
+      case 2:
+        return 'Completed';
+      default:
+        return 'Cancelled';
     }
   },
   validateEmail(email) {

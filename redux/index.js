@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import Data from 'services/Data';
-import { Helper, Color } from 'common';
-import { Routes } from 'common';
+import {Helper, Color} from 'common';
+import {Routes} from 'common';
 import Api from '../services/api';
 
 const types = {
@@ -23,6 +23,7 @@ const types = {
   SET_SEARCH_PARAMETER: 'SET_SEARCH_PARAMETER',
   SET_REQUESTS: 'SET_REQUESTS',
   UPDATE_REQUESTS: 'UPDATE_REQUESTS',
+  SET_UNREAD_REQUESTS: 'SET_UNREAD_REQUESTS',
   SET_PIN_FLAG: 'SET_PIN_FLAG',
   SET_SYSTEM_NOTIFICATION: 'SET_SYSTEM_NOTIFICATION',
   SET_SELECTED_PRODUCT_ID: 'SET_SELECTED_PRODUCT_ID',
@@ -32,71 +33,85 @@ const types = {
   SET_THEME: 'SET_THEME',
   SET_REQUEST_INPUT: 'SET_REQUEST_INPUT',
   SET_VALIDATE_OTP: 'SET_VALIDATE_OTP',
+  VIEW_MENU: 'VIEW_MENU',
+  VIEW_SHARE: 'VIEW_SHARE',
+  SET_REQUEST: 'SET_REQUEST',
+  SET_DEFAULT_ADDRESS: 'SET_DEFAULT_ADDRESS',
+  SET_UNREAD_MESSAGES: 'SET_UNREAD_MESSAGES',
+  SET_UNREAD_PEER_REQUEST: 'SET_UNREAD_PEER_REQUEST',
+  SET_CIRCLE_SEARCH: 'SET_CIRCLE_SEARCH',
+  SET_FILTER_DATA: 'SET_FILTER_DATA',
+  SET_DEVICE_LOCATION: 'SET_DEVICE_LOCATION',
+  SET_PARAMETER: 'SET_PARAMETER',
+  SET_DEEPLINK_ROUTE: 'SET_DEEPLINK_ROUTE'
 };
 
 export const actions = {
   login: (user, token) => {
-    return { type: types.LOGIN, user, token };
+    return {type: types.LOGIN, user, token};
   },
   logout() {
-    return { type: types.LOGOUT };
+    return {type: types.LOGOUT};
   },
   updateUser: (user) => {
-    return { type: types.UPDATE_USER, user };
+    return {type: types.UPDATE_USER, user};
   },
   setNotifications(unread, notifications) {
-    return { type: types.SET_NOTIFICATIONS, unread, notifications };
+    return {type: types.SET_NOTIFICATIONS, unread, notifications};
   },
   setMessenger(unread, messages) {
-    return { type: types.SET_MESSAGES, unread, messages };
+    return {type: types.SET_MESSAGES, unread, messages};
   },
   setLedger(ledger) {
-    return { type: types.SET_LEDGER, ledger };
+    return {type: types.SET_LEDGER, ledger};
   },
   setUserLedger(userLedger) {
-    return { type: types.SET_USER_LEDGER, userLedger };
+    return {type: types.SET_USER_LEDGER, userLedger};
   },
   setMessengerGroup(messengerGroup) {
-    return { type: types.SET_MESSENGER_GROUP, messengerGroup };
+    return {type: types.SET_MESSENGER_GROUP, messengerGroup};
   },
   updateMessengerGroup(messengerGroup) {
-    return { type: types.UPDATE_MESSENGER_GROUP, messengerGroup };
+    return {type: types.UPDATE_MESSENGER_GROUP, messengerGroup};
   },
   updateMessagesOnGroupByPayload(messages) {
-    return { type: types.UPDATE_MESSAGES_ON_GROUP_BY_PAYLOAD, messages };
+    return {type: types.UPDATE_MESSAGES_ON_GROUP_BY_PAYLOAD, messages};
   },
   setMessagesOnGroup(messagesOnGroup) {
-    return { type: types.SET_MESSAGES_ON_GROUP, messagesOnGroup };
+    return {type: types.SET_MESSAGES_ON_GROUP, messagesOnGroup};
   },
   updateMessagesOnGroup(message) {
-    return { type: types.UPDATE_MESSAGES_ON_GROUP, message };
+    return {type: types.UPDATE_MESSAGES_ON_GROUP, message};
   },
   updateMessageByCode(message) {
-    return { type: types.UPDATE_MESSAGE_BY_CODE, message };
+    return {type: types.UPDATE_MESSAGE_BY_CODE, message};
   },
   setLocation(location) {
-    return { type: types.SET_LOCATION, location };
+    return {type: types.SET_LOCATION, location};
   },
   updateNotifications(unread, notification) {
-    return { type: types.UPDATE_NOTIFICATIONS, unread, notification };
+    return {type: types.UPDATE_NOTIFICATIONS, unread, notification};
   },
   setSearchParameter(searchParameter) {
-    return { type: types.SET_SEARCH_PARAMETER, searchParameter };
+    return {type: types.SET_SEARCH_PARAMETER, searchParameter};
   },
   setRequests(requests) {
-    return { type: types.SET_REQUESTS, requests };
+    return {type: types.SET_REQUESTS, requests};
   },
-  updateRequests(requests) {
-    return { type: types.UPDATE_REQUESTS, requests };
+  setRequest(request) {
+    return {type: types.SET_REQUEST, request};
+  },
+  updateRequests(request) {
+    return {type: types.UPDATE_REQUESTS, request};
   },
   setPinFlag(pinFlag) {
-    return { type: types.SET_PIN_FLAG, pinFlag };
+    return {type: types.SET_PIN_FLAG, pinFlag};
   },
   setSystemNotification(systemNotification) {
-    return { type: types.SET_SYSTEM_NOTIFICATION, systemNotification };
+    return {type: types.SET_SYSTEM_NOTIFICATION, systemNotification};
   },
   setProduct(product) {
-    return { type: types.SET_PRODUCT, product };
+    return {type: types.SET_PRODUCT, product};
   },
   setSelectedProductId(productId) {
     return {
@@ -105,19 +120,53 @@ export const actions = {
     };
   },
   setQRCodeModal(isVisible) {
-    return { type: types.QRCODE_MODAL, isVisible };
+    return {type: types.QRCODE_MODAL, isVisible};
   },
   setTheme(theme) {
-    return { type: types.SET_THEME, theme };
+    return {type: types.SET_THEME, theme};
   },
   setRequestInput(requestInput) {
-    return { type: types.SET_REQUEST_INPUT, requestInput };
+    return {type: types.SET_REQUEST_INPUT, requestInput};
   },
   setIsValidOtp(isValidOtp) {
-    return { type: types.SET_VALIDATE_OTP, isValidOtp };
+    return {type: types.SET_VALIDATE_OTP, isValidOtp};
   },
+  viewMenu(isViewing){
+    return {type: types.VIEW_MENU, isViewing}
+  },
+  viewShare(isShow){
+    return {type: types.VIEW_SHARE, isShow}
+  },
+  setDefaultAddress(defaultAddress) {
+    return {type: types.SET_DEFAULT_ADDRESS, defaultAddress}
+  },
+  setUnReadMessages(messages) {
+    return {type: types.SET_UNREAD_MESSAGES, messages}
+  },
+  setUnReadPeerRequest(message) {
+    return {type: types.SET_UNREAD_PEER_REQUEST, messages}
+  },
+  setUnReadRequests(requests) {
+    return {type: types.SET_UNREAD_REQUESTS, requests}
+  },
+  setCircleSearch(circleSearch) {
+    return {type: types.SET_CIRCLE_SEARCH, circleSearch}
+  },
+  setFilterData(filterData) {
+    return {type: types.SET_FILTER_DATA, filterData}
+  },
+  setDeviceLocation(deviceLocation) {
+    return {type: types.SET_DEVICE_LOCATION, deviceLocation}
+  },
+  setParameter(parameter) {
+    return {type: types.SET_PARAMETER, parameter}
+  },
+  setDeepLinkRoute(deepLinkRoute) {
+    return {type: types.SET_DEEPLINK_ROUTE, deepLinkRoute}
+  }
 };
 
+const date = new Date()
 const initialState = {
   token: null,
   user: null,
@@ -130,9 +179,21 @@ const initialState = {
     groupId: null,
     messages: null,
   },
+  unReadMessages: [],
   searchParameter: null,
-  location: null,
-  requests: null,
+  parameter: null,
+  location: {
+    id: 1,
+    account_id: 1,
+    latitude: '10.373264655881858',
+    latitude: '123.94052113182192',
+    route: 'test',
+    locality: 'test',
+    region: 'test',
+    country: 'test'
+  },
+  requests: [],
+  request: null,
   nav: null,
   pinFlag: false,
   systemNotification: null,
@@ -141,6 +202,15 @@ const initialState = {
   qrCodeModal: false,
   requestInput: null,
   isValidOtp: false,
+  isViewing: false,
+  isShow: false,
+  defaultAddress: null,
+  unReadPeerRequest: [],
+  unReadRequests: [],
+  circleSearch: null,
+  filterData: null,
+  deviceLocation: null,
+  deepLinkRoute: null
 };
 
 storeData = async (key, value) => {
@@ -151,27 +221,42 @@ storeData = async (key, value) => {
   }
 };
 
+// removeData = async (item) => {
+//   try{
+//     await AsyncStorage.removeItem(item)
+//   }catch (e){
+
+//   }
+// }
+
 const reducer = (state = initialState, action) => {
-  const { type, user, token } = action;
-  const { messages, unread, message } = action;
-  const { messengerGroup, messagesOnGroup } = action;
-  const { location, notification } = action;
-  const { searchParameter, requests } = action;
-  const { systemNotification } = action;
-  const { product, productId } = action;
-  const { isVisible } = action;
-  const { theme } = action;
-  const { requestInput } = action;
-  const { isValidOtp } = action;
+  const {type, user, token} = action;
+  const {messages, unread, message} = action;
+  const {messengerGroup, messagesOnGroup} = action;
+  const {location, notification} = action;
+  const {searchParameter, requests} = action;
+  const {systemNotification} = action;
+  const {product, productId} = action;
+  const {isVisible, isShow} = action;
+  const {theme} = action;
+  const {requestInput} = action;
+  const {isValidOtp} = action;
+  const { isViewing, request, defaultAddress } = action;
+  const { circleSearch } = action;
+  const { filterData } = action;
+  const { deviceLocation } = action;
+  const { parameter, deepLinkRoute } = action;
   switch (type) {
     case types.LOGOUT:
-      AsyncStorage.clear();
+      storeData('token', '');
+      // AsyncStorage.clear()
+      console.log("[LOGOUT]");
       return Object.assign({}, initialState);
     case types.LOGIN:
       storeData('token', token);
       console.log('LOGIN', true);
       Data.setToken(token);
-      return { ...state, user, token };
+      return {...state, user, token};
     case types.UPDATE_USER:
       return {
         ...state,
@@ -365,11 +450,24 @@ const reducer = (state = initialState, action) => {
         ...state,
         requests,
       };
-    case types.UPDATE_REQUESTS:
-      state.requests.push(...requests);
+    case types.SET_REQUEST:
       return {
         ...state,
-        requests: state.requests,
+        request
+      };
+    case types.UPDATE_REQUESTS:
+      let newRequests = state.requests.map((item, index) => {
+        if(item.code == request.code){
+          return {
+            ...item,
+            status: request.status
+          }
+        }
+        return
+      })
+      return {
+        ...state,
+        requests: newRequests,
       };
     case types.SET_PIN_FLAG:
       return {
@@ -397,13 +495,16 @@ const reducer = (state = initialState, action) => {
         qrCodeModal: isVisible.isVisible,
       };
     case types.SET_THEME:
-      console.log('theme:', theme);
+      console.log('tertiary', theme.tertiary);
       storeData('primary', theme.primary);
       storeData('secondary', theme.secondary);
       storeData('tertiary', theme.tertiary);
+      storeData('fourth', theme.fourth);
+      storeData('index', '' + theme.index);
       Color.setPrimary(theme.primary);
       Color.setSecondary(theme.secondary);
-      Color.setTertiary(theme.tertiary);
+      Color.setTertiary(theme.tertiary);  
+      Color.setFourth(theme.fourth);
       return {
         ...state,
         theme,
@@ -420,8 +521,80 @@ const reducer = (state = initialState, action) => {
         ...state,
         isValidOtp,
       };
+    case types.VIEW_MENU:
+      return {
+        ...state,
+        isViewing,
+      };
+    case types.SET_DEFAULT_ADDRESS: 
+      return {
+        ...state,
+        defaultAddress
+      }
+    case types.SET_UNREAD_MESSAGES: 
+      let newUnread = []
+      if(messages.length == null){
+        newUnread = []
+      }else{
+        newUnread = state.unReadMessages.push(messages)
+      }
+      return {
+        ...state,
+        unReadMessages: newUnread
+      }
+    case types.VIEW_SHARE:
+      return {
+        ...state,
+        isShow,
+      };
+    case types.SET_UNREAD_PEER_REQUEST: 
+      let newUnreadPeerRequest = []
+      if(messages == null){
+        newUnreadPeerRequest = []
+      }else{
+        newUnreadPeerRequest = state.unReadPeerRequest.push(messages)
+      }
+      return {
+        ...state,
+        unReadPeerRequest: newUnreadPeerRequest
+      }
+    case types.SET_UNREAD_REQUESTS:
+      return {
+        ...state,
+        unReadRequests: requests,
+      };
+    case types.SET_CIRCLE_SEARCH:
+      return {
+        ...state,
+        circleSearch
+      };
+    case types.SET_FILTER_DATA:
+      return {
+        ...state,
+        filterData,
+      };
+    case types.SET_DEVICE_LOCATION:
+      return {
+        ...state,
+        deviceLocation,
+      };
+    case types.SET_PARAMETER:
+      return {
+        ...state,
+        parameter,
+      };
+    case types.SET_SELECTED_LEDGER:
+      return {
+        ...state,
+        ledger,
+      };
+    case types.SET_DEEPLINK_ROUTE:
+      return {
+        ...state,
+        deepLinkRoute,
+      }
     default:
-      return { ...state, nav: state.nav };
+      return {...state, nav: state.nav};
   }
 };
 export default reducer;

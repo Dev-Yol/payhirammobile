@@ -1,66 +1,114 @@
 import React, {Component} from 'react';
-import {Text, View, StyleSheet, ScrollView, TextInput} from 'react-native';
+import {Text, View, StyleSheet, TouchableOpacity, ScrollView, TextInput, Dimensions, Alert} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faStar, faAsterisk} from '@fortawesome/free-solid-svg-icons';
-import {Picker} from '@react-native-community/picker';
+import {faStar, faAsterisk, faMinusCircle, faPlusCircle} from '@fortawesome/free-solid-svg-icons';
 import {connect} from 'react-redux';
 import Api from 'services/api/index.js';
 import {Spinner} from 'components';
-
-import FulfillmentCard from 'modules/request/createRequest/FulfillmentCard';
-import BalanceCard from 'modules/dashboard/BalanceCard';
-import CustomButton from './CustomButton';
+import {NavigationActions, StackActions} from 'react-navigation';
+import FulfillmentCard from 'modules/generic/FulfilmentCard';
+import TargetCard from 'modules/generic/TargetCard';
+import BalanceCard from 'modules/generic/BalanceCard';
+import Button from 'components/Form/Button';
+import TextInputWithLabel from 'components/Form/TextInputWithLabel';
+import LocationTextInput from 'components/Form/LocationTextInput';
+import PickerWithLabel from 'components/Form/PickerWithLabel';
 import styles from './Styles';
-import {BasicStyles, Routes, Helper} from 'common';
+import {BasicStyles, Routes, Helper, Color} from 'common';
 import DateTime from 'components/DateTime';
+import Currency from 'services/Currency';
+import TextInputWithoutLabel from 'components/Form/TextInputWithoutLabel'
+
+const width = Math.round(Dimensions.get('window').width);
+const height = Math.round(Dimensions.get('window').height);
+
 class CreateRequest extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      location: null,
       currency: 'PHP',
-      date: '',
-      time: '',
-      fulfillmentType: '',
-      amount: '0',
-      maximumProcessingCharge: '',
-      details: '',
-      money_type: '',
+      shipping: 0,
+      neededOn: null,
+      fulfillmentType: null,
+      amount: 0,
+      maximumProcessingCharge: null,
+      reason: null,
+      money_type: null,
       isLoading: false,
+      target: 'partners',
+      currentDate: null,
+      edited: false
     };
   }
+  componentDidMount() {
+    this.retrieveSummaryLedger()
+    const { params } = this.props.navigation.state;
+    if(params && params.data){
+      this.handleSelectFulfillment(params.data)
+    }
+    let date = new Date()
+    this.setState({
+      currentDate: date.setDate(date.getDate())
+    })
+  }
+
+  retrieveSummaryLedger = () => {
+    const {user} = this.props.state;
+    const { setLedger } = this.props;
+    if (user == null) {
+      return;
+    }
+    let parameter = {
+      account_id: user.id,
+      account_code: user.code
+    };
+    this.setState({isLoading: true});
+    Api.request(Routes.ledgerSummary, parameter, (response) => {
+      this.setState({isLoading: false});
+      if (response != null) {
+        setLedger(response.data[0]);
+      } else {
+        setLedger(null);
+      }
+    }, error => {
+      console.log('response', error)
+      this.setState({isLoading: false});
+    });
+  };
 
   redirect = (route) => {
     this.props.navigation.navigate(route);
   };
 
+  navigateToDrawer = (route) => {
+      const navigateAction = NavigationActions.navigate({
+      routeName: 'drawerStack',
+      action: StackActions.reset({
+        index: 0,
+        key: null,
+        actions: [
+            NavigationActions.navigate({routeName: route}),
+        ]
+      })
+    });
+    this.props.navigation.dispatch(navigateAction);
+  }
+
   onDateFinish = (datetime) => {
+    console.log('[Selected Date]', datetime)
     this.setState({
-      date: datetime.date,
+      neededOn: datetime.date,
     });
   };
 
-  renderFulfillmentTypes = () => {
-    const fulfullmentTypes = Helper.fulfillmentTypes;
-    return fulfullmentTypes.map((fulfillment, index) => {
-      return (
-        <FulfillmentCard
-          key={index}
-          index={fulfillment.value}
-          cardColor="#22B173"
-          fulfillmentType={fulfillment.label}
-          fulfillmentDescription={fulfillment.description}
-          handleSelect={this.handleSelectFulfillment}
-        />
-      );
-    });
-  };
 
-  handleSelectFulfillment = (value) => {
-    const fulfullmentTypes = Helper.fulfillmentTypes;
-    const type = fulfullmentTypes.filter((type) => type.value === value);
+  handleSelectFulfillment = (item) => {
+    console.log('[item]', item);
     this.setState({
-      fulfillmentType: type[0].value,
-      money_type: type[0].money_type,
+      fulfillmentType: item,
+      money_type: item.money_type,
+      type: item.id
     });
   };
 
@@ -69,52 +117,77 @@ class CreateRequest extends Component {
   };
 
   handleDetailsChange = (details) => {
-    this.setState({details: details});
+    this.setState({reason: details});
   };
 
   handleMaxProcessingChargeChange = (maximumProcessingCharge) => {
     this.setState({maximumProcessingCharge: maximumProcessingCharge});
   };
 
-  createRequest = async () => {
-    const {user} = this.props.state;
+  handleTarget = (item) => {
+    this.setState({
+      target: item.payload
+    })
+  }
+
+  createRequest = () => {
+    const {user, defaultAddress} = this.props.state;
+    if(user == null){
+      return
+    }else if(this.state.target == null || this.state.type == null || this.state.money_type == null || this.state.amount == null ||  this.state.amount == "" || this.state.neededOn == null || this.state.reason == null || this.state.reason == "" || defaultAddress == null || this.state.target == null) {
+      Alert.alert(
+        'Error Message',
+        'All fields with (*) are required.',
+        [
+          {text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel'}
+        ],
+        { cancelable: false }
+      )
+      return
+    }else if(parseInt(this.state.amount) < 1000){
+      Alert.alert(
+        'Error Message',
+        'Amount must not be less than 1000',
+        [
+          {text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel'}
+        ],
+        { cancelable: false }
+      )
+      return
+    }
     let parameters = {
-      account_id: user.account_information.account_id,
-      money_type: this.state.money_type,
-      currency: this.state.currency,
-      type: this.state.fulfillmentType,
+      account_id: user.id,
       amount: this.state.amount,
-      interest: 1,
-      months_payable: 1,
-      needed_on: this.state.date,
-      billing_per_month: 1,
-      max_charge: null,
-      reason: this.state.details,
-      location: {
-        route: this.props.state.location.address,
-        locality: this.props.state.location.locality,
-        region: this.props.state.location.region,
-        country: this.props.state.location.country,
-        latitude: this.props.state.location.latitude,
-        longitude: this.props.state.location.longitude,
-      },
-      comaker: '',
-      coupon: '',
+      comaker: null,
+      coupon: null,
+      currency: this.state.currency,
+      interest: null,
+      location_id: defaultAddress.id,
+      max_charge: this.state.maximumProcessingCharge,
+      months_payable: null,
+      needed_on: this.state.neededOn,
+      reason: this.state.reason,
+      shipping: this.state.shipping,
+      type: this.state.type,
+      money_type: this.state.money_type,
+      target: this.state.target
     };
-    this.props.setRequestInput(parameters);
+    console.log('[Create Requests] Create parameters', parameters)
+    // this.props.setRequestInput(parameters);
+    // this.sendRequest()
     this.props.navigation.navigate('otpStack', {
-      performTransaction: this.sendRequest,
+      data: {
+        payload: 'createRequest',
+        data: parameters
+      }
     });
   };
 
   sendRequest = () => {
     this.setState({isLoading: true});
-    Api.request(
-      Routes.requestCreate,
-      this.props.state.requestInput,
-      (response) => {
-        console.log('RESPONSE', response);
+    Api.request(Routes.requestCreate, this.props.state.requestInput, response => {
         this.setState({isLoading: false});
+        this.navigateToDrawer('Requests')
       },
       (error) => {
         console.log('API ERROR', error);
@@ -123,22 +196,98 @@ class CreateRequest extends Component {
     );
   };
 
+  renderTarget = () => {
+    return(
+      <View styl={{
+        flexDirection: 'row',
+        width: '100%'
+      }}>
+        {
+          targets.map((item, index) => (
+            <TouchableOpacity
+              style={{
+                width: width / 4,
+                marginRight: 10,
+                borderRadius: BasicStyles.standardBorderRadius,
+                borderColor: Color.lightGray,
+                borderWidth: 1,
+                paddingTop: 10,
+                paddingBottom: 10,
+                alignItems: 'center',
+              }}>
+              <Text style={{
+                fontSize: BasicStyles.standardFontSize,
+                fontWeight: 'bold'
+              }}>{item.title}</Text>
+              <Text style={{
+                fontSize: BasicStyles.standardFontSize
+              }}>
+                {
+                  item.description
+                }
+              </Text>
+            </TouchableOpacity>
+          ))
+        }
+        
+      </View>
+    );
+  }
+
   render() {
+    const { ledger, theme, defaultAddress } = this.props.state;
     return (
-      <View style={{height: '100%', width: '100%', alignItems: 'center'}}>
-        <View style={styles.CreateRequestContainer}>
-          {this.state.isLoading ? <Spinner mode="overlay" /> : null}
-          <ScrollView>
-            <BalanceCard
-              cardColor="#22B173"
-              availableBalance={'PHP 25,000.00'}
-              currentBalance={'PHP 52,000.00'}
-            />
-            <View style={styles.FillInDetailsContainer}>
-              <Text style={styles.FillInDetailsTextStyle}>
+      <View style={{
+        flex: 1
+      }}>
+        {this.state.isLoading ? <Spinner mode="overlay" /> : null}
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {/*
+            ledger && (
+              <BalanceCard
+                data={ledger}
+              />
+            )
+          */}
+          <View style={{
+            ...BasicStyles.standardContainer
+          }}>
+            <View style={{
+              marginTop: 20
+            }}>
+              <Text style={{
+                fontWeight: 'bold'
+              }}>
                 Fill in the details
               </Text>
             </View>
+
+            <View style={styles.SelectFulfillmentContainer}>
+              <Text
+                style={[
+                  styles.SelectFulfillmentTextStyle,
+                  {fontSize: BasicStyles.standardFontSize}
+                ]}>
+                Visible to
+              </Text>
+              <FontAwesomeIcon
+                icon={faAsterisk}
+                size={7}
+                style={{paddingLeft: 15, color: '#FF2020'}}
+              />
+            </View>
+
+            <View style={{width: '100%'}}>
+              <ScrollView
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}>
+                <TargetCard
+                  onSelect={(item) => this.handleTarget(item)}
+                  selected={this.state.target}
+                  />
+              </ScrollView>
+            </View>
+
             <View style={styles.SelectFulfillmentContainer}>
               <Text
                 style={[
@@ -153,40 +302,69 @@ class CreateRequest extends Component {
                 style={{paddingLeft: 15, color: '#FF2020'}}
               />
             </View>
-            <View style={{height: 200, width: '100%'}}>
+
+            <View style={{width: '100%'}}>
               <ScrollView
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}>
-                {this.renderFulfillmentTypes()}
+                <FulfillmentCard
+                  onSelect={(item) => this.handleSelectFulfillment(item)}
+                  selected={this.state.fulfillmentType}
+                  />
               </ScrollView>
             </View>
-            <View style={styles.SelectFulfillmentContainer}>
-              <Text
-                style={[
-                  styles.SelectFulfillmentTextStyle,
-                  {fontSize: BasicStyles.standardFontSize},
-                ]}>
-                I need
-              </Text>
-              <FontAwesomeIcon
-                icon={faAsterisk}
-                size={7}
-                style={{paddingLeft: 15, color: '#FF2020'}}
-              />
-            </View>
-            <CustomButton
-              buttonColor="#22b173"
-              fontColor="#fffff"
-              buttonText="Cash"
-              width="100%"
+
+            <LocationTextInput 
+              variable={defaultAddress !== null ? defaultAddress.route : null}
+              label={'Select Location'}
+              placeholder={'Select Location'}
+              onError={false}
+              required={true}
+              route={'addLocationStack'}
+              navigation={this.props.navigation}
             />
-            <View style={styles.SelectFulfillmentContainer}>
+
+            <PickerWithLabel 
+              label={'Select Currency'}
+              data={Helper.currency}
+              placeholder={'Click to select'}
+              onChange={(value) => this.setState({
+                currency: value
+              })}
+              required={true}
+              onError={false}
+            />
+
+
+            <TextInputWithLabel 
+              variable={this.state.amount}
+              onChange={(value) => this.handleAmountChange(value.toString())}
+              label={'Amount'}
+              keyboardType={'numeric'}
+              maxLength={6}
+              onError={false}
+              placeholder={'Amount'}
+              required={true}
+            />
+
+            {/* <TextInputWithLabel 
+              variable={this.state.maximumProcessingCharge}
+              onChange={(value) => this.handleMaxProcessingChargeChange(value.toString())}
+              label={'Suggested processing charge'}
+              onError={false}
+              keyboardType={'numeric'}
+              required={false}
+              placeholder={'Optional'}
+            /> */}
+
+
+            {/*<View style={styles.SelectFulfillmentContainer}>
               <Text
                 style={[
                   styles.SelectFulfillmentTextStyle,
                   {fontSize: BasicStyles.standardFontSize},
                 ]}>
-                Select Currency
+                Suggested processing charge
               </Text>
               <FontAwesomeIcon
                 icon={faAsterisk}
@@ -194,94 +372,25 @@ class CreateRequest extends Component {
                 style={{paddingLeft: 15, color: '#FF2020'}}
               />
             </View>
-            <View style={styles.TextInputContainer}>
-              <Picker
-                selectedValue={this.state.language}
-                style={{
-                  fontSize: BasicStyles.standardFontSize,
-                  height: 60,
-                  width: '90%',
-                  borderRadius: 5,
-                  borderColor: '#EOEOEO',
-                  borderWidth: 1,
-                }}
-                onValueChange={(itemValue, itemIndex) =>
-                  this.setState({currency: itemValue})
-                }>
-                <Picker.Item
-                  label="Philippine Peso - PHP"
-                  value="Philippine Peso - PHP"
-                />
-                <Picker.Item label="US Dollar - USD" value="US Dollar - USD" />
-              </Picker>
-            </View>
-            <View style={styles.SelectFulfillmentContainer}>
-              <Text
-                style={[
-                  styles.SelectFulfillmentTextStyle,
-                  {fontSize: BasicStyles.standardFontSize},
-                ]}>
-                Amount
-              </Text>
-              <FontAwesomeIcon
-                icon={faAsterisk}
-                size={7}
-                style={{paddingLeft: 15, color: '#FF2020'}}
-              />
-            </View>
-            <View style={styles.TextInputContainer}>
-              <TextInput
-                value={this.state.amount}
-                onChangeText={(amount) => {
-                  this.handleAmountChange(amount);
-                }}
-              />
-            </View>
-            <View style={styles.SelectFulfillmentContainer}>
-              <Text
-                style={[
-                  styles.SelectFulfillmentTextStyle,
-                  {fontSize: BasicStyles.standardFontSize},
-                ]}>
-                Maximum processing charge
-              </Text>
-              <FontAwesomeIcon
-                icon={faAsterisk}
-                size={7}
-                style={{paddingLeft: 15, color: '#FF2020'}}
-              />
-            </View>
-            <View style={styles.TextInputContainer}>
-              <TextInput
-                placeholder="Optional"
-                style={{textAlign: 'justify'}}
-                onChangeText={(maximumProcessingCharge) => {
-                  this.handleMaxProcessingChargeChange(maximumProcessingCharge);
-                }}
-              />
-            </View>
-            <View style={styles.SelectFulfillmentContainer}>
-              <Text
-                style={[
-                  styles.SelectFulfillmentTextStyle,
-                  {fontSize: BasicStyles.standardFontSize},
-                ]}>
-                Location
-              </Text>
-              <FontAwesomeIcon
-                icon={faAsterisk}
-                size={7}
-                style={{paddingLeft: 15, color: '#FF2020'}}
-              />
-            </View>
-            <View style={styles.TextInputContainer}>
-              <TextInput
-                placeholder="Please type meetup address"
-                onFocus={() => {
-                  this.redirect('addLocationStack');
-                }}
-              />
-            </View>
+                
+              <View>
+                <View style={{alignContent: 'center', marginTop: 15, marginLeft: '30%'}}>
+                  <FontAwesomeIcon
+                    icon={faMinusCircle}
+                    size={30}
+                    style={{paddingLeft: 15, color: Color.primary}}
+                  />
+                </View>
+                <Text style={{marginTop: -20, marginLeft: '51%'}}>1</Text>
+                <View style={{alignContent: 'center', marginTop: -30, marginLeft: '65%'}}>
+                  <FontAwesomeIcon
+                    icon={faPlusCircle}
+                    size={30}
+                    style={{paddingLeft: 15, color: Color.primary}}
+                  />
+                </View>
+              </View>*/}
+
             <View style={styles.SelectFulfillmentContainer}>
               <Text
                 style={[
@@ -296,12 +405,38 @@ class CreateRequest extends Component {
                 style={{paddingLeft: 15, color: '#FF2020'}}
               />
             </View>
+            
             <DateTime
               onFinish={this.onDateFinish}
-              placeholder="Select date and time"
+              placeholder="Select date"
               type="date"
+              minimumDate={this.state.currentDate}
             />
-            <View style={[styles.SelectFulfillmentContainer, {paddingTop: 0}]}>
+
+            <PickerWithLabel 
+              label={'Select Shipping Option'}
+              data={Helper.shipping}
+              placeholder={'Click to select'}
+              onChange={(value) => this.setState({
+                shipping: value
+              })}
+              required={true}
+              onError={false}
+            />
+
+
+            {/*<TextInputWithLabel 
+                          variable={this.state.reason}
+                          onChange={(value) => this.handleDetailsChange(value)}
+                          label={'Details'}
+                          onError={false}
+                          required={true}
+                          placeholder={'Add details here'}
+                          multiline={true}
+                          numberOfLines={5}
+                        />*/}
+
+            <View style={styles.SelectFulfillmentContainer}>
               <Text
                 style={[
                   styles.SelectFulfillmentTextStyle,
@@ -315,16 +450,22 @@ class CreateRequest extends Component {
                 style={{paddingLeft: 15, color: '#FF2020'}}
               />
             </View>
-            <View style={[styles.TextInputContainer, {height: 120}]}>
-              <TextInput
-                value={this.state.details}
-                placeholder="Add details here"
-                placeholderTextColor="#000000"
-                onChangeText={(details) => {
-                  this.handleDetailsChange(details);
-                }}
-              />
-            </View>
+
+
+            <TextInputWithoutLabel
+              variable={this.state.reason}
+              multiline={true}
+              onChange={(value) => this.setState({
+                reason: value
+              })}
+              numberOfLines={5}
+              placeholder={'Type the details here ...'}
+              style={{
+                marginTop: 10
+              }}
+            />
+
+
             <View style={styles.AmountContainer}>
               <View style={styles.AmountTextContainer}>
                 <Text
@@ -341,14 +482,9 @@ class CreateRequest extends Component {
                     styles.AmountDetailsStyle,
                     {fontSize: BasicStyles.standardFontSize},
                   ]}>
-                  PHP
-                </Text>
-                <Text
-                  style={[
-                    styles.AmountDetailsStyle,
-                    {fontSize: BasicStyles.standardFontSize},
-                  ]}>
-                  0.00
+                  {
+                    Currency.display(this.state.amount, 'PHP')
+                  }
                 </Text>
               </View>
             </View>
@@ -367,20 +503,23 @@ class CreateRequest extends Component {
                   <Text style={styles.AmountTextStyle}>Total</Text>
                 </View>
                 <View style={styles.AmountDetailsContainer}>
-                  <Text style={styles.AmountDetailsStyle}>PHP</Text>
-                  <Text style={styles.AmountDetailsStyle}>0.00</Text>
+                  <Text style={styles.AmountDetailsStyle}>
+                  {
+                    Currency.display(this.state.amount, 'PHP')
+                  }
+                  </Text>
                 </View>
               </View>
-              <CustomButton
-                onPress={this.createRequest}
-                buttonColor="#3F0050"
-                fontColor="#fffff"
-                buttonText="Post"
-                width="100%"
+              <Button
+                onClick={() => this.createRequest()}
+                title={'Post'}
+                style={{
+                  backgroundColor: theme ? theme.secondary : Color.secondary
+                }}
               />
             </View>
-          </ScrollView>
-        </View>
+          </View>
+        </ScrollView>
       </View>
     );
   }
@@ -391,9 +530,8 @@ const mapDispatchToProps = (dispatch) => {
   const {actions} = require('@redux');
   return {
     // updateUser: (user) => dispatch(actions.updateUser(user)),
-    setLocation: (location) => dispatch(actions.setLocation(location)),
-    setRequestInput: (requestInput) =>
-      dispatch(actions.setRequestInput(requestInput)),
+    setRequestInput: (requestInput) => dispatch(actions.setRequestInput(requestInput)),
+    setLedger: (ledger) => dispatch(actions.setLedger(ledger)),
   };
 };
 

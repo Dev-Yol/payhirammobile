@@ -16,15 +16,14 @@ const styles = StyleSheet.create({
     width: '90%',
   },
   OTPInputContainer: {
-    width: '70%',
+    width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 50,
   },
   OTPTextContainer: {
-    paddingBottom: '1%',
     marginBottom: 0,
-    width: '75%',
+    width: '100%',
   },
   OTPTextStyle: {
     textAlign: 'center',
@@ -35,9 +34,8 @@ const styles = StyleSheet.create({
     height: 200,
   },
   ResendContainer: {
-    paddingBottom: '90%',
-    width: '75%',
-    marginTop: '10%',
+    width: '100%',
+    marginTop: 20
   },
   ResendTextStyle: {
     textAlign: 'center',
@@ -49,8 +47,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-evenly',
     position: 'absolute',
-    bottom: 0,
-    paddingBottom: 10,
+    bottom: 10
   },
   CustomButtonContainer: {
     borderRadius: 10,

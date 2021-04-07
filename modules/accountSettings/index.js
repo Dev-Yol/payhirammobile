@@ -5,15 +5,20 @@ import {
   TextInput,
   TouchableHighlight,
   ScrollView,
+  Dimensions,
+  SafeAreaView
 } from 'react-native';
 import { connect } from 'react-redux';
 import { Routes, Color, Helper, BasicStyles } from 'common';
-import AccountSettingsInput from 'modules/accountSettings/AccountSettingsInput.js';
-import AccountSettingsButton from 'modules/accountSettings/AccountSettingsButton.js';
 import styles from 'modules/accountSettings/Styles.js';
 import PasswordWithIcon from 'components/InputField/Password.js';
 import Api from 'services/api/index.js';
 import { Spinner } from 'components';
+import Button from 'components/Form/Button';
+import TextInputWithLabel from 'components/Form/TextInputWithLabel';
+import QRCode from 'react-native-qrcode-svg';
+import { ColorPropType } from 'react-native';
+const height = Math.round(Dimensions.get('window').height);
 
 class AccountSettings extends Component {
   constructor(props) {
@@ -23,6 +28,7 @@ class AccountSettings extends Component {
       password: '',
       confirmPassword: '',
       isLoading: false,
+      error: false
     };
   }
   isValidEmail = () => {
@@ -39,27 +45,45 @@ class AccountSettings extends Component {
     })
   }
   updateEmail = () => {
+    const { user } = this.props.state;
+    if(user == null){
+      return
+    }
     if (this.isValidEmail()) {
-      const { user } = this.props.state;
       let parameters = {
-        id: user.account_information.account_id,
+        id: user.id,
         email: this.state.email
       };
       this.setState({ isLoading: true });
-      Api.request(
-        Routes.accountUpdateEmail,
-        parameters,
-        (response) => {
+      console.log('[Update Email] Parameters', parameters)
+      Api.request( Routes.accountUpdateEmail, parameters, response => {
           this.setState({ isLoading: false });
-          alert('Email updated!');
+          if(response.data == true){
+            alert('Your email is now updated.')
+            const { updateUser } = this.props;
+            updateUser({
+              ...user,
+              email: this.state.email
+            })
+          }else{
+            alert(response.error)
+          }
         },
         (error) => {
           console.log('update email error', error);
           this.setState({ isLoading: false });
-        },
+        }
       );
     } else {
       alert("Invalid Email")
+    }
+  }
+  validPassword(value) {
+    this.setState({password: value})
+    if (/^.*(?=.{8,})((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/.test(value) === false) {;
+      this.setState({error: true})
+    } else {
+      this.setState({error: false})
     }
   }
   updatePassword = () => {
@@ -68,13 +92,15 @@ class AccountSettings extends Component {
       this.state.password != '' &&
       this.state.confirmPassword != null &&
       this.state.confirmPassword != '' &&
-      this.state.password === this.state.confirmPassword
-    ) {
-      const { user } = this.props.state;
-      let parameters = {
-        id: user.account_information.account_id,
-        password: this.state.password,
-      };
+      this.state.password === this.state.confirmPassword &&
+      this.state.error === false
+      ) {
+        const { user } = this.props.state;
+        let parameters = {
+          id: user.id,
+          password: this.state.password,
+        };
+      console.log('[password parameters]', parameters);
       this.setState({ isLoading: true });
       Api.request(
         Routes.accountUpdatePassword,
@@ -83,83 +109,122 @@ class AccountSettings extends Component {
           console.log('update password response', response);
           this.setState({ isLoading: false });
           alert('Password updated!');
+          this.state.password = ''
+          this.state.confirmPassword = ''
         },
         (error) => {
           console.log('update password error', error);
           this.setState({ isLoading: false });
         },
       );
-    } else {
-      alert("Passwords don't match!");
+    }else if(this.state.password != this.state.confirmPassword){
+      alert("Password mismatch with the Confirm Password!");
+    }else {
+      alert("Invalid Password!");
     }
   };
 
-
   render() {
-    let { user } = this.props.state;
-    const Label = ({ label }) => {
-      return (
-        <View
-          style={{
-            textAlign: 'left',
-            alignSelf: 'flex-start',
-          }}>
-          <Text style={{ marginBottom: 5 }}>{label}</Text>
-        </View>
-      );
-    };
+    let { user, theme } = this.props.state;
 
     return (
-      <ScrollView style={{ flex: 1, paddingTop: 10 }}>
-        <View style={[styles.AccountSettingsContainer]}>
-          {this.state.isLoading ? <Spinner mode="overlay" /> : null}
-          <Label label={'Username'} />
-          <TextInput
-            style={BasicStyles.formControl}
-            editable={false}
-            value={user.username}
-          />
-          <Label label={'Email'} />
-          <TextInput
-            style={BasicStyles.formControl}
-            value={this.state.email}
-            placeholder={'Enter Email address'}
-            onChangeText={(e) => {
-              this.setState({ email: e })
-            }}
-          />
-          <TouchableHighlight
-            style={[BasicStyles.btn, BasicStyles.btnSecondary]}
-            onPress={this.updateEmail}
-            underlayColor={Color.gray}>
-            <Text style={BasicStyles.textWhite}>Update Email</Text>
-          </TouchableHighlight>
-          <Label label={'Password'} />
-          <PasswordWithIcon
-            onTyping={(input) =>
-              this.setState({
-                password: input,
-              })
-            }
-          />
-          <Label label={'Confirm Password'} />
-          <PasswordWithIcon
-            onTyping={(input) =>
-              this.setState({
-                confirmPassword: input,
-              })
-            }
-          />
-          <TouchableHighlight
-            style={[BasicStyles.btn, BasicStyles.btnSecondary]}
-            onPress={() => {
-              this.updatePassword();
-            }}
-            underlayColor={Color.gray}>
-            <Text style={BasicStyles.textWhite}>Change Password</Text>
-          </TouchableHighlight>
-        </View>
-      </ScrollView>
+      <SafeAreaView>
+        <ScrollView
+         showsVerticalScrollIndicator={false}>
+          <View style={{
+            ...styles.AccountSettingsContainer,
+            height: height + 25,
+            paddingTop: 25
+          }}>
+              <QRCode
+                size={220}
+                value={user.code}
+              />
+            
+
+            <TextInputWithLabel 
+              variable={user.username}
+              onChange={(value) => {}}
+              label={'Username'}
+              selectTextOnFocus={false}
+              onError={false}
+              editable={false}
+              required={false}
+            />
+
+            <TextInputWithLabel 
+              variable={this.state.email}
+              onChange={(value) => {this.setState({email: value})}}
+              label={'Email Address'}
+              onError={false}
+              placeholder={'Enter Email address'}
+              required={true}
+              editable={true}
+            />
+
+            <Button
+              style={{
+                backgroundColor: theme ? theme.secondary : Color.secondary,
+                marginTop: 15,
+                marginBottom: 15
+              }}
+              title={'Update Email'}
+              onClick={() => this.updateEmail()}/>
+
+            { this.state.error === true && (
+              <Text style={{color: Color.danger}}>Password must be atleast 8 alphanumeric characters. It should contain 1 number, 1 special character and 1 capital letter.</Text>
+            )}
+            
+            <Text style={{
+              fontSize: BasicStyles.standardFontSize,
+              paddingBottom: 10,
+              textAlign: 'left',
+              width: '100%'
+            }}>
+              Password
+            </Text>
+            <PasswordWithIcon
+              onTyping={(input) =>
+                this.validPassword(input)
+              }
+              style={{
+                width: '100%'
+              }}
+              />
+
+            <Text style={{
+              fontSize: BasicStyles.standardFontSize,
+              paddingBottom: 10,
+              textAlign: 'left',
+              width: '100%'
+            }}>
+              Confirm Password
+            </Text>
+            <PasswordWithIcon
+              onTyping={(input) =>
+                this.setState({
+                  confirmPassword: input,
+                })
+              }
+              
+              style={{
+                // paddingBottom: 20,
+                width: '100%'
+              }}
+            />
+
+            <Button 
+              style={{
+                backgroundColor: theme ? theme.secondary : Color.secondary,
+                marginTop: '5%'
+              }}
+              title={'Change Password'}
+              onClick={() => this.updatePassword()}/>
+
+          </View>
+        </ScrollView>
+        {this.state.isLoading ? <Spinner mode="overlay" /> : null}
+      </SafeAreaView>
     );
   }
 }
@@ -168,8 +233,12 @@ const mapStateToProps = (state) => ({
   state
 })
 
-const mapDispatchToProps = {
 
-}
+const mapDispatchToProps = dispatch => {
+  const { actions } = require('@redux');
+  return {
+    updateUser: (user) => dispatch(actions.updateUser(user))
+  };
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(AccountSettings);

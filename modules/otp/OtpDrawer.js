@@ -3,9 +3,9 @@ import {View, TouchableOpacity, Text} from 'react-native';
 import {createStackNavigator} from 'react-navigation-stack';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faChevronLeft} from '@fortawesome/free-solid-svg-icons';
-import OTP from 'modules/otp';
+import OTP from 'modules/otp/Otp';
 import {connect} from 'react-redux';
-import {BasicStyles} from 'common';
+import {BasicStyles, Color} from 'common';
 class HeaderOptions extends Component {
   constructor(props) {
     super(props);
@@ -14,29 +14,15 @@ class HeaderOptions extends Component {
     this.props.navigationProps.pop();
   };
   render() {
+    const { theme } = this.props.state;
     return (
-      <View
-        style={{
-          height: 45,
-          width: 45,
-          justifyContent: 'center',
-          alignItems: 'center',
-          marginLeft: 5,
-        }}>
-        <TouchableOpacity
-          onPress={() => {
-            this.back();
-          }}
-          style={{
-            width: '16.5%',
-            alignItems: 'center',
-            marginLeft: '0.5%',
-          }}>
+      <View style={{flexDirection: 'row'}}>
+        <TouchableOpacity onPress={this.back.bind(this)}>
           {/*Donute Button Image */}
           <FontAwesomeIcon
             icon={faChevronLeft}
-            size={BasicStyles.iconSize}
-            style={{color: '#3F0050'}}
+            size={BasicStyles.headerBackIconSize}
+            style={{Color: theme ? theme.primary : Color.primary }}
           />
         </TouchableOpacity>
       </View>
@@ -53,22 +39,16 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
+let HeaderOptionsConnect  = connect(mapStateToProps, mapDispatchToProps)(HeaderOptions);
+
 const OtpStack = createStackNavigator({
   otpScreen: {
     screen: OTP,
     navigationOptions: ({navigation}) => ({
       title: 'OTP Code',
       drawerLabel: 'OTP',
-      headerLeft: <HeaderOptions navigationProps={navigation} />,
-      headerStyle: {
-        backgroundColor: 'white',
-        height: 80,
-        elevation: 0,
-      },
-      headerTintColor: '#4c4c4c',
-      headerTitleStyle: {
-        fontSize: 20,
-      },
+      headerLeft: <HeaderOptionsConnect navigationProps={navigation} />,
+      ...BasicStyles.headerDrawerStyle
     }),
   },
 });
