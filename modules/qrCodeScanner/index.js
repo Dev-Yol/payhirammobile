@@ -50,7 +50,6 @@ class Scanner extends Component {
           Platform.OS == 'android' && (
              <QRCodeScanner
               onRead={this.onSuccess}
-              flashMode={RNCamera.Constants.FlashMode.torch}
               showMarker
               containerStyle={{
                 height: height,
