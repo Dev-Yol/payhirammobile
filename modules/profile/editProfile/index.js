@@ -15,7 +15,8 @@ import Api from 'services/api/index.js';
 import {
   faCheckCircle,
   faUserCircle,
-  faUpload
+  faUpload,
+  faEdit
 } from '@fortawesome/free-solid-svg-icons';
 import {BasicStyles, Color, Routes} from 'common';
 import {Rating, DateTime} from 'components';
@@ -268,18 +269,61 @@ class EditProfile extends Component {
 
             {/* {
               this.state.profile && ( */}
+                
+              {/* )
+            } */}
+
+              <TouchableOpacity
+                style={{
+                  height: 180,
+                  width: 180,
+                  borderRadius: 100,
+                  borderColor: Color.primary,
+                  borderWidth: 2
+                }}
+                onPress={() => this.upload()}>
                 <UserImage
                   user={this.state.profile}
                   style={{
-                    height: 100,
-                    width: 100,
-                    borderRadius: 50
+                    height: '100%',
+                    width: '100%',
+                    borderRadius: 100
                   }}
                   size={100}
                   color={Color.white}
                   />
-              {/* )
-            } */}
+                <View style={{
+                  height: 50,
+                  width: 50,
+                  borderRadius: 100,
+                  marginRight: 5,
+                  position: 'absolute',
+                  right: -5,
+                  bottom: 1,
+                  backgroundColor: 'white',
+                  justifyContent: 'center',
+                  alignItems: 'center'
+                }}>
+                  <View style={{
+                    height: 35,
+                    width: 35,
+                    borderRadius: 100,
+                    borderWidth: 2,
+                    borderColor: Color.primary,
+                    backgroundColor: 'white',
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                  }}>
+                    <FontAwesomeIcon style={{
+                      borderColor: Color.primary
+                    }}
+                      icon={faEdit}
+                      size={20}
+                      color={Color.primary}
+                    />
+                  </View>
+                </View>
+              </TouchableOpacity>
 
             {
               user.username && (
@@ -302,14 +346,16 @@ class EditProfile extends Component {
                 />
               )
             }
-            <Rating ratings={''} style={[{flex: 2}]}></Rating>
+            <Rating ratings={''} rating={' '} style={[{flex: 2}]}></Rating>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <FontAwesomeIcon
-                icon={faCheckCircle}
-                style={{color: 'blue', marginLeft: 5}}
-                size={15}
-              />
-              <Text style={{color: Color.white}}>{user.status}</Text>
+              { user.status == 'verified' && (
+                <FontAwesomeIcon
+                  icon={faCheckCircle}
+                  style={{color: 'blue', marginLeft: 5}}
+                  size={15}
+                />
+              )}
+              <Text style={{color: Color.white, marginLeft: '1%'}}>{user.status}</Text>
             </View>
           </View>
           <View>
