@@ -11,10 +11,34 @@ class Currency extends Component {
     };
   }
 
+  selectHandler = (index) => {
+    const {setDefaultAddress} = this.props;
+    this.setState({ selectedAddress: index });
+    setDefaultAddress(this.state.addresses[index]);
+    console.log('[default]', this.props.state.defaultAddress);
+    this.props.navigation.pop()
+  };
+
   render() {
-    return (
-      <CurrencyList/>
-    );
+    // return (
+    //   <CurrencyList/>
+    // );
+    return addresses.map((address, index) => {
+      return (
+        <CurrencyList
+          key={index}
+          index={index}
+          address={address.route}
+          onPress={this.selectHandler}
+          backgroundColor={
+            this.state.selectedAddress === index ? '#22B173' : '#FFFFFF'
+          }
+          fontColor={
+            this.state.selectedAddress === index ? '#FFFFFF' : '#000000'
+          }
+        />
+      );
+    });
   }
 }
 

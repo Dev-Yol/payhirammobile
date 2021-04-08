@@ -23,24 +23,59 @@ class CurrencyList extends Component {
   render() {
     const { currency } = this.state
     return (
-        <ScrollView>
-          <View style={styles.PaymentMethodsContainer}>
-          <RadioButton
-              value="PHP"
-              status={ currency == 'PHP' ? 'checked' : 'unchecked' }
-              onPress={() => this.setCur('PHP')}
-              color='#3F0050'
-              />
-            <Text style={{marginTop: '-8%', marginLeft: '12%', marginBottom: '3%'}}>PHP</Text>
-            <RadioButton
-              value="USD"
-              status={ currency == 'USD' ? 'checked' : 'unchecked' }
-              onPress={() => this.setCurren('USD')}
-              color='#3F0050'
-            />
-            <Text style={{marginTop: '-8%', marginLeft: '12%', marginBottom: '3%'}}>USD</Text>
-          </View>
-        </ScrollView>
+        // <ScrollView>
+        //   <View style={styles.PaymentMethodsContainer}>
+        //   <RadioButton
+        //       value="PHP"
+        //       status={ currency == 'PHP' ? 'checked' : 'unchecked' }
+        //       onPress={() => this.setCur('PHP')}
+        //       color='#3F0050'
+        //       />
+        //     <Text style={{marginTop: '-8%', marginLeft: '12%', marginBottom: '3%'}}>PHP</Text>
+        //     <RadioButton
+        //       value="USD"
+        //       status={ currency == 'USD' ? 'checked' : 'unchecked' }
+        //       onPress={() => this.setCurren('USD')}
+        //       color='#3F0050'
+        //     />
+        //     <Text style={{marginTop: '-8%', marginLeft: '12%', marginBottom: '3%'}}>USD</Text>
+        //   </View>
+        // </ScrollView>
+        <TouchableOpacity
+        style={[
+          styles.AddressTileContainer,
+          {
+            backgroundColor: this.props.backgroundColor,
+            paddingRight: 30
+          },
+        ]}
+        onPress={() => {
+          this.props.onPress(this.props.index);
+        }}>
+        <View style={styles.AddressContainer}>
+          <Text
+            style={[styles.AddressTextStyle, {
+                color: this.props.fontColor,
+                fontWeight: 'bold',
+                fontSize: BasicStyles.standardFontSize - 1,
+                marginTop: 5,
+                marginBottom: 5
+              }
+            ]}>
+            {this.props.currency}
+          </Text>
+        </View>
+        {/* <View style={styles.CountryContainer}>
+          <Text
+            style={[styles.CountryTextStyle, {
+              color: this.props.fontColor,
+              fontSize: BasicStyles.standardFontSize
+            }
+          ]}>
+            {this.props.country}
+          </Text>
+        </View> */}
+      </TouchableOpacity>
     );
   }
 }

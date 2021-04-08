@@ -101,6 +101,7 @@ class Requests extends Component {
     const { setParameter } = this.props
     const {user, searchParameter, parameter, location, defaultAddress} = this.props.state;
     const { data, tempData, page } = this.state;
+    console.log('[parameter]', parameter)
     if (user == null) {
       return;
     }

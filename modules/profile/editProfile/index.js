@@ -24,7 +24,7 @@ import { connect } from 'react-redux';
 import UserImage from 'components/User/Image';
 import Button from 'components/Form/Button';
 import ImagePicker from 'react-native-image-picker';
-import { Item } from 'native-base';
+import { Spinner } from 'components';
 const gender = [{
   title: 'Male',
   value: 'male'
@@ -160,13 +160,11 @@ class EditProfile extends Component {
         this.setState({isLoading: true})
         Api.upload(Routes.imageUpload, formData, response => {
           this.setState({isLoading: false})
-          console.log("[FIRST_UPLOAD]", response.data.data);
           let imageData = new FormData()
           imageData.append('account_id', user.id);
           imageData.append('url', response.data.data)
           if(profile.profile == null){
             Api.upload(Routes.accountProfileCreate, imageData, response => {
-              console.log("[CREATE_IMAGE]", response);
               if(response.data !== null) {
                 this.retrieve();
                 Alert.alert(
@@ -273,10 +271,11 @@ class EditProfile extends Component {
               {/* )
             } */}
 
+        {this.state.isLoading ? <Spinner mode="overlay" /> : null}
               <TouchableOpacity
                 style={{
-                  height: 180,
-                  width: 180,
+                  height: 110,
+                  width: 110,
                   borderRadius: 100,
                   borderColor: Color.primary,
                   borderWidth: 2
@@ -293,8 +292,8 @@ class EditProfile extends Component {
                   color={Color.white}
                   />
                 <View style={{
-                  height: 50,
-                  width: 50,
+                  height: 40,
+                  width: 40,
                   borderRadius: 100,
                   marginRight: 5,
                   position: 'absolute',
