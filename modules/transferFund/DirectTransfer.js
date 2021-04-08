@@ -82,7 +82,7 @@ class DirectTransfer extends Component {
       console.log('response', response)
       this.setState({isLoading: false, summaryLoading: false});
 
-      if (response != null) {
+      if (response.data.length > 0) {
         setLedger(response.data[0]);
       } else {
         setLedger(null);
@@ -253,9 +253,11 @@ class DirectTransfer extends Component {
 
         <AmountInput
           onChange={(amount, currency) => this.setState({
-            amount: amount,
-            currency: currency
-          })}
+              amount: amount,
+              currency: currency
+            })
+          }
+          navigation={this.props.navigation}
           />
           {/*<TextInput
             value={this.state.amount}

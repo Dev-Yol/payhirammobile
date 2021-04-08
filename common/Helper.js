@@ -46,6 +46,14 @@ export default {
       icon: faHeadset
     }
   ],
+  currencyBal: [{
+    currency: 'PHP',
+    value: 'PHP'
+  },
+  {
+    currency: 'USD',
+    value: 'USD'
+  }],
   currency: [{
     title: 'Philippine Peso',
     value: 'PHP'
@@ -93,7 +101,7 @@ export default {
     {
       id: 5,
       type: 'Accept Payment',
-      description: "Accept Payment",
+      description: "Accept Payment with 0% charge",
       money_type: 'cash',
     },
   ],

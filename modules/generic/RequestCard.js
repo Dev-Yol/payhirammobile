@@ -88,7 +88,7 @@ class RequestCard extends Component {
                   style={{
                     fontWeight: 'bold',
                     textAlign: 'right',
-                    paddingRight: (user && item.account?.code != user.code && item.status == 0) ? 10 : 0,
+                    paddingRight: (user && item.account?.code != user.code && item.status == 0) ? 9 : 0,
                     width: (user && item.account?.code != user.code && item.status == 0) ? 'auto' : '100%',
                     fontSize: BasicStyles.standardFontSize
                   }}>
