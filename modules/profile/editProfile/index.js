@@ -24,7 +24,8 @@ import { connect } from 'react-redux';
 import UserImage from 'components/User/Image';
 import Button from 'components/Form/Button';
 import ImagePicker from 'react-native-image-picker';
-import { Item } from 'native-base';
+import { Spinner } from 'components';
+import Skeleton from 'components/Loading/Skeleton';
 const gender = [{
   title: 'Male',
   value: 'male'
@@ -47,7 +48,8 @@ class EditProfile extends Component {
       // birthDate: null,
       profile: null,
       url: null,
-      photo: null
+      photo: null,
+      isLoading: false
     };
   }
   
@@ -160,13 +162,11 @@ class EditProfile extends Component {
         this.setState({isLoading: true})
         Api.upload(Routes.imageUpload, formData, response => {
           this.setState({isLoading: false})
-          console.log("[FIRST_UPLOAD]", response.data.data);
           let imageData = new FormData()
           imageData.append('account_id', user.id);
           imageData.append('url', response.data.data)
           if(profile.profile == null){
             Api.upload(Routes.accountProfileCreate, imageData, response => {
-              console.log("[CREATE_IMAGE]", response);
               if(response.data !== null) {
                 this.retrieve();
                 Alert.alert(
@@ -255,6 +255,7 @@ class EditProfile extends Component {
   }
 
   render() {
+    const { isLoading } = this.state
     const { user, theme } = this.props.state;
     return (
       <View>
@@ -275,8 +276,8 @@ class EditProfile extends Component {
 
               <TouchableOpacity
                 style={{
-                  height: 180,
-                  width: 180,
+                  height: 110,
+                  width: 110,
                   borderRadius: 100,
                   borderColor: Color.primary,
                   borderWidth: 2
@@ -293,8 +294,8 @@ class EditProfile extends Component {
                   color={Color.white}
                   />
                 <View style={{
-                  height: 50,
-                  width: 50,
+                  height: 40,
+                  width: 40,
                   borderRadius: 100,
                   marginRight: 5,
                   position: 'absolute',
@@ -358,6 +359,8 @@ class EditProfile extends Component {
               <Text style={{color: Color.white, marginLeft: '1%'}}>{user.status}</Text>
             </View>
           </View>
+          
+          {isLoading ? <Spinner mode="overlay" /> : null}
           <View>
             <Text
               style={{
@@ -394,41 +397,6 @@ class EditProfile extends Component {
               value={this.state.last_name}
               required={true}
             />
-            {/* <Text style={{marginLeft: 20}}>Phone Number</Text>
-            <TextInput
-              style={[BasicStyles.formControl, {alignSelf: 'center'}]}
-              placeholder={'Enter Phone Number'}
-              onChangeText={(cellular_number) => this.setState({cellular_number: cellular_number.toString()})}
-              value={this.state.cellular_number}
-              keyboardType={'numeric'}
-              maxLength = {11}
-              required={true}
-            /> */}
-            {/* <Text style={{marginLeft: 20}}>Email</Text>
-            <TextInput
-              style={[BasicStyles.formControl, {alignSelf: 'center'}]}
-              placeholder={'Enter Email'}
-              value={user.email}
-              variable={this.state.email}
-              onChange={(value) => {this.setState({email: value})}}
-              required={true}
-            /> */}
-            {/* <View style={{flexDirection: 'row', justifyContent: 'center'}}> */}
-              {/* <View style={{width: '90%', marginLeft: '5%'}}>
-                <Text>Birthdate</Text>
-                <DateTime
-                  type={'date'}
-                  placeholder={'Select Date'}
-                  onFinish={(date) => {
-                    this.setState({
-                      birthDate: date.date
-                    })
-                  }}
-                  style={{
-                    marginTop: 1
-                  }}
-                />
-              </View> */}
               <View style={{width: '90%', marginLeft: '5%'}}>
                 <Text>Gender</Text>
                 <View
@@ -457,15 +425,6 @@ class EditProfile extends Component {
                   </Picker>
                 </View>
               </View>
-            {/* </View> */}
-            {/* <Text style={{marginLeft: 20}}>Address</Text>
-            <TextInput
-              style={[BasicStyles.formControl, {alignSelf: 'center'}]}
-              onChangeText={(address) => this.setState({address})}
-              value={this.state.address}
-              placeholder={'Enter address'}
-              required={true}
-            /> */}
           </View>
           {/* <View>
             <Text

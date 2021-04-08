@@ -15,7 +15,8 @@ class AmountInput extends Component {
   }
 
   render() {
-    const { theme, ledger } = this.props.state;
+    const { theme, ledger, currencyBal } = this.props.state;
+    console.log('[currencyBal]', currencyBal)
     const { errorMessage } = this.state;
     return (
       <View
@@ -44,12 +45,12 @@ class AmountInput extends Component {
                 this.setState({
                   errorMessage: 'Insufficient Balance!'
                 })
-                this.props.onChange(input, ledger && ledger.currency ? ledger.currency : 'PHP')
+                this.props.onChange(input, ledger && (currencyBal != null ? currencyBal : ledger.currency))
               }else{
                 this.setState({
                   amount: input
                 })
-                this.props.onChange(input, ledger && ledger.currency ? ledger.currency : 'PHP')
+                this.props.onChange(input, ledger && (currencyBal != null ? currencyBal : ledger.currency))
               }
             }}
             style={{
@@ -68,7 +69,8 @@ class AmountInput extends Component {
               }}
               onPress={() => {
                 this.props.navigation.navigate('currencyStack')
-              }}
+              }
+            }
               >
                 <View style={{
                   width: '100%',
@@ -78,7 +80,7 @@ class AmountInput extends Component {
                     fontSize: BasicStyles.standardFontSize,
                     paddingTop: 5,
                     paddingBottom: 5
-                  }}>{Currency.display(ledger.available_balance, ledger?.currency ? ledger.currency : 'PHP') +  '  >'}</Text>
+                  }}>{Currency.display(ledger && ledger.available_balance ? ledger.available_balance.toFixed() : 0, currencyBal != null ? currencyBal : ledger.currency) +  '  >'}</Text>
                   <Text style={{
                     fontSize: BasicStyles.standardFontSize,
                     color: Color.gray

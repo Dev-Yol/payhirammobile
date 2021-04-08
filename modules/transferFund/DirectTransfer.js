@@ -138,7 +138,7 @@ class DirectTransfer extends Component {
     const { amount, charge, notes, currency} = this.state;
     if(ledger == null){
       this.errorAlert('Invalid Account')
-      return
+      return 
     }
 
     if(amount == 0){
@@ -443,7 +443,7 @@ class DirectTransfer extends Component {
             fontSize: BasicStyles.standardFontSize,
             width: '40%',
             textAlign: 'right'
-          }}>{Currency.display(charge, lledger && ledger.currency ? ledger.currency : 'PHP')}</Text>
+          }}>{Currency.display(charge, ledger && ledger.currency ? ledger.currency : 'PHP')}</Text>
         </View>
 
 

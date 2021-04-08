@@ -1,54 +1,26 @@
-import {StyleSheet, Platform} from 'react-native';
+import {StyleSheet, Dimensions} from 'react-native';
 import {Color} from 'common';
-export default StyleSheet.create({
-  MainContainer: {
-    flexGrow: 1,
-    marginTop: 60,
-  },
-  PaymentMethodsContainer: {
-    flex: 1,
-    padding: 25,
-  },
-  PaymentTileContainer: {
-    flexDirection: 'row',
-    borderWidth: 0.4,
-    borderRadius: 10,
-    marginVertical: 10,
-    padding: 20,
-  },
-  PaymentTileImage: {
-    marginRight: 15,
-  },
-  PaymentTileText: {
-    fontWeight: 'bold',
-  },
-  floatingButton: {
+
+const width = Math.round(Dimensions.get('window').width);
+
+const styles = StyleSheet.create({
+  AddressTileContainer: {
     justifyContent: 'center',
-    alignItems: 'center',
-    position: 'absolute',
-    bottom: 0,
-    backgroundColor: Color.primary,
+    alignItems: 'flex-start',
     height: 70,
-    width: 70,
-    right: 25,
-    borderRadius: 100
+    paddingLeft: 20,
+    elevation: 1,
+    borderBottomWidth: 0.5,
+    borderColor: '#E8E8E8',
   },
-  textFloatingBtn: {
-    color: Color.white,
+  AddressTextStyle: {
+    fontSize: 17,
   },
-  ButtonContainer: {
-    alignItems: 'center',
-    marginTop: '50%',
-    left: 130,
+  textStyle: {
+    color: Color.primaryDark,
+    fontWeight: "bold",
+    textAlign: "center"
   },
-  CustomButtonContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    textAlign: 'center',
-    width: 50,
-    height: 50,
-    backgroundColor: Color.primary,
-    color: Color.white,
-    borderRadius: 50,
-  }
 });
+
+export default styles;

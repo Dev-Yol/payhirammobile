@@ -15,6 +15,7 @@ import {Routes, Color, Helper, BasicStyles} from 'common';
 import {Spinner, Empty, SystemNotification} from 'components';
 import Api from 'services/api/index.js';
 import Currency from 'services/Currency.js';
+import Skeleton from 'components/Loading/Skeleton';
 import {NavigationActions} from 'react-navigation';
 import {connect} from 'react-redux';
 import {Dimensions} from 'react-native';
@@ -73,7 +74,8 @@ class Summary extends Component {
     Api.request(Routes.ledgerDashboard, parameter, (response) => {
       this.setState({isLoading: false});
       if (response != null) {
-        setLedger(response.data.ledger);
+        console.log('Ledger', response.data.ledger)
+        setLedger(response.data.ledger[0]);
         this.setState({
           history: response.data.history
         })
@@ -345,12 +347,14 @@ class Summary extends Component {
                       <TransactionCard data={item} key={index}/>
                     ))
                   }
+              {
+                isLoading && (<Skeleton size={2}/>)
+              }
                 </View>
               )
             }
           </View>
         </ScrollView>
-        {isLoading ? <Spinner mode="overlay" /> : null}
         {/* {
           showRatings && (
             <View style={{

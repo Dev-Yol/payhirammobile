@@ -42,7 +42,8 @@ const types = {
   SET_CIRCLE_SEARCH: 'SET_CIRCLE_SEARCH',
   SET_FILTER_DATA: 'SET_FILTER_DATA',
   SET_DEVICE_LOCATION: 'SET_DEVICE_LOCATION',
-  SET_PARAMETER: 'SET_PARAMETER'
+  SET_PARAMETER: 'SET_PARAMETER',
+  SET_CURRENCY_BAL: 'SET_CURRENCY_BAL'
 };
 
 export const actions = {
@@ -159,6 +160,9 @@ export const actions = {
   },
   setParameter(parameter) {
     return {type: types.SET_PARAMETER, parameter}
+  },
+  setCurrencyBal(currencyBal) {
+    return {type: types.SET_CURRENCY_BAL, currencyBal}
   }
 };
 
@@ -205,7 +209,8 @@ const initialState = {
   unReadRequests: [],
   circleSearch: null,
   filterData: null,
-  deviceLocation: null
+  deviceLocation: null,
+  currencyBal: null
 };
 
 storeData = async (key, value) => {
@@ -240,7 +245,7 @@ const reducer = (state = initialState, action) => {
   const { circleSearch } = action;
   const { filterData } = action;
   const { deviceLocation } = action;
-  const { parameter } = action;
+  const { parameter, currencyBal } = action;
   switch (type) {
     case types.LOGOUT:
       storeData('token', '');
@@ -582,6 +587,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         ledger,
+      };
+    case types.SET_CURRENCY_BAL:
+      return {
+        ...state,
+        currencyBal,
       };
     default:
       return {...state, nav: state.nav};
