@@ -38,7 +38,8 @@ class Summary extends Component {
       isLoading: false,
       selected: null,
       showRatings: true,
-      history: []
+      history: [],
+      currentLedger: null
     };
   }
 
@@ -73,17 +74,22 @@ class Summary extends Component {
     this.setState({isLoading: true});
     Api.request(Routes.ledgerDashboard, parameter, (response) => {
       this.setState({isLoading: false});
-      if (response != null) {
+      if (response.data != null) {
         console.log('Ledger', response.data.ledger)
-        setLedger(response.data.ledger[0]);
+        // setLedger(response.data.ledger[0]);
         this.setState({
-          history: response.data.history
+          history: response.data.history,
+          currentLedger: response.data.ledger ? response.data.ledger[0] : null
         })
       } else {
-        setLedger(null);
+        // setLedger(null);
+        this.setState({
+          history: null,
+          currentLedger: null
+        })
       }
     }, error => {
-      this.setState({isLoading: false});
+      this.setState({isLoading: false, history: null, currentLedger: null});
     });
   };
 
@@ -211,7 +217,7 @@ class Summary extends Component {
   }
 
   render() {
-    const { showRatings, isLoading, history } = this.state;
+    const { showRatings, isLoading, history, currentLedger } = this.state;
     const { ledger, theme } = this.props.state;
     return (
       <View>
@@ -224,12 +230,16 @@ class Summary extends Component {
           }}>
 
             {
-              (ledger != null && ledger.length > 0) && ledger.map((item, index) => (
+              (ledger != null && ledger.length > 0) && (
                 <BalanceCard
-                  key={index}
-                  data={item}
+                  data={ledger}
                 />
-              ))
+              )
+            }
+            {
+              (currentLedger) && (
+                <BalanceCard data={currentLedger}/>
+              )
             }
 
             <Text style={{
