@@ -400,7 +400,7 @@ class CreateRequest extends Component {
               }}
               >
               { defaultAddress != null ?
-              <Text></Text> :  <FontAwesomeIcon icon={faMapMarkerAlt} size={BasicStyles.standardFontSize} color={Color.black} style={{marginLeft: '45%', marginTop: '3%'}}/>}
+              <Text></Text> :  <FontAwesomeIcon icon={faMapMarkerAlt} size={BasicStyles.standardFontSize} color={Color.black} style={{marginLeft: '39%', marginTop: '3%'}}/>}
               <Text style={{
                 fontSize: BasicStyles.standardFontSize,
                 width: '100%',
@@ -427,7 +427,6 @@ class CreateRequest extends Component {
 
   thirdStep = () => {
     const { ledger } = this.props.state;
-    console.log('[ledger]', ledger)
     return(
         <View style={{
           width: '100%',
@@ -441,8 +440,10 @@ class CreateRequest extends Component {
           onChange={(amount, currency) => this.setState({
             amount: amount,
             currency: currency
-          })}
-          />
+          })
+          }
+          navigation={this.props.navigation}
+        />
 
           {/*<TextInput
                       value={this.state.amount}

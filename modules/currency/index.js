@@ -1,40 +1,45 @@
 import React, { Component } from 'react';
 import { ScrollView, View, Text, StyleSheet } from 'react-native';
-import { BasicStyles } from 'common';
+import { BasicStyles, Helper } from 'common';
 import CurrencyList from './CurrencyList';
+import {connect} from 'react-redux';
 
 class Currency extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-    };
+      selectedCurrency: null
+    }
   }
 
   selectHandler = (index) => {
-    const {setDefaultAddress} = this.props;
-    this.setState({ selectedAddress: index });
-    setDefaultAddress(this.state.addresses[index]);
-    console.log('[default]', this.props.state.defaultAddress);
-    this.props.navigation.pop()
+    const {setCurrencyBal} = this.props;
+    this.setState({selectedCurrency: index})
+    if(index == 0){
+      let php = 'PHP'
+      setCurrencyBal(php);
+      this.props.navigation.pop()
+    }else if(index == 1){
+      let usd = 'USD'
+      setCurrencyBal(usd)
+      this.props.navigation.pop()
+    }
   };
 
   render() {
-    // return (
-    //   <CurrencyList/>
-    // );
-    return addresses.map((address, index) => {
+    return Helper.currencyBal.map((item, index) => {
       return (
         <CurrencyList
           key={index}
           index={index}
-          address={address.route}
+          currency={item.currency}
           onPress={this.selectHandler}
           backgroundColor={
-            this.state.selectedAddress === index ? '#22B173' : '#FFFFFF'
+            this.state.selectedCurrency === index ? '#22B173' : '#FFFFFF'
           }
           fontColor={
-            this.state.selectedAddress === index ? '#FFFFFF' : '#000000'
+            this.state.selectedCurrency === index ? '#FFFFFF' : '#000000'
           }
         />
       );
@@ -70,4 +75,15 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Currency;
+const mapStateToProps = state => ({ state: state });
+
+const mapDispatchToProps = dispatch => {
+  const { actions } = require('@redux');
+  return {
+    setCurrencyBal: (currencyBal) => dispatch(actions.setCurrencyBal(currencyBal)),
+  };
+};
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Currency);

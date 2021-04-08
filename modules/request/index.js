@@ -101,7 +101,6 @@ class Requests extends Component {
     const { setParameter } = this.props
     const {user, searchParameter, parameter, location, defaultAddress} = this.props.state;
     const { data, tempData, page } = this.state;
-    console.log('[parameter]', parameter)
     if (user == null) {
       return;
     }
@@ -113,7 +112,8 @@ class Requests extends Component {
         column: 'created_at',
         order: 'desc'
       },
-      mode: 'all'
+      mode: 'all',
+      target: 'all'
     }
     if(page == 'personal'){
       parameters['request_account_id'] = user.id
@@ -151,10 +151,10 @@ class Requests extends Component {
       parameters['location'] = location;
     }
 
-    console.log('parameters', parameters)
+    console.log('paramddeters', parameters)
     this.setState({isLoading: (loading == false) ? false : true});
     Api.request(Routes.requestRetrieveMobile, parameters, response => {
-      // console.log('response in Requests', response.data[0].rating)
+      console.log('response in Requests', response)
       response.data.forEach(element => {
         console.log('[rating]', element.rating)
       });
