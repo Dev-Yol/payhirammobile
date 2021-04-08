@@ -67,6 +67,7 @@ class CreateRequest extends Component {
       account_code: user.code
     };
     this.setState({isLoading: true});
+    setLedger(null)
     Api.request(Routes.ledgerSummary, parameter, (response) => {
       this.setState({isLoading: false});
       if (response != null) {
@@ -77,6 +78,7 @@ class CreateRequest extends Component {
     }, error => {
       console.log('response', error)
       this.setState({isLoading: false});
+      setLedger(null)
     });
   };
   
