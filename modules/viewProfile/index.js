@@ -40,11 +40,11 @@ class ViewProfile extends Component {
       condition: [{
         value: this.props.state.user.id,
         column: "account",
-        clause: "="
+        clause: "or"
       }, {
         value: this.props.state.user.id,
         column: "account_id",
-        clause: "or"
+        clause: "="
       }, {
         value: 'declined',
         column: "status",
@@ -53,7 +53,6 @@ class ViewProfile extends Component {
       offset: 0
     }
     this.setState({isLoading: true})
-    console.log(parameter, Routes.circleRetrieve, "============================test");
     Api.request(Routes.circleRetrieve, parameter, response => {
       this.setState({isLoading: false})
       this.setState({ connections: response.data })
@@ -66,7 +65,6 @@ class ViewProfile extends Component {
   checkStatus = (array) => {
     const { user } = this.state
     array.map((item, index) => {
-      console.log(item.account.id, user);
       if(item.account.id === user.id) {
         this.setState({connection: item})
       }
@@ -89,11 +87,9 @@ class ViewProfile extends Component {
             id: user.id,
             status: status
           }
-          console.log(parameter, "========================parameter");
           this.setState({isLoading: true})
           Api.request(Routes.circleUpdate, parameter, response => {
             this.setState({isLoading: false})
-            console.log(response, "===================response upon updating request===============");
             this.retrieveAccount();
           });
         }}
@@ -146,7 +142,6 @@ class ViewProfile extends Component {
       if (response.data.length > 0) {
         this.retrieveEducationalBackground(response.data[0].id);
         this.setState({ user: this.props.navigation.state.params.user ? this.props.navigation.state.params.user : response.data[0] })
-        console.log(response.data[0]);
         this.setState({status: true});
       } else {
         this.setState({ user: null })
@@ -176,7 +171,7 @@ class ViewProfile extends Component {
   render() {
     const { user } = this.state
     const { theme } = this.props.state;
-    console.log(this.state.connection && this.state.connection, user && user);
+    console.log(user && user, 'hey');
     return (
       <View>
         <View>
@@ -185,14 +180,16 @@ class ViewProfile extends Component {
               <View style={{
                 height: '35%',
                 justifyContent: 'center',
-                alignItems: 'center',
-                backgroundColor: theme ? theme.primary : Color.primary
+                alignItems: 'center'
               }}>
                 {user && (
-                  <View>
+                  <View style={{
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
                     <View>
                       <UserImage
-                        user={{ profile: user.profile }}
+                        user={{ profile: user.profile ? user.profile : user?.account?.profile }}
                         color={Color.white} style={{
                           width: 100,
                           height: 100,
@@ -210,7 +207,6 @@ class ViewProfile extends Component {
                     }}>
                       <Text style={{
                         marginLeft: 5,
-                        color: Color.white
                       }}>{this.props.navigation.state.params.user? user.account.username : user.username}</Text>
                     </View>
                   </View>
@@ -232,7 +228,7 @@ class ViewProfile extends Component {
                       borderRadius: 20, 
                     }}
                   />
-                  <Text style={{ color: Color.white, fontStyle: 'italic' }}>  Verified</Text>
+                  <Text style={{ fontStyle: 'italic' }}>  Verified</Text>
                 </View>)}
                 { this.state.status === true && (
                 <View>

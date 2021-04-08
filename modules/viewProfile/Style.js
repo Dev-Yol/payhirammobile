@@ -6,7 +6,5 @@ export default StyleSheet.create({
   container: {
     height: height,
     marginBottom: 100,
-    justifyContent: 'center',
-    alignItems: 'center',
   }
 });

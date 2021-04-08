@@ -14,20 +14,22 @@ class PersonalInformationCard extends Component {
         width: '90%',
         marginLeft: '5%',
         marginRight: '5%',
-        paddingTop: 15
+        paddingTop: 15,
+        paddingRight: '15%'
       }}>
         <View style={{
           backgroundColor:'#ededed',
           justifyContent: 'center',
           alignItems: 'center',
-          padding: 10,
+          padding: 12,
           marginRight: '5%',
           borderRadius: 100
         }}>
           <FontAwesomeIcon icon={icon} size={20} />
         </View>
         <Text style={{
-          fontSize: 16
+          fontSize: 16,
+          marginTop: -15
         }}>{text}</Text>
         <Text style={{
           fontSize: 12,
