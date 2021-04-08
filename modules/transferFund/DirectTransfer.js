@@ -422,7 +422,7 @@ class DirectTransfer extends Component {
             fontSize: BasicStyles.standardFontSize,
             width: '40%',
             textAlign: 'right'
-          }}>{Currency.display(amount, ledger.currency)}</Text>
+          }}>{Currency.display(amount, ledger && ledger.currency ? ledger.currency : 'PHP')}</Text>
         </View>
 
 
@@ -443,7 +443,7 @@ class DirectTransfer extends Component {
             fontSize: BasicStyles.standardFontSize,
             width: '40%',
             textAlign: 'right'
-          }}>{Currency.display(charge, ledger.currency)}</Text>
+          }}>{Currency.display(charge, lledger && ledger.currency ? ledger.currency : 'PHP')}</Text>
         </View>
 
 
@@ -465,7 +465,7 @@ class DirectTransfer extends Component {
             width: '40%',
             fontWeight: 'bold',
             textAlign: 'right'
-          }}>{Currency.display((parseFloat(amount) - parseFloat(charge)), ledger.currency)}</Text>
+          }}>{Currency.display((parseFloat(amount) - parseFloat(charge)), ledger && ledger.currency ? ledger.currency : 'PHP')}</Text>
         </View>
       </View>
     )
