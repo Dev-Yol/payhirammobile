@@ -4,10 +4,14 @@ import styles from './BalanceCardStyle';
 import Currency from 'services/Currency';
 import {connect} from 'react-redux';
 import { Color } from 'common';
+import Skeleton from 'components/Loading/Skeleton';
 
 class BalanceCard extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      isLoading: false
+    }
   }
 
   render() {
@@ -44,6 +48,9 @@ class BalanceCard extends Component {
               </Text>
             </View>
           )
+        }
+        {
+          this.state.isLoading && (<Skeleton size={2}/>)
         }
         
       </View>

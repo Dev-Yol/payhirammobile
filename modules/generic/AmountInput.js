@@ -78,7 +78,7 @@ class AmountInput extends Component {
                     fontSize: BasicStyles.standardFontSize,
                     paddingTop: 5,
                     paddingBottom: 5
-                  }}>{Currency.display(ledger.available_balance, ledger?.currency ? ledger.currency : 'PHP') +  '  >'}</Text>
+                  }}>{Currency.display(ledger.available_balance.toFixed(), ledger?.currency ? ledger.currency : 'PHP') +  '  >'}</Text>
                   <Text style={{
                     fontSize: BasicStyles.standardFontSize,
                     color: Color.gray

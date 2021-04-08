@@ -28,7 +28,8 @@ class Dashboard extends Component {
     this.state = {
       showRatings: true,
       page: 'summary',
-      activeIndex: 0
+      activeIndex: 0,
+      isLoading: false
     };
   }
 
@@ -77,7 +78,7 @@ class Dashboard extends Component {
             })
           }}
           from={'dashboard'}
-        />  
+        />
       </View>
     );
   }
