@@ -76,6 +76,7 @@ class DirectTransfer extends Component {
       account_id: user.id,
       account_code: user.code
     };
+    setLedger(null)
     this.setState({isLoading: true, summaryLoading: true});
     console.log('parameter', parameter)
     Api.request(Routes.ledgerSummary, parameter, (response) => {
@@ -90,6 +91,7 @@ class DirectTransfer extends Component {
     }, error => {
       console.log('response', error)
       this.setState({isLoading: false, summaryLoading: false});
+      setLedger(null)
     });
   };
 
@@ -496,7 +498,7 @@ class DirectTransfer extends Component {
               */}
 
               {
-                (ledger ) && this.renderInput()
+                (ledger) && this.renderInput()
               }
               {
                 (ledger && user ) && this.renderSendTo(user)
