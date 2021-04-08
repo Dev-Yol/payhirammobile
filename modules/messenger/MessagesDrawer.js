@@ -40,11 +40,11 @@ class HeaderOptions extends Component {
   };
 
   viewMenu = () => {
-    this.setState({isViewing : !this.state.isViewing})
-    this.props.navigationProps.navigate('messagesStack', {isViewing : this.state.isViewing})
+    // this.setState({isViewing : !this.state.isViewing})
+    // this.props.navigationProps.navigate('messagesStack', {isViewing : this.state.isViewing})
     // const { viewMenu } = this.props
     // viewMenu(!this.props.state.isViewing)
-    console.log('[viewWIng]', this.state.isViewing)
+    // console.log('[viewWIng]',this.props.navigationProps.replace('messagesStack', {isViewing: this.state.isViewing}))
   }
 
   _card = () => {
