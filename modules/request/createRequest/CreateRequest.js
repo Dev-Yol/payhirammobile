@@ -290,13 +290,13 @@ class CreateRequest extends Component {
                     }}
                     title={item}
                     style={{
-                      backgroundColor: shipping == item.toLowerCase() ? (theme ? theme.primary : Color.primary) : Color.white,
+                      backgroundColor: shipping == item.toLowerCase() ? (theme ? theme.secondary : Color.secondary) : Color.white,
                       width: '40%',
                       marginRight: '5%',
                       height: 50,
                       borderRadius: 25,
                       borderWidth: 0.5,
-                      borderColor: theme ? theme.primary : Color.primary
+                      borderColor: theme ? theme.secondary : Color.secondary
                     }}
                     textStyle={{
                       color: shipping == item.toLowerCase() ? Color.white : Color.black,

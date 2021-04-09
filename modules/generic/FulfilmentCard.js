@@ -55,17 +55,23 @@ class FulfilmentCard extends Component {
           Helper.fulfillmentTypes && Helper.fulfillmentTypes.map((item, index) => (
            
             <TouchableOpacity
-              style={[styles.CardContainer, {backgroundColor: (selected && selected.id == item.id) ? (theme ? theme.primary : Color.primary) : (theme ? theme.secondary : Color.secondary)}]}
+              style={{
+                ...styles.CardContainer,
+                backgroundColor: (selected && selected.id == item.id) ? (theme ? theme.secondary : Color.secondary) : 'transparent',
+                borderWidth: (selected && selected.id == item.id) ? 0 : 1,
+                borderColor: theme ? theme.secondary : Color.secondary
+              }}
               onPress={() => {
                 this.onSelect(item, index);
               }}
               key={index}>
               <View style={styles.title}>
                 <Text
-                  style={[
-                    styles.titleText,
-                    {fontSize: BasicStyles.titleText.fontSize},
-                  ]}>
+                  style={{
+                    ...styles.titleText,
+                    color: (selected && selected.id == item.id) ? Color.white : Color.black,
+                    fontSize: BasicStyles.titleText.fontSize,
+                  }}>
                   {item.type}
                 </Text>
               </View>
@@ -73,12 +79,11 @@ class FulfilmentCard extends Component {
                 paddingBottom: 10
               }]}>
                 <Text
-                  style={[
-                    styles.descriptionText,
-                    {
-                      fontSize: BasicStyles.titleText.fontSize
-                    },
-                  ]}>
+                  style={{
+                    ...styles.descriptionText,
+                    fontSize: BasicStyles.titleText.fontSize,
+                    color: (selected && selected.id == item.id) ? Color.white : Color.black
+                  }}>
                   {item.description}
                 </Text>
               </View>

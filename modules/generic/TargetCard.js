@@ -44,13 +44,16 @@ class TargetCard extends Component {
             <TouchableOpacity
               style={{
                 width: width / 2,
-                backgroundColor: (selected && selected == item.payload) ? (theme ? theme.primary : Color.primary) : (theme ? theme.secondary : Color.secondary),
                 borderRadius: BasicStyles.standardBorderRadius,
                 marginRight: 10,
                 paddingTop: 20,
                 paddingBottom: 20,
                 paddingLeft: 20,
-                paddingRight: 20
+                paddingRight: 20,
+                paddingRight: 20,
+                backgroundColor: (selected && selected == item.payload) ? (theme ? theme.secondary : Color.secondary) : 'transparent',
+                borderWidth: (selected && selected == item.payload) ? 0 : 1,
+                borderColor: theme ? theme.secondary : Color.secondary
               }}
               onPress={() => {
                 this.onSelect(item, index);
@@ -64,7 +67,8 @@ class TargetCard extends Component {
                   style={{
                     ...styles.titleText,
                     paddingBottom: 10,
-                    fontSize: BasicStyles.titleText.fontSize
+                    fontSize: BasicStyles.titleText.fontSize,
+                    color: (selected && selected == item.payload) ? Color.white : Color.black
                   }}>
                   {item.title}
                 </Text>
@@ -72,7 +76,8 @@ class TargetCard extends Component {
                   style={{
                     fontSize: BasicStyles.standardFontSize,
                     textAlign: 'center',
-                    color: Color.white
+                    color: Color.white,
+                    color: (selected && selected == item.payload) ? Color.white : Color.black
                   }}>
                   {item.description}
                 </Text>
