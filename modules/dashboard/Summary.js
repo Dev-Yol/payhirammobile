@@ -225,7 +225,7 @@ class Summary extends Component {
         showsVerticalScrollIndicator={false}>
           <View style={{
             ...styles.MainContainer,
-            marginTop: Platform.OS == 'ios' ? 100 : 60,
+            marginTop: Platform.OS == 'ios' ? 60 : 60,
             minHeight: height
           }}>
 
@@ -241,6 +241,34 @@ class Summary extends Component {
                 <BalanceCard data={currentLedger}/>
               )
             }
+            
+            {
+              (isLoading) && (
+                <Skeleton size={1} />
+              )
+            }
+
+            {
+              (isLoading == false) && (
+                <TouchableOpacity
+                  style={{
+                    width: '90%',
+                    paddingTop: 20,
+                    marginLeft: '5%',
+                    marginRight: '5%',
+                  }}
+                  onPress={() => {this.props.navigation.navigate('currencyStack')
+                }}>
+                  <Text style={{
+                    width: '100%',
+                    textAlign: 'center',
+                    color: theme ? theme.secondary : Color.secondary,
+                    fontWeight: 'bold'
+                  }}>View More</Text>
+                </TouchableOpacity>
+              )
+            }
+            
 
             <Text style={{
               width: '100%',
