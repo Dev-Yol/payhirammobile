@@ -443,9 +443,12 @@ class Requests extends Component {
               page: value,
               activeIndex: index,
               offset: 0,
-              data: []
+              data: [],
+              isLoading: true
             })
-            this.retrieve(false, false, true)
+            setTimeout(() => {
+              this.retrieve(false, false, true)
+            }, 1000)
           }}
           from={'request'}
         />  

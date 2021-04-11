@@ -288,7 +288,8 @@ class RequestCard extends Component {
                           request: item,
                           currency: item.currency,
                           amount: item.amount,
-                          status: item.status
+                          status: item.status,
+                          menuFlag: false
                         }
                       });
                     }}

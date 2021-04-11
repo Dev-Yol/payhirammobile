@@ -248,7 +248,8 @@ class ProposalCard extends Component {
                             request: request,
                             currency: request.currency,
                             amount: request.amount,
-                            status: request.status
+                            status: request.status,
+                            menuFlag: false
                           }
                         });
                       }}
