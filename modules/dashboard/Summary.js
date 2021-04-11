@@ -23,7 +23,7 @@ import BalanceCard from 'modules/generic/BalanceCard.js';
 import TransactionCard from 'modules/generic/TransactionCard.js';
 import QRCodeModal from 'components/Modal/QRCode';
 import { faStar as faStarRegular } from '@fortawesome/free-regular-svg-icons';
-import { faHandHoldingUsd, faMoneyBillWave, faFileInvoice, faWallet } from '@fortawesome/free-solid-svg-icons';
+import { faHandHoldingUsd, faMoneyBillWave, faFileInvoice, faWallet, faQrcode } from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import ButtonWithIcon from 'components/Form/ButtonWithIcon';
 const width = Math.round(Dimensions.get('window').width);
@@ -349,27 +349,54 @@ class Summary extends Component {
               />   
             </View>
 
-            <ButtonWithIcon 
-              title={'Send to Wallet(Free)'}
-              onClick={() => {
-                this.props.navigation.navigate('qrCodeScannerStack', {
-                  payload: 'transfer'
-                })
-              }}
-              description={'Transfer money through PayHiram to PayHiram Account'}
-              style={{
-                width: '90%',
-                marginLeft: '5%',
-                marginRight: '5%',
-                marginTop: 20,
-                height: 150,
-                backgroundColor: theme ? theme.secondary : Color.secondary,
-              }}
-              icon={faWallet}
-              descriptionStyle={{
-                fontSize: BasicStyles.standardFontSize
-              }}
-            />
+            <View style={{
+              flexDirection: 'row',
+              width: '90%',
+              marginLeft: '5%',
+              marginRight: '5%',
+              marginTop: 20
+            }}>
+              <ButtonWithIcon 
+                title={'Send to Wallet(FREE)'}
+                onClick={() => {
+                  this.props.navigation.navigate('qrCodeScannerStack', {
+                    payload: 'transfer'
+                  })
+                }}
+                description={'Transfer money through PayHiram to PayHiram Account'}
+                style={{
+                  width: '49%',
+                  marginRight: '1%',
+                  height: 150,
+                  backgroundColor: theme ? theme.secondary : Color.secondary,
+                }}
+                icon={faWallet}
+                descriptionStyle={{
+                  fontSize: BasicStyles.standardFontSize
+                }}
+              />
+
+              <ButtonWithIcon 
+                title={'Scan Payment(FREE)'}
+                onClick={() => {
+                  this.props.navigation.navigate('qrCodeScannerStack', {
+                    payload: 'scan_payment'
+                  })
+                }}
+                description={'Scan qr code from your customer.'}
+                style={{
+                  width: '49%',
+                  marginLeft: '1%',
+                  height: 150,
+                  backgroundColor: theme ? theme.secondary : Color.secondary,
+                }}
+                icon={faQrcode}
+                descriptionStyle={{
+                  fontSize: BasicStyles.standardFontSize
+                }}
+              />
+
+            </View>
             {
               (history && history.length > 0) && this.renderTransactionHeader()
             }

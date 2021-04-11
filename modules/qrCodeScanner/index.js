@@ -5,7 +5,8 @@ import {
     View,
     Linking,
     Dimensions,
-    Platform
+    Platform,
+    Alert
 } from 'react-native';
 import { BasicStyles, Color } from 'common'
 import QRCodeScanner from 'react-native-qrcode-scanner';
@@ -15,15 +16,51 @@ class Scanner extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      camera: null
+      camera: null,
+      data: null
     }
   }
   onSuccess = e => {
       // Linking.openURL(e.data).catch(err =>
       //     console.error('An error occured', err)
       // );
-    console.log('e',e)
-    this.props.navigation.navigate('viewProfileStack', {code: e.data})
+    let code = e.data
+    let scanCode = null
+    let expiry = null
+    if(this.state.data == null){
+      if(code && code.length < 60){
+        expiry = parseInt(code.substring(32, code.length))
+        scanCode = code.substring(0, 32)
+      }else{
+        expiry = parseInt(code.substring(64, code.length))
+        scanCode = code.substring(0, 64)
+      }
+      let newDate = new Date().getTime()
+      let difference = (newDate - expiry) / 1000
+      this.setState({
+        data: scanCode
+      })
+      console.log('difference', difference)
+      if(difference < (5 * 60) && scanCode != null){
+        this.setState({
+          data: null
+        })
+        this.props.navigation.navigate('viewProfileStack', {code: scanCode})
+      }else{
+        Alert.alert(
+          "Message Alert",
+          "Invalid Accessed",
+          [
+            { text: "OK", onPress: () => {
+              this.setState({
+                data: null
+              })
+            }}
+          ]
+        );
+      }
+    }
+    
   };
 
   render() {
