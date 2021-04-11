@@ -18,6 +18,7 @@ export default {
   ledgerHistory: apiUrl + 'ledger/history',
   ledgerDashboard: apiUrl + 'ledger/dashboard',
   ledgerDirectTransfer: apiUrl + 'ledger/direct_transfer',
+  ledgerAcceptPayment: apiUrl + 'ledger/accept_payment_confirmation',
   requestRetrieve: apiUrl + 'requests/retrieve',
   requestRetrieveMobile: apiUrl + 'requests/retrieve_mobile',
   requestRetrieveItem: apiUrl + 'requests/retrieve_item',

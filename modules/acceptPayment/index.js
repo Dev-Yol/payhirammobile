@@ -155,24 +155,30 @@ class AcceptPaymentStack extends Component {
       this.errorAlert('Greater than transaction limit')
       return
     }
-    // let parameter = {
-    //   from: scannedUser.code,
-      
-    // }
-    // Api.request(Routes.ledgerSummary, parameter, (response) => {
-    //   console.log('response', response)
-    //   this.setState({isLoading: false, summaryLoading: false});
+    let parameter = {
+      from_code: scannedUser.code,
+      from_email: scannedUser.email,
+      to_code: user.code,
+      to_email: user.email,
+      amount: amount,
+      currency: currency,
+      notes: notes,
+      charge: charge
+    }
+    Api.request(Routes.ledgerAcceptPayment, parameter, (response) => {
+      console.log('response', response)
+      this.setState({isLoading: false, summaryLoading: false});
 
-    //   if (response.data.length > 0) {
-    //     setLedger(response.data[0]);
-    //   } else {
-    //     setLedger(null);
-    //   }
-    // }, error => {
-    //   console.log('response', error)
-    //   this.setState({isLoading: false, summaryLoading: false});
-    //   setLedger(null)
-    // });
+      if (response.data.length > 0) {
+        setLedger(response.data[0]);
+      } else {
+        setLedger(null);
+      }
+    }, error => {
+      console.log('response', error)
+      this.setState({isLoading: false, summaryLoading: false});
+      setLedger(null)
+    });
   }
 
   footerOptions = (data) => {
