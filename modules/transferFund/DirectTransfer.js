@@ -362,7 +362,7 @@ class DirectTransfer extends Component {
 
 
 
-          <View style={{
+          {/*<View style={{
             height: 50,
             justifyContent: 'center',
             alignItems: 'center',
@@ -381,7 +381,7 @@ class DirectTransfer extends Component {
             }}
             numberOfLines={1}
             >{scannedUser.email}</Text>
-          </View>
+          </View>*/}
         </View>
       )}
       </View>
@@ -498,7 +498,7 @@ class DirectTransfer extends Component {
               */}
 
               {
-                (ledger) && this.renderInput()
+                (ledger && data && data.success == false) && this.renderInput()
               }
               {
                 (ledger && user ) && this.renderSendTo(user)
