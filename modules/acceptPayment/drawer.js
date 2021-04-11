@@ -5,7 +5,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faChevronLeft} from '@fortawesome/free-solid-svg-icons';
 import {Color, BasicStyles} from 'common';
 import {connect} from 'react-redux';
-import TransferFund from './DirectTransfer.js';
+import Stack from './index.js';
 import {NavigationActions, StackActions} from 'react-navigation';
 
 class HeaderOptions extends Component {
@@ -66,11 +66,11 @@ const mapDispatchToProps = dispatch => {
 
 let HeaderOptionsConnect  = connect(mapStateToProps, mapDispatchToProps)(HeaderOptions);
 
-const DirectTransferStack = createStackNavigator({
-  transferFundScreen: {
-    screen: TransferFund,
+const DrawerStack = createStackNavigator({
+  acceptPaymentStack: {
+    screen: Stack,
     navigationOptions: ({navigation}) => ({
-      title: 'Send Money',
+      title: 'Scan for Payments',
       headerLeft: <HeaderOptionsConnect navigationProps={navigation} />,
       ...BasicStyles.headerDrawerStyle
     }),
@@ -87,4 +87,4 @@ const styles = StyleSheet.create({
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(DirectTransferStack);
+)(DrawerStack);

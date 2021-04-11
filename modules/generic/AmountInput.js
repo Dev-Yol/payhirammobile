@@ -62,13 +62,17 @@ class AmountInput extends Component {
           />
           
           {
-            ledger && (
+            (ledger && this.props.disableRedirect == false) && (
               <TouchableOpacity style={{
                 width: '100%',
                 paddingBottom: 20
               }}
               onPress={() => {
-                this.props.navigation.navigate('currencyStack')
+                if(this.props.disableRedirect){
+                  //
+                }else{
+                  this.props.navigation.navigate('currencyStack')  
+                }
               }
             }
               >

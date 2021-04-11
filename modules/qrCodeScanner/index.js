@@ -20,6 +20,31 @@ class Scanner extends Component {
       data: null
     }
   }
+
+  manageRedirect = (code) => {
+    const { payload } = this.props.navigation.state.params;
+    if(payload && payload == 'transfer'){
+      this.props.navigation.navigate('directTransferDrawer', {
+        data: {  
+          from: payload,
+          code: code,
+          success: false
+        }
+      })
+    }else if(payload && payload == 'scan_payment'){
+      this.props.navigation.navigate('acceptPaymentStack', {
+        data: {  
+          from: payload,
+          code: code,
+          success: false
+        }
+      })
+    }else{
+      this.props.navigation.navigate('viewProfileStack', {
+        code: code
+      })
+    }
+  }
   onSuccess = e => {
       // Linking.openURL(e.data).catch(err =>
       //     console.error('An error occured', err)
@@ -45,7 +70,7 @@ class Scanner extends Component {
         this.setState({
           data: null
         })
-        this.props.navigation.navigate('viewProfileStack', {code: scanCode})
+        this.manageRedirect(scanCode)
       }else{
         Alert.alert(
           "Message Alert",

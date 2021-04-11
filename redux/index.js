@@ -43,7 +43,8 @@ const types = {
   SET_FILTER_DATA: 'SET_FILTER_DATA',
   SET_DEVICE_LOCATION: 'SET_DEVICE_LOCATION',
   SET_PARAMETER: 'SET_PARAMETER',
-  SET_CURRENCY_BAL: 'SET_CURRENCY_BAL'
+  SET_CURRENCY_BAL: 'SET_CURRENCY_BAL',
+  SET_ACCEPT_PAYMENT: 'SET_ACCEPT_PAYMENT'
 };
 
 export const actions = {
@@ -163,6 +164,9 @@ export const actions = {
   },
   setCurrencyBal(currencyBal) {
     return {type: types.SET_CURRENCY_BAL, currencyBal}
+  },
+  setAcceptPayment(acceptPayment) {
+    return {type: types.SET_ACCEPT_PAYMENT, acceptPayment}
   }
 };
 
@@ -210,7 +214,8 @@ const initialState = {
   circleSearch: null,
   filterData: null,
   deviceLocation: null,
-  currencyBal: null
+  currencyBal: null,
+  acceptPayment: null
 };
 
 storeData = async (key, value) => {
@@ -246,6 +251,7 @@ const reducer = (state = initialState, action) => {
   const { filterData } = action;
   const { deviceLocation } = action;
   const { parameter, currencyBal } = action;
+  const { acceptPayment } = action;
   switch (type) {
     case types.LOGOUT:
       storeData('token', '');
@@ -593,6 +599,11 @@ const reducer = (state = initialState, action) => {
         ...state,
         currencyBal,
       };
+    case types.SET_ACCEPT_PAYMENT:
+      return {
+        ...state,
+        acceptPayment
+      }
     default:
       return {...state, nav: state.nav};
   }

@@ -16,7 +16,7 @@ import TextInputWithoutLabel from 'components/Form/TextInputWithoutLabel'
 import AmountInput from 'modules/generic/AmountInput'
 
 const height = Math.round(Dimensions.get('window').height);
-class DirectTransfer extends Component {
+class AcceptPaymentStack extends Component {
   constructor(props){
     super(props)
     this.state = {
@@ -30,7 +30,6 @@ class DirectTransfer extends Component {
   }
   
   componentDidMount = () => {
-    this.retrieveSummaryLedger()
     const { data } = this.props.navigation.state.params;
     if(data.success == true){
       this.setState({
@@ -60,14 +59,14 @@ class DirectTransfer extends Component {
       this.setState({ isLoading: false })
       if (response.data.length > 0) {
         this.setState({ scannedUser: response.data[0] })
+        this.retrieveSummaryLedger(response.data[0])
       } else {
         this.setState({ scannedUser: null })
       }
     });
   }
 
-  retrieveSummaryLedger = () => {
-    const {user} = this.props.state;
+  retrieveSummaryLedger = (user) => {
     const { setLedger } = this.props;
     if (user == null) {
       return;
@@ -156,19 +155,24 @@ class DirectTransfer extends Component {
       this.errorAlert('Greater than transaction limit')
       return
     }
+    // let parameter = {
+    //   from: scannedUser.code,
+      
+    // }
+    // Api.request(Routes.ledgerSummary, parameter, (response) => {
+    //   console.log('response', response)
+    //   this.setState({isLoading: false, summaryLoading: false});
 
-    this.props.navigation.navigate('otpStack', {
-      data: {
-        from: user,
-        to: scannedUser,
-        amount: amount,
-        currency: currency,
-        notes: notes,
-        payload: 'directTransfer',
-        charge: charge,
-        selectedLedger: ledger
-      },
-    })
+    //   if (response.data.length > 0) {
+    //     setLedger(response.data[0]);
+    //   } else {
+    //     setLedger(null);
+    //   }
+    // }, error => {
+    //   console.log('response', error)
+    //   this.setState({isLoading: false, summaryLoading: false});
+    //   setLedger(null)
+    // });
   }
 
   footerOptions = (data) => {
@@ -259,8 +263,8 @@ class DirectTransfer extends Component {
               currency: currency
             })
           }
-          disableRedirect={false}
           navigation={this.props.navigation}
+          disableRedirect={true}
           />
           {/*<TextInput
             value={this.state.amount}
@@ -314,7 +318,7 @@ class DirectTransfer extends Component {
             <Text style={{
               fontWeight: 'bold',
               fontSize: BasicStyles.standardFontSize
-            }}>Send to </Text>
+            }}>Credit from </Text>
           </View>
 
           <View style={{
@@ -535,4 +539,4 @@ const mapDispatchToProps = dispatch => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(DirectTransfer);
+)(AcceptPaymentStack);
