@@ -49,6 +49,7 @@ class EditProfile extends Component {
       profile: null,
       url: null,
       photo: null,
+      dataRetrieve: null,
       isLoading: false
     };
   }
@@ -97,6 +98,7 @@ class EditProfile extends Component {
       console.log("[RESPONSE s]", response.data);
       if(response.data.length > 0){
         const { data } = response
+        this.setState({dataRetrieve: response.data[0]})
         this.setState({
           id: data[0].account_id,
           first_name: data[0].first_name,
@@ -203,13 +205,25 @@ class EditProfile extends Component {
   }
 
   update = () => {
+    console.log('[dataRetrieve]', this.state.dataRetrieve)
     const { user } = this.props.state;
+    const { dataRetrieve } = this.state
     if(user == null){
       return
     }else if(this.state.first_name == null || this.state.middle_name == null || this.state.last_name == null || this.state.sex == null){
       Alert.alert(
         'Error Message',
         'Please fill in all the fields.',
+        [
+          {text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel'}
+        ],
+        { cancelable: false }
+      )
+      return
+    }else if(this.state.first_name == dataRetrieve.first_name || this.state.middle_name == dataRetrieve.middle_name || this.state.last_name == dataRetrieve.last_name || this.state.sex == dataRetrieve.sex){
+      Alert.alert(
+        'Message',
+        'Nothing is Updated',
         [
           {text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel'}
         ],

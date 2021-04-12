@@ -362,7 +362,7 @@ class RequestCard extends Component {
 
               <Button
                 onClick={() => {
-                  if(item.status > 0){
+                  if(item.status >= 1){
                     this.props.navigation.navigate('messagesStack', {
                       data: {
                         id: item.id,
@@ -382,7 +382,7 @@ class RequestCard extends Component {
                     })
                   }
                 }}
-                title={item.status == 0 ? 'View proposals' : 'See transaction'}
+                title={item.status >= 1 ? 'See transaction' : 'View Proposal'}
                 style={{
                   backgroundColor: item.status == 0 ? (theme ? theme.primary : Color.primary) : (theme ? theme.secondary : Color.secondary),
                   width: '60%',
