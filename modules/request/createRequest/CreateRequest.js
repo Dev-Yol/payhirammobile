@@ -442,6 +442,7 @@ class CreateRequest extends Component {
             currency: currency
           })
           }
+          disableRedirect={false}
           navigation={this.props.navigation}
         />
 
