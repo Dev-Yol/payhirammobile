@@ -136,7 +136,16 @@ class Requests extends Component {
     if(page == 'public'){
       parameters['status'] = 0
     }
+    if(page == 'onNegotiation'){
+      parameters['status'] = 0
+    }
+    if(page == 'onDelivery'){
+      parameters['status'] = 1
+    }
     if(page == 'history'){
+      parameters['status'] = 2
+    }
+    if(page == 'history' || page == 'onNegotiation' || page == 'onDelivery'){
       parameters['mode'] = 'history'
     }
     if(user.scope_location != null){

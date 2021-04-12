@@ -34,6 +34,7 @@ class ProposalModal extends Component {
   }
 
   componentDidMount(){
+    console.log('propspeer request', this.props.peerRequest)
     if(this.props.from == 'update' && this.props.peerRequest != null){
       const { setDefaultAddress } = this.props;
       this.setState({
@@ -154,7 +155,7 @@ class ProposalModal extends Component {
         isLoading: true
       })
       Api.request(Routes.requestPeerCreate, parameter, response => {
-        console.log('[Send proposal] Success', response)
+        console.log('[Send proposal] Success', response.error)
         if(response.error == null){
           this.setState({
             isLoading: false
@@ -248,7 +249,7 @@ class ProposalModal extends Component {
                   }}
                   >
                     <RequestCard 
-                      onConnectRequest={(data) => {}}
+                      onConnectRequest={(data) => data}
                       data={request}
                       navigation={this.props.navigation}
                       from={'proposal'}
