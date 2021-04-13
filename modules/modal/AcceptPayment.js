@@ -21,7 +21,9 @@ class AcceptPayment extends Component {
 
   renderSendTo = (user) => {
     return (
-      <View>
+      <View style={{
+        width: '100%'
+      }}>
       {user  && (
         <View>
           <View style={{
@@ -88,6 +90,7 @@ class AcceptPayment extends Component {
   renderSummary = (data) => {
     return(
       <View style={{
+        width: '100%'
       }}>
         <View style={{
           height: 50,
@@ -175,11 +178,8 @@ class AcceptPayment extends Component {
           backgroundColor: Color.white,
           width: '100%',
           flexDirection: 'row',
-          position: 'absolute',
-          bottom: 10,
           paddingLeft: 20,
-          paddingRight: 20,
-          left: 0
+          paddingRight: 20
         }}>
           <Button 
             title={'Decline'}
@@ -218,11 +218,12 @@ class AcceptPayment extends Component {
           }}>
             <View style={{
               height: height * 0.6,
-              marginTop: height * 0.2,
               borderRadius: 10,
               width: '90%',
               marginLeft: '5%',
               marginRight: '5%',
+              paddingLeft: 20,
+              paddingRight: 20,
               backgroundColor: Color.white
             }}>
               {data && this.renderSendTo(JSON.parse(data.from_account))}
