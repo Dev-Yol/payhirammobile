@@ -63,6 +63,11 @@ class AcceptPaymentStack extends Component {
       } else {
         this.setState({ scannedUser: null })
       }
+    }, error => {
+      console.log('error')
+      this.setState({
+        isLoading: false
+      })
     });
   }
 
@@ -165,19 +170,16 @@ class AcceptPaymentStack extends Component {
       notes: notes,
       charge: charge
     }
+    this.setState({
+      isLoading: true
+    })
+    console.log('parameter', parameter)
     Api.request(Routes.ledgerAcceptPayment, parameter, (response) => {
       console.log('response', response)
       this.setState({isLoading: false, summaryLoading: false});
-
-      if (response.data.length > 0) {
-        setLedger(response.data[0]);
-      } else {
-        setLedger(null);
-      }
     }, error => {
       console.log('response', error)
       this.setState({isLoading: false, summaryLoading: false});
-      setLedger(null)
     });
   }
 
