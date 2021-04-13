@@ -5,7 +5,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { connect } from 'react-redux';
 import { Color , BasicStyles, Helper, Routes} from 'common';
-import { connect } from 'react-redux';
 const height = Math.round(Dimensions.get('window').height);
 class AcceptPayment extends Component {
   constructor(props){
