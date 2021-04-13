@@ -190,7 +190,7 @@ class ViewProfile extends Component {
                     <View>
                       <UserImage
                         user={{ profile: user.profile ? user.profile : user?.account?.profile }}
-                        color={Color.white} style={{
+                        color={theme ? theme.primary : Color.primary} style={{
                           width: 100,
                           height: 100,
                           borderRadius: 100
