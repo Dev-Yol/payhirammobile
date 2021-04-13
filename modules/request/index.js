@@ -17,14 +17,7 @@ import {FlatList, TouchableOpacity} from 'react-native';
 import { Picker } from '@react-native-community/picker';
 import {Routes, Color, Helper, BasicStyles} from 'common';
 import Skeleton from 'components/Loading/Skeleton';
-import {
-  Spinner,
-  Rating,
-  CustomModal,
-  Empty,
-  UserImage,
-  SystemNotification,
-} from 'components';
+import Message from 'components/Message/index.js'
 import Api from 'services/api/index.js';
 import Currency from 'services/Currency.js';
 import {connect} from 'react-redux';
@@ -71,7 +64,8 @@ class Requests extends Component {
       page: 'public',
       unReadPeerRequests: [],
       unReadRequests: [],
-      activeIndex: 0
+      activeIndex: 0,
+      messageEmpty: null
     };
   }
 
@@ -138,12 +132,15 @@ class Requests extends Component {
     }
     if(page == 'onNegotiation'){
       parameters['status'] = 0
+      parameters['peer_status'] = 'requesting'
     }
     if(page == 'onDelivery'){
       parameters['status'] = 1
+      parameters['peer_status'] = 'approved'
     }
     if(page == 'history'){
       parameters['status'] = 2
+      parameters['peer_status'] = 'approved'
     }
     if(page == 'history' || page == 'onNegotiation' || page == 'onDelivery'){
       parameters['mode'] = 'history'
@@ -164,9 +161,9 @@ class Requests extends Component {
     this.setState({isLoading: (loading == false) ? false : true});
     Api.request(Routes.requestRetrieveMobile, parameters, response => {
       console.log('response in Requests', response)
-      response.data.forEach(element => {
-        console.log('[rating]', element.rating)
-      });
+      // response.data.forEach(element => {
+      //   console.log('[rating]', element.rating)
+      // });
       this.setState({
         // size: response.size ? response.size : 0,
         isLoading: false
@@ -174,6 +171,7 @@ class Requests extends Component {
         if(response.data.length > 0){
           this.setState({
             // data: flag == false ? response.data : response.data,
+            messageEmpty: '',
             data: flag == false ? response.data : _.uniqBy([...this.state.data, ...response.data], 'id'),
             numberOfPages: parseInt(response.size / this.state.limit) + (response.size % this.state.limit ? 1 : 0),
             offset: flag == false ? 1 : (this.state.offset + 1)
@@ -184,6 +182,18 @@ class Requests extends Component {
             numberOfPages: null,
             offset: flag == false ? 0 : this.state.offset
           })
+          if(page == 'public'){
+            this.setState({messageEmpty: 'No Public Request'})
+          }
+          if(page == 'onNegotiation'){
+            this.setState({messageEmpty: 'No Negotiation'})
+          }
+          if(page == 'onDelivery'){
+            this.setState({messageEmpty: 'No On Delivery'})
+          }
+          if(page == 'history'){
+            this.setState({messageEmpty: 'No History'})
+          }
         }
       },
       (error) => {
@@ -360,7 +370,7 @@ class Requests extends Component {
                 paddingLeft: 10,
                 paddingRight: 10
               }}>
-                <Empty refresh={true} onRefresh={() => this.onRefresh()} />
+                <Message message={this.state.messageEmpty}/>
               </View>
             )}
             {
