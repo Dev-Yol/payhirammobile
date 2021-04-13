@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Text, View, TouchableOpacity, TextInput, Dimensions} from 'react-native';
+import {Text, View, TouchableOpacity, TextInput, Dimensions, ScrollView} from 'react-native';
 import Modal from "react-native-modal";
 import Button from 'components/Form/Button';
 import { connect } from 'react-redux';
@@ -30,10 +30,12 @@ class AcceptPayment extends Component {
             height: 50,
             justifyContent: 'center',
             borderBottomWidth: 1,
+            width: '100%',
             borderBottomColor: Color.lightGray
           }}>
             <Text style={{
               fontWeight: 'bold',
+              textAlign: 'center',
               fontSize: BasicStyles.standardFontSize
             }}>Request from </Text>
           </View>
@@ -122,6 +124,27 @@ class AcceptPayment extends Component {
             width: '40%',
             textAlign: 'right'
           }}>{Currency.display(data.amount, data.currency)}</Text>
+        </View>
+
+
+        <View style={{
+          height: 50,
+          justifyContent: 'center',
+          alignItems: 'center',
+          borderBottomWidth: 1,
+          borderBottomColor: Color.lightGray,
+          flexDirection: 'row'
+        }}>
+          <Text style={{
+            fontSize: BasicStyles.standardFontSize,
+            width: '40%'
+          }}>Notes</Text>
+
+          <Text style={{
+            fontSize: BasicStyles.standardFontSize,
+            width: '60%',
+            textAlign: 'right'
+          }}>{data.notes}</Text>
         </View>
 
 
@@ -226,9 +249,11 @@ class AcceptPayment extends Component {
               paddingRight: 20,
               backgroundColor: Color.white
             }}>
-              {data && this.renderSendTo(JSON.parse(data.from_account))}
-              {data && this.renderSummary(data)}
-              {data && this.footerOptions()}
+              <ScrollView>
+                {data && this.renderSendTo(JSON.parse(data.from_account))}
+                {data && this.renderSummary(data)}
+                {data && this.footerOptions()}
+              </View>
             </View>
           </View>
         </Modal>
