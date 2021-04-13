@@ -171,29 +171,28 @@ class Requests extends Component {
         if(response.data.length > 0){
           this.setState({
             // data: flag == false ? response.data : response.data,
-            messageEmpty: '',
             data: flag == false ? response.data : _.uniqBy([...this.state.data, ...response.data], 'id'),
             numberOfPages: parseInt(response.size / this.state.limit) + (response.size % this.state.limit ? 1 : 0),
             offset: flag == false ? 1 : (this.state.offset + 1)
           })
         }else{
+          if(page == 'public'){
+            this.setState({messageEmpty: 'Grab the chance to process requests and the great chance to earn. Click the button below to get started.'})
+          }
+          if(page == 'onNegotiation'){
+            this.setState({messageEmpty: 'Seems like you do not make any proposals yet. Click the button below to get started.'})
+          }
+          if(page == 'onDelivery'){
+            this.setState({messageEmpty: 'Seems like you do not have ongoing transaction yet. Click the button below to get started.'})
+          }
+          if(page == 'history'){
+            this.setState({messageEmpty: 'Seems like you do not have completed transaction. Click the button below to get started.'})
+          }
           this.setState({
             data: flag == false ? [] : this.state.data,
             numberOfPages: null,
             offset: flag == false ? 0 : this.state.offset
           })
-          if(page == 'public'){
-            this.setState({messageEmpty: 'No Public Request'})
-          }
-          if(page == 'onNegotiation'){
-            this.setState({messageEmpty: 'No Negotiation'})
-          }
-          if(page == 'onDelivery'){
-            this.setState({messageEmpty: 'No On Delivery'})
-          }
-          if(page == 'history'){
-            this.setState({messageEmpty: 'No History'})
-          }
         }
       },
       (error) => {
