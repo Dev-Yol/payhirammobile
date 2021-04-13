@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 import {Text, View, TouchableOpacity, TextInput, Dimensions} from 'react-native';
 import Modal from "react-native-modal";
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import Button from 'components/Form/Button';
 import { connect } from 'react-redux';
 import { Color , BasicStyles, Helper, Routes} from 'common';
+import Currency from 'services/Currency';
 const height = Math.round(Dimensions.get('window').height);
 class AcceptPayment extends Component {
   constructor(props){
@@ -22,7 +22,7 @@ class AcceptPayment extends Component {
   renderSendTo = (user) => {
     return (
       <View>
-      {scannedUser && (
+      {user  && (
         <View>
           <View style={{
             height: 50,
@@ -77,7 +77,7 @@ class AcceptPayment extends Component {
               fontWeight: 'bold'
             }}
             numberOfLines={1}
-            >{user.information ? user.information.first_name + ' ' + user.information.last_name : user.username}</Text>
+            >{user.email}</Text>
           </View>
         </View>
       )}
@@ -133,7 +133,7 @@ class AcceptPayment extends Component {
           <Text style={{
             fontSize: BasicStyles.standardFontSize,
             width: '60%'
-          }}>Processing fee {charge ? ' (Free)' : null}</Text>
+          }}>Processing fee {data.charge ? ' (Free)' : null}</Text>
 
           <Text style={{
             fontSize: BasicStyles.standardFontSize,
@@ -225,7 +225,7 @@ class AcceptPayment extends Component {
               marginRight: '5%',
               backgroundColor: Color.white
             }}>
-              {data && this.renderSendTo(JSON.parse(data))}
+              {data && this.renderSendTo(JSON.parse(data.from_account))}
               {data && this.renderSummary(data)}
               {data && this.footerOptions()}
             </View>
