@@ -486,13 +486,6 @@ class RequestCard extends Component {
     const { data, from } = this.props;
     const { user } = this.props.state;
     const { option } = this.state;
-    // if(data?.account == null || data?.account == undefined){
-    (data.length > 0) && data.forEach((element, index) => {
-      console.log('[eeeeeeeeeeeeeeeeeeeeee]', element)
-      data.account = element.request_account
-      data.account.code = element.code
-    });
-    // }
     return (
       <TouchableOpacity
       onPress={() => {
