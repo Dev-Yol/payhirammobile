@@ -50,11 +50,7 @@ class Summary extends Component {
       this.retrieveSummaryLedger();
     }
   }
-
-  redirect = (route) => {
-    this.props.navigation.navigate(route);
-  };
-
+  
   redirectDrawer = (route) => {
     const navigateAction = NavigationActions.navigate({
       routeName: 'Requests',
