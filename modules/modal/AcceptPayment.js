@@ -249,11 +249,15 @@ class AcceptPayment extends Component {
               paddingRight: 20,
               backgroundColor: Color.white
             }}>
-              <ScrollView>
+              <ScrollView
+                style={{
+                  width: '100%'
+                }}
+                showsVerticalScrollIndicator={false}>
                 {data && this.renderSendTo(JSON.parse(data.from_account))}
                 {data && this.renderSummary(data)}
                 {data && this.footerOptions()}
-              </View>
+              </ScrollView>
             </View>
           </View>
         </Modal>
