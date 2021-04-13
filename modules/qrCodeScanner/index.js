@@ -22,7 +22,8 @@ class Scanner extends Component {
   }
 
   manageRedirect = (code) => {
-    const { payload } = this.props.navigation.state.params;
+    const { params } = this.props.navigation.state
+    let payload = params ? params.payload : null
     if(payload && payload == 'transfer'){
       this.props.navigation.navigate('directTransferDrawer', {
         data: {  

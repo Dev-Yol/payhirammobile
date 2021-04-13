@@ -202,7 +202,8 @@ class AcceptPayment extends Component {
           width: '100%',
           flexDirection: 'row',
           paddingLeft: 20,
-          paddingRight: 20
+          paddingRight: 20,
+          marginBottom: 100
         }}>
           <Button 
             title={'Decline'}
