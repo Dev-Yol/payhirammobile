@@ -44,7 +44,9 @@ const types = {
   SET_DEVICE_LOCATION: 'SET_DEVICE_LOCATION',
   SET_PARAMETER: 'SET_PARAMETER',
   SET_CURRENCY_BAL: 'SET_CURRENCY_BAL',
-  SET_ACCEPT_PAYMENT: 'SET_ACCEPT_PAYMENT'
+  SET_ACCEPT_PAYMENT: 'SET_ACCEPT_PAYMENT',
+  SET_COMMENTS: 'SET_COMMENTS',
+  SET_CURRENT_TICKET_ID: 'SET_CURRENT_TICKET_ID'
 };
 
 export const actions = {
@@ -167,6 +169,12 @@ export const actions = {
   },
   setAcceptPayment(acceptPayment) {
     return {type: types.SET_ACCEPT_PAYMENT, acceptPayment}
+  },
+  setComments(comments) {
+    return {type: types.SET_COMMENTS, comments}
+  },
+  setCurrentTicketId(currentTicketId) {
+    return {type: types.SET_CURRENT_TICKET_ID, currentTicketId}
   }
 };
 
@@ -215,7 +223,12 @@ const initialState = {
   filterData: null,
   deviceLocation: null,
   currencyBal: null,
-  acceptPayment: null
+  acceptPayment: null,
+  comments: {
+    id: null,
+    commentList: []
+  },
+  currentTicketId: null
 };
 
 storeData = async (key, value) => {
@@ -252,6 +265,8 @@ const reducer = (state = initialState, action) => {
   const { deviceLocation } = action;
   const { parameter, currencyBal } = action;
   const { acceptPayment } = action;
+  const { comments } = action;
+  const { currentTicketId } = action;
   switch (type) {
     case types.LOGOUT:
       storeData('token', '');
@@ -604,6 +619,18 @@ const reducer = (state = initialState, action) => {
         ...state,
         acceptPayment
       }
+    case types.SET_COMMENTS:
+      if(comments.id == state.currentTicketId) {
+        return {
+          ...state,
+          comments,
+        };
+      }
+    case types.SET_CURRENT_TICKET_ID:
+      return {
+        ...state,
+        currentTicketId,
+      };
     default:
       return {...state, nav: state.nav};
   }
