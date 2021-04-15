@@ -4,7 +4,7 @@ import Style from './RequestCardStyle';
 import Currency from 'services/Currency';
 import { Helper, Color, BasicStyles } from 'common';
 import Rating from 'components/Rating'
-import UserImage from 'components/User/Image';
+import UserImage from './Profile.js';
 import Options from 'modules/generic/Dropdown.js';
 import {connect} from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
@@ -42,7 +42,7 @@ class RequestCard extends Component {
             justifyContent: 'center'
           }}>
             {
-              user != null && user.profile != null ?
+              user?.profile != null ?
               <UserImage
                 user={item.account}
                 color={theme ? theme.primary : Color.primary}
@@ -54,13 +54,14 @@ class RequestCard extends Component {
               />
               :
               <UserImage
+                size={500}
                 user={item.account}
                 color={theme ? theme.primary : Color.primary}
-                style={{
-                  width: this.getWidth() - 10,
-                  height: this.getWidth() - 10,
-                  borderRadius: ((this.getWidth() - 10) / 2)
-                }}
+                // style={{
+                //   width: this.getWidth() - 10,
+                //   height: this.getWidth() - 10,
+                //   borderRadius: ((this.getWidth() - 10) / 2)
+                // }}
               />
             }
           </View>

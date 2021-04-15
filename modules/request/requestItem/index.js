@@ -169,7 +169,6 @@ class RequestItem extends Component {
   }
 
   onChangeTerms(item){
-    console.log('[OnChange]', item);
     this.setState({
       modalStatus: 'update',
       peerRequest: item
