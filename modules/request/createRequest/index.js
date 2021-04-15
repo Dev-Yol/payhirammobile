@@ -96,7 +96,6 @@ class CreateRequest extends Component {
   }
 
   onDateFinish = (datetime) => {
-    console.log('[Selected Date]', datetime)
     this.setState({
       neededOn: datetime.date,
     });
@@ -104,7 +103,6 @@ class CreateRequest extends Component {
 
 
   handleSelectFulfillment = (item) => {
-    console.log('[item]', item);
     this.setState({
       fulfillmentType: item,
       money_type: item.money_type,

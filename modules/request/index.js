@@ -157,10 +157,9 @@ class Requests extends Component {
       parameters['location'] = location;
     }
 
-    console.log('paramddeters', parameters)
+    console.log('parameters', parameters)
     this.setState({isLoading: (loading == false) ? false : true});
     Api.request(Routes.requestRetrieveMobile, parameters, response => {
-      console.log('response in Requests', response)
       // response.data.forEach(element => {
       //   console.log('[rating]', element.rating)
       // });
@@ -263,7 +262,7 @@ class Requests extends Component {
   };
 
   connectRequest = (item) => {
-    console.log('[itemssss]', item)
+    console.log('[itemmmmmmmmmmm]', item);
     const { setRequest } = this.props;
     this.setState({
       connectSelected: item,
@@ -324,7 +323,6 @@ class Requests extends Component {
 
   renderData(){
     const { isLoading, data } = this.state;
-    console.log('[dataaaaaaaaaaaaaaaaaaaaaa]', data);
     return(
       <ScrollView
         showsVerticalScrollIndicator={false}

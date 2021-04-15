@@ -21,7 +21,6 @@ class TransferFundCard extends Component {
   
   componentDidMount = () => {
     this.retrieve()
-    console.log('[propsssssss]', this.props.from);
   }
 
   retrieve(){
@@ -39,7 +38,6 @@ class TransferFundCard extends Component {
     console.log('[RequestItem] Retrieve parameter', parameter)
     Api.request(Routes.requestPeerRetrieveItem, parameter, (response) => {
       this.setState({isLoading: false});
-      console.log('response', response.data.account)
       if (response.data.length > 0) {
         this.setState({
           peer: response.data

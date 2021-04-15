@@ -34,7 +34,6 @@ class ProposalModal extends Component {
   }
 
   componentDidMount(){
-    console.log('propspeer request', this.props.peerRequest)
     if(this.props.from == 'update' && this.props.peerRequest != null){
       const { setDefaultAddress } = this.props;
       this.setState({
@@ -44,9 +43,7 @@ class ProposalModal extends Component {
       if(this.props.peerRequest.location){
         setDefaultAddress(this.props.peerRequest.location)        
       }
-      console.log('[chargeOnPeerRequest]', this.props.peerRequest.charge);
     }else{
-      console.log('[here]');
       this.setState({
         data: null,
         charge: 0
@@ -74,9 +71,7 @@ class ProposalModal extends Component {
       account_code: user.code
     };
     this.setState({isLoading: true, summaryLoading: true});
-    console.log('parameter', parameter)
     Api.request(Routes.ledgerSummary, parameter, (response) => {
-      console.log('response', response)
       this.setState({isLoading: false, summaryLoading: false});
 
       if (response != null) {
@@ -133,8 +128,6 @@ class ProposalModal extends Component {
       return
     }
 
-    console.log('[Send proposal] data', data)
-    console.log('[Send proposal] request', request)
     if(data == null){
       if(request.account == null){
         return
@@ -150,7 +143,6 @@ class ProposalModal extends Component {
       if(request && request.shipping.toLowerCase() == 'pickup' && defaultAddress){
         parameter['location_id'] = defaultAddress.id
       }
-      console.log('[send proposal] parameter', parameter)
       this.setState({
         isLoading: true
       })
@@ -188,7 +180,6 @@ class ProposalModal extends Component {
         charge: charge
       }
       if(request && request.shipping.toLowerCase() == 'pickup' && defaultAddress){
-        console.log('defaultAddress', defaultAddress)
         parameter['location_id'] = defaultAddress.id
       }
       console.log('[Update proposal]', parameter)
@@ -333,7 +324,7 @@ class ProposalModal extends Component {
                           onError={false}
                           required={true}
                           route={'addLocationStack'}
-                          // closeOnClick={() => this.props.closeModal()}
+                          closeOnClick={() => this.props.closeModal()}
                           navigation={this.props.navigation}
                         />
                       )
