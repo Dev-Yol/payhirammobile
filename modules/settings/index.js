@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, ScrollView, Dimensions, Platform, SafeAreaView} from 'react-native';
+import {View, Text, StyleSheet, ScrollView, Dimensions, Platform, SafeAreaView, BackHandler} from 'react-native';
 import SettingTile from 'modules/settings/SettingTile.js';
 import navigation from 'modules/settings/Routes.js';
 import styles from 'modules/settings/Styles.js';
@@ -7,6 +7,14 @@ const height = Math.round(Dimensions.get('window').height);
 import Footer from 'modules/generic/Footer'
 
 class Settings extends Component {
+  
+  componentDidMount(){
+    this.backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      this.handleBackPress,
+    );
+  }
+
   render() {
     return (
       <SafeAreaView>

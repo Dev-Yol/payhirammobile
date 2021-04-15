@@ -25,11 +25,11 @@ export default {
       route: 'Dashboard',
       icon: faTachometerAlt
     },
-    {
-      title: 'Circle',
-      route: 'Circle',
-      icon: faUsers
-    },
+    // {
+    //   title: 'Circle',
+    //   route: 'Circle',
+    //   icon: faUsers
+    // },
     // {
     //   title: 'Messages',
     //   route: 'Messenger',
@@ -97,13 +97,13 @@ export default {
       type: 'Bills and Payments',
       description: "Don't have time and want to pay your bills either online or onsite? Our partners will handle your payments",
       money_type: 'cash',
-    },
-    {
-      id: 5,
-      type: 'Accept Payment',
-      description: "Accept Payment with 0% charge",
-      money_type: 'cash',
-    },
+    }
+    // {
+    //   id: 5,
+    //   type: 'Accept Payment',
+    //   description: "Accept Payment with 0% charge",
+    //   money_type: 'cash',
+    // },
   ],
   fulfillmentBorrowTypes: [
     {
