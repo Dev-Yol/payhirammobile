@@ -21,6 +21,7 @@ class TransferFundCard extends Component {
   
   componentDidMount = () => {
     this.retrieve()
+    console.log('[propsssssss]', this.props.from);
   }
 
   retrieve(){
@@ -100,7 +101,6 @@ class TransferFundCard extends Component {
   render() {
     const {user, theme, messengerGroup} = this.props.state
     const { data } = this.props.navigation.state.params;
-    console.log('[transferFund] data', data)
     return (
       <SafeAreaView key={data}>
         <ScrollView

@@ -176,6 +176,11 @@ class Requests extends Component {
             offset: flag == false ? 1 : (this.state.offset + 1)
           })
         }else{
+          this.setState({
+            data: flag == false ? [] : this.state.data,
+            numberOfPages: null,
+            offset: flag == false ? 0 : this.state.offset
+          })
           if(page == 'public'){
             this.setState({messageEmpty: 'Grab the chance to process requests and the great chance to earn. Click the button below to get started.'})
           }
@@ -188,11 +193,6 @@ class Requests extends Component {
           if(page == 'history'){
             this.setState({messageEmpty: 'Seems like you do not have completed transaction. Click the button below to get started.'})
           }
-          this.setState({
-            data: flag == false ? [] : this.state.data,
-            numberOfPages: null,
-            offset: flag == false ? 0 : this.state.offset
-          })
         }
       },
       (error) => {
@@ -263,6 +263,7 @@ class Requests extends Component {
   };
 
   connectRequest = (item) => {
+    console.log('[itemssss]', item)
     const { setRequest } = this.props;
     this.setState({
       connectSelected: item,
@@ -323,6 +324,7 @@ class Requests extends Component {
 
   renderData(){
     const { isLoading, data } = this.state;
+    console.log('[dataaaaaaaaaaaaaaaaaaaaaa]', data);
     return(
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -369,7 +371,7 @@ class Requests extends Component {
                 paddingLeft: 10,
                 paddingRight: 10
               }}>
-                <Message message={this.state.messageEmpty}/>
+                <Message message={this.state.messageEmpty} navigation={this.props.navigation}/>
               </View>
             )}
             {
