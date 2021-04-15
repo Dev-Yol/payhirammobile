@@ -8,7 +8,8 @@ import {
   ScrollView,
   FlatList,
   StyleSheet,
-  TouchableOpacity
+  TouchableOpacity,
+  BackHandler
 } from 'react-native';
 import {Routes, Color, Helper, BasicStyles} from 'common';
 import {connect} from 'react-redux';
@@ -31,6 +32,13 @@ class Dashboard extends Component {
       activeIndex: 0,
       isLoading: false
     };
+  }
+
+  componentDidMount(){
+    this.backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      this.handleBackPress,
+    );
   }
 
   render() {

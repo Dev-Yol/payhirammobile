@@ -5,6 +5,7 @@ import Button from 'components/Form/Button';
 import { connect } from 'react-redux';
 import { Color , BasicStyles, Helper, Routes} from 'common';
 import Currency from 'services/Currency';
+import Api from 'services/api/index.js';
 const height = Math.round(Dimensions.get('window').height);
 class AcceptPayment extends Component {
   constructor(props){
@@ -16,7 +17,16 @@ class AcceptPayment extends Component {
   }
 
   onAccept(){
-
+    //ledgerAcceptPaymentOnConfirm
+    const { acceptPayment } = this.props.state;
+    this.props.navivation.navigate('otpStack', {
+      data: {
+        ...acceptPayment,
+        payload: 'acceptPayment'
+      }
+    })
+    const { setAcceptPayment } = this.props;
+    setAcceptPayment(null)
   }
 
   renderSendTo = (user) => {

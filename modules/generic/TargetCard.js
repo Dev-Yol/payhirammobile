@@ -10,15 +10,18 @@ const Data = [{
   title: 'Partners',
   payload: 'partners',
   description: 'Your request will be visible only to partners in selected location and can be process on by the partner assigned to the selected location.'
-}, {
-  title: 'Circle',
-  payload: 'circle',
-  description: 'Your request will be visible only to your circles and can be process on by your circle.'
-}, {
-  title: 'Public',
-  payload: 'public',
-  description: 'All can process your request.'
-}]
+},
+// {
+//   title: 'Circle',
+//   payload: 'circle',
+//   description: 'Your request will be visible only to your circles and can be process on by your circle.'
+// }, 
+// {
+//   title: 'Public',
+//   payload: 'public',
+//   description: 'All can process your request.'
+// }
+]
 
 
 class TargetCard extends Component {
