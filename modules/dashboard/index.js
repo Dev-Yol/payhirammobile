@@ -41,6 +41,15 @@ class Dashboard extends Component {
     );
   }
 
+
+  componentWillUnmount() {
+    this.backHandler.remove();
+  }
+
+  handleBackPress = () => {
+    return true
+  };
+
   render() {
     const { showRatings, isLoading, history, activeIndex } = this.state;
     const { ledger, theme } = this.props.state;

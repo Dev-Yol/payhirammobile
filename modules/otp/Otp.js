@@ -56,6 +56,9 @@ function OTP(props){
           console.log("[OTP] on Direct Transfer", data)
           sendDirectTransfer(data)
           break
+        case 'acceptPayment':
+          console.log("[OTP] on Accept Payment", data)
+          sendDirectTransfer(data)
       }
     } 
   }

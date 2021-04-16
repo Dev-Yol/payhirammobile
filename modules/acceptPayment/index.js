@@ -59,7 +59,7 @@ class AcceptPaymentStack extends Component {
       this.setState({ isLoading: false })
       if (response.data.length > 0) {
         this.setState({ scannedUser: response.data[0] })
-        this.retrieveSummaryLedger(response.data[0])
+        // this.retrieveSummaryLedger(response.data[0])
       } else {
         this.setState({ scannedUser: null })
       }
@@ -153,6 +153,11 @@ class AcceptPaymentStack extends Component {
     if(amount > ledger.available_balance){
       this.errorAlert('Issuficient Balance')
       return    
+    }
+
+    if(notes == null || notes == ''){
+      this.errorAlert('Notes is required')
+      return
     }
 
 

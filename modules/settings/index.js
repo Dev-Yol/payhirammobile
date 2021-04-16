@@ -15,6 +15,15 @@ class Settings extends Component {
     );
   }
 
+
+  componentWillUnmount() {
+    this.backHandler.remove();
+  }
+
+  handleBackPress = () => {
+    return true
+  };
+
   render() {
     return (
       <SafeAreaView>
