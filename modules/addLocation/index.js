@@ -68,7 +68,11 @@ class AddLocation extends Component {
     this.setState({ selectedAddress: index });
     setDefaultAddress(this.state.addresses[index]);
     console.log('[default]', this.props.state.defaultAddress);
-    this.props.navigation.pop()
+    if(this.props.state.location_from == 'proposal'){
+      this.props.navigation.navigate('requestItemStack', {data: this.props.state.request});
+    }else{
+      this.props.navigation.pop()
+    }
   };
 
   renderAddresses = () => {
@@ -171,12 +175,12 @@ class AddLocation extends Component {
     })
   }
 
-  redirect = (route) => {
-    this.props.navigation.navigate(route);
+  redirect = (route, param) => {
+    this.props.navigation.navigate(route, {data: param});
   };
 
   render() {
-    const {location} = this.props.state
+    const {location, location_from} = this.props.state
     const {isLoading} = this.state
     return (
       <View style={{
@@ -197,7 +201,7 @@ class AddLocation extends Component {
             const {setLocation} = await this.props
             await setLocation(null)
             console.log('[lcoation again]', this.props.state.location);
-            await this.redirect('locationWithMapStack')
+            await this.redirect('locationWithMapStack', this.props.from)
             await this.setState({addingAddress: true})
           }}
           title={'Add Address'}
@@ -209,6 +213,7 @@ class AddLocation extends Component {
             right: '5%',
             width: '90%'
           }}
+          from={'proposal'}
         />
         <Modal
           animationType="fade"

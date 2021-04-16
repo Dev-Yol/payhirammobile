@@ -160,39 +160,36 @@ class Requests extends Component {
     console.log('parameters', parameters)
     this.setState({isLoading: (loading == false) ? false : true});
     Api.request(Routes.requestRetrieveMobile, parameters, response => {
-      // response.data.forEach(element => {
-      //   console.log('[rating]', element.rating)
-      // });
       this.setState({
         // size: response.size ? response.size : 0,
         isLoading: false
       });
-        if(response.data.length > 0){
-          this.setState({
-            // data: flag == false ? response.data : response.data,
-            data: flag == false ? response.data : _.uniqBy([...this.state.data, ...response.data], 'id'),
-            numberOfPages: parseInt(response.size / this.state.limit) + (response.size % this.state.limit ? 1 : 0),
-            offset: flag == false ? 1 : (this.state.offset + 1)
-          })
-        }else{
-          this.setState({
-            data: flag == false ? [] : this.state.data,
-            numberOfPages: null,
-            offset: flag == false ? 0 : this.state.offset
-          })
-          if(page == 'public'){
-            this.setState({messageEmpty: 'Grab the chance to process requests and the great chance to earn. Click the button below to get started.'})
-          }
-          if(page == 'onNegotiation'){
-            this.setState({messageEmpty: 'Seems like you do not make any proposals yet. Click the button below to get started.'})
-          }
-          if(page == 'onDelivery'){
-            this.setState({messageEmpty: 'Seems like you do not have ongoing transaction yet. Click the button below to get started.'})
-          }
-          if(page == 'history'){
-            this.setState({messageEmpty: 'Seems like you do not have completed transaction. Click the button below to get started.'})
-          }
+      if(response.data.length > 0){
+        this.setState({
+          // data: flag == false ? response.data : response.data,
+          data: flag == false ? response.data : _.uniqBy([...this.state.data, ...response.data], 'id'),
+          numberOfPages: parseInt(response.size / this.state.limit) + (response.size % this.state.limit ? 1 : 0),
+          offset: flag == false ? 1 : (this.state.offset + 1)
+        })
+      }else{
+        this.setState({
+          data: flag == false ? [] : this.state.data,
+          numberOfPages: null,
+          offset: flag == false ? 0 : this.state.offset
+        })
+        if(page == 'public'){
+          this.setState({messageEmpty: 'Grab the chance to process requests and the great chance to earn. Click the button below to get started.'})
         }
+        if(page == 'onNegotiation'){
+          this.setState({messageEmpty: 'Seems like you do not make any proposals yet. Click the button below to get started.'})
+        }
+        if(page == 'onDelivery'){
+          this.setState({messageEmpty: 'Seems like you do not have ongoing transaction yet. Click the button below to get started.'})
+        }
+        if(page == 'history'){
+          this.setState({messageEmpty: 'Seems like you do not have completed transaction. Click the button below to get started.'})
+        }
+      }
       },
       (error) => {
         console.log('error', error)
@@ -354,7 +351,7 @@ class Requests extends Component {
                 }}
                   key={index}
                   >
-                  <RequestCard 
+                  <RequestCard
                     onConnectRequest={(item) => {this.connectRequest(item)}}
                     data={item}
                     navigation={this.props.navigation}

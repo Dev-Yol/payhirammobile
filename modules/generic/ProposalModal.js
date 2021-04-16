@@ -98,7 +98,7 @@ class ProposalModal extends Component {
       ],
       { cancelable: false }
     )
-  } 
+  }
 
   submit(){
     const { user, ledger, defaultAddress } = this.props.state;
@@ -326,6 +326,7 @@ class ProposalModal extends Component {
                           route={'addLocationStack'}
                           closeOnClick={() => this.props.closeModal()}
                           navigation={this.props.navigation}
+                          from={'proposal'}
                         />
                       )
                     }

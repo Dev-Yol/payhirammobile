@@ -462,7 +462,7 @@ class RequestCard extends Component {
                         })
                       }
                     }}
-                    title={item.peer_flag == true ? 'View Proposal' : 'Send Proposal'}
+                    title={(item.peer_flag == true || item.status == 1) ? 'View Proposal' : 'Send Proposal'}
                     style={{
                       backgroundColor: item.peer_flag == true ? (theme ? theme.primary : Color.primary) : (theme ? theme.secondary : Color.secondary),
                       width: '60%',

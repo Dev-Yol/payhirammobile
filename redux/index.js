@@ -46,7 +46,8 @@ const types = {
   SET_CURRENCY_BAL: 'SET_CURRENCY_BAL',
   SET_ACCEPT_PAYMENT: 'SET_ACCEPT_PAYMENT',
   SET_COMMENTS: 'SET_COMMENTS',
-  SET_CURRENT_TICKET_ID: 'SET_CURRENT_TICKET_ID'
+  SET_CURRENT_TICKET_ID: 'SET_CURRENT_TICKET_ID',
+  SET_FROM: 'SET_FROM'
 };
 
 export const actions = {
@@ -175,6 +176,9 @@ export const actions = {
   },
   setCurrentTicketId(currentTicketId) {
     return {type: types.SET_CURRENT_TICKET_ID, currentTicketId}
+  },
+  setFrom(location_from) {
+    return {type: types.SET_FROM, location_from}
   }
 };
 
@@ -224,6 +228,7 @@ const initialState = {
   deviceLocation: null,
   currencyBal: null,
   acceptPayment: null,
+  location_from: null,
   comments: {
     id: null,
     commentList: []
@@ -264,7 +269,7 @@ const reducer = (state = initialState, action) => {
   const { filterData } = action;
   const { deviceLocation } = action;
   const { parameter, currencyBal } = action;
-  const { acceptPayment } = action;
+  const { acceptPayment, location_from } = action;
   const { comments } = action;
   const { currentTicketId } = action;
   switch (type) {
@@ -630,6 +635,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         currentTicketId,
+      };
+    case types.SET_FROM:
+      return {
+        ...state,
+        location_from,
       };
     default:
       return {...state, nav: state.nav};
