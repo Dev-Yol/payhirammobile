@@ -237,7 +237,7 @@ class AcceptPayment extends Component {
           />
 
           <Button 
-            title={'Accept'}
+            title={'Continue'}
             onClick={ () => this.onAccept()}
             style={{
               width: '45%',

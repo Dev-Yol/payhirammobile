@@ -14,6 +14,7 @@ import BalanceCard from 'modules/generic/BalanceCard';import {
 } from 'components';
 import TextInputWithoutLabel from 'components/Form/TextInputWithoutLabel'
 import AmountInput from 'modules/generic/AmountInput'
+import Modal from 'react-native-modal';
 
 const height = Math.round(Dimensions.get('window').height);
 class AcceptPaymentStack extends Component {
@@ -181,6 +182,8 @@ class AcceptPaymentStack extends Component {
     console.log('parameter', parameter)
     Api.request(Routes.ledgerAcceptPayment, parameter, (response) => {
       console.log('response', response)
+      const { setPaymentConfirmation } = this.props;
+      setPaymentConfirmation(true)
       this.setState({isLoading: false, summaryLoading: false});
     }, error => {
       console.log('response', error)
@@ -490,7 +493,7 @@ class AcceptPaymentStack extends Component {
   }
 
   render() {
-    const { ledger, user } = this.props.state
+    const { ledger, user, acceptPayment, paymentConfirmation  } = this.props.state
     const { data } = this.props.navigation.state.params;
     const { amount, isLoading } = this.state;
     return (
@@ -505,15 +508,6 @@ class AcceptPaymentStack extends Component {
               marginLeft: '5%',
               marginBottom: 100
             }}>
-
-
-              {/*
-                (ledger != null && ledger.length > 0) && ledger.map(item => (
-                  <BalanceCard
-                    data={item}
-                  />
-                ))
-              */}
 
               {
                 (ledger && data && data.success == false) && this.renderInput()
@@ -532,10 +526,22 @@ class AcceptPaymentStack extends Component {
         }
 
         {
-          (data && data.success == true) && this.footerOptionsComplete(data)
+          (data.success == true) && this.footerOptionsComplete(data)
         }
 
         {isLoading ? <Spinner mode="overlay" /> : null}
+
+        {
+          paymentConfirmation && (
+            <Modal
+              onBackdropPress={() => {}}
+              transparent={true}
+              backdropTransitionInTiming={100}
+              backdropTransitionOutTiming={100}
+              isVisible={true}>
+            </Modal>
+          )
+        }
       </SafeAreaView>
     )
   }
@@ -547,6 +553,7 @@ const mapDispatchToProps = dispatch => {
   const { actions } = require('@redux');
   return {
     setLedger: (ledger) => dispatch(actions.setLedger(ledger)),
+    setPaymentConfirmation: (flag) => dispatch(actions.setPaymentConfirmation(flag)),
   };
 };
 export default connect(

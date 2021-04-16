@@ -54,11 +54,15 @@ function OTP(props){
           break;
         case 'directTransfer':
           console.log("[OTP] on Direct Transfer", data)
-          sendDirectTransfer(data)
+          sendDirectTransfer(data, 'direct_transfer')
           break
         case 'acceptPayment':
           console.log("[OTP] on Accept Payment", data)
-          sendDirectTransfer(data)
+          sendDirectTransfer({
+            ...data,
+            from: JSON.parse(data.to_account),
+            to: JSON.parse(data.from_account)
+          }, 'scan_payment')
       }
     } 
   }
@@ -121,7 +125,7 @@ function OTP(props){
 
   };
 
-  const sendDirectTransfer = (data) => {
+  const sendDirectTransfer = (data, payload) => {
     console.log('OTP Create Request API Call')
     let parameter = {
       from: {
@@ -135,7 +139,8 @@ function OTP(props){
       amount: data.amount,
       currency: data.currency,
       notes: data.notes,
-      charge: data.charge
+      charge: data.charge,
+      payload: payload
     }
     console.log('[SEND directTransfer] parameter', parameter)
     setIsLoading(true)
