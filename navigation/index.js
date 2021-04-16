@@ -37,6 +37,7 @@ import GuidelinesStack from 'modules/guidelines/GuidelinesDrawer';
 import LocationWithMapViewerStack from 'components/Location/LocationViewerDrawer.js';
 import CurrencyStack from 'modules/currency/CurrencyDrawer.js';
 import AcceptPaymentStack from 'modules/acceptPayment/drawer.js';
+import ReceivePaymentRequestStack from 'modules/acceptPayment/receiving/Drawer';
 
 // login stack
 const LoginStack = createStackNavigator(
@@ -130,7 +131,8 @@ const PrimaryNav = createStackNavigator(
     guidelinesStack: { screen: GuidelinesStack},
     directTransferDrawer: { screen: DirectTransferStack },
     currencyStack: { screen: CurrencyStack },
-    acceptPaymentStack: { screen: AcceptPaymentStack }
+    acceptPaymentStack: { screen: AcceptPaymentStack },
+    recievePaymentRequestStack: { screen: ReceivePaymentRequestStack}
   },
   {
     // Default config for all screens
