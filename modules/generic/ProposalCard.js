@@ -179,7 +179,6 @@ class ProposalCard extends Component {
 
 
   _footer = (item, index) => {
-    console.log('[item==============]', item);
     const {user, theme } = this.props.state;
     const { data, request } = this.props;
     return (
@@ -271,7 +270,6 @@ class ProposalCard extends Component {
   _myFooter = (item, index) => {
     const {user, theme} = this.props.state;
     const { data, request } = this.props;
-    console.log('[item==============]', item);
     return (
       <View>
         <View
@@ -345,7 +343,6 @@ class ProposalCard extends Component {
   render() {
     const { data, request } = this.props;
     const { user } = this.props.state;
-    console.log('user', user)
     return (
       <View>
         {

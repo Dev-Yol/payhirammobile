@@ -13,6 +13,14 @@ class HeaderOptions extends Component {
   back = () => {
     this.props.navigationProps.pop();
   };
+
+  componentDidMount(){
+    if(this.props.navigationProps?.state?.params?.data == 'proposal'){
+      const { setFrom } = this.props
+      setFrom(this.props.navigationProps.state.params.data)
+    }
+  }
+
   render() {
     return (
       <View style={{ flexDirection: 'row' }}>
@@ -33,15 +41,21 @@ const mapDispatchToProps = (dispatch) => {
   const {actions} = require('@redux');
   return {
     logout: () => dispatch(actions.logout()),
+    setFrom: (location_from) => dispatch(actions.setFrom(location_from))
   };
 };
+
+let HeaderOptionsConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(HeaderOptions);
 
 const AddLocationStack = createStackNavigator({
   addLocationScreen: {
     screen: AddLocation,
     navigationOptions: ({navigation}) => ({
       title: 'ADDRESS',
-      headerLeft: <HeaderOptions navigationProps={navigation} />,
+      headerLeft: <HeaderOptionsConnect navigationProps={navigation} />,
       ...BasicStyles.headerDrawerStyle
     }),
   },

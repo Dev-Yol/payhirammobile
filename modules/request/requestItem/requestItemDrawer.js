@@ -14,7 +14,7 @@ class HeaderOptions extends Component {
   }
   back = () => {
     const { from } = this.props.navigationProps.state.params;
-    if(from == 'create'){ // from === 'request' || from === 'create'
+    if(from == 'create' || this.props.state.location_from == 'proposal'){ // from === 'request' || from === 'create'
       const navigateAction = NavigationActions.navigate({
         routeName: 'drawerStack',
         action: StackActions.reset({
