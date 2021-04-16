@@ -55,7 +55,16 @@ class OTP extends Component {
           break;
         case 'directTransfer':
           console.log("[OTP] on Direct Transfer", data)
-          this.sendDirectTransfer(data)
+          this.sendDirectTransfer(data, 'direct_transfer')
+          break
+        case 'acceptPayment': {
+            console.log("[OTP] on Accept Payment", data)
+            this.sendDirectTransfer({
+              ...data,
+              from: JSON.parse(data.to_account),
+              to: JSON.parse(data.from_account)
+            }, 'scan_payment')          
+          }
           break
       }
     } 
@@ -124,8 +133,8 @@ class OTP extends Component {
 
   };
 
-  sendDirectTransfer = (data) => {
-    console.log('OTP Create Request API Call')
+  sendDirectTransfer = (data, payload) => {
+    console.log('OTP Create Request API Call', data)
     let parameter = {
       from: {
         code: data.from.code,
@@ -138,7 +147,8 @@ class OTP extends Component {
       amount: data.amount,
       currency: data.currency,
       notes: data.notes,
-      charge: data.charge
+      charge: data.charge,
+      payload: payload
     }
     console.log('[SEND directTransfer] parameter', parameter)
     this.setState({isLoading: true});
@@ -146,11 +156,17 @@ class OTP extends Component {
         this.setState({isLoading: false});
         console.log('[OTP] Create Request response', response)
         if(response.error == null){
-          this.navigateToScreen('directTransferDrawer', 'transferFundScreen', {
-            ...data,
-            success: true,
-            code: data.to.code
-          })          
+          if(payload == 'direct_transfer'){
+            this.navigateToScreen('directTransferDrawer', 'transferFundScreen', {
+              ...data,
+              success: true,
+              code: data.to.code
+            }) 
+          }else{
+            this.navigateToScreen('Dashboard', 'Dashboard', {
+              data: null
+            })
+          }        
         }else{
           Alert.alert(
             "Error Message",
@@ -303,25 +319,20 @@ class OTP extends Component {
     };
     this.setState({isLoading: true});
     console.log('[OTP] parameters', JSON.stringify(parameters))
-    Api.request( Routes.notificationSettingsRetrieve, parameters, (response) => {
+    Api.request(Routes.notificationSettingsRetrieve, parameters, (response) => {
         this.setState({
           isLoading: false,
           errorMessage: null
         })
-        console.log("[OTP] Retrieve OTP", response)
         if(response.data.length > 0){
-          console.log('[OTP Success]');
+          console.log('[OTP Success]', response.data);
           this.handleResult() 
         }else{
           this.setState({
             errorMessage: 'Invalid Code.'
           })
         }
-      },
-      (error) => {
-        this.setState({isLoading: false, errorMessage: 'Invalid Code'});
-        console.log('[OTP Error]', parameter);
-      },
+      }
     );
   };
 

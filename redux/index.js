@@ -47,7 +47,8 @@ const types = {
   SET_ACCEPT_PAYMENT: 'SET_ACCEPT_PAYMENT',
   SET_COMMENTS: 'SET_COMMENTS',
   SET_CURRENT_TICKET_ID: 'SET_CURRENT_TICKET_ID',
-  SET_FROM: 'SET_FROM'
+  SET_FROM: 'SET_FROM',
+  SET_PAYMENT_CONFIRMATION: 'SET_PAYMENT_CONFIRMATION'
 };
 
 export const actions = {
@@ -179,6 +180,9 @@ export const actions = {
   },
   setFrom(location_from) {
     return {type: types.SET_FROM, location_from}
+  },
+  setPaymentConfirmation(flag) {
+    return {type: types.SET_PAYMENT_CONFIRMATION, flag}
   }
 };
 
@@ -233,7 +237,8 @@ const initialState = {
     id: null,
     commentList: []
   },
-  currentTicketId: null
+  currentTicketId: null,
+  paymentConfirmation: false
 };
 
 storeData = async (key, value) => {
@@ -271,7 +276,7 @@ const reducer = (state = initialState, action) => {
   const { parameter, currencyBal } = action;
   const { acceptPayment, location_from } = action;
   const { comments } = action;
-  const { currentTicketId } = action;
+  const { currentTicketId, flag } = action;
   switch (type) {
     case types.LOGOUT:
       storeData('token', '');
@@ -641,6 +646,11 @@ const reducer = (state = initialState, action) => {
         ...state,
         location_from,
       };
+    case types.SET_PAYMENT_CONFIRMATION:
+      return {
+        ...state,
+        paymentConfirmation: flag
+      }
     default:
       return {...state, nav: state.nav};
   }
