@@ -82,13 +82,7 @@ class Requests extends Component {
   }
 
   handleBackPress = () => {
-    const {user} = this.props.state;
-    console.log('back button');
-    if (user) {
-      return true;
-    } else {
-      return false;
-    }
+    return true
   };
 
   retrieve = (scroll, flag, loading = true) => {
