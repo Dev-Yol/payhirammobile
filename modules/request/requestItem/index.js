@@ -76,7 +76,7 @@ class RequestItem extends Component {
     };
     this.setState({isLoading: true});
     Api.request(Routes.requestPeerRetrieveItem, parameter, (response) => {
-      // console.log('response', JSON.stringify(response));
+      console.log('response', JSON.stringify(response));
       this.setState({isLoading: false});
       if (response.data.length > 0) {
         this.setState({
@@ -245,6 +245,7 @@ class RequestItem extends Component {
     const { peers, isLoading } = this.state;
     const { connectModal, modalStatus } = this.state;
     const { data } = this.props.navigation.state.params;
+    // this.state.peers = data
     return (
       <View>
         <ScrollView showsVerticalScrollIndicator={false}>

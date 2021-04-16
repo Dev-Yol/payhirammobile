@@ -322,7 +322,7 @@ class RequestCard extends Component {
                         })
                       }
                     }}
-                    title={item.peer_flag == true ? 'View Proposal' : 'Send Proposal'}
+                    title={(item.peer_flag == true) ? 'View Proposal' : 'Send Proposal'}
                     style={{
                       backgroundColor: item.peer_flag == true ? (theme ? theme.primary : Color.primary) : (theme ? theme.secondary : Color.secondary),
                       width: '60%',
@@ -383,7 +383,7 @@ class RequestCard extends Component {
                     })
                   }
                 }}
-                title={item.status >= 1 ? 'See transaction' : 'View Proposal'}
+                title={(item.peer_flag == true) ? 'See transaction' : 'View Proposal'}
                 style={{
                   backgroundColor: item.status == 0 ? (theme ? theme.primary : Color.primary) : (theme ? theme.secondary : Color.secondary),
                   width: '60%',
