@@ -161,10 +161,10 @@ class AcceptPaymentStack extends Component {
       return
     }
     let parameter = {
-      from_code: scannedUser.code,
-      from_email: scannedUser.email,
-      to_code: user.code,
-      to_email: user.email,
+      to_code: scannedUser.code,
+      to_email: scannedUser.email,
+      from_code: user.code,
+      from_email: user.email,
       amount: amount,
       currency: currency,
       notes: notes,
