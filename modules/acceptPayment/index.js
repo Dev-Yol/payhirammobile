@@ -409,7 +409,7 @@ class AcceptPaymentStack extends Component {
     )
   }
 
-  renderSummary = (ledger) => {
+  renderSummary = () => {
     const { amount, charge } = this.state;
     return(
       <View style={{
@@ -443,7 +443,7 @@ class AcceptPaymentStack extends Component {
             fontSize: BasicStyles.standardFontSize,
             width: '40%',
             textAlign: 'right'
-          }}>{Currency.display(amount, ledger && ledger.currency ? ledger.currency : 'PHP')}</Text>
+          }}>{Currency.display(amount, this.state.currency)}</Text>
         </View>
 
 
@@ -464,7 +464,7 @@ class AcceptPaymentStack extends Component {
             fontSize: BasicStyles.standardFontSize,
             width: '40%',
             textAlign: 'right'
-          }}>{Currency.display(charge, ledger && ledger.currency ? ledger.currency : 'PHP')}</Text>
+          }}>{Currency.display(charge, this.state.currency)}</Text>
         </View>
 
 
@@ -486,7 +486,7 @@ class AcceptPaymentStack extends Component {
             width: '40%',
             fontWeight: 'bold',
             textAlign: 'right'
-          }}>{Currency.display((parseFloat(amount) - parseFloat(charge)), ledger && ledger.currency ? ledger.currency : 'PHP')}</Text>
+          }}>{Currency.display((parseFloat(amount) - parseFloat(charge)), 'PHP')}</Text>
         </View>
       </View>
     )
@@ -510,13 +510,13 @@ class AcceptPaymentStack extends Component {
             }}>
 
               {
-                (ledger && data && data.success == false) && this.renderInput()
+                (data && data.success == false) && this.renderInput()
               }
               {
-                (ledger && user ) && this.renderSendTo(user)
+                (user ) && this.renderSendTo(user)
               }
               {
-                ledger && this.renderSummary(ledger)
+                this.renderSummary()
               }
             </View>
 
