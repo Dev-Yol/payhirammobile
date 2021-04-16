@@ -155,6 +155,11 @@ class AcceptPaymentStack extends Component {
       return    
     }
 
+    if(notes == null || notes == ''){
+      this.errorAlert('Notes is required')
+      return    
+    }
+
 
     if(amount > Helper.transactionLimit){
       this.errorAlert('Greater than transaction limit')
