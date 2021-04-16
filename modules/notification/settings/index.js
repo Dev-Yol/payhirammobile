@@ -109,7 +109,7 @@ class NotificationSettings extends Component {
                 ios_backgroundColor={Color.danger}
                 />
             </View>
-            <View style={{flexDirection: 'row', borderBottomWidth: 1, borderColor: Color.gray, padding: 20}}>
+            {/* <View style={{flexDirection: 'row', borderBottomWidth: 1, borderColor: Color.gray, padding: 20}}>
               <View style={{flex: 1}}>
                 <Text>Account PIN</Text>
                 <Text style={{fontSize: 10}}>Receive new PIN from email everytime there's a login with my account.</Text>
@@ -120,7 +120,7 @@ class NotificationSettings extends Component {
                 value={this.state.pin}
                 ios_backgroundColor={Color.danger}
                 />
-            </View>
+            </View> */}
           </View>
         </ScrollView>
       </View>

@@ -159,6 +159,15 @@ class Requests extends Component {
         isLoading: false
       });
       if(response.data.length > 0){
+        if(page == 'onNegotiation'){
+          let sample = []
+          response.data.forEach(element => {
+            if(element.peer_flag == true){
+              sample.push(element)
+              response.data = sample;
+            }
+          });
+        }
         this.setState({
           // data: flag == false ? response.data : response.data,
           data: flag == false ? response.data : _.uniqBy([...this.state.data, ...response.data], 'id'),
@@ -253,7 +262,6 @@ class Requests extends Component {
   };
 
   connectRequest = (item) => {
-    console.log('[itemmmmmmmmmmm]', item);
     const { setRequest } = this.props;
     this.setState({
       connectSelected: item,
