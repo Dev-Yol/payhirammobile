@@ -9,7 +9,7 @@ import {Routes, Color} from 'common';
 import {Spinner} from 'components';
 import styles from 'modules/reviews/Styles.js';
 import Button from 'components/Form/Button';
-import UserImage from 'components/User/Image';
+import UserImage from 'components/User/Image.js';
 import TextInputWithoutLabel from 'components/Form/TextInputWithoutLabel'
 import { ScrollView } from 'react-native-gesture-handler';
 const height = Math.round(Dimensions.get('window').height);
@@ -233,7 +233,6 @@ class Reviews extends Component {
 
   renderDetails = (data) => {
     const { theme, user } = this.props.state;
-    console.log('data', data)
     return(
       <View style={{
         height: height,
@@ -244,7 +243,7 @@ class Reviews extends Component {
         position: 'relative'
       }}>
         <View 
-        style={{marginLeft: '36%'}}>
+        style={{marginLeft: '34%'}}>
           <UserImage
             user={data.account?.code == user.code ? data.peer?.account : data.account}
             style={{

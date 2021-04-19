@@ -253,7 +253,7 @@ class RequestCard extends Component {
         {item.images != null && (
           <View>
             {item.images.map((image, imageIndex) => {
-              return <View></View>;
+              return <View key={imageIndex}></View>;
             })}
           </View>
         )}
@@ -277,7 +277,7 @@ class RequestCard extends Component {
                 width: '100%'
               }}>
               {
-                item.approved == true && (
+                (item.approved == true || item.peer_status == 'approved') && (
                   <Button
                     onClick={() => {
                       this.props.navigation.navigate('messagesStack', {
@@ -310,7 +310,7 @@ class RequestCard extends Component {
                 )
               }
               {
-                item.approved == false && (
+                (item.approved == false && item.peer_status != 'approved') && (
                   <Button
                     onClick={() => {
                       if(item.peer_flag == false){
@@ -418,7 +418,7 @@ class RequestCard extends Component {
                 width: '100%'
               }}>
               {
-                item.approved == true && (
+                (item.approved == true || item.peer_status == 'approved') && (
                   <Button
                     onClick={() => {
                       this.props.navigation.navigate('messagesStack', {
@@ -450,7 +450,7 @@ class RequestCard extends Component {
                 )
               }
               {
-                item.approved == false && (
+                (item.approved == false && item.peer_status != 'approved') && (
                   <Button
                     onClick={() => {
                       if(item.peer_flag == false){
