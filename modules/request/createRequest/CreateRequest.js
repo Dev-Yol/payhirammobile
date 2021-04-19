@@ -92,7 +92,6 @@ class CreateRequest extends Component {
 
 
   handleSelectFulfillment = (item) => {
-    console.log('[item]', item);
     this.setState({
       fulfillmentType: item,
       money_type: item.money_type,
@@ -101,7 +100,6 @@ class CreateRequest extends Component {
   };
 
   onDateFinish = (datetime) => {
-    console.log('[Selected Date]', datetime)
     this.setState({
       neededOn: datetime.date,
     });
@@ -514,6 +512,7 @@ class CreateRequest extends Component {
               placeholder={this.state.needed_on}
               borderColor= {'white'}
               minimumDate={this.state.currentDate}
+              borderBottomColor={'white'}
               height={40}
               style={{
                 borderColor: 0,

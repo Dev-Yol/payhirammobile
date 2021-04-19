@@ -304,7 +304,7 @@ class ProposalCard extends Component {
             </View>
           )}
             {
-              (item.status == 'approved') && (
+              (item.status == 'approved' || request.peer_status == 'approved') && (
                 <View
                   style={{
                     width: '100%',

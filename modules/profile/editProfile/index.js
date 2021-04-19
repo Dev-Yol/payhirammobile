@@ -209,6 +209,86 @@ class EditProfile extends Component {
     })
   }
 
+  uploadId = () => {
+    const { user } = this.props.state
+    const { profile } = this.state
+    const options = {
+      noData: true
+    }
+    ImagePicker.launchImageLibrary(options, response => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+        this.setState({ photo: null })
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+        this.setState({ photo: null })
+      } else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+        this.setState({ photo: null })
+      } else {
+        ImageResizer.createResizedImage(response.uri, response.width * 0.5, response.height * 0.5, 'JPEG', 72, 0)
+          .then(res => {
+            this.setState({ photo: res })
+            let formData = new FormData();
+            let uri = Platform.OS == "android" ? res.uri : res.uri.replace("file://", "");
+            formData.append("file", {
+              name: response.fileName,
+              type: response.type,
+              uri: uri
+            });
+            formData.append('file_url', response.fileName);
+            formData.append('account_id', user.id);
+            this.setState({ isLoading: true })
+            Api.upload(Routes.imageUpload, formData, response => {
+              this.setState({ isLoading: false })
+              let imageData = new FormData()
+              imageData.append('account_id', user.id);
+              imageData.append('payload_value', response.data.data)
+              imageData.append('payload', 'upload_image')
+              console.log('[imageData]', imageData)
+              // if (profile.profile == null) {
+                Api.upload(Routes.accountCardsCreate, imageData, response => {
+                  console.log('[respones]', response)
+                  if (response.data !== null) {
+                    this.retrieve();
+                    Alert.alert(
+                      'Message',
+                      'ID successfully uploaded',
+                      [
+                        { text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel' }
+                      ],
+                      { cancelable: false }
+                    )
+                  }
+                })
+              // } else {
+              //   imageData.append('id', profile.profile.id)
+              //   this.setState({ isLoading: true })
+              //   Api.upload(Routes.accountCardsUpdate, imageData, response => {
+              //     console.log("[UPDATE_IMAGE]", response);
+              //     if (response.data !== null) {
+              //       this.retrieve();
+              //       Alert.alert(
+              //         'Message',
+              //         'ID successfully updated',
+              //         [
+              //           { text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel' }
+              //         ],
+              //         { cancelable: false }
+              //       )
+              //     }
+              //   })
+              // }
+            })
+          })
+          .catch(err => {
+            // Oops, something went wrong. Check that the filename is correct and
+            // inspect err to get more details.
+            console.log('[ERROR]', err)
+          });
+      }
+    })}
+
   update = () => {
     console.log('[dataRetrieve]', this.state.dataRetrieve)
     const { user } = this.props.state;
@@ -531,9 +611,9 @@ class EditProfile extends Component {
                   alignItems: 'center',
                 },
               ]}
-              onPress={() => this.upload()}>
+              onPress={() => this.uploadId()}>
               <View style={{ flexDirection: 'row' }}>
-                <Text>Upload Photo</Text>
+                <Text>Upload ID</Text>
                 <FontAwesomeIcon
                   icon={faUpload}
                   style={{ marginLeft: 20 }}

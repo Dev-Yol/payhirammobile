@@ -22,7 +22,6 @@ class HeaderOptions extends Component {
         const { setMessengerGroup, setMessagesOnGroup } = this.props
         setMessengerGroup(this.props.navigationProps.state.params)
         setMessagesOnGroup(this.props.navigationProps.state.params)
-        console.log('setMessengerGroup', this.props.navigationProps.state.params);
       }
     }
   }
@@ -45,7 +44,6 @@ class HeaderOptions extends Component {
     // const { viewMenu } = this.props
     // viewMenu(!this.props.state.isViewing)
     // console.log('[viewWIng]',this.props.navigationProps.replace('messagesStack', {isViewing: this.state.isViewing}))
-    console.log('viewMenu')
     this.props.navigationProps.setParams({
       data: {
         ...this.props.navigationProps.state.params.data,
@@ -63,7 +61,6 @@ class HeaderOptions extends Component {
       let temp = data.route.substring(data.route.lastIndexOf('/') + 1)
       data.title = temp
     }
-    console.log('[data]', data);
     return (
       <View>
         <View style={{

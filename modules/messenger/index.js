@@ -72,7 +72,6 @@ class Groups extends Component{
     const { setMessengerGroup } = this.props;
     this.updateLastMessageStatus(item)
     setMessengerGroup(item);
-    console.log('[viewMessages] data', item)
     setTimeout(() => {
       this.props.navigation.navigate('messagesStack', {
         data: item
