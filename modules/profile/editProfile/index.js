@@ -26,7 +26,9 @@ import Button from 'components/Form/Button';
 import ImagePicker from 'react-native-image-picker';
 import { Spinner } from 'components';
 import Skeleton from 'components/Loading/Skeleton';
+import ImageModal from 'components/Modal/ImageModal';
 import ImageResizer from 'react-native-image-resizer';
+import Config from 'src/config.js';
 const gender = [{
   title: 'Male',
   value: 'male'
@@ -51,13 +53,18 @@ class EditProfile extends Component {
       url: null,
       photo: null,
       dataRetrieve: null,
-      isLoading: false
+      isLoading: false,
+      uploadedID: [],
+      imageModal: false,
+      urlID: null,
+      reachMax: false
     };
   }
 
   componentDidMount = () => {
     const { user } = this.props.state
     this.retrieve()
+    this.retrieveUploadedId()
     if ((this.state.email != null || this.state.first_name != null || this.state.middle_name != null || this.state.last_name != null ||
       this.state.sex != null) && user.status != 'granted') {
       // this.state.sex != null || this.state.address != null || this.state.birthDate != null) && user.status != 'granted'){
@@ -131,6 +138,25 @@ class EditProfile extends Component {
     });
   }
 
+  retrieveUploadedId = () => {
+    const { user } = this.props.state
+    // this.state.uploadedID = []
+    let parameter = {
+      account_id: user.id,
+      payload: 'image_upload'
+    }
+    this.setState({ isLoading: true })
+    Api.request(Routes.accountCardsRetrieve, parameter, response => {
+      this.setState({ isLoading: false })
+      response.data[0].content.map(element => {
+        this.state.uploadedID.push(element)
+      })
+      if(response.data[0].content.length == 4){
+        this.setState({ reachMax : true })
+      }
+    })
+  }
+
   upload = () => {
     const { user } = this.props.state
     const { profile } = this.state
@@ -184,7 +210,6 @@ class EditProfile extends Component {
                 imageData.append('id', profile.profile.id)
                 this.setState({ isLoading: true })
                 Api.upload(Routes.accountProfileUpdate, imageData, response => {
-                  console.log("[UPDATE_IMAGE]", response);
                   if (response.data !== null) {
                     this.retrieve();
                     Alert.alert(
@@ -209,9 +234,31 @@ class EditProfile extends Component {
     })
   }
 
+  uploadMessage = () => {
+    const { reachMax } = this.state
+    if(reachMax == true){
+      Alert.alert(
+        'Message',
+        'You have reached the maximum number of uploads',
+        [
+          { text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel' }
+        ],
+        { cancelable: false }
+      )
+    }else{
+      Alert.alert(
+        'Notice',
+        "You are only allowed to upload maximum of Four(4) ID's",
+        [
+          { text: 'Ok', onPress: () => this.uploadId(), style: 'cancel' }
+        ],
+        { cancelable: false }
+      )
+    }
+  }
+
   uploadId = () => {
     const { user } = this.props.state
-    const { profile } = this.state
     const options = {
       noData: true
     }
@@ -245,10 +292,7 @@ class EditProfile extends Component {
               imageData.append('account_id', user.id);
               imageData.append('payload_value', response.data.data)
               imageData.append('payload', 'upload_image')
-              console.log('[imageData]', imageData)
-              // if (profile.profile == null) {
                 Api.upload(Routes.accountCardsCreate, imageData, response => {
-                  console.log('[respones]', response)
                   if (response.data !== null) {
                     this.retrieve();
                     Alert.alert(
@@ -261,24 +305,6 @@ class EditProfile extends Component {
                     )
                   }
                 })
-              // } else {
-              //   imageData.append('id', profile.profile.id)
-              //   this.setState({ isLoading: true })
-              //   Api.upload(Routes.accountCardsUpdate, imageData, response => {
-              //     console.log("[UPDATE_IMAGE]", response);
-              //     if (response.data !== null) {
-              //       this.retrieve();
-              //       Alert.alert(
-              //         'Message',
-              //         'ID successfully updated',
-              //         [
-              //           { text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel' }
-              //         ],
-              //         { cancelable: false }
-              //       )
-              //     }
-              //   })
-              // }
             })
           })
           .catch(err => {
@@ -290,7 +316,6 @@ class EditProfile extends Component {
     })}
 
   update = () => {
-    console.log('[dataRetrieve]', this.state.dataRetrieve)
     const { user } = this.props.state;
     const { dataRetrieve } = this.state
     if (user == null) {
@@ -524,6 +549,73 @@ class EditProfile extends Component {
                 </Picker>
               </View>
             </View>
+            <View>
+              <Text
+                style={{
+                  borderBottomWidth: 1,
+                  padding: 15,
+                  marginBottom: 10,
+                  fontWeight: 'bold',
+                  borderColor: Color.gray,
+                }}>
+                ID's
+              </Text>
+              <TouchableOpacity
+                style={
+                  {
+                    borderColor: Color.gray,
+                    borderWidth: 1,
+                    backgroundColor: Color.gray,
+                    borderRadius: 25,
+                    position: 'absolute',
+                    padding: 10,
+                    marginTop: '0%',
+                    marginLeft: '55%'
+                  }}
+                onPress={() => this.uploadMessage()}>
+                <View style={{ flexDirection: 'row' }}>
+                  <FontAwesomeIcon
+                    icon={faUpload}
+                    style={{ marginRight: 18, marginLeft: 10 }}
+                    size={15}
+                    />
+                    <Text>Upload ID</Text>
+                </View>
+              </TouchableOpacity>
+              <View style={{
+              flexDirection: 'row',
+              flex: 1,
+              flexWrap: 'wrap',
+              alignItems: 'flex-start'
+              }}>
+                {
+                  this.state.uploadedID.map((item, index) => {
+                    if(item.payload == "upload_image"){
+                      return (
+                        <TouchableOpacity style={{
+                          height: 100,
+                          width: '48%',
+                          borderWidth: 1,
+                          borderColor: Color.gray,
+                          margin: 1
+                        }}
+                          onPress={() => { this.setState({ imageModal: true, urlID: item.payload_value }) }}
+                          key={index}>
+                          <Image
+                            source={{ uri: Config.BACKEND_URL  + item.payload_value }}
+                            style={{
+                              width: 205,
+                              height: 98
+                            }}
+                          />
+                        </TouchableOpacity>
+                      )
+                    }
+                  })
+                }
+                <ImageModal visible={this.state.imageModal} url={Config.BACKEND_URL  + this.state.urlID} action={() => { this.setState({ imageModal: false }) }}></ImageModal>
+              </View>
+            </View>
           </View>
           {/* <View>
             <Text
@@ -591,37 +683,6 @@ class EditProfile extends Component {
               </View>
             </View>
           </View> */}
-          <View>
-            <Text
-              style={{
-                borderBottomWidth: 1,
-                padding: 15,
-                marginBottom: 10,
-                fontWeight: 'bold',
-                borderColor: Color.gray,
-              }}>
-              ID's
-            </Text>
-            <TouchableOpacity
-              style={[
-                BasicStyles.formControl,
-                {
-                  alignSelf: 'center',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                },
-              ]}
-              onPress={() => this.uploadId()}>
-              <View style={{ flexDirection: 'row' }}>
-                <Text>Upload ID</Text>
-                <FontAwesomeIcon
-                  icon={faUpload}
-                  style={{ marginLeft: 20 }}
-                  size={15}
-                />
-              </View>
-            </TouchableOpacity>
-          </View>
 
           <Button
             title={'Update'}
@@ -630,6 +691,7 @@ class EditProfile extends Component {
               width: '90%',
               marginRight: '5%',
               marginLeft: '5%',
+              marginTop: '5%',
               marginBottom: '5%',
               backgroundColor: theme ? theme.secondary : Color.secondary
             }}
