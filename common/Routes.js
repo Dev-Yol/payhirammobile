@@ -68,6 +68,7 @@ export default {
   accountProfileUpdate: apiUrl + 'account_profiles/update',
   accountCardsCreate: apiUrl + 'account_cards/create',
   accountCardsUpdate: apiUrl + 'account_cards/update',
+  accountCardsRetrieve: apiUrl + 'account_cards/retrieve',
   accountProfileRetrieveImage : apiUrl + 'acount_profiles/retrieve',
   investorLocationsRetrieve: apiUrl + 'investor_locations/retrieve',
   systemNotificationRetrieve: apiUrl + 'system_notifications/retrieve',
