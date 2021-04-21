@@ -93,7 +93,8 @@ class Transactions extends Component {
           }}
           showsVerticalScrollIndicator={false}>
         <View style={{
-          marginTop: Platform.OS == 'ios' ? 50 : 50
+          marginTop: Platform.OS == 'ios' ? 50 : 50,
+          marginBottom: Platform.OS == 'ios' ? 105 : 105
         }}>
             <View style={Styles.MainContainer}>
               {
