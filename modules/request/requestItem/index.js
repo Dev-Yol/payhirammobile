@@ -105,6 +105,7 @@ class RequestItem extends Component {
       title: data.code,
       payload: 'request'
     }
+    console.log('parameter', parameter)
     Api.request(Routes.customMessengerGroupCreate, parameter, response => {
       this.setState({ isLoading: false })
       if (response.error == null) {
