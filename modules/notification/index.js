@@ -45,11 +45,13 @@ class Notifications extends Component{
       this.props.navigation.navigate('messagesStack', {
         data: items
       })
-    }else{
+    }else if(payload === 'Peer Request'){
       this.props.navigation.navigate('requestItemStack', {
         data: items.request[0],
         from: 'notification'
       })
+    }else{
+      this.props.navigation.navigate('transactionsStack')
     }
   }
   
