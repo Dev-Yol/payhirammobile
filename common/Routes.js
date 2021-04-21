@@ -38,6 +38,7 @@ export default {
   customMessengerGroupRetrieveByParams:
     apiUrl + 'custom_messenger_groups/retrieve_by_params',
   // customMessengerGroupCreate: apiUrl + 'custom_messenger_groups/create',
+  messengerGroupRetrieve: apiUrl + 'messenger_groups/retrieve',
   messengerMessagesCreate: apiUrl + 'messenger_messages/create',
   messengerMessagesRetrieve: apiUrl + 'messenger_messages/retrieve',
   messengerMessagesUpdate: apiUrl + 'messenger_messages/update_by_status',
