@@ -394,7 +394,7 @@ const reducer = (state = initialState, action) => {
       let updatedMessagesOnGroup = null;
       if (state.messagesOnGroup != null) {
         let oldMessages = state.messagesOnGroup.messages;
-        if (oldMessages == null) {
+        if (oldMessages == null || oldMessages.length == 0) {
           let temp = [];
           temp.push(message);
           updatedMessagesOnGroup = {
