@@ -235,7 +235,7 @@ class OTP extends Component {
       code: data.code,
       account_code: user.code
     }
-    console.log('[Fund Transfer] data', parameter)
+    console.log('[Fund Transfer] parameter', parameter)
     this.setState({isLoading: true});
     Api.request(Routes.requestManageByThread, parameter, response => {
         this.setState({isLoading: false});
@@ -320,6 +320,7 @@ class OTP extends Component {
     this.setState({isLoading: true});
     console.log('[OTP] parameters', JSON.stringify(parameters))
     Api.request(Routes.notificationSettingsRetrieve, parameters, (response) => {
+      console.log('[OTP] response', response)
         this.setState({
           isLoading: false,
           errorMessage: null

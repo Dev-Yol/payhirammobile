@@ -101,13 +101,17 @@ class Requests extends Component {
         order: 'desc'
       },
       mode: 'all',
-      target: 'all'
+      target: 'all',
+      shipping: 'all'
     }
     if(page == 'personal'){
       parameters['request_account_id'] = user.id
     }
     if(parameter && parameter.target.toLowerCase() != 'all'){
       parameters['target'] = parameter.target
+    }
+    if(parameter && parameter.shipping.toLowerCase() != 'all'){
+      parameters['shipping'] = parameter.shipping
     }
     if(parameter && parameter.type.toLowerCase() != 'all'){
       parameters['type'] = Helper.getRequestTypeCode(parameter.type)

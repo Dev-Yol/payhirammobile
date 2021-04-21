@@ -307,6 +307,13 @@ export default {
     }, {
       value: 'Circle'
     }],
+    ships: [{
+      value: 'All'
+    }, {
+      value: 'Pickup'
+    }, {
+      value: 'Delivery'
+    }],
     types: [{
       value: 'All'
     }, {

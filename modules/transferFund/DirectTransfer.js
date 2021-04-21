@@ -32,7 +32,7 @@ class DirectTransfer extends Component {
   componentDidMount = () => {
     this.retrieveSummaryLedger()
     const { data } = this.props.navigation.state.params;
-    console.log('[datain transferfund]', data)
+    console.log('[data in transferfund]', data)
     if(data.success == true){
       this.setState({
         amount: data.amount,
