@@ -6,22 +6,19 @@ const styles = StyleSheet.create({
     height: '100%',
     marginTop: 70,
   },
-  SettingTileContainer: {
-    left: -5,
+  container: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    width: '100%',
+    width: '90%',
+    marginLeft: '5%',
+    marginRight: '5%',
     height: 50,
     borderTopWidth: 0.5,
-    borderBottomWidth: 0.5,
     borderColor: '#E0E0E0',
   },
   SettingTextContainer: {},
-  SettingTextStyle: {},
-  IconContainer: {
-    paddingRight: 10,
-  },
+  SettingTextStyle: {}
 });
 
 export default styles;

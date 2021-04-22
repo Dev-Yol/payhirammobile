@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import {View, TouchableOpacity, Text, StyleSheet} from 'react-native';
 import {createStackNavigator} from 'react-navigation-stack';
+import {NavigationActions, StackActions} from 'react-navigation';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faArrowLeft} from '@fortawesome/free-solid-svg-icons';
+import {faChevronLeft} from '@fortawesome/free-solid-svg-icons';
 import {Color, BasicStyles} from 'common';
 import {connect} from 'react-redux';
 import RequestItem from './index.js';
@@ -12,17 +13,38 @@ class HeaderOptions extends Component {
     super(props);
   }
   back = () => {
-    this.props.navigationProps.navigate('drawerStack');
+    const { from } = this.props.navigationProps.state.params;
+    if(from == 'create'){ // from === 'request' || from === 'create'
+      const navigateAction = NavigationActions.navigate({
+        routeName: 'drawerStack',
+        action: StackActions.reset({
+          index: 0,
+          key: null,
+          actions: [
+              NavigationActions.navigate({routeName: 'Requests', params: {
+                initialRouteName: 'Requests', 
+                index: 0
+              }}),
+          ]
+        })
+      });
+      this.props.navigationProps.dispatch(navigateAction);      
+    }else{
+      this.props.navigationProps.pop()
+    }
+
   };
   render() {
+    const { theme } = this.props.state;
     return (
       <View style={{flexDirection: 'row'}}>
         <TouchableOpacity onPress={this.back.bind(this)}>
           {/*Donute Button Image */}
           <FontAwesomeIcon
-            icon={faArrowLeft}
+            icon={faChevronLeft}
             size={BasicStyles.iconSize}
             style={styles.iconStyle}
+            color={theme ? theme.primary : Color.primary}
           />
         </TouchableOpacity>
       </View>
@@ -39,16 +61,15 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
+let HeaderOptionsConnect = connect(mapStateToProps, mapDispatchToProps)(HeaderOptions);
+
 const RequestItemStack = createStackNavigator({
   requestItemScreen: {
     screen: RequestItem,
     navigationOptions: ({navigation}) => ({
       title: 'Request Item',
-      headerLeft: <HeaderOptions navigationProps={navigation} />,
-      headerTransparent: true
-      // headerTintColor: BasicStyles.headerTintColor,
-      // headerTitleContainerStyle: BasicStyles.headerTitleContainerStyle,
-      // headerTitleStyle: BasicStyles.headerTitleStyle,
+      headerLeft: <HeaderOptionsConnect navigationProps={navigation} />,
+      ...BasicStyles.headerDrawerStyle
     }),
   },
 });

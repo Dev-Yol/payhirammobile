@@ -23,20 +23,17 @@ class PersonalInformationCard extends Component {
         let { _renderTextIcon } = this
         return (
             <View style={{marginBottom:20}}>
-                <View style={styles.cardHeader}>
-                    <Text style={[{ fontSize: BasicStyles.standardFontSize }, styles.cardHeaderText]}>Educational Background</Text>
-                </View>
                 <View style={styles.rowContainer}>
                     <View >
-                        <View style={[{ paddingLeft: 20, marginTop:10 }]}>
+                        <View style={[{ paddingLeft: 20, padding:20 }]}>
                             <Text style={[{ fontWeight: 'bold', margin: 2, fontSize: BasicStyles.standardFontSize }]}>Tertiary</Text>
                             {_renderTextIcon(faGraduationCap, 'Bachelor of Science and Information Technology', 'University of San Carlos • Talamban, Cebu City 2015 - 2019')}
                         </View>
-                        <View style={[{ paddingLeft: 20, marginTop:10 }]}>
+                        <View style={[{ paddingLeft: 20, padding:30 }]}>
                             <Text style={[{ fontWeight: 'bold', margin: 2, fontSize: BasicStyles.standardFontSize }]}>Tertiary</Text>
                             {_renderTextIcon(faUniversity, 'University of San Carlos', '2011-2015 • Talamban, Cebu City')}
                         </View>
-                        <View style={[{ paddingLeft: 20, marginTop:10 }]}>
+                        <View style={[{ paddingLeft: 20, padding:20 }]}>
                             <Text style={[{ fontWeight: 'bold', margin: 2, fontSize: BasicStyles.standardFontSize }]}>Tertiary</Text>
                             {_renderTextIcon(faUserGraduate, 'University of San Carlos', '2005-2011 • Talamban, Cebu City')}
                         </View>

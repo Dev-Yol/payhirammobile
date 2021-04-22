@@ -17,6 +17,11 @@ class SendRequirements extends Component {
     }
   }
 
+  componentDidMount = () => {
+    const { messengerGroup, user } = this.props.state;
+    console.log('======================', messengerGroup, '+++++++++++++++++++++++++++++++++', user)
+  }
+  
   sendImageWithPayload = (url, id) => {
     const { messengerGroup, user } = this.props.state;
     let parameter = {
@@ -108,7 +113,7 @@ class SendRequirements extends Component {
         marginBottom: 50
       }}>
         <View>
-          <Text style={Style.templateText}>Hi {user.username}! Send the requirements below. Just click the button and swipe to right for more options.</Text>
+          <Text style={Style.templateText}>Hi {user.username}! You are now messaging with </Text>
         </View>
         <ScrollView horizontal={true} style={[Style.ScrollView, {
           marginBottom: 50
@@ -116,7 +121,7 @@ class SendRequirements extends Component {
           <View style={{
             flexDirection: 'row'
           }}>
-          {
+          {/* {
             messengerGroup.validations.requirements.map((item, index) => {
               if(item.validations != null){
                 return (
@@ -146,7 +151,7 @@ class SendRequirements extends Component {
                 )
               }
             })
-          }
+          } */}
           </View>
         </ScrollView>
         <Sketch

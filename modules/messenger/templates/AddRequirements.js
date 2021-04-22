@@ -43,7 +43,7 @@ class AddRequirements extends Component {
           <View style={{
             flexDirection: 'row'
           }}>
-          {
+          {/* {
             messengerGroup.validations.requirements.map((item, index) => {
               if(item.validations === null){
                 return (
@@ -67,7 +67,7 @@ class AddRequirements extends Component {
                 )
               }
             })
-          }
+          } */}
           </View>
         </ScrollView>
       </View>

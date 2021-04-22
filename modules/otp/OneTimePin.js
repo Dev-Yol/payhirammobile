@@ -1,70 +1,114 @@
 import React, {Component} from 'react';
 import {View, TextInput, StyleSheet} from 'react-native';
+import { Color } from 'common';
 
 class OneTimePin extends Component {
   constructor(props) {
     super(props);
-    var fieldCount = new Array(this.props.fieldCount).fill('');
-    this.inputRefs = new Array(this.props.fieldCount).fill(React.createRef());
-    this.state = {
-      fields: fieldCount,
-    };
+    this.setState = {
+      otp: [{
+          code: null
+        }, {
+          code: null
+        }, {
+          code: null
+        }, {
+          code: null
+        }, {
+          code: null
+        }, {
+          code: null
+      }],
+      activeIndex: 0,
+      otpTextInput: [],
+      errorMessage: null
+    }
+    this.otpTextInput = []
+  }
+
+  completeOTPField = () => {
+    const { otp } = this.state;
+    let finalOtp = '';
+    for (var i = 0; i < 6; i++) {
+      let item = otp[i]
+      if(item.code == null || item.code == ''){
+        this.setState({
+          errorMessage: 'Incomplete Code'
+        })
+        return
+      }else{
+        finalOtp += item.code
+      }
+    }
+    if(this.state.errorMessage == null){
+      this.props.onComplete(finalOtp)
+    }
   }
 
   inputHandler = (value, index) => {
-    const {fields} = this.state;
-    fields.splice(index, 1, value);
-    this.props.pinHandler(fields);
-    if (value) {
-      if (index + 1 < this.state.fields.length) {
-        this.moveToNextField(index);
+    const { otp } = this.state;
+    console.log('i', i)
+    let newOtp = otp.map((item, index) => {
+      if(i == index){
+        item.code = code
       }
-    }
-  };
-
-  moveToNextField = (index) => {
-    this.inputRefs[index + 1].focus();
-  };
-
-  displayFields = () => {
-    let fields = [];
-    for (let i = 0; i <= this.props.fieldCount - 1; i++) {
-      fields.push(
-        <View style={styles.OtpFieldContainer} key={i}>
-          <TextInput
-            value={this.props.pin[i]}
-            ref={(r) => (this.inputRefs[i] = r)}
-            maxLength={1}
-            style={styles.OtpFieldTextStyle}
-            onChangeText={(value) => this.inputHandler(value, i)}
-          />
-        </View>,
-      );
-    }
-    return fields;
-  };
-
-  handleFieldChange = (value, index) => {
-    if (isNaN(value)) {
-      return false;
-    }
-    console.log('Value', value);
-    this.setState({
-      fields: [
-        ...this.state.fields.map((val, i) => (index === i ? value : val)),
-      ],
-    });
-
-    console.log('Fields', this.state.fields);
-
-    if (value.nextSibling) {
-      value.nextSibling.focus();
+      return item
+    })
+    this.setState({otp: newOtp})
+    if(i < 5 && (newOtp[i].code != null && newOtp[i].code != '')){
+      let newIndex = parseInt(i + 1)
+      this.otpTextInput[i + 1].focus();
+      this.setState({activeIndex: newIndex})
+    }else{
+      // disabled here
     }
   };
 
   render() {
+    const { otp } = this.state;
+    let inputs = []
+    for (let i = 0; i < 6; i++) {
+      inputs.push(
+        <TextInput
+          style={{
+            borderColor: Color.gray,
+            borderWidth: 1,
+            width: '15%',
+            marginBottom: 20,
+            fontSize: 16,
+            textAlign: 'center',
+            borderRadius: 5,
+            marginRight: 2,
+            height: 50
+          }}
+          onChangeText={(code) => this.inputHandler(code, i)}
+          value={otp[i].code}
+          maxLength={1}
+          placeholder={'0'}
+          keyboardType={'numeric'}
+          key={i}
+          autoFocus={this.state.activeIndex == i}
+          ref={ref => this.otpTextInput[i] = ref}
+        />
+      );
+    }
     return (
-      <View style={styles.OneTimePinContainer}>{this.displayFields()}</View>
+      <View style={styles.OneTimePinContainer}>
+        {
+          this.state.errorMessage != null && (
+            <View style={{
+              alignItems: 'center',
+              paddingBottom: 20
+            }}>
+              <Text style={{
+                color: Color.danger,
+                textAlign: 'center'
+              }}>Opps! {this.state.errorMessage}</Text>
+            </View>
+          )
+        }
+        {inputs}
+      </View>
     );
   }
 }

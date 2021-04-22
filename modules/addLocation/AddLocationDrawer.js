@@ -5,7 +5,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faChevronLeft} from '@fortawesome/free-solid-svg-icons';
 import AddLocation from 'modules/addLocation';
 import {connect} from 'react-redux';
-import LocationWithMap from 'components/Location/LocationWithMap.js';
+import { BasicStyles, Color } from 'common';
 class HeaderOptions extends Component {
   constructor(props) {
     super(props);
@@ -15,29 +15,12 @@ class HeaderOptions extends Component {
   };
   render() {
     return (
-      <View
-        style={{
-          height: 45,
-          width: 45,
-          justifyContent: 'center',
-          alignItems: 'center',
-          marginLeft: 5,
-        }}>
-        <TouchableOpacity
-          onPress={() => {
-            this.back();
-          }}
-          style={{
-            width: '16.5%',
-            alignItems: 'center',
-            marginLeft: '0.5%',
-          }}>
+      <View style={{ flexDirection: 'row' }}>
+        <TouchableOpacity onPress={this.back.bind(this)}>
           {/*Donute Button Image */}
-          <FontAwesomeIcon
-            icon={faChevronLeft}
-            size={30}
-            style={{color: '#3F0050'}}
-          />
+          <FontAwesomeIcon icon={faChevronLeft} size={BasicStyles.iconSize} style={[BasicStyles.iconStyle, {
+            color: Color.primary
+          }]} />
         </TouchableOpacity>
       </View>
     );
@@ -59,16 +42,7 @@ const AddLocationStack = createStackNavigator({
     navigationOptions: ({navigation}) => ({
       title: 'ADDRESS',
       headerLeft: <HeaderOptions navigationProps={navigation} />,
-      headerStyle: {
-        backgroundColor: 'white',
-        height: 80,
-        elevation: 0,
-      },
-      headerTintColor: '#4c4c4c',
-      headerTitleStyle: {
-        fontSize: 15,
-        fontWeight: 'bold',
-      },
+      ...BasicStyles.headerDrawerStyle
     }),
   },
 });
