@@ -109,6 +109,18 @@ class NotificationSettings extends Component {
                 ios_backgroundColor={Color.danger}
                 />
             </View>
+            <View style={{flexDirection: 'row', borderBottomWidth: 1, borderColor: Color.gray, padding: 20}}>
+              <View style={{flex: 1}}>
+                <Text>Fingerprint</Text>
+                <Text style={{fontSize: 10}}>Use for a convenient way to accept and process transactions.</Text>
+              </View>
+              <Switch
+                trackColor={{ false: Color.danger, true: theme ? theme.primary : Color.primary }}
+                thumbColor={'white'} onValueChange={() => this.changeState('pin')}
+                value={this.state.pin}
+                ios_backgroundColor={Color.danger}
+                />
+            </View>
             {/* <View style={{flexDirection: 'row', borderBottomWidth: 1, borderColor: Color.gray, padding: 20}}>
               <View style={{flex: 1}}>
                 <Text>Account PIN</Text>

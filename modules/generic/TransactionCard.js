@@ -11,7 +11,6 @@ class TransactionCard extends Component {
   render() {
     const { data } = this.props;
     const { theme } = this.props.state;
-    console.log('[data]', data);
     return (
       <View>
         <ScrollView showsHorizontalScrollIndicator={false}>

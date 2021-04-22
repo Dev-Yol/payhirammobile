@@ -42,7 +42,7 @@ class Transactions extends Component {
     let parameter = {
       account_id: user.id,
       limit: this.state.limit,
-      offset: flag == true ? (this.state.offset * this.state.limit) : 0,
+      offset: flag == true && this.state.offset > 0 ? (this.state.offset * this.state.limit) : this.state.offset,
       sort: {
         column: 'created_at',
         value: 'desc'
@@ -53,7 +53,7 @@ class Transactions extends Component {
     console.log('parameter', parameter)
     this.setState({isLoading: true});
     Api.request(Routes.transactionRetrieve, parameter, (response) => {
-      console.log('data', response.data)
+      console.log('[data]', response)
       this.setState({isLoading: false});
       if (response.data.length > 0) {
         this.setState({
