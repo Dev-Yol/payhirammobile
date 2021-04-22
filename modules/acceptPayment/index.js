@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableOpacity, SafeAreaView, Image, TouchableHighlight, Dimensions, ScrollView, TextInput, Alert } from 'react-native';
+import { ActivityIndicator } from 'react-native'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faUserCircle, faStar as Solid } from '@fortawesome/free-solid-svg-icons';
 import {faStar as Regular} from '@fortawesome/free-regular-svg-icons';
@@ -141,20 +142,20 @@ class AcceptPaymentStack extends Component {
     }
 
     const { amount, charge, notes, currency} = this.state;
-    if(ledger == null){
-      this.errorAlert('Invalid Account')
-      return 
-    }
+    // if(ledger == null){
+    //   this.errorAlert('Invalid Account')
+    //   return 
+    // }
 
     if(amount == 0){
       this.errorAlert('Amount is required')
       return    
     }
 
-    if(amount > ledger.available_balance){
-      this.errorAlert('Issuficient Balance')
-      return    
-    }
+    // if(amount > ledger.available_balance){
+    //   this.errorAlert('Issuficient Balance')
+    //   return    
+    // }
 
     if(notes == null || notes == ''){
       this.errorAlert('Notes is required')
@@ -539,6 +540,21 @@ class AcceptPaymentStack extends Component {
               backdropTransitionInTiming={100}
               backdropTransitionOutTiming={100}
               isVisible={true}>
+              <View style={{
+                width: '100%',
+                flex: 1,
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}>
+                <ActivityIndicator
+                  size={100}
+                  color={Color.white}
+                />
+                <Text style={{
+                  color: Color.white,
+                  fontWeight: 'bold'
+                }}>Waiting for approval ...</Text>
+              </View>
             </Modal>
           )
         }
