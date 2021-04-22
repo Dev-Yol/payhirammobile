@@ -92,6 +92,7 @@ export default {
   retrieveImage: apiUrl + 'payloads/retrieve',
   transferFund: apiUrl + 'fund_transfer_charges/update',
   enableSupportCreate: apiUrl + 'enable_supports/create',
+  enableSupportRetrieve: apiUrl + 'enable_supports/retrieve',
   commentCreate: apiUrl + 'comments/create',
   commentsRetrieve: apiUrl + 'comments/retrieve',
   replyCreate: apiUrl + 'comment_replies/create'
