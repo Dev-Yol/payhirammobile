@@ -45,12 +45,12 @@ class AmountInput extends Component {
                 this.setState({
                   errorMessage: 'Insufficient Balance!'
                 })
-                this.props.onChange(input, ledger && (currencyBal != null ? currencyBal : ledger.currency))
+                this.props.onChange(input, ledger && ledger.currency ? ledger.currency : 'PHP')
               }else{
                 this.setState({
                   amount: input
                 })
-                this.props.onChange(input, ledger && (currencyBal != null ? currencyBal : ledger.currency))
+                this.props.onChange(input, ledger && ledger.currency ? ledger.currency : 'PHP')
               }
             }}
             style={{
