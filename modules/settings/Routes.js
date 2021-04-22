@@ -6,7 +6,8 @@ import {
   faPalette,
   faHandshake,
   faShieldAlt,
-  faBookOpen
+  faBookOpen,
+  faLock
 } from '@fortawesome/free-solid-svg-icons';
 const navigation = [
   {
@@ -25,9 +26,9 @@ const navigation = [
   //   icon: faCreditCard
   // },
   {
-    title: 'Notifications',
+    title: 'Security',
     route: 'notificationSettingsStack',
-    icon: faBell
+    icon: faLock
   },
   {
     title: 'Display',
