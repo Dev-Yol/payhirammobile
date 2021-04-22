@@ -553,7 +553,7 @@ class AcceptPaymentStack extends Component {
                 <Text style={{
                   color: Color.white,
                   fontWeight: 'bold'
-                }}>Payment Processing ...</Text>
+                }}>Waiting for approval ...</Text>
               </View>
             </Modal>
           )
