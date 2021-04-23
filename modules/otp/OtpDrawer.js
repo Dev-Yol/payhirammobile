@@ -46,7 +46,7 @@ const OtpStack = createStackNavigator({
   otpScreen: {
     screen: OTP,
     navigationOptions: async ({navigation}) => ({
-      title: await AsyncStorage.getItem(`${Helper.APP_NAME}fingerprint`) == "true" ? 'Finger Print Scanning' : 'OTP Code',
+      title: 'Authenticating',
       drawerLabel: 'OTP',
       headerLeft: <HeaderOptionsConnect navigationProps={navigation} />,
       ...BasicStyles.headerDrawerStyle
