@@ -192,6 +192,7 @@ class RequestItem extends Component {
   }
 
   deleteRequest(data){
+    console.log('[sasssss]', data)
     Alert.alert(
       'Confirmation',
       'Are you sure you want to cancel this request?',
