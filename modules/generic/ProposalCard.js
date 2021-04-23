@@ -16,7 +16,6 @@ class ProposalCard extends Component {
     super(props);
   }
 
-
   withdrawAlert(item){
     Alert.alert(
       'Confirmation Message!',

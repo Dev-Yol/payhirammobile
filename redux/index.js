@@ -48,7 +48,8 @@ const types = {
   SET_COMMENTS: 'SET_COMMENTS',
   SET_CURRENT_TICKET_ID: 'SET_CURRENT_TICKET_ID',
   SET_FROM: 'SET_FROM',
-  SET_PAYMENT_CONFIRMATION: 'SET_PAYMENT_CONFIRMATION'
+  SET_PAYMENT_CONFIRMATION: 'SET_PAYMENT_CONFIRMATION',
+  VIEW_CHANGE_PASS: 'VIEW_CHANGE_PASS'
 };
 
 export const actions = {
@@ -183,6 +184,9 @@ export const actions = {
   },
   setPaymentConfirmation(flag) {
     return {type: types.SET_PAYMENT_CONFIRMATION, flag}
+  },
+  viewChangePass(changePassword) {
+    return {type: types.VIEW_CHANGE_PASS, changePassword}
   }
 };
 
@@ -237,6 +241,7 @@ const initialState = {
     id: null,
     commentList: []
   },
+  changePassword: 0,
   currentTicketId: null,
   paymentConfirmation: false
 };
@@ -276,7 +281,7 @@ const reducer = (state = initialState, action) => {
   const { parameter, currencyBal } = action;
   const { acceptPayment, location_from } = action;
   const { comments } = action;
-  const { currentTicketId, flag } = action;
+  const { currentTicketId, flag, changePassword } = action;
   switch (type) {
     case types.LOGOUT:
       storeData('token', '');
@@ -650,6 +655,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         paymentConfirmation: flag
+      };
+    case types.VIEW_CHANGE_PASS:
+      return {
+        ...state,
+        changePassword,
       }
     default:
       return {...state, nav: state.nav};
