@@ -48,7 +48,8 @@ const types = {
   SET_COMMENTS: 'SET_COMMENTS',
   SET_CURRENT_TICKET_ID: 'SET_CURRENT_TICKET_ID',
   SET_FROM: 'SET_FROM',
-  SET_PAYMENT_CONFIRMATION: 'SET_PAYMENT_CONFIRMATION'
+  SET_PAYMENT_CONFIRMATION: 'SET_PAYMENT_CONFIRMATION',
+  SET_ENABLE_FINGER_PRINT: 'SET_ENABLE_FINGER_PRINT'
 };
 
 export const actions = {
@@ -183,6 +184,9 @@ export const actions = {
   },
   setPaymentConfirmation(flag) {
     return {type: types.SET_PAYMENT_CONFIRMATION, flag}
+  },
+  setEnableFingerPrint(enable){
+    return {type: types.SET_ENABLE_FINGER_PRINT, enable}
   }
 };
 
@@ -238,7 +242,8 @@ const initialState = {
     commentList: []
   },
   currentTicketId: null,
-  paymentConfirmation: false
+  paymentConfirmation: false,
+  enableFingerPrint: false,
 };
 
 storeData = async (key, value) => {
@@ -277,6 +282,7 @@ const reducer = (state = initialState, action) => {
   const { acceptPayment, location_from } = action;
   const { comments } = action;
   const { currentTicketId, flag } = action;
+  const { enable } = action;
   switch (type) {
     case types.LOGOUT:
       storeData('token', '');
@@ -650,6 +656,13 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         paymentConfirmation: flag
+      };
+    case types.SET_ENABLE_FINGER_PRINT:
+      console.log('[enable finger print::]', enable == false ? "true" : "false");
+      storeData('fingerprint', enable == false ? "true" : "false");
+      return {
+        ...state,
+        enableFingerPrint: enable,
       }
     default:
       return {...state, nav: state.nav};
