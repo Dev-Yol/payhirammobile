@@ -48,7 +48,7 @@ class TransactionCard extends Component {
                     {
                       data.amount < 0 ? (
                         <Text style={{
-                          color: theme ? theme.danger : Color.danger,
+                          color: Color.danger,
                           fontSize: BasicStyles.standardFontSize,
                           fontWeight: 'bold',
                           textAlign: 'right'

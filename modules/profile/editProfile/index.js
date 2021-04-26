@@ -29,13 +29,15 @@ import Skeleton from 'components/Loading/Skeleton';
 import ImageModal from 'components/Modal/ImageModal';
 import ImageResizer from 'react-native-image-resizer';
 import Config from 'src/config.js';
+
 const gender = [{
   title: 'Male',
   value: 'male'
-}, {
+},
+{
   title: 'Female',
   value: 'female'
-}]
+}];
 class EditProfile extends Component {
   constructor(props) {
     super(props);
@@ -57,7 +59,8 @@ class EditProfile extends Component {
       uploadedID: [],
       imageModal: false,
       urlID: null,
-      reachMax: false
+      reachMax: false,
+      radioSelected: 'male'
     };
   }
 
@@ -100,10 +103,8 @@ class EditProfile extends Component {
       isLoading: true,
       showDatePicker: false
     })
-    console.log("[PARAMETER]", parameter);
     Api.request(Routes.accountProfileRetrieve, parameter, response => {
       this.setState({ isLoading: false })
-      console.log("[RESPONSE s]", response.data);
       if (response.data.length > 0) {
         const { data } = response
         this.setState({ dataRetrieve: response.data[0] })
@@ -378,6 +379,50 @@ class EditProfile extends Component {
     )
   }
 
+  radioClick(id) {
+    this.setState({
+      sex: id
+    })
+  }
+
+  gender = () => {
+    const { theme } = this.props.state;
+    return (
+      gender.map((val) => {
+        return (
+          <TouchableOpacity
+          style={{flexDirection: 'row', width: '80%'}}
+          key={val.value} onPress={this.radioClick.bind(this, val.value)}>
+            <View style={{
+              height: 24,
+              width: 24,
+              borderRadius: 12,
+              borderWidth: 2,
+              borderColor: theme ? theme.primary : Color.primary,
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderWidth: 1,
+              marginTop: '5%'
+            }}>
+              {
+                val.value == (this.state.sex != null ? this.state.sex : this.state.radioSelected) ?
+                <View style={{
+                  height: 12,
+                  width: 12,
+                  borderRadius: 6,
+                  backgroundColor: theme ? theme.primary : Color.primary
+                }} />
+                : null
+              }
+            </View>
+            <Text style={{flexDirection: 'column', 
+              marginTop: '5%', marginLeft: '5%'}}>{val.title}</Text>
+          </TouchableOpacity>
+        )
+      })
+    );
+  }
+ 
   render() {
     const { isLoading } = this.state
     const { user, theme } = this.props.state;
@@ -403,7 +448,7 @@ class EditProfile extends Component {
                 height: 110,
                 width: 110,
                 borderRadius: 100,
-                borderColor: Color.primary,
+                borderColor: theme ? theme.primary : Color.primary,
                 borderWidth: 2
               }}
               onPress={() => this.upload()}>
@@ -434,17 +479,17 @@ class EditProfile extends Component {
                   width: 35,
                   borderRadius: 100,
                   borderWidth: 2,
-                  borderColor: Color.primary,
+                  borderColor: theme ? theme.primary : Color.primary,
                   backgroundColor: 'white',
                   justifyContent: 'center',
                   alignItems: 'center'
                 }}>
                   <FontAwesomeIcon style={{
-                    borderColor: Color.primary
+                    borderColor: theme ? theme.primary : Color.primary
                   }}
                     icon={faEdit}
                     size={20}
-                    color={Color.primary}
+                    color={theme ? theme.primary : Color.primary}
                   />
                 </View>
               </View>
@@ -471,7 +516,11 @@ class EditProfile extends Component {
                 />
               )
             }
-            <Rating ratings={''} rating={' '} style={[{ flex: 2 }]}></Rating>
+            {
+              user.rating && (
+                <Rating ratings={user.rating} rating={' '} style={[{ flex: 2 }]}></Rating>
+              )
+            }
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               {user.status == 'verified' && (
                 <FontAwesomeIcon
@@ -523,7 +572,8 @@ class EditProfile extends Component {
             />
             <View style={{ width: '90%', marginLeft: '5%' }}>
               <Text>Gender</Text>
-              <View
+              {this.gender()}
+              {/* <View
                 style={{
                   borderColor: Color.gray,
                   borderWidth: 1,
@@ -547,7 +597,7 @@ class EditProfile extends Component {
                     })
                   }
                 </Picker>
-              </View>
+              </View> */}
             </View>
             <View>
               <Text
