@@ -50,7 +50,7 @@ const NotificationSettingsStack = createStackNavigator({
   notificationSettingsScreen: {
     screen: NotificationSettings,
     navigationOptions: ({navigation}) => ({
-      title: 'Notification Settings',
+      title: 'Security Settings',
       headerLeft: <HeaderOptionsConnect navigationProps={navigation} />,
       ...BasicStyles.headerDrawerStyle
     }),

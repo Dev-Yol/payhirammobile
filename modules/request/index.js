@@ -164,15 +164,15 @@ class Requests extends Component {
         isLoading: false
       });
       if(response.data.length > 0){
-        if(page == 'onNegotiation'){
-          let sample = []
-          response.data.forEach(element => {
-            if(element.peer_flag == true){
-              sample.push(element)
-              response.data = sample;
-            }
-          });
-        }
+        // if(page == 'onNegotiation'){
+        //   let sample = []
+        //   response.data.forEach(element => {
+        //     if(element.peer_flag == true){
+        //       sample.push(element)
+        //       response.data = sample;
+        //     }
+        //   });
+        // }
         this.setState({
           // data: flag == false ? response.data : response.data,\
           messageEmpty: null,

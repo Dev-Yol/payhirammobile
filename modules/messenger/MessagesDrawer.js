@@ -12,12 +12,18 @@ class HeaderOptions extends Component {
   constructor(props){
     super(props);
     this.state = {
-      isViewing: false
+      isViewing: false,
+      origin: false
     }
   }
 
   componentDidMount = () => {
     if(this.props.navigationProps.state.params !== undefined){
+      if(this.props.navigationProps.state.params.data.payload == 'request'){
+        this.setState({origin: true})
+      }else{
+    
+      }
       if(this.props.navigationProps.state.params.con){
         const { setMessengerGroup, setMessagesOnGroup } = this.props
         setMessengerGroup(this.props.navigationProps.state.params)
@@ -31,11 +37,14 @@ class HeaderOptions extends Component {
   };
 
   back = () => {
+    if(this.props.navigationProps.state.params.data.payload == 'request'){
+      this.props.navigationProps.navigate('drawerStack');
+    }else{
+      this.props.navigationProps.pop()
+    }
     // const { setMessagesOnGroup, setMessengerGroup } = this.props;
     // setMessagesOnGroup({groupId: null, messages: null});
     // setMessengerGroup(null);
-    // this.props.navigationProps.navigate('drawerStack');
-    this.props.navigationProps.pop()
   };
 
   viewMenu = () => {

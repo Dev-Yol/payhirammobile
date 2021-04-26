@@ -554,6 +554,21 @@ class AcceptPaymentStack extends Component {
                   color: Color.white,
                   fontWeight: 'bold'
                 }}>Waiting for approval ...</Text>
+                
+                <Button 
+                  title={'Cancel'}
+                  onClick={() => this.props.navigation.pop()}
+                  style={{
+                    width: '50%',
+                    marginRight: '25%',
+                    marginLeft: '25%',
+                    marginTop: 25,
+                    backgroundColor: Color.white,
+                  }}
+                  textStyle={{
+                    color: Color.black
+                  }}
+                />
               </View>
             </Modal>
           )

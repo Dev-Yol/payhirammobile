@@ -49,7 +49,8 @@ const types = {
   SET_CURRENT_TICKET_ID: 'SET_CURRENT_TICKET_ID',
   SET_FROM: 'SET_FROM',
   SET_PAYMENT_CONFIRMATION: 'SET_PAYMENT_CONFIRMATION',
-  SET_ENABLE_FINGER_PRINT: 'SET_ENABLE_FINGER_PRINT'
+  SET_ENABLE_FINGER_PRINT: 'SET_ENABLE_FINGER_PRINT',
+  VIEW_CHANGE_PASS: 'VIEW_CHANGE_PASS'
 };
 
 export const actions = {
@@ -187,6 +188,9 @@ export const actions = {
   },
   setEnableFingerPrint(enable){
     return {type: types.SET_ENABLE_FINGER_PRINT, enable}
+  },
+  viewChangePass(changePassword) {
+    return {type: types.VIEW_CHANGE_PASS, changePassword}
   }
 };
 
@@ -241,6 +245,7 @@ const initialState = {
     id: null,
     commentList: []
   },
+  changePassword: 0,
   currentTicketId: null,
   paymentConfirmation: false,
   enableFingerPrint: false,
@@ -283,6 +288,7 @@ const reducer = (state = initialState, action) => {
   const { comments } = action;
   const { currentTicketId, flag } = action;
   const { enable } = action;
+  const { currentTicketId, flag, changePassword } = action;
   switch (type) {
     case types.LOGOUT:
       storeData('token', '');
@@ -663,7 +669,12 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         enableFingerPrint: enable,
-      }
+      };
+    case types.VIEW_CHANGE_PASS:
+      return {
+        ...state,
+        changePassword,
+      };
     default:
       return {...state, nav: state.nav};
   }
