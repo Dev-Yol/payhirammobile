@@ -288,7 +288,7 @@ const reducer = (state = initialState, action) => {
   const { comments } = action;
   const { currentTicketId, flag } = action;
   const { enable } = action;
-  const { currentTicketId, flag, changePassword } = action;
+  const { changePassword } = action;
   switch (type) {
     case types.LOGOUT:
       storeData('token', '');
