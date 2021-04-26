@@ -433,7 +433,7 @@ class ViewProfile extends Component {
                 />
               </View>
             )}
-            { this.state.status === true && !this.props.navigation.state.params.code === false && this.state.connection === null && user.id !== this.props.state.user.id   && (
+            {/* { this.state.status === true && !this.props.navigation.state.params.code === false && this.state.connection === null && user.id !== this.props.state.user.id   && (
               <View
                 style={{
                   flexDirection: 'row'
@@ -448,7 +448,7 @@ class ViewProfile extends Component {
                     backgroundColor: Color.secondary
                   }}
                 />
-              </View>)}
+              </View>)} */}
           </View>
         </View>
       </View >

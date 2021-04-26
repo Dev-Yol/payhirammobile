@@ -247,6 +247,7 @@ class RequestItem extends Component {
     const { connectModal, modalStatus } = this.state;
     const { data } = this.props.navigation.state.params;
     // this.state.peers = data
+    console.log(data)
     return (
       <View>
         <ScrollView showsVerticalScrollIndicator={false}>
@@ -302,7 +303,7 @@ class RequestItem extends Component {
             </View>
         </ScrollView>
         {
-          (user.username == data.account.username) && (data.status == 0) && (
+          (user.username == data.account.username) && (data.status == 0) && (data.status == 0) && (
             <View style={{
               width: '100%',
               flexDirection: 'row',
