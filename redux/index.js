@@ -286,7 +286,6 @@ const reducer = (state = initialState, action) => {
   const { parameter, currencyBal } = action;
   const { acceptPayment, location_from } = action;
   const { comments } = action;
-  const { currentTicketId, flag } = action;
   const { enable } = action;
   const { currentTicketId, flag, changePassword } = action;
   switch (type) {

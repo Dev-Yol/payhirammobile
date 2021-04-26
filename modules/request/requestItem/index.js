@@ -192,7 +192,6 @@ class RequestItem extends Component {
   }
 
   deleteRequest(data){
-    console.log('[sasssss]', data)
     Alert.alert(
       'Confirmation',
       'Are you sure you want to cancel this request?',
@@ -246,8 +245,6 @@ class RequestItem extends Component {
     const { peers, isLoading } = this.state;
     const { connectModal, modalStatus } = this.state;
     const { data } = this.props.navigation.state.params;
-    // this.state.peers = data
-    console.log(data)
     return (
       <View>
         <ScrollView showsVerticalScrollIndicator={false}>

@@ -14,7 +14,6 @@ class HeaderOptions extends Component {
   }
   back = () => {
     const { from } = this.props.navigationProps.state.params;
-    console.log('[back]', from, '[asdf]', this.props.state.location_from)
     if(from == 'create' || this.props.state.location_from == 'proposal'){ // from === 'request' || from === 'create'
       const navigateAction = NavigationActions.navigate({
         routeName: 'drawerStack',

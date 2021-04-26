@@ -158,23 +158,13 @@ class Requests extends Component {
     console.log('parameters', parameters)
     this.setState({isLoading: (loading == false) ? false : true});
     Api.request(Routes.requestRetrieveMobile, parameters, response => {
-      console.log('[response]', response, '[pages]', page)
       this.setState({
         // size: response.size ? response.size : 0,
         isLoading: false
       });
       if(response.data.length > 0){
-        // if(page == 'onNegotiation'){
-        //   let sample = []
-        //   response.data.forEach(element => {
-        //     if(element.peer_flag == true){
-        //       sample.push(element)
-        //       response.data = sample;
-        //     }
-        //   });
-        // }
         this.setState({
-          // data: flag == false ? response.data : response.data,\
+          // data: flag == false ? response.data : response.data,
           messageEmpty: null,
           data: flag == false ? response.data : _.uniqBy([...this.state.data, ...response.data], 'id'),
           numberOfPages: parseInt(response.size / this.state.limit) + (response.size % this.state.limit ? 1 : 0),

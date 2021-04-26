@@ -60,7 +60,8 @@ class EditProfile extends Component {
       imageModal: false,
       urlID: null,
       reachMax: false,
-      radioSelected: 'male'
+      radioSelected: 'male',
+      rating: null
     };
   }
 
@@ -114,6 +115,7 @@ class EditProfile extends Component {
           middle_name: data[0].middle_name,
           last_name: data[0].last_name,
           sex: data[0].sex,
+          rating: data[0].rating,
           // cellular_number:  data[0].cellular_number,
           // address: data[0].address,
           profile: data[0]
@@ -517,8 +519,8 @@ class EditProfile extends Component {
               )
             }
             {
-              user.rating && (
-                <Rating ratings={user.rating} rating={' '} style={[{ flex: 2 }]}></Rating>
+              this.state.rating != null && (
+                <Rating ratings={this.state.rating} rating={' '} style={[{ flex: 2 }]}></Rating>
               )
             }
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
