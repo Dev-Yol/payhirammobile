@@ -3,9 +3,10 @@ import {View, TouchableOpacity, Text} from 'react-native';
 import {createStackNavigator} from 'react-navigation-stack';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faChevronLeft} from '@fortawesome/free-solid-svg-icons';
+import AsyncStorage from '@react-native-community/async-storage';
 import OTP from 'modules/otp';
 import {connect} from 'react-redux';
-import {BasicStyles, Color} from 'common';
+import {BasicStyles, Color, Helper} from 'common';
 class HeaderOptions extends Component {
   constructor(props) {
     super(props);
@@ -44,8 +45,8 @@ let HeaderOptionsConnect  = connect(mapStateToProps, mapDispatchToProps)(HeaderO
 const OtpStack = createStackNavigator({
   otpScreen: {
     screen: OTP,
-    navigationOptions: ({navigation}) => ({
-      title: 'OTP Code',
+    navigationOptions: async ({navigation}) => ({
+      title: 'Authenticating',
       drawerLabel: 'OTP',
       headerLeft: <HeaderOptionsConnect navigationProps={navigation} />,
       ...BasicStyles.headerDrawerStyle

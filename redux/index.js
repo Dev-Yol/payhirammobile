@@ -49,6 +49,7 @@ const types = {
   SET_CURRENT_TICKET_ID: 'SET_CURRENT_TICKET_ID',
   SET_FROM: 'SET_FROM',
   SET_PAYMENT_CONFIRMATION: 'SET_PAYMENT_CONFIRMATION',
+  SET_ENABLE_FINGER_PRINT: 'SET_ENABLE_FINGER_PRINT',
   VIEW_CHANGE_PASS: 'VIEW_CHANGE_PASS'
 };
 
@@ -185,6 +186,9 @@ export const actions = {
   setPaymentConfirmation(flag) {
     return {type: types.SET_PAYMENT_CONFIRMATION, flag}
   },
+  setEnableFingerPrint(enable){
+    return {type: types.SET_ENABLE_FINGER_PRINT, enable}
+  },
   viewChangePass(changePassword) {
     return {type: types.VIEW_CHANGE_PASS, changePassword}
   }
@@ -243,7 +247,8 @@ const initialState = {
   },
   changePassword: 0,
   currentTicketId: null,
-  paymentConfirmation: false
+  paymentConfirmation: false,
+  enableFingerPrint: false,
 };
 
 storeData = async (key, value) => {
@@ -281,6 +286,8 @@ const reducer = (state = initialState, action) => {
   const { parameter, currencyBal } = action;
   const { acceptPayment, location_from } = action;
   const { comments } = action;
+  const { currentTicketId, flag } = action;
+  const { enable } = action;
   const { currentTicketId, flag, changePassword } = action;
   switch (type) {
     case types.LOGOUT:
@@ -656,11 +663,18 @@ const reducer = (state = initialState, action) => {
         ...state,
         paymentConfirmation: flag
       };
+    case types.SET_ENABLE_FINGER_PRINT:
+      console.log('[enable finger print::]', enable == false ? "true" : "false");
+      storeData('fingerprint', enable == false ? "true" : "false");
+      return {
+        ...state,
+        enableFingerPrint: enable,
+      };
     case types.VIEW_CHANGE_PASS:
       return {
         ...state,
         changePassword,
-      }
+      };
     default:
       return {...state, nav: state.nav};
   }
