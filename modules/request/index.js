@@ -158,6 +158,7 @@ class Requests extends Component {
     console.log('parameters', parameters)
     this.setState({isLoading: (loading == false) ? false : true});
     Api.request(Routes.requestRetrieveMobile, parameters, response => {
+      console.log('[response.data]', response.data)
       this.setState({
         // size: response.size ? response.size : 0,
         isLoading: false
@@ -413,11 +414,11 @@ class Requests extends Component {
             bottom: 70
           }]}
           onPress={() => {
-            // {
-            //   user.status == 'verified' ? 
-            //   this.props.navigation.navigate('createRequestStack') : this.validate()
-            // }
-              this.props.navigation.navigate('createRequestStack')
+            {
+              (user.status == 'VERIFIED' || user.status == 'GRANTED') ? 
+              this.props.navigation.navigate('createRequestStack') : this.validate()
+            }
+              // this.props.navigation.navigate('createRequestStack')
           }}>
           <FontAwesomeIcon
             icon={faPlus}

@@ -321,7 +321,7 @@ class Footer extends Component {
                 />
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={() => this.navigateToScreen('Circle')}
+                onPress={() => this.navigateToScreen('Support')}
                 style={{
                   justifyContent: 'center',
                   alignItems: 'center',

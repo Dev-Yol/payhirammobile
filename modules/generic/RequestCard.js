@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, TouchableHighlight, Dimensions } from 'react-native';
+import { View, Text, TouchableOpacity, TouchableHighlight, Dimensions, Alert } from 'react-native';
 import Style from './RequestCardStyle';
 import Currency from 'services/Currency';
 import { Helper, Color, BasicStyles } from 'common';
@@ -25,6 +25,17 @@ class RequestCard extends Component {
 
   getWidth= () => {
     return (width - 40) * 0.15;
+  }
+
+  validate = () => {
+    Alert.alert(
+      'Message',
+      'In order to Send Proposal, Please Verify your Account.',
+      [
+        {text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel'}
+      ],
+      { cancelable: false }
+    )
   }
 
   _header = (item, type) => {
@@ -313,13 +324,17 @@ class RequestCard extends Component {
                 (item.approved == false && item.peer_status != 'approved') && (
                   <Button
                     onClick={() => {
-                      if(item.peer_flag == false){
-                        this.props.onConnectRequest(item);
+                      if(user.status == 'NOT_VERIFIED'){
+                        this.validate()
                       }else{
-                        this.props.navigation.navigate('requestItemStack', {
-                          data: item,
-                          from: 'request'
-                        })
+                        if(item.peer_flag == false){
+                          this.props.onConnectRequest(item);
+                        }else{
+                          this.props.navigation.navigate('requestItemStack', {
+                            data: item,
+                            from: 'request'
+                          })
+                        }
                       }
                     }}
                     title={(item.peer_flag == true) ? 'View Proposal' : 'Send Proposal'}
