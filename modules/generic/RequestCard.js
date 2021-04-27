@@ -118,7 +118,7 @@ class RequestCard extends Component {
               style={{
                 ...Style.text,
                 fontSize: BasicStyles.standardFontSize - 1,
-                color: Color.primary,
+                color: theme ? theme.primary : Color.primary,
                 width: '100%'
               }}
               > 

@@ -119,7 +119,7 @@ class NotificationSettings extends Component {
                 ios_backgroundColor={Color.danger}
                 />
             </View>
-            <View style={{flexDirection: 'row', borderBottomWidth: 1, borderColor: Color.gray, padding: 20}}>
+            {/* <View style={{flexDirection: 'row', borderBottomWidth: 1, borderColor: Color.gray, padding: 20}}>
               <View style={{flex: 1}}>
                 <Text>Fingerprint</Text>
                 <Text style={{fontSize: 10}}>Use for a convenient way to accept and process transactions.</Text>
@@ -130,7 +130,7 @@ class NotificationSettings extends Component {
                 value={this.state.enable}
                 ios_backgroundColor={Color.danger}
                 />
-            </View>
+            </View> */}
             {/* <View style={{flexDirection: 'row', borderBottomWidth: 1, borderColor: Color.gray, padding: 20}}>
               <View style={{flex: 1}}>
                 <Text>Account PIN</Text>

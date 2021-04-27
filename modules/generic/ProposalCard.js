@@ -154,7 +154,11 @@ class ProposalCard extends Component {
           width: '70%',
           justifyContent: 'center',
         }}>
-          <Rating ratings={''} style={[{flex: 2}]}></Rating>
+        {
+          item.rating != null && (
+            <Rating ratings={item.rating} style={[{flex: 2}]}></Rating>
+          )
+        }
         </View>
         
         <View style={{

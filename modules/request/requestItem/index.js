@@ -192,7 +192,6 @@ class RequestItem extends Component {
   }
 
   deleteRequest(data){
-    console.log('[sasssss]', data)
     Alert.alert(
       'Confirmation',
       'Are you sure you want to cancel this request?',
@@ -246,7 +245,6 @@ class RequestItem extends Component {
     const { peers, isLoading } = this.state;
     const { connectModal, modalStatus } = this.state;
     const { data } = this.props.navigation.state.params;
-    // this.state.peers = data
     return (
       <View>
         <ScrollView showsVerticalScrollIndicator={false}>
@@ -302,7 +300,7 @@ class RequestItem extends Component {
             </View>
         </ScrollView>
         {
-          (user.username == data.account.username) && (data.status == 0) && (
+          (user.username == data.account.username) && (data.status == 0) && (data.status == 0) && (
             <View style={{
               width: '100%',
               flexDirection: 'row',

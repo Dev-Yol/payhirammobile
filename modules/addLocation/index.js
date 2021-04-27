@@ -180,7 +180,7 @@ class AddLocation extends Component {
   };
 
   render() {
-    const {location, location_from} = this.props.state
+    const {location, location_from, theme} = this.props.state
     const {isLoading} = this.state
     return (
       <View style={{
@@ -206,7 +206,7 @@ class AddLocation extends Component {
           }}
           title={'Add Address'}
           style={{
-            backgroundColor: Color.secondary,
+            backgroundColor: theme ? theme.secondary : Color.secondary,
             position: 'absolute',
             bottom: 10,
             left: '5%',
