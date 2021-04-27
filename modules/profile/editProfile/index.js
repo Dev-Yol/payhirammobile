@@ -70,7 +70,7 @@ class EditProfile extends Component {
     this.retrieve()
     this.retrieveUploadedId()
     if ((this.state.email != null || this.state.first_name != null || this.state.middle_name != null || this.state.last_name != null ||
-      this.state.sex != null) && user.status != 'granted') {
+      this.state.sex != null || this.state.uploadedID.length > 2) && (user.status != 'GRANTED' || user.status != 'VERIFIED') ) {
       // this.state.sex != null || this.state.address != null || this.state.birthDate != null) && user.status != 'granted'){
       Alert.alert(
         'Verification Link',

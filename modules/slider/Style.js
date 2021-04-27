@@ -25,7 +25,7 @@ export default {
     alignItems: 'center'
   },
   footerContainer: {
-    padding: 20,
+    padding: 10,
     fontSize: 8
   }
 };

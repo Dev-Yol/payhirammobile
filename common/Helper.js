@@ -8,7 +8,7 @@ import {
 import { faMoneyBillWaveAlt, faCog, faHome, faEnvelope, faUsers, faPalette, faShieldAlt, faHandshake, faTachometerAlt, faHeadset } from '@fortawesome/free-solid-svg-icons';
 import { faComment } from '@fortawesome/free-regular-svg-icons';
 export default {
-  company: 'Increment Technologies',
+  company: 'Increment Technologies Inc.',
   APP_NAME: '@Payhiram_',
   APP_NAME_BASIC: 'PayHiram',
   APP_EMAIL: 'support@payhiram.ph',
