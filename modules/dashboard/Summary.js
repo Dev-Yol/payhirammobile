@@ -272,7 +272,7 @@ class Summary extends Component {
             
             {
               (isLoading) && (
-                <Skeleton size={1} template={'block'}/>
+                <Skeleton size={1} template={'block'} height={125}/>
               )
             }
 
@@ -456,7 +456,7 @@ class Summary extends Component {
                     ))
                   }
               {
-                isLoading && (<Skeleton size={2} template={'block'}/>)
+                isLoading && (<Skeleton size={2} template={'block'} height={50}/>)
               }
                 </View>
               )
