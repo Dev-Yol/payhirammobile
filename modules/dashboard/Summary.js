@@ -9,6 +9,7 @@ import {
   FlatList,
   StyleSheet,
   Platform,
+  Alert,
   TouchableOpacity
 } from 'react-native';
 import {Routes, Color, Helper, BasicStyles} from 'common';
@@ -149,6 +150,17 @@ class Summary extends Component {
     })
   }
 
+  alertMessage = () => {
+    Alert.alert(
+      'Notice',
+      'In order to Create Request, Please Verify your Account.',
+      [
+        {text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel'}
+      ],
+      { cancelable: false }
+    )
+  }
+
   rating = () => {
     let stars = []
     for(let i = 0; i < 5; i++) {
@@ -214,7 +226,7 @@ class Summary extends Component {
 
   render() {
     const { showRatings, isLoading, history, currentLedger } = this.state;
-    const { ledger, theme } = this.props.state;
+    const { ledger, theme, user } = this.props.state;
     return (
       <View>
         <ScrollView 
@@ -302,11 +314,10 @@ class Summary extends Component {
                   backgroundColor: theme ? theme.primary : Color.primary,
                 }}
                 icon={faHandHoldingUsd}
-              />   
-
+              />
               <ButtonWithIcon 
                 title={'Send Cash'}
-                onClick={() => {
+                onClick={() => ( (user.status == 'VERIFIED' || user.status == 'GRANTED') ?
                   this.props.navigation.navigate('createRequestStack', {
                     data: {
                       type: 'Send Cash',
@@ -314,8 +325,9 @@ class Summary extends Component {
                       id: 1,
                       money_type: 'cash'
                     }
-                  })
-                }}
+                  }) :
+                  this.alertMessage()
+                )}
                 style={{
                   width: '30%',
                   marginLeft: '5%',
@@ -327,7 +339,7 @@ class Summary extends Component {
 
               <ButtonWithIcon 
                 title={'Bills Payment'}
-                onClick={() => {
+                onClick={() => ( (user.status == 'VERIFIED' || user.status == 'GRANTED') ?
                   this.props.navigation.navigate('createRequestStack', {
                     data: {
                       type: 'Bills and Payment',
@@ -336,7 +348,9 @@ class Summary extends Component {
                       money_type: 'cash'
                     }
                   })
-                }}
+                  :
+                  this.alertMessage()
+                )}
                 style={{
                   width: '30%',
                   backgroundColor: theme ? theme.primary : Color.primary,
