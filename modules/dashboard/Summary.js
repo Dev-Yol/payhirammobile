@@ -144,14 +144,6 @@ class Summary extends Component {
     //
   };
 
-  checkStatus(user){
-    switch(user.status.toLowerCase()){
-      case 'not_verified': return false;break
-      case 'verified': return false;break
-      default: return true;break
-    }
-  }
-
   invalidAcccess(){
     Alert.alert(
       'Message',
@@ -328,7 +320,7 @@ class Summary extends Component {
               <ButtonWithIcon 
                 title={'Cash In'}
                 onClick={() => {
-                  if(user && this.checkStatus(user) == true){
+                  if(user && Helper.checkStatus(user) == true){
                     this.props.navigation.navigate('createRequestStack', {
                       data: {
                         type: 'Deposit',
@@ -350,7 +342,7 @@ class Summary extends Component {
               <ButtonWithIcon 
                 title={'Send Cash'}
                 onClick={() => {
-                  if(user && this.checkStatus(user) == true){
+                  if(user && Helper.checkStatus(user) == true){
                     this.props.navigation.navigate('createRequestStack', {
                       data: {
                         type: 'Send Cash',
@@ -376,7 +368,7 @@ class Summary extends Component {
               <ButtonWithIcon 
                 title={'Bills Payment'}
                 onClick={() => {
-                  if(user && this.checkStatus(user) == true){
+                  if(user && Helper.checkStatus(user) == true){
                     this.props.navigation.navigate('createRequestStack', {
                       data: {
                         type: 'Bills and Payment',

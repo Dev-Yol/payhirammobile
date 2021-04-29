@@ -382,4 +382,14 @@ export default {
       return true;
     }
   },
+  checkStatus(user){
+    if(user == null){
+      return false
+    }
+    switch(user.status.toLowerCase()){
+      case 'not_verified': return false;break
+      case 'verified': return false;break
+      default: return true;break
+    }
+  }
 };

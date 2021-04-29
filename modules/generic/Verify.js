@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Currency from 'services/Currency';
 import {connect} from 'react-redux';
-import { Color, BasicStyles } from 'common';
+import { Color, BasicStyles, Helper } from 'common';
 import Skeleton from 'components/Loading/Skeleton';
 import Button from 'components/Form/Button';
 import { faUserShield } from '@fortawesome/free-solid-svg-icons';
@@ -16,17 +16,7 @@ class Verify extends Component {
     }
   }
 
-  checkStatus(){
-    const { user } = this.props.state;
-    if(user == null){
-      return false
-    }
-    switch(user.status.toLowerCase()){
-      case 'not_verified': return false;break
-      case 'verified': return false;break
-      default: return true;break
-    }
-  }
+  
 
   render() {
     const { data } = this.props;
@@ -39,7 +29,7 @@ class Verify extends Component {
         width: '100%'
       }}>
         {
-          (this.checkStatus() ==  false && user) && (
+          (Helper.checkStatus() ==  false && user) && (
             <View
               style={{
                 width: '100%',
