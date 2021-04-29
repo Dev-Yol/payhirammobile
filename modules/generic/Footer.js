@@ -36,7 +36,7 @@ class Footer extends Component {
 
   render (){
     const { selected, from } = this.props;
-    const { theme } = this.props.state;
+    const { theme, user } = this.props.state;
     return(
       <View
         style={{          
@@ -76,7 +76,7 @@ class Footer extends Component {
                         color: selected == 'public' ? Color.white : gray,
                       },
                     ]}
-                  />
+                    />
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => this.props.onSelect('personal', 1)}
@@ -96,7 +96,7 @@ class Footer extends Component {
                         color: selected == 'personal' ? Color.white : gray,
                       },
                     ]}
-                  />
+                    />
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => this.props.onSelect('onNegotiation', 2)}
@@ -157,6 +157,56 @@ class Footer extends Component {
                       },
                     ]}
                   />
+                </TouchableOpacity>
+              </View>
+            )
+        }
+
+        {
+          from == 'requestUser' && (
+              <View style={{
+                flexDirection: 'row',
+              }}>
+                <TouchableOpacity
+                  onPress={() => this.props.onSelect('public', 0)}
+                  style={{
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    width: '50%',
+                    flexDirection: 'row'
+                  }}
+                  >
+
+                  <FontAwesomeIcon
+                    icon={faUsers}
+                    size={18}
+                    style={[
+                      BasicStyles.iconStyle,
+                      {
+                        color: selected == 'public' ? Color.white : gray,
+                      },
+                    ]}
+                    />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => this.props.onSelect('personal', 1)}
+                  style={{
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    width: '50%',
+                    flexDirection: 'row'
+                  }}
+                  >
+                  <FontAwesomeIcon
+                    icon={faUser}
+                    size={18}
+                    style={[
+                      BasicStyles.iconStyle,
+                      {
+                        color: selected == 'personal' ? Color.white : gray,
+                      },
+                    ]}
+                    />
                 </TouchableOpacity>
               </View>
             )
@@ -322,6 +372,75 @@ class Footer extends Component {
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => this.navigateToScreen('Support')}
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  width: '33%',
+                  flexDirection: 'row'
+                }}
+                >
+                <FontAwesomeIcon
+                  icon={faUsers}
+                  size={18}
+                  style={[
+                    BasicStyles.iconStyle,
+                    {
+                      color: Color.white,
+                    },
+                  ]}
+                />
+              </TouchableOpacity>
+            </View>
+          )
+        }
+
+        {
+          from == 'support' && (
+            <View style={{
+              flexDirection: 'row',
+            }}>
+              <TouchableOpacity
+                onPress={() => this.navigateToScreen('Requests')}
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  width: '33%',
+                  flexDirection: 'row'
+                }}
+                >
+                <FontAwesomeIcon
+                  icon={faMoneyBillWave}
+                  size={BasicStyles.iconSize}
+                  style={[
+                    BasicStyles.iconStyle,
+                    {
+                      color: Color.white,
+                    },
+                  ]}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => this.navigateToScreen('Dashboard')}
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  width: '34%',
+                  flexDirection: 'row'
+                }}
+                >
+                <FontAwesomeIcon
+                  icon={faTachometerAlt}
+                  size={18}
+                  style={[
+                    BasicStyles.iconStyle,
+                    {
+                      color: Color.white,
+                    },
+                  ]}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => this.navigateToScreen('Settings')}
                 style={{
                   justifyContent: 'center',
                   alignItems: 'center',
