@@ -170,6 +170,17 @@ class Summary extends Component {
     })
   }
 
+  alertMessage = () => {
+    Alert.alert(
+      'Notice',
+      'In order to Create Request, Please Verify your Account.',
+      [
+        {text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel'}
+      ],
+      { cancelable: false }
+    )
+  }
+
   rating = () => {
     let stars = []
     for(let i = 0; i < 5; i++) {
@@ -329,8 +340,7 @@ class Summary extends Component {
                   backgroundColor: theme ? theme.primary : Color.primary,
                 }}
                 icon={faHandHoldingUsd}
-              />   
-
+              />
               <ButtonWithIcon 
                 title={'Send Cash'}
                 onClick={() => {

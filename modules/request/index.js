@@ -177,6 +177,9 @@ class Requests extends Component {
           numberOfPages: null,
           offset: flag == false ? 0 : this.state.offset
         })
+        if(page == 'personal'){
+          this.setState({messageEmpty: `Hi ${user.username}!` + ' ' + (user.account_type != 'USER' ? 'Create any requests and let our trusted partners process your requests . Click the button below to get started.' : 'Create any requests and let our trusted partners process your requests . Click the button below to get started.')})
+        }
         if(page == 'public'){
           this.setState({messageEmpty: `Hi ${user.username}!` + ' ' + 'Grab the chance to process requests and the great chance to earn. Click the button below to get started.'})
         }
@@ -450,22 +453,46 @@ class Requests extends Component {
             }></ProposalModal>
           )
         }
-        <Footer
-          {...this.props}
-          selected={this.state.page} onSelect={async (value, index) => {
-            await this.setState({
-              page: value,
-              activeIndex: index,
-              offset: 0,
-              data: [],
-              isLoading: true
-            })
-            setTimeout(() => {
-              this.retrieve(false, false, true)
-            }, 1000)
-          }}
-          from={'request'}
-        />  
+        {
+          user?.account_type == 'USER' && (
+            <Footer
+              {...this.props}
+              selected={this.state.page} onSelect={async (value, index) => {
+                await this.setState({
+                  page: value,
+                  activeIndex: index,
+                  offset: 0,
+                  data: [],
+                  isLoading: true
+                })
+                setTimeout(() => {
+                  this.retrieve(false, false, true)
+                }, 1000)
+              }}
+              from={'requestUser'}
+            />
+          )
+        }
+        {
+          user?.account_type != 'USER' && (
+            <Footer
+              {...this.props}
+              selected={this.state.page} onSelect={async (value, index) => {
+                await this.setState({
+                  page: value,
+                  activeIndex: index,
+                  offset: 0,
+                  data: [],
+                  isLoading: true
+                })
+                setTimeout(() => {
+                  this.retrieve(false, false, true)
+                }, 1000)
+              }}
+              from={'request'}
+            />  
+          )
+        }
       </SafeAreaView>
     );
   }

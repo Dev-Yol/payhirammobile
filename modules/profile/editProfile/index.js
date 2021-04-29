@@ -7,6 +7,7 @@ import {
   Alert,
   Image,
   TouchableOpacity,
+  Linking,
   TouchableHighlight,
 } from 'react-native';
 import { Picker } from '@react-native-community/picker';
@@ -61,7 +62,8 @@ class EditProfile extends Component {
       urlID: null,
       reachMax: false,
       radioSelected: 'male',
-      rating: null
+      rating: null,
+      verifyButton: false
     };
   }
 
@@ -69,23 +71,24 @@ class EditProfile extends Component {
     const { user } = this.props.state
     this.retrieve()
     this.retrieveUploadedId()
-    if ((this.state.email != null || this.state.first_name != null || this.state.middle_name != null || this.state.last_name != null ||
-      this.state.sex != null || this.state.uploadedID.length > 2) && (user.status != 'GRANTED' || user.status != 'VERIFIED') ) {
-      // this.state.sex != null || this.state.address != null || this.state.birthDate != null) && user.status != 'granted'){
-      Alert.alert(
-        'Verification Link',
-        'Click the button below for an appointment.',
-        [
-          { text: 'Ok', onPress: () => console.log('Generate Link') },
-          {
-            text: 'Cancel',
-            onPress: () => console.log('Cancel Pressed'),
-            style: 'cancel',
-          }
-        ],
-        { cancelable: false }
-      )
-    }
+    this.verifyApplication()
+    // if ((this.state.email != null || this.state.first_name != null || this.state.middle_name != null || this.state.last_name != null ||
+    //   this.state.sex != null || this.state.uploadedID.length > 2) && (user.status != 'GRANTED' || user.status != 'VERIFIED') ) {
+    //   // this.state.sex != null || this.state.address != null || this.state.birthDate != null) && user.status != 'granted'){
+    //   Alert.alert(
+    //     'Verification Link',
+    //     'Click the button below for an appointment.',
+    //     [
+    //       { text: 'Ok', onPress: () => console.log('Generate Link') },
+    //       {
+    //         text: 'Cancel',
+    //         onPress: () => console.log('Cancel Pressed'),
+    //         style: 'cancel',
+    //       }
+    //     ],
+    //     { cancelable: false }
+    //   )
+    // }
   }
 
   retrieve = () => {
@@ -120,6 +123,7 @@ class EditProfile extends Component {
           // address: data[0].address,
           profile: data[0]
         })
+        this.verifyApplication()
         // if(data.birth_date != null){
         //   this.setState({
         //     dateFlag: true,
@@ -158,6 +162,14 @@ class EditProfile extends Component {
         this.setState({ reachMax : true })
       }
     })
+    this.verifyApplication()
+  }
+
+  verifyApplication = () => {
+    const { first_name, middle_name, last_name, sex, uploadedID} = this.state
+    if(first_name != null && middle_name != null && last_name != null && sex != null && uploadedID.length == 4 && (user.status != 'VERIFIED' || user.status != 'GRANTED')){
+      this.setState({verifyButton: true})
+    }
   }
 
   upload = () => {
@@ -506,7 +518,7 @@ class EditProfile extends Component {
             }
 
             {
-              user.status == 'verified' && (
+              (user.status == 'VERIFIED' || user.status == 'GRANTED') && (
                 <FontAwesomeIcon
                   icon={faCheckCircle}
                   size={15}
@@ -524,7 +536,7 @@ class EditProfile extends Component {
               )
             }
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              {user.status == 'verified' && (
+              {(user.status == 'VERIFIED' || user.status == 'GRANTED') && (
                 <FontAwesomeIcon
                   icon={faCheckCircle}
                   style={{ color: 'blue', marginLeft: 5 }}
@@ -533,6 +545,21 @@ class EditProfile extends Component {
               )}
               <Text style={{ color: Color.white, marginLeft: '1%' }}>{user.status}</Text>
             </View>
+            {
+              this.state.verifyButton == true && (
+                <Button 
+                  style={{
+                    backgroundColor: theme ? theme.secondary : Color.secondary,
+                    width: '50%',
+                    marginRight: '10%',
+                    marginLeft: '15%',
+                    marginTop: '1%'
+                  }}
+                  title={'Apply for Verification'}
+                  onClick={() => Linking.openURL('https://calendly.com/payhiramph/shortdiscussion')}
+                />
+              )
+            }
           </View>
 
           {isLoading ? <Spinner mode="overlay" /> : null}

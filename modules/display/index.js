@@ -41,6 +41,7 @@ class Display extends Component {
     if(theme == null){
       return
     }
+    console.log('them', theme)
     this.setState({
       selectedTile: theme.index
     })
@@ -62,7 +63,6 @@ class Display extends Component {
 
   displayThemeTiles = () => {
     const { theme } = this.props.state;
-    console.log('theme', theme)
     return dummyThemeData.map((data, index) => {
       return (
         <ThemeSettingTile
