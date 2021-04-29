@@ -63,7 +63,7 @@ class Verify extends Component {
               <Button
                 title={'Verify'}
                 onClick={() => {
-                  // redirect here
+                  this.props.navigation.navigate('editProfileStack')
                 }}
                 style={{
                   width: '30%',

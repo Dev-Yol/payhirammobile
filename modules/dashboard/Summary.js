@@ -271,7 +271,7 @@ class Summary extends Component {
             
             {
               (isLoading) && (
-                <Skeleton size={1} />
+                <Skeleton size={1} template={'block'} height={125}/>
               )
             }
 
@@ -296,7 +296,7 @@ class Summary extends Component {
               )
             }
 
-            <Verify />
+            <Verify {...this.props}/>
             
 
             <Text style={{
@@ -455,7 +455,7 @@ class Summary extends Component {
                     ))
                   }
               {
-                isLoading && (<Skeleton size={2}/>)
+                isLoading && (<Skeleton size={2} template={'block'} height={50}/>)
               }
                 </View>
               )
