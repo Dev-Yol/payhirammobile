@@ -46,7 +46,7 @@ const OtpStack = createStackNavigator({
   otpScreen: {
     screen: OTP,
     navigationOptions: async ({navigation}) => ({
-      title: 'Authenticating',
+      title: 'OTP Code',
       drawerLabel: 'OTP',
       headerLeft: <HeaderOptionsConnect navigationProps={navigation} />,
       ...BasicStyles.headerDrawerStyle
