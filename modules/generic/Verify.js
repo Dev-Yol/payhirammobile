@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Currency from 'services/Currency';
 import {connect} from 'react-redux';
-import { Color } from 'common';
+import { Color, BasicStyles } from 'common';
 import Skeleton from 'components/Loading/Skeleton';
 import Button from 'components/Form/Button';
 
@@ -30,41 +30,48 @@ class Verify extends Component {
     const { data } = this.props;
     const { theme, user } = this.props.state;
     return (
-      <View>
+      <View style={{
+        paddingLeft: 20,
+        paddingRight: 20,
+      }}>
         {
           (this.checkStatus() ==  false && user) && (
             <View
               style={{
-                width: '90%',
-                borderRadius: 10,
-                justifyContent: 'flex-start',
-                backgroundColor: Color.secondary,
-                marginLeft: '5%',
-                marginRight: '5%',
-                marginTop: 25
+                width: '100%',
+                flexDirection: 'row',
+                marginTop: 25,
+                borderRadius: 12,
+                paddingLeft: 10,
+                paddingRight: 10,
+                paddingTop: 25,
+                paddingBottom: 25,
+                backgroundColor: Color.danger
               }}>
-              
-              <Text style={{
-                textAlign: 'center',
-                fontSize: 30,
-                color: '#FFFFFF',
-                fontWeight: 'bold',
-                paddingTop: 10,
-                paddingBottom: 20
+              <View style={{
+                width: '60%'
               }}>
-                Hi {user.username}! You can verify your account by clicking the button below.
-              </Text>
+                <Text style={{
+                  fontSize: BasicStyles.standardFontSize,
+                  textAlign: 'left',
+                  color: Color.white
+                }}>
+                  Hi {user.username}! You can verify your account by clicking the button below.
+                </Text>
+              </View>
 
               <Button
-                title={'Verify now!'}
+                title={'Verify'}
                 onClick={() => {
                   // redirect here
                 }}
                 style={{
-                  width: '50%',
+                  width: '30%',
+                  marginLeft: '10%',
                   backgroundColor: Color.white
                 }}
                 textStyle={{
+                  fontSize: BasicStyles.standardFontSize,
                   color: Color.black
                 }}
               />

@@ -9,7 +9,8 @@ import {
   FlatList,
   StyleSheet,
   Platform,
-  TouchableOpacity
+  TouchableOpacity,
+  Alert
 } from 'react-native';
 import {Routes, Color, Helper, BasicStyles} from 'common';
 import {Spinner, Empty, SystemNotification} from 'components';
