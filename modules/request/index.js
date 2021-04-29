@@ -30,6 +30,7 @@ import RequestCard from 'modules/generic/RequestCard';
 import { Pager, PagerProvider } from '@crowdlinker/react-native-pager';
 import _ from 'lodash';
 import Footer from 'modules/generic/Footer'
+import Verify from 'modules/generic/Verify'
 import Header from 'modules/generic/Header'
 const height = Math.round(Dimensions.get('window').height);
 class Requests extends Component {
@@ -393,6 +394,7 @@ class Requests extends Component {
         flex: 1
       }}>
         
+        <Verify />
 
         <PagerProvider activeIndex={activeIndex}>
           <Pager panProps={{enabled: false}}>
@@ -407,6 +409,7 @@ class Requests extends Component {
             </View>
           </Pager>
         </PagerProvider>
+
 
         <TouchableOpacity
           style={[Style.floatingButton, {

@@ -82,6 +82,17 @@ const RegisterStack = createStackNavigator(
     navigationOptions: {},
   },
 );
+
+// Verify Email stack
+const VerifyEmailStack = createStackNavigator(
+  {
+    verifyEmailScreen: { screen: VerifyEmail },
+  },
+  {
+    headerMode: 'none',
+    navigationOptions: {},
+  },
+);
 const LocationWithMapStack = createStackNavigator(
   {
     LocationWithMapScreen: {screen: LocationWithMap},
@@ -98,6 +109,7 @@ const PrimaryNav = createStackNavigator(
     fingerPrintStack: {screen: FingerPrintStack},
     forgotPasswordStack: {screen: ForgotPasswordStack},
     registerStack: {screen: RegisterStack},
+    verifyEmailStack: {screen: VerifyEmailStack},
     drawerStack: {screen: Drawer},
     notificationStack: {screen: NotificationStack},
     messagesStack: {screen: MessagesStack},

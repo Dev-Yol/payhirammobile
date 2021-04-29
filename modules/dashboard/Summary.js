@@ -73,7 +73,6 @@ class Summary extends Component {
     Api.request(Routes.ledgerDashboard, parameter, (response) => {
       this.setState({isLoading: false});
       if (response.data != null) {
-        console.log('Ledger', response.data.ledger)
         // setLedger(response.data.ledger[0]);
         this.setState({
           history: response.data.history,
