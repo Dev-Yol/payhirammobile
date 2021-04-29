@@ -288,8 +288,7 @@ const reducer = (state = initialState, action) => {
   const { circleSearch } = action;
   const { filterData } = action;
   const { deviceLocation } = action;
-  const { parameter, deepLinkRoute } = action;
-  const { parameter, currencyBal } = action;
+  const { parameter, deepLinkRoute, currencyBal } = action;
   const { acceptPayment, location_from } = action;
   const { comments } = action;
   const { enable } = action;
