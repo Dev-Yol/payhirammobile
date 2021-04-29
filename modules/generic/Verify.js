@@ -5,6 +5,8 @@ import {connect} from 'react-redux';
 import { Color, BasicStyles } from 'common';
 import Skeleton from 'components/Loading/Skeleton';
 import Button from 'components/Form/Button';
+import { faUserShield } from '@fortawesome/free-solid-svg-icons';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 
 class Verify extends Component {
   constructor(props) {
@@ -33,48 +35,69 @@ class Verify extends Component {
       <View style={{
         paddingLeft: 20,
         paddingRight: 20,
+        width: '100%'
       }}>
         {
           (this.checkStatus() ==  false && user) && (
             <View
               style={{
                 width: '100%',
-                flexDirection: 'row',
                 marginTop: 25,
                 borderRadius: 12,
                 paddingLeft: 10,
                 paddingRight: 10,
-                paddingTop: 25,
-                paddingBottom: 25,
+                paddingTop: 15,
+                paddingBottom: 15,
                 backgroundColor: Color.danger
               }}>
               <View style={{
-                width: '60%'
+                width: '100%',
+                flexDirection: 'row',
               }}>
-                <Text style={{
-                  fontSize: BasicStyles.standardFontSize,
-                  textAlign: 'justify',
-                  color: Color.white
+                <View style={{
+                  width: '60%'
                 }}>
-                  Hi {user.username}! Your account is not verified. You can verify by clicking the button below.
-                </Text>
+                  <Text style={{
+                    fontSize: BasicStyles.standardFontSize,
+                    textAlign: 'justify',
+                    color: Color.white,
+                    paddingBottom: 10
+                  }}>
+                    Hi {user.username}! Your account is not verified. You can verify by clicking the button below.
+                  </Text>
+                  <View style={{
+                    width: '100%',
+                  }}>
+                    <Button
+                      title={'Verify'}
+                      onClick={() => {
+                        this.props.navigation.navigate('editProfileStack')
+                      }}
+                      style={{
+                        width: '50%',
+                        backgroundColor: Color.white,
+                        height: 40
+                      }}
+                      textStyle={{
+                        fontSize: BasicStyles.standardFontSize,
+                        color: Color.black
+                      }}
+                    />
+                  </View>
+                </View>
+                <View style={{
+                  width: '40%',
+                  alignItems: 'flex-end'
+                }}>
+                  <FontAwesomeIcon icon={faUserShield} style={{
+                    color: Color.white
+                  }}
+                  size={100}
+                  />
+                </View>
               </View>
-
-              <Button
-                title={'Verify'}
-                onClick={() => {
-                  this.props.navigation.navigate('editProfileStack')
-                }}
-                style={{
-                  width: '30%',
-                  marginLeft: '10%',
-                  backgroundColor: Color.white
-                }}
-                textStyle={{
-                  fontSize: BasicStyles.standardFontSize,
-                  color: Color.black
-                }}
-              />
+              
+              
             </View>
           )
         }
