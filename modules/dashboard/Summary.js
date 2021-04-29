@@ -286,7 +286,7 @@ class Summary extends Component {
               )
             }
 
-            <Verify />
+            <Verify {...this.props}/>
             
 
             <Text style={{
