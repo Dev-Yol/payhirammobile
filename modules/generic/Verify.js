@@ -53,10 +53,10 @@ class Verify extends Component {
               }}>
                 <Text style={{
                   fontSize: BasicStyles.standardFontSize,
-                  textAlign: 'left',
+                  textAlign: 'justify',
                   color: Color.white
                 }}>
-                  Hi {user.username}! You can verify your account by clicking the button below.
+                  Hi {user.username}! Your account is not verified. You can verify by clicking the button below.
                 </Text>
               </View>
 
