@@ -1,13 +1,11 @@
 import React, {Component} from 'react';
 import { View, Text, ScrollView, TextInput, TouchableOpacity, SafeAreaView, Platform} from 'react-native';
 import Api from 'services/api/index.js';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faCheckCircle, faUserCircle, faUpload } from '@fortawesome/free-solid-svg-icons';
 import { BasicStyles, Color, Routes} from 'common';
-import Currency from 'services/Currency.js'
 import Styles from './Styles.js'
 import { connect } from 'react-redux';
 import TransactionCard from 'modules/generic/TransactionCard';
+import Skeleton from 'components/Loading/Skeleton';
 import _ from 'lodash';
 import { Spinner } from 'components';
 
@@ -104,10 +102,13 @@ class Transactions extends Component {
                   <TransactionCard key={index} data={item}/>
                 ))
               }
+            {
+              isLoading && (<Skeleton size={2} template={'block'} height={50}/>)
+            }
             </View>
         </View>
       </ScrollView>
-      {isLoading ? <Spinner mode="overlay" /> : null}
+      {/* {isLoading ? <Spinner mode="overlay" /> : null} */}
     </SafeAreaView>
     );
   }

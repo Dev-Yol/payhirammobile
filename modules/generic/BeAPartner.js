@@ -5,26 +5,14 @@ import {connect} from 'react-redux';
 import { Color, BasicStyles } from 'common';
 import Skeleton from 'components/Loading/Skeleton';
 import Button from 'components/Form/Button';
-import { faUserShield } from '@fortawesome/free-solid-svg-icons';
+import { faHandshake, faUserShield } from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 
-class Verify extends Component {
+class BeAPartner extends Component {
   constructor(props) {
     super(props);
     this.state = {
       isLoading: false
-    }
-  }
-
-  checkStatus(){
-    const { user } = this.props.state;
-    if(user == null){
-      return false
-    }
-    switch(user.status.toLowerCase()){
-      case 'not_verified': return false;break
-      case 'verified': return false;break
-      default: return true;break
     }
   }
 
@@ -38,17 +26,16 @@ class Verify extends Component {
         paddingTop: this.props.paddingTop ? this.props.paddingTop : 0,
         width: '100%'
       }}>
-        {
-          (this.checkStatus() ==  false && user) && (
             <View
               style={{
                 width: '100%',
-                marginTop: 35,
+                marginTop: 25,
                 borderRadius: 12,
                 paddingLeft: 10,
                 paddingRight: 10,
-                padding: 15,
-                backgroundColor: Color.danger
+                paddingTop: 15,
+                paddingBottom: 15,
+                backgroundColor: theme ? theme.secondary : Color.secondary
               }}>
               <View style={{
                 width: '100%',
@@ -63,13 +50,13 @@ class Verify extends Component {
                     color: Color.white,
                     paddingBottom: 10
                   }}>
-                    Hi {user.username}! Your account is not verified. You can verify by clicking the button below.
+                    Hi {user.username}! Be one of our Partners and Grab the chance to earn 80% in every transaction. Enjoy earning!
                   </Text>
                   <View style={{
                     width: '100%',
                   }}>
                     <Button
-                      title={'Verify'}
+                      title={'Learn More'}
                       onClick={() => {
                         this.props.navigation.navigate('editProfileStack')
                       }}
@@ -89,18 +76,14 @@ class Verify extends Component {
                   width: '40%',
                   alignItems: 'flex-end'
                 }}>
-                  <FontAwesomeIcon icon={faUserShield} style={{
+                  <FontAwesomeIcon icon={faHandshake} style={{
                     color: Color.white
                   }}
                   size={100}
                   />
                 </View>
               </View>
-              
-              
             </View>
-          )
-        }
       
       </View>
     );
@@ -115,5 +98,5 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Verify);
+export default connect(mapStateToProps, mapDispatchToProps)(BeAPartner);
 

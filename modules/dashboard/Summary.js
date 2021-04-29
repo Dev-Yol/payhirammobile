@@ -28,6 +28,7 @@ import { faHandHoldingUsd, faMoneyBillWave, faFileInvoice, faWallet, faQrcode } 
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import ButtonWithIcon from 'components/Form/ButtonWithIcon';
 import Verify from 'modules/generic/Verify'
+import BePartner from 'modules/generic/BeAPartner'
 const width = Math.round(Dimensions.get('window').width);
 const height = Math.round(Dimensions.get('window').height);
 
@@ -73,7 +74,6 @@ class Summary extends Component {
     Api.request(Routes.ledgerDashboard, parameter, (response) => {
       this.setState({isLoading: false});
       if (response.data != null) {
-        console.log('Ledger', response.data.ledger)
         // setLedger(response.data.ledger[0]);
         this.setState({
           history: response.data.history,
@@ -297,8 +297,14 @@ class Summary extends Component {
               )
             }
 
-            <Verify {...this.props}/>
-            
+            {
+              (user && user.status == 'NOT_VERIFIED' && user.account_type != 'PARTNER') && 
+              (<Verify {...this.props}/>)
+            }
+            {
+              (user && user.status != 'NOT_VERIFIED' && user.account_type != 'PARTNER')&&
+              (<BePartner {...this.props} />)
+            }
 
             <Text style={{
               width: '100%',

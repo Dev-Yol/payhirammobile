@@ -30,6 +30,8 @@ import RequestCard from 'modules/generic/RequestCard';
 import { Pager, PagerProvider } from '@crowdlinker/react-native-pager';
 import _ from 'lodash';
 import Footer from 'modules/generic/Footer'
+import Verify from 'modules/generic/Verify'
+import BePartner from 'modules/generic/BeAPartner'
 import Header from 'modules/generic/Header'
 const height = Math.round(Dimensions.get('window').height);
 class Requests extends Component {
@@ -158,7 +160,6 @@ class Requests extends Component {
     console.log('parameters', parameters)
     this.setState({isLoading: (loading == false) ? false : true});
     Api.request(Routes.requestRetrieveMobile, parameters, response => {
-      console.log('[response.data]', response.data)
       this.setState({
         // size: response.size ? response.size : 0,
         isLoading: false
@@ -287,6 +288,14 @@ class Requests extends Component {
     return <View style={Style.Separator} />;
   };
 
+  checkStatus(user){
+    switch(user.status.toLowerCase()){
+      case 'not_verified': return false;break
+      case 'verified': return false;break
+      default: return true;break
+    }
+  }
+
   _flatList = () => {
     const {selected, isLoading, data} = this.state;
     const {user} = this.props.state;
@@ -322,6 +331,7 @@ class Requests extends Component {
 
   renderData(){
     const { isLoading, data } = this.state;
+    const { user } = this.props.state
     return(
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -340,11 +350,33 @@ class Requests extends Component {
             }
           }
         }}>
-          <View style={Style.MainContainer}>  
+          <View style={Style.MainContainer}> 
+          
+            {
+              (user && user.status == 'NOT_VERIFIED' && data.length > 0) && 
+              (
+                <Verify {...this.props} paddingTop={50} />
+                )
+              }
+            {
+              (user && user.status != 'NOT_VERIFIED' && user.account_type != 'PARTNER' && data?.length > 0) && 
+              (
+                <BePartner {...this.props} paddingTop={50} />
+              )
+            }
+            {data.length == 0 && isLoading == false && (
+              <View style={{
+                marginTop: (user?.status == 'NOT_VERIFIED' || user.account_type != 'PARTNER') ? 100 : 0,
+                paddingLeft: 10,
+                paddingRight: 10
+              }}>
+                <Message message={this.state.messageEmpty} navigation={this.props.navigation}/>
+              </View>
+            )}
             {
               (data && data.length > 0) && data.map((item, index) => (
                 <View style={{
-                  marginTop: (index == 0) ? 70 : 0,
+                  marginTop: ((index == 0 && user?.status != 'NOT_VERIFIED' && user?.account_type != 'PARTNER') ? 0 : (index == 0 && user?.status == 'NOT_VERIFIED') ? 0 : (index == 0 && user?.status != 'NOT_VERIFIED' && user.account_type == 'PARTNER') ? 70: 0),
                   marginBottom: (index == data.length - 1 && isLoading == false) ? 100 : 0,
                   borderBottomWidth: 10,
                   borderBottomColor: Color.lightGray,
@@ -362,15 +394,6 @@ class Requests extends Component {
                 </View>
               ))
             }
-            {data.length == 0 && isLoading == false && (
-              <View style={{
-                marginTop: 100,
-                paddingLeft: 10,
-                paddingRight: 10
-              }}>
-                <Message message={this.state.messageEmpty} navigation={this.props.navigation}/>
-              </View>
-            )}
             {
               isLoading && (<Skeleton size={2}/>)
             }
@@ -392,7 +415,6 @@ class Requests extends Component {
       <SafeAreaView style={{
         flex: 1
       }}>
-        
 
         <PagerProvider activeIndex={activeIndex}>
           <Pager panProps={{enabled: false}}>
@@ -408,6 +430,7 @@ class Requests extends Component {
           </Pager>
         </PagerProvider>
 
+
         <TouchableOpacity
           style={[Style.floatingButton, {
             backgroundColor: theme ? theme.secondary : Color.secondary,
@@ -418,7 +441,7 @@ class Requests extends Component {
           }]}
           onPress={() => {
             {
-              (user.status == 'VERIFIED' || user.status == 'GRANTED') ? 
+              (user?.status == 'VERIFIED' || user?.status == 'GRANTED') ? 
               this.props.navigation.navigate('createRequestStack') : this.validate()
             }
               // this.props.navigation.navigate('createRequestStack')

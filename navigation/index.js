@@ -2,6 +2,7 @@ import { createStackNavigator } from 'react-navigation-stack';
 import Login from 'modules/basics/rounded/LoginWithFingerPrint';
 import FingerprintScan from '../modules/basics/FingerPrintScanner';
 import ForgotPassword from 'modules/basics/rounded/ForgotPassword';
+import VerifyEmail from 'modules/basics/rounded/VerifyEmail';
 import Register from 'modules/basics/rounded/Register';
 import Drawer from './Drawer';
 import NotificationStack from 'modules/notification/Drawer.js';
@@ -82,6 +83,17 @@ const RegisterStack = createStackNavigator(
     navigationOptions: {},
   },
 );
+
+// Verify Email stack
+const VerifyEmailStack = createStackNavigator(
+  {
+    verifyEmailScreen: { screen: VerifyEmail },
+  },
+  {
+    headerMode: 'none',
+    navigationOptions: {},
+  },
+);
 const LocationWithMapStack = createStackNavigator(
   {
     LocationWithMapScreen: {screen: LocationWithMap},
@@ -98,6 +110,7 @@ const PrimaryNav = createStackNavigator(
     fingerPrintStack: {screen: FingerPrintStack},
     forgotPasswordStack: {screen: ForgotPasswordStack},
     registerStack: {screen: RegisterStack},
+    verifyEmailStack: {screen: VerifyEmailStack},
     drawerStack: {screen: Drawer},
     notificationStack: {screen: NotificationStack},
     messagesStack: {screen: MessagesStack},
