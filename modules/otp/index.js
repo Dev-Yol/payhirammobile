@@ -43,10 +43,10 @@ class OTP extends Component {
 
   async componentDidMount() {
     // const { enableFingerPrint } = this.props.state;
+    console.log('==============================================',  this.props.state);
     console.log(await AsyncStorage.getItem(`${Helper.APP_NAME}fingerprint`));
     if(await AsyncStorage.getItem('username') !== null && await AsyncStorage.getItem('password') !== null && await AsyncStorage.getItem(`${Helper.APP_NAME}fingerprint`) == "true"){
       await this.setState({hasCredential: true, popupShowed: true})
-      console.log('==============================================',  this.props.state);
     }else{
       await this.setState({hasCredential: false, popupShowed: false})
       this.generateOTP();
@@ -56,6 +56,7 @@ class OTP extends Component {
 
   handleFingerprintDismissed = async() => {
     await this.setState({ popupShowed: false });
+    this.props.navigation.pop()
   };
 
   componentWillUnmount() {
@@ -542,7 +543,10 @@ class OTP extends Component {
           {
             this.state.popupShowed == false ? 
             <View style ={{marginTop: '50%'}}>
-              <Spinner mode="overlay" />
+              <View>
+                <Spinner mode="overlay" />
+                <Text style={{marginTop: 50, marginRight:'auto', marginLeft: 'auto'}}>Processing Request</Text>
+              </View>
             </View> :
                 <FingerprintPopup
                   style={styles.popup}

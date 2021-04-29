@@ -45,7 +45,7 @@ let HeaderOptionsConnect  = connect(mapStateToProps, mapDispatchToProps)(HeaderO
 const OtpStack = createStackNavigator({
   otpScreen: {
     screen: OTP,
-    navigationOptions: async ({navigation}) => ({
+    navigationOptions: ({navigation}) => ({
       title: 'Authenticating',
       drawerLabel: 'OTP',
       headerLeft: <HeaderOptionsConnect navigationProps={navigation} />,
