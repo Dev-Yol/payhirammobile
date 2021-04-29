@@ -26,6 +26,7 @@ import { faStar as faStarRegular } from '@fortawesome/free-regular-svg-icons';
 import { faHandHoldingUsd, faMoneyBillWave, faFileInvoice, faWallet, faQrcode } from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import ButtonWithIcon from 'components/Form/ButtonWithIcon';
+import Verify from 'modules/generic/Verify'
 const width = Math.round(Dimensions.get('window').width);
 const height = Math.round(Dimensions.get('window').height);
 
@@ -142,6 +143,25 @@ class Summary extends Component {
     //
   };
 
+  checkStatus(user){
+    switch(user.status.toLowerCase()){
+      case 'not_verified': return false;break
+      case 'verified': return false;break
+      default: return true;break
+    }
+  }
+
+  invalidAcccess(){
+    Alert.alert(
+      'Message',
+      'In order to Create Request, Please Verify your Account.',
+      [
+        {text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel'}
+      ],
+      { cancelable: false }
+    )
+  }
+
   submitRating = (index) => {
     this.setState({
       showRatings: false,
@@ -214,7 +234,7 @@ class Summary extends Component {
 
   render() {
     const { showRatings, isLoading, history, currentLedger } = this.state;
-    const { ledger, theme } = this.props.state;
+    const { ledger, theme, user } = this.props.state;
     return (
       <View>
         <ScrollView 
@@ -264,6 +284,8 @@ class Summary extends Component {
                 </TouchableOpacity>
               )
             }
+
+            <Verify />
             
 
             <Text style={{
@@ -288,14 +310,18 @@ class Summary extends Component {
               <ButtonWithIcon 
                 title={'Cash In'}
                 onClick={() => {
-                  this.props.navigation.navigate('createRequestStack', {
-                    data: {
-                      type: 'Deposit',
-                      description: 'Allow other peers to find your deposits Payhiram',
-                      id: 3,
-                      money_type: 'e-wallet'
-                    }
-                  })
+                  if(user && this.checkStatus(user) == true){
+                    this.props.navigation.navigate('createRequestStack', {
+                      data: {
+                        type: 'Deposit',
+                        description: 'Allow other peers to find your deposits Payhiram',
+                        id: 3,
+                        money_type: 'e-wallet'
+                      }
+                    })
+                  }else{
+                    this.invalidAcccess()
+                  }
                 }}
                 style={{
                   width: '30%',
@@ -307,14 +333,19 @@ class Summary extends Component {
               <ButtonWithIcon 
                 title={'Send Cash'}
                 onClick={() => {
-                  this.props.navigation.navigate('createRequestStack', {
-                    data: {
-                      type: 'Send Cash',
-                      description: 'Allow other peers to fulfill your transaction when you to send money to your family, friends, or to businesses',
-                      id: 1,
-                      money_type: 'cash'
-                    }
-                  })
+                  if(user && this.checkStatus(user) == true){
+                    this.props.navigation.navigate('createRequestStack', {
+                      data: {
+                        type: 'Send Cash',
+                        description: 'Allow other peers to fulfill your transaction when you to send money to your family, friends, or to businesses',
+                        id: 1,
+                        money_type: 'cash'
+                      }
+                    })
+                  }else{
+                    this.invalidAcccess()
+                  }
+                  
                 }}
                 style={{
                   width: '30%',
@@ -328,14 +359,19 @@ class Summary extends Component {
               <ButtonWithIcon 
                 title={'Bills Payment'}
                 onClick={() => {
-                  this.props.navigation.navigate('createRequestStack', {
-                    data: {
-                      type: 'Bills and Payment',
-                      description: "Don't have time and want to pay your bills? Allow other peers to pay your bills.",
-                      id: 4,
-                      money_type: 'cash'
-                    }
-                  })
+                  if(user && this.checkStatus(user) == true){
+                    this.props.navigation.navigate('createRequestStack', {
+                      data: {
+                        type: 'Bills and Payment',
+                        description: "Don't have time and want to pay your bills? Allow other peers to pay your bills.",
+                        id: 4,
+                        money_type: 'cash'
+                      }
+                    })
+                  }else{
+                    // alert here
+                    this.invalidAcccess()
+                  }
                 }}
                 style={{
                   width: '30%',
