@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableOpacity, SafeAreaView, Image, TouchableHighlight, Dimensions, ScrollView, TextInput, Alert } from 'react-native';
+import { ActivityIndicator } from 'react-native'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faUserCircle, faStar as Solid } from '@fortawesome/free-solid-svg-icons';
 import {faStar as Regular} from '@fortawesome/free-regular-svg-icons';
@@ -14,9 +15,10 @@ import BalanceCard from 'modules/generic/BalanceCard';import {
 } from 'components';
 import TextInputWithoutLabel from 'components/Form/TextInputWithoutLabel'
 import AmountInput from 'modules/generic/AmountInput'
+import Modal from 'react-native-modal';
 
 const height = Math.round(Dimensions.get('window').height);
-class DirectTransfer extends Component {
+class AcceptPaymentStack extends Component {
   constructor(props){
     super(props)
     this.state = {
@@ -30,9 +32,7 @@ class DirectTransfer extends Component {
   }
   
   componentDidMount = () => {
-    this.retrieveSummaryLedger()
     const { data } = this.props.navigation.state.params;
-    console.log('[data in transferfund]', data)
     if(data.success == true){
       this.setState({
         amount: data.amount,
@@ -61,14 +61,19 @@ class DirectTransfer extends Component {
       this.setState({ isLoading: false })
       if (response.data.length > 0) {
         this.setState({ scannedUser: response.data[0] })
+        // this.retrieveSummaryLedger(response.data[0])
       } else {
         this.setState({ scannedUser: null })
       }
+    }, error => {
+      console.log('error')
+      this.setState({
+        isLoading: false
+      })
     });
   }
 
-  retrieveSummaryLedger = () => {
-    const {user} = this.props.state;
+  retrieveSummaryLedger = (user) => {
     const { setLedger } = this.props;
     if (user == null) {
       return;
@@ -137,19 +142,24 @@ class DirectTransfer extends Component {
     }
 
     const { amount, charge, notes, currency} = this.state;
-    if(ledger == null){
-      this.errorAlert('Invalid Account')
-      return 
-    }
+    // if(ledger == null){
+    //   this.errorAlert('Invalid Account')
+    //   return 
+    // }
 
     if(amount == 0){
       this.errorAlert('Amount is required')
       return    
     }
 
-    if(amount > ledger.available_balance){
-      this.errorAlert('Issuficient Balance')
-      return    
+    // if(amount > ledger.available_balance){
+    //   this.errorAlert('Issuficient Balance')
+    //   return    
+    // }
+
+    if(notes == null || notes == ''){
+      this.errorAlert('Notes is required')
+      return
     }
 
 
@@ -157,19 +167,29 @@ class DirectTransfer extends Component {
       this.errorAlert('Greater than transaction limit')
       return
     }
-
-    this.props.navigation.navigate('otpStack', {
-      data: {
-        from: user,
-        to: scannedUser,
-        amount: amount,
-        currency: currency,
-        notes: notes,
-        payload: 'directTransfer',
-        charge: charge,
-        selectedLedger: ledger
-      },
+    let parameter = {
+      to_code: scannedUser.code,
+      to_email: scannedUser.email,
+      from_code: user.code,
+      from_email: user.email,
+      amount: amount,
+      currency: currency,
+      notes: notes,
+      charge: charge
+    }
+    this.setState({
+      isLoading: true
     })
+    console.log('parameter', parameter)
+    Api.request(Routes.ledgerAcceptPayment, parameter, (response) => {
+      console.log('response', response)
+      const { setPaymentConfirmation } = this.props;
+      setPaymentConfirmation(true)
+      this.setState({isLoading: false, summaryLoading: false});
+    }, error => {
+      console.log('response', error)
+      this.setState({isLoading: false, summaryLoading: false});
+    });
   }
 
   footerOptions = (data) => {
@@ -260,8 +280,8 @@ class DirectTransfer extends Component {
               currency: currency
             })
           }
-          disableRedirect={false}
           navigation={this.props.navigation}
+          disableRedirect={true}
           />
           {/*<TextInput
             value={this.state.amount}
@@ -315,7 +335,7 @@ class DirectTransfer extends Component {
             <Text style={{
               fontWeight: 'bold',
               fontSize: BasicStyles.standardFontSize
-            }}>Send to </Text>
+            }}>Credit from </Text>
           </View>
 
           <View style={{
@@ -390,7 +410,7 @@ class DirectTransfer extends Component {
     )
   }
 
-  renderSummary = (ledger) => {
+  renderSummary = () => {
     const { amount, charge } = this.state;
     return(
       <View style={{
@@ -424,7 +444,7 @@ class DirectTransfer extends Component {
             fontSize: BasicStyles.standardFontSize,
             width: '40%',
             textAlign: 'right'
-          }}>{Currency.display(amount, ledger && ledger.currency ? ledger.currency : 'PHP')}</Text>
+          }}>{Currency.display(amount, this.state.currency)}</Text>
         </View>
 
 
@@ -445,7 +465,7 @@ class DirectTransfer extends Component {
             fontSize: BasicStyles.standardFontSize,
             width: '40%',
             textAlign: 'right'
-          }}>{Currency.display(charge, ledger && ledger.currency ? ledger.currency : 'PHP')}</Text>
+          }}>{Currency.display(charge, this.state.currency)}</Text>
         </View>
 
 
@@ -467,14 +487,14 @@ class DirectTransfer extends Component {
             width: '40%',
             fontWeight: 'bold',
             textAlign: 'right'
-          }}>{Currency.display((parseFloat(amount) - parseFloat(charge)), ledger && ledger.currency ? ledger.currency : 'PHP')}</Text>
+          }}>{Currency.display((parseFloat(amount) - parseFloat(charge)), 'PHP')}</Text>
         </View>
       </View>
     )
   }
 
   render() {
-    const { ledger, user } = this.props.state
+    const { ledger, user, acceptPayment, paymentConfirmation  } = this.props.state
     const { data } = this.props.navigation.state.params;
     const { amount, isLoading } = this.state;
     return (
@@ -490,23 +510,14 @@ class DirectTransfer extends Component {
               marginBottom: 100
             }}>
 
-
-              {/*
-                (ledger != null && ledger.length > 0) && ledger.map(item => (
-                  <BalanceCard
-                    data={item}
-                  />
-                ))
-              */}
-
               {
-                (ledger && data && data.success == false) && this.renderInput()
+                (data && data.success == false) && this.renderInput()
               }
               {
-                (ledger && user ) && this.renderSendTo(user)
+                (user ) && this.renderSendTo(user)
               }
               {
-                ledger && this.renderSummary(ledger)
+                this.renderSummary()
               }
             </View>
 
@@ -516,10 +527,52 @@ class DirectTransfer extends Component {
         }
 
         {
-          (data && data.success == true) && this.footerOptionsComplete(data)
+          (data.success == true) && this.footerOptionsComplete(data)
         }
 
         {isLoading ? <Spinner mode="overlay" /> : null}
+
+        {
+          paymentConfirmation && (
+            <Modal
+              onBackdropPress={() => {}}
+              transparent={true}
+              backdropTransitionInTiming={100}
+              backdropTransitionOutTiming={100}
+              isVisible={true}>
+              <View style={{
+                width: '100%',
+                flex: 1,
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}>
+                <ActivityIndicator
+                  size={100}
+                  color={Color.white}
+                />
+                <Text style={{
+                  color: Color.white,
+                  fontWeight: 'bold'
+                }}>Waiting for approval ...</Text>
+                
+                <Button 
+                  title={'Cancel'}
+                  onClick={() => this.props.navigation.pop()}
+                  style={{
+                    width: '50%',
+                    marginRight: '25%',
+                    marginLeft: '25%',
+                    marginTop: 25,
+                    backgroundColor: Color.white,
+                  }}
+                  textStyle={{
+                    color: Color.black
+                  }}
+                />
+              </View>
+            </Modal>
+          )
+        }
       </SafeAreaView>
     )
   }
@@ -531,9 +584,10 @@ const mapDispatchToProps = dispatch => {
   const { actions } = require('@redux');
   return {
     setLedger: (ledger) => dispatch(actions.setLedger(ledger)),
+    setPaymentConfirmation: (flag) => dispatch(actions.setPaymentConfirmation(flag)),
   };
 };
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(DirectTransfer);
+)(AcceptPaymentStack);

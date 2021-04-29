@@ -20,9 +20,11 @@ class FilterSlider extends Component {
     this.state = {
       amount: 1000,
       showTarget: false,
+      showShipping: false,
       showTypes: false,
       target: 'all',
       type: 'all',
+      shipping: 'all',
       filterData: null,
       currency: 'PHP',
       showCurrency: false,
@@ -38,6 +40,7 @@ class FilterSlider extends Component {
     const { parameter } = this.props.state;
     if(parameter){
       this.setState({
+        shipping: parameter.shipping,
         type: parameter.type,
         target: parameter.target,
         needed_on: parameter.needed_on,
@@ -82,8 +85,9 @@ class FilterSlider extends Component {
   }
   apply() {
     const { setParameter } = this.props
-    const { target, type, needed_on, amount, currency } = this.state
+    const { shipping, target, type, needed_on, amount, currency } = this.state
     let parameters = {
+      shipping: shipping,
       target: target,
       type: type,
       currency: currency,
@@ -93,6 +97,78 @@ class FilterSlider extends Component {
     setParameter(parameters)
     this.props.close()
     this.navigateToScreen('Requests')
+  }
+
+  shippings() {
+    const { theme, user } = this.props.state;
+    const { showShipping, shipping } = this.state;
+    return (
+      <TouchableOpacity style={{
+          width: '100%',
+          borderBottomWidth: 1,
+          borderBottomColor: Color.lightGray
+        }}
+        onPress={() => this.setState({
+          showShipping: !this.state.showShipping
+        })}
+        >
+        <View style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          minHeight: 50,
+        }}>
+          <Text style={{
+            fontSize: BasicStyles.standardFontSize,
+            width: '50%',
+            fontWeight: 'bold'
+          }}>Shipping Options</Text>
+
+          <Text style={{
+            fontSize: BasicStyles.standardFontSize,
+            width: '50%',
+            textAlign: 'right'
+          }}>{shipping.toUpperCase()}</Text>
+        </View>
+        {
+          showShipping && (
+            <View style={{
+              width: '100%',
+              flexDirection: 'row',
+              marginBottom: 20
+            }}>
+              <ScrollView
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}>
+                {
+                  Helper.filter.ships.map((item, index) => (
+                  <Button
+                    key={index}
+                      onClick={() => this.setState({
+                        shipping: item.value
+                      })}
+                      title={item.value}
+                      style={{
+                        backgroundColor: shipping.toLowerCase() == item.value.toLowerCase() ? (theme ? theme.primary : Color.primary) : Color.white,
+                        width: index == 0 ? 40 : 80,
+                        height: 40,
+                        borderRadius: 20,
+                        borderWidth: 0.5,
+                        borderColor: theme ? theme.primary : Color.primary
+                      }}
+                      textStyle={{
+                        color: shipping.toLowerCase() == item.value.toLowerCase() ? Color.white : (theme ? theme.primary : Color.primary),
+                        fontSize: BasicStyles.standardFontSize
+                      }}
+                    />
+                  ))
+                }
+                </ScrollView>
+            </View>
+          )
+        }
+
+      </TouchableOpacity>
+    );
   }
 
   amount = () => {
@@ -465,7 +541,8 @@ class FilterSlider extends Component {
               paddingTop: 20
             }}>
               {this.header()}
-              {this.target()}
+              {this.shippings()}
+              {/* {this.target()} */}
               {/*this.keywords()*/}
               {this.types()}
               <View style={{

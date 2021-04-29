@@ -34,7 +34,7 @@ class Transactions extends Component {
     }
   }
 
-  retrieve = (flag) => {
+  retrieve = (flag, loading = true) => {
     const { user } = this.props.state
     if (user == null) {
       return;
@@ -42,7 +42,7 @@ class Transactions extends Component {
     let parameter = {
       account_id: user.id,
       limit: this.state.limit,
-      offset: flag == true ? (this.state.offset * this.state.limit) : 0,
+      offset: flag == true && this.state.offset > 0 ? (this.state.offset * this.state.limit) : this.state.offset,
       sort: {
         column: 'created_at',
         value: 'desc'
@@ -53,11 +53,12 @@ class Transactions extends Component {
     console.log('parameter', parameter)
     this.setState({isLoading: true});
     Api.request(Routes.transactionRetrieve, parameter, (response) => {
-      console.log('data', response.data)
+      console.log('[data]', response.data.length)
       this.setState({isLoading: false});
       if (response.data.length > 0) {
         this.setState({
-          data: flag == false ? response.data : _.uniqBy([...this.state.data, ...response.data], 'code'),
+          // data: flag == false ? response.data : _.uniqBy([...this.state.data, ...response.data], 'code'),
+          data: response.data,
           offset: flag == false ? 1 : (this.state.offset + 1)
         })
       } else {
@@ -76,25 +77,27 @@ class Transactions extends Component {
     return (
       <SafeAreaView>
         <ScrollView
+          showsVerticalScrollIndicator={false}
+          scrollEventThrottle={16}
           onScroll={(event) => {
             let scrollingHeight = event.nativeEvent.layoutMeasurement.height + event.nativeEvent.contentOffset.y
             let totalHeight = event.nativeEvent.contentSize.height
             if(event.nativeEvent.contentOffset.y <= 0) {
               if(isLoading == false){
-                this.retrieve(false)
+                // this.retrieve(false)
+                console.log('[]')
               }
             }
-            console.log(scrollingHeight, totalHeight);
-            if(scrollingHeight >= (totalHeight - 20)) {
+            if(Math.round(scrollingHeight) >= Math.round(totalHeight)) {
               if(isLoading == false){
-                this.retrieve(true)
+                this.retrieve(true, true)
               }
             }
-          }}
-          showsVerticalScrollIndicator={false}>
-        <View style={{
-          marginTop: Platform.OS == 'ios' ? 50 : 50
-        }}>
+          }}>
+          <View style={{
+            marginTop: Platform.OS == 'ios' ? 50 : 50,
+            marginBottom: Platform.OS == 'ios' ? 105 : 105
+          }}>
             <View style={Styles.MainContainer}>
               {
                 data && data.map((item, index) => (
@@ -104,7 +107,7 @@ class Transactions extends Component {
             </View>
         </View>
       </ScrollView>
-       {isLoading ? <Spinner mode="overlay" /> : null}
+      {isLoading ? <Spinner mode="overlay" /> : null}
     </SafeAreaView>
     );
   }

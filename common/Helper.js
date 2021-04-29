@@ -8,7 +8,7 @@ import {
 import { faMoneyBillWaveAlt, faCog, faHome, faEnvelope, faUsers, faPalette, faShieldAlt, faHandshake, faTachometerAlt, faHeadset } from '@fortawesome/free-solid-svg-icons';
 import { faComment } from '@fortawesome/free-regular-svg-icons';
 export default {
-  company: 'Increment Technologies',
+  company: 'Increment Technologies Inc.',
   APP_NAME: '@Payhiram_',
   APP_NAME_BASIC: 'PayHiram',
   APP_EMAIL: 'support@payhiram.ph',
@@ -25,11 +25,11 @@ export default {
       route: 'Dashboard',
       icon: faTachometerAlt
     },
-    {
-      title: 'Circle',
-      route: 'Circle',
-      icon: faUsers
-    },
+    // {
+    //   title: 'Circle',
+    //   route: 'Circle',
+    //   icon: faUsers
+    // },
     // {
     //   title: 'Messages',
     //   route: 'Messenger',
@@ -46,6 +46,14 @@ export default {
       icon: faHeadset
     }
   ],
+  currencyBal: [{
+    currency: 'PHP',
+    value: 'PHP'
+  },
+  {
+    currency: 'USD',
+    value: 'USD'
+  }],
   currency: [{
     title: 'Philippine Peso',
     value: 'PHP'
@@ -68,7 +76,7 @@ export default {
   fulfillmentTypes: [
     {
       id: 1,
-      type: 'Send Cash',
+      type: 'Pera Padala',
       description: 'Send cash and allow our partners to process or deliver the cash to your receiver.',
       money_type: 'cash',
     },
@@ -89,7 +97,13 @@ export default {
       type: 'Bills and Payments',
       description: "Don't have time and want to pay your bills either online or onsite? Our partners will handle your payments",
       money_type: 'cash',
-    },
+    }
+    // {
+    //   id: 5,
+    //   type: 'Accept Payment',
+    //   description: "Accept Payment with 0% charge",
+    //   money_type: 'cash',
+    // },
   ],
   fulfillmentBorrowTypes: [
     {
@@ -292,6 +306,13 @@ export default {
       value: 'Public'
     }, {
       value: 'Circle'
+    }],
+    ships: [{
+      value: 'All'
+    }, {
+      value: 'Pickup'
+    }, {
+      value: 'Delivery'
     }],
     types: [{
       value: 'All'

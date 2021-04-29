@@ -36,16 +36,22 @@ class Notifications extends Component{
   }
 
   async redirect(payload, item, payloadValue, items){
+    // console.log('[]')
     const { user } = this.props.state;
     if(payload === 'thread'){
+      items.amount = items.amount.amount
+      items.currency = items.currency.currency
+      console.log('ITEMS::', items);
       this.props.navigation.navigate('messagesStack', {
         data: items
       })
-    }else{
+    }else if(payload === 'Peer Request'){
       this.props.navigation.navigate('requestItemStack', {
         data: items.request[0],
         from: 'notification'
       })
+    }else{
+      this.props.navigation.navigate('transactionsStack')
     }
   }
   
@@ -69,6 +75,7 @@ class Notifications extends Component{
       }
     }
     // this.setState({isLoading: true})
+    console.log('[parameter]', parameter)
     Api.request(Routes.notificationsRetrieve, parameter, notifications => {
       console.log("[RESTRIEVE]", notifications.data)
       // this.setState({isLoading: false})
@@ -81,6 +88,7 @@ class Notifications extends Component{
 
   render() {
     const { notifications } = this.props.state;
+    console.log('NOTIFICATION', notifications);
     const { selected, isLoading } = this.state;
 
     return (
@@ -109,9 +117,9 @@ class Notifications extends Component{
             flex: 1,
             height: height
           }}>
-            {notifications == null || (notifications != null && notifications.notifications == null) && (<Empty refresh={true} onRefresh={() => this.retrieve()}/>)}
+            {notifications.notifications == null || (notifications.notifications != null && notifications.notifications == null) && (<Empty refresh={true} onRefresh={() => this.retrieve()}/>)}
             {
-              notifications && notifications.notifications.map((item, index) => (
+              notifications.notifications && notifications.notifications.map((item, index) => (
                 <TouchableHighlight
                   onPress={() => this.redirect(item.payload, item.id, item.payload_value, item)}
                   underlayColor={Color.gray}

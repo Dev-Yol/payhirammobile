@@ -11,15 +11,23 @@ import { Dimensions } from 'react-native';
 class HeaderOptions extends Component {
   constructor(props){
     super(props);
+    this.state = {
+      isViewing: false,
+      origin: false
+    }
   }
 
   componentDidMount = () => {
     if(this.props.navigationProps.state.params !== undefined){
+      if(this.props.navigationProps.state.params.data.payload == 'request'){
+        this.setState({origin: true})
+      }else{
+    
+      }
       if(this.props.navigationProps.state.params.con){
         const { setMessengerGroup, setMessagesOnGroup } = this.props
         setMessengerGroup(this.props.navigationProps.state.params)
         setMessagesOnGroup(this.props.navigationProps.state.params)
-        console.log('setMessengerGroup', this.props.navigationProps.state.params);
       }
     }
   }
@@ -29,16 +37,28 @@ class HeaderOptions extends Component {
   };
 
   back = () => {
+    if(this.props.navigationProps.state.params.data.payload == 'request'){
+      this.props.navigationProps.navigate('drawerStack');
+    }else{
+      this.props.navigationProps.pop()
+    }
     // const { setMessagesOnGroup, setMessengerGroup } = this.props;
     // setMessagesOnGroup({groupId: null, messages: null});
     // setMessengerGroup(null);
-    // this.props.navigationProps.navigate('drawerStack');
-    this.props.navigationProps.pop()
   };
 
   viewMenu = () => {
-    const { viewMenu } = this.props
-    viewMenu(!this.props.state.isViewing)
+    // this.setState({isViewing : !this.state.isViewing})
+    // this.props.navigationProps.navigate('messagesStack', {isViewing : this.state.isViewing})
+    // const { viewMenu } = this.props
+    // viewMenu(!this.props.state.isViewing)
+    // console.log('[viewWIng]',this.props.navigationProps.replace('messagesStack', {isViewing: this.state.isViewing}))
+    this.props.navigationProps.setParams({
+      data: {
+        ...this.props.navigationProps.state.params.data,
+        menuFlag: !this.props.navigationProps.state.params.data.menuFlag
+      }
+    })
   }
 
   _card = () => {
@@ -46,6 +66,10 @@ class HeaderOptions extends Component {
     const width = Math.round(Dimensions.get('window').width);
     // {Helper.showRequestType(messengerGroup.request.type)} -
     const { data } = this.props.navigationProps.state.params;
+    if(data.route != undefined){
+      let temp = data.route.substring(data.route.lastIndexOf('/') + 1)
+      data.title = temp
+    }
     return (
       <View>
         <View style={{
@@ -61,10 +85,10 @@ class HeaderOptions extends Component {
             data ? '****' + data.title.substr(data.title.length - 8, data.title.length - 1) + ' - ' + data.currency + ' ' + data.amount: null
           }</Text>
           {Helper.MessengerMenu != null &&
-            <TouchableHighlight 
+            <TouchableHighlight
               activeOpacity={0.6}
               underlayColor={Color.lightGray}
-              onPress={this.viewMenu.bind(this)} 
+              onPress={() => this.viewMenu()}
               style={
                 {
                   position: 'absolute',
@@ -78,8 +102,8 @@ class HeaderOptions extends Component {
                 }
               }
             >
-              <FontAwesomeIcon 
-                icon={ faEllipsisV } 
+              <FontAwesomeIcon
+                icon={ faEllipsisV }
                 style={{color: theme ? theme.primary : Color.primary}}
               />
             </TouchableHighlight>
@@ -141,8 +165,8 @@ const mapDispatchToProps = dispatch => {
   const { actions } = require('@redux');
   return {
     setMessagesOnGroup: (messagesOnGroup) => dispatch(actions.setMessagesOnGroup(messagesOnGroup)),
-    setMessengerGroup: (messengerGroup) => dispatch(actions.setMessengerGroup(messengerGroup)),
-    viewMenu: (isViewing) => dispatch(actions.viewMenu(isViewing))
+    setMessengerGroup: (messengerGroup) => dispatch(actions.setMessengerGroup(messengerGroup))
+    // viewMenu: (isViewing) => dispatch(actions.viewMenu(isViewing))
   };
 };
 

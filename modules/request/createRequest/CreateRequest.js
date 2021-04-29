@@ -1,29 +1,21 @@
 import React, {Component} from 'react';
 import {Text, View, StyleSheet, TouchableOpacity, ScrollView, TextInput, Dimensions, Alert, KeyboardAvoidingView} from 'react-native';
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faStar, faAsterisk, faMinusCircle, faPlusCircle} from '@fortawesome/free-solid-svg-icons';
 import {connect} from 'react-redux';
 import Api from 'services/api/index.js';
-import {Spinner} from 'components';
-import {NavigationActions, StackActions} from 'react-navigation';
 import FulfillmentCard from 'modules/generic/FulfilmentCard';
 import TargetCard from 'modules/generic/TargetCard';
-import BalanceCard from 'modules/generic/BalanceCard';
 import Button from 'components/Form/Button';
-import TextInputWithLabel from 'components/Form/TextInputWithLabel';
-import LocationTextInput from 'components/Form/LocationTextInput';
-import PickerWithLabel from 'components/Form/PickerWithLabel';
-import styles from './Styles';
 import {BasicStyles, Routes, Helper, Color} from 'common';
-import DateTime from 'components/DateTime';
 import DatePicker from 'components/DateTime/index.js';
 import Currency from 'services/Currency';
 import TextInputWithoutLabel from 'components/Form/TextInputWithoutLabel'
 import Stepper from 'components/Stepper';
 import { Pager, PagerProvider } from '@crowdlinker/react-native-pager';
 import MapViewer from 'components/Location/MapViewer';
-import NumberFormat from 'react-number-format';
 import RequestCard from 'modules/generic/RequestCard';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
+import AmountInput from 'modules/generic/AmountInput'
 
 const width = Math.round(Dimensions.get('window').width);
 const height = Math.round(Dimensions.get('window').height);
@@ -58,6 +50,10 @@ class CreateRequest extends Component {
       this.handleSelectFulfillment(params.data)
     }
     this.retrieveSummaryLedger()
+    let date = new Date()
+    this.setState({
+      currentDate: date.setDate(date.getDate())
+    })
   }
 
  retrieveSummaryLedger = () => {
@@ -71,6 +67,7 @@ class CreateRequest extends Component {
       account_code: user.code
     };
     this.setState({isLoading: true});
+    setLedger(null)
     Api.request(Routes.ledgerSummary, parameter, (response) => {
       this.setState({isLoading: false});
       if (response != null) {
@@ -81,6 +78,7 @@ class CreateRequest extends Component {
     }, error => {
       console.log('response', error)
       this.setState({isLoading: false});
+      setLedger(null)
     });
   };
   
@@ -94,7 +92,6 @@ class CreateRequest extends Component {
 
 
   handleSelectFulfillment = (item) => {
-    console.log('[item]', item);
     this.setState({
       fulfillmentType: item,
       money_type: item.money_type,
@@ -103,7 +100,6 @@ class CreateRequest extends Component {
   };
 
   onDateFinish = (datetime) => {
-    console.log('[Selected Date]', datetime)
     this.setState({
       neededOn: datetime.date,
     });
@@ -292,13 +288,13 @@ class CreateRequest extends Component {
                     }}
                     title={item}
                     style={{
-                      backgroundColor: shipping == item.toLowerCase() ? (theme ? theme.primary : Color.primary) : Color.white,
+                      backgroundColor: shipping == item.toLowerCase() ? (theme ? theme.secondary : Color.secondary) : Color.white,
                       width: '40%',
                       marginRight: '5%',
                       height: 50,
                       borderRadius: 25,
                       borderWidth: 0.5,
-                      borderColor: theme ? theme.primary : Color.primary
+                      borderColor: theme ? theme.secondary : Color.secondary
                     }}
                     textStyle={{
                       color: shipping == item.toLowerCase() ? Color.white : Color.black,
@@ -401,10 +397,13 @@ class CreateRequest extends Component {
                 this.props.navigation.navigate('addLocationStack')
               }}
               >
+              { defaultAddress != null ?
+              <Text></Text> :  <FontAwesomeIcon icon={faMapMarkerAlt} size={BasicStyles.standardFontSize} color={Color.black} style={{marginLeft: '39%', marginTop: '3%'}}/>}
               <Text style={{
                 fontSize: BasicStyles.standardFontSize,
                 width: '100%',
-                textAlign: 'right'
+                textAlign: 'right',
+                marginTop: '-8%'
               }}>{defaultAddress ? defaultAddress.route : 'Select Location'}</Text>
             </TouchableOpacity>
           </View>
@@ -434,34 +433,48 @@ class CreateRequest extends Component {
           alignItems: 'center',
           height: height
         }}>
+        
+        <AmountInput
+          onChange={(amount, currency) => this.setState({
+            amount: amount,
+            currency: currency
+          })
+          }
+          disableRedirect={false}
+          navigation={this.props.navigation}
+        />
 
-          <TextInput
-            value={this.state.amount}
-            keyboardType={'numeric'}
-            onChangeText={(input) => {
-              if(ledger && ledger.available_balance < input){
-                this.setState({
-                  errorMessage: 'Insufficient Balance!'
-                })
-              }else{
-                this.setState({
-                  amount: input
-                })  
-              }
-            }}
-            style={{
-              alignItems: 'center',
-              fontSize: 52
-            }}
-            placeholder={'0.00'}
-          />
+          {/*<TextInput
+                      value={this.state.amount}
+                      keyboardType={'numeric'}
+                      onChangeText={(input) => {
+                        if(ledger && ledger.available_balance < input){
+                          this.setState({
+                            errorMessage: 'Insufficient Balance!'
+                          })
+                        }else{
+                          this.setState({
+                            amount: input
+                          })  
+                        }
+                      }}
+                      style={{
+                        alignItems: 'center',
+                        fontSize: 52
+                      }}
+                      placeholder={'0.00'}
+                    />*/}
           
-          {
+          {/*
             ledger && (
               <TouchableOpacity style={{
                 width: '100%',
                 paddingBottom: 20
-              }}>
+              }}
+              onPress={() => {
+                this.props.navigation.navigate('currencyStack')
+              }}
+              >
                 <View style={{
                   width: '100%',
                   alignItems: 'center'
@@ -478,7 +491,7 @@ class CreateRequest extends Component {
                 </View>
               </TouchableOpacity>
             )
-          }
+          */}
 
           <View style={{
             width: '100%',
@@ -499,6 +512,7 @@ class CreateRequest extends Component {
               placeholder={this.state.needed_on}
               borderColor= {'white'}
               minimumDate={this.state.currentDate}
+              borderBottomColor={'white'}
               height={40}
               style={{
                 borderColor: 0,

@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, TouchableHighlight, Dimensions } from 'react-native';
+import { View, Text, TouchableOpacity, TouchableHighlight, Dimensions, Alert } from 'react-native';
 import Style from './RequestCardStyle';
 import Currency from 'services/Currency';
 import { Helper, Color, BasicStyles } from 'common';
 import Rating from 'components/Rating'
-import UserImage from 'components/User/Image';
+import UserImage from './Profile.js';
 import Options from 'modules/generic/Dropdown.js';
 import {connect} from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
@@ -27,6 +27,17 @@ class RequestCard extends Component {
     return (width - 40) * 0.15;
   }
 
+  validate = () => {
+    Alert.alert(
+      'Message',
+      'In order to Send Proposal, Please Verify your Account.',
+      [
+        {text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel'}
+      ],
+      { cancelable: false }
+    )
+  }
+
   _header = (item, type) => {
     const { theme, user } = this.props.state;
     return (
@@ -41,15 +52,29 @@ class RequestCard extends Component {
             width: '15%',
             justifyContent: 'center'
           }}>
-            <UserImage
-              user={item.account}
-              color={theme ? theme.primary : Color.primary}
-              style={{
-                width: this.getWidth() - 10,
-                height: this.getWidth() - 10,
-                borderRadius: ((this.getWidth() - 10) / 2)
-              }}
-            /> 
+            {
+              user?.profile != null ?
+              <UserImage
+                user={item.account}
+                color={theme ? theme.primary : Color.primary}
+                style={{
+                  width: this.getWidth() - 10,
+                  height: this.getWidth() - 10,
+                  borderRadius: ((this.getWidth() - 10) / 2)
+                }}
+              />
+              :
+              <UserImage
+                size={500}
+                user={item.account}
+                color={theme ? theme.primary : Color.primary}
+                // style={{
+                //   width: this.getWidth() - 10,
+                //   height: this.getWidth() - 10,
+                //   borderRadius: ((this.getWidth() - 10) / 2)
+                // }}
+              />
+            }
           </View>
           <View style={{
             width: '85%'
@@ -75,7 +100,7 @@ class RequestCard extends Component {
                   style={{
                     fontWeight: 'bold',
                     textAlign: 'right',
-                    paddingRight: (user && item.account?.code != user.code && item.status == 0) ? 10 : 0,
+                    paddingRight: (user && item.account?.code != user.code && item.status == 0) ? 9 : 0,
                     width: (user && item.account?.code != user.code && item.status == 0) ? 'auto' : '100%',
                     fontSize: BasicStyles.standardFontSize
                   }}>
@@ -104,7 +129,7 @@ class RequestCard extends Component {
               style={{
                 ...Style.text,
                 fontSize: BasicStyles.standardFontSize - 1,
-                color: Color.primary,
+                color: theme ? theme.primary : Color.primary,
                 width: '100%'
               }}
               > 
@@ -239,7 +264,7 @@ class RequestCard extends Component {
         {item.images != null && (
           <View>
             {item.images.map((image, imageIndex) => {
-              return <View></View>;
+              return <View key={imageIndex}></View>;
             })}
           </View>
         )}
@@ -263,7 +288,7 @@ class RequestCard extends Component {
                 width: '100%'
               }}>
               {
-                item.approved == true && (
+                (item.approved == true || item.peer_status == 'approved') && (
                   <Button
                     onClick={() => {
                       this.props.navigation.navigate('messagesStack', {
@@ -275,7 +300,8 @@ class RequestCard extends Component {
                           request: item,
                           currency: item.currency,
                           amount: item.amount,
-                          status: item.status
+                          status: item.status,
+                          menuFlag: false
                         }
                       });
                     }}
@@ -295,19 +321,23 @@ class RequestCard extends Component {
                 )
               }
               {
-                item.approved == false && (
+                (item.approved == false && item.peer_status != 'approved') && (
                   <Button
                     onClick={() => {
-                      if(item.peer_flag == false){
-                        this.props.onConnectRequest(item);
+                      if(user.status == 'NOT_VERIFIED'){
+                        this.validate()
                       }else{
-                        this.props.navigation.navigate('requestItemStack', {
-                          data: item,
-                          from: 'request'
-                        })
+                        if(item.peer_flag == false){
+                          this.props.onConnectRequest(item);
+                        }else{
+                          this.props.navigation.navigate('requestItemStack', {
+                            data: item,
+                            from: 'request'
+                          })
+                        }
                       }
                     }}
-                    title={item.peer_flag == true ? 'View Proposal' : 'Send Proposal'}
+                    title={(item.peer_flag == true) ? 'View Proposal' : 'Send Proposal'}
                     style={{
                       backgroundColor: item.peer_flag == true ? (theme ? theme.primary : Color.primary) : (theme ? theme.secondary : Color.secondary),
                       width: '60%',
@@ -348,7 +378,7 @@ class RequestCard extends Component {
 
               <Button
                 onClick={() => {
-                  if(item.status > 0){
+                  if(item.status >= 1){
                     this.props.navigation.navigate('messagesStack', {
                       data: {
                         id: item.id,
@@ -368,7 +398,7 @@ class RequestCard extends Component {
                     })
                   }
                 }}
-                title={item.status == 0 ? 'See proposals' : 'See transaction'}
+                title={item.status >= 1 ? 'See transaction' : 'View Proposal'}
                 style={{
                   backgroundColor: item.status == 0 ? (theme ? theme.primary : Color.primary) : (theme ? theme.secondary : Color.secondary),
                   width: '60%',
@@ -403,7 +433,7 @@ class RequestCard extends Component {
                 width: '100%'
               }}>
               {
-                item.approved == true && (
+                (item.approved == true || item.peer_status == 'approved') && (
                   <Button
                     onClick={() => {
                       this.props.navigation.navigate('messagesStack', {
@@ -435,7 +465,7 @@ class RequestCard extends Component {
                 )
               }
               {
-                item.approved == false && (
+                (item.approved == false && item.peer_status != 'approved') && (
                   <Button
                     onClick={() => {
                       if(item.peer_flag == false){
@@ -447,9 +477,9 @@ class RequestCard extends Component {
                         })
                       }
                     }}
-                    title={item.peer_flag == true ? 'View Proposal' : 'Send Proposal'}
+                    title={(item.peer_flag == true) ? 'View Proposal' : 'Send Proposal'}
                     style={{
-                      backgroundColor: titem.peer_flag == true ? (theme ? theme.primary : Color.primary) : (theme ? theme.secondary : Color.secondary),
+                      backgroundColor: item.peer_flag == true ? (theme ? theme.primary : Color.primary) : (theme ? theme.secondary : Color.secondary),
                       width: '60%',
                       marginLeft: '40%',
                       height: 40,
@@ -469,16 +499,18 @@ class RequestCard extends Component {
     );
   };
   render() {
-    const { data } = this.props;
+    const { data, from } = this.props;
     const { user } = this.props.state;
     const { option } = this.state;
     return (
       <TouchableOpacity
-      onPress={() =>
-        this.props.navigation.navigate('requestItemStack', {
-          data: data,
-          from: 'request'
-        })
+      onPress={() => {
+        from == 'request' && (
+          this.props.navigation.navigate('requestItemStack', {
+            data: data,
+            from: 'request'
+          })
+      )}
       }
       >
         {this._header(data, 'amount')}

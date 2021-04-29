@@ -44,6 +44,14 @@ class AccountSettings extends Component {
       email: this.props.state.user.email
     })
   }
+
+  getExpiry(){
+    const { user } = this.props.state;
+    let date = new Date().getTime()
+    console.log('date', date)
+    return date
+  }
+
   updateEmail = () => {
     const { user } = this.props.state;
     if(user == null){
@@ -136,10 +144,15 @@ class AccountSettings extends Component {
             height: height + 25,
             paddingTop: 25
           }}>
-              <QRCode
-                size={220}
-                value={user.code}
-              />
+            {
+              user && (
+                <QRCode
+                  size={220}
+                  value={user.code + this.getExpiry()}
+                />
+              )
+            }
+              
             
 
             <TextInputWithLabel 

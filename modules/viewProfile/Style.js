@@ -5,6 +5,6 @@ const height = Math.round(Dimensions.get('window').height);
 export default StyleSheet.create({
   container: {
     height: height,
-    marginBottom: 100
+    marginBottom: 100,
   }
 });

@@ -35,8 +35,6 @@ function OTP(props){
   const keyboard = useKeyboard()
   
   useEffect(() => {
-    console.log('keyboard height', keyboard.keyboardShown)
-    setDisplayHeight(keyboard.keyboardShown ? height - (keyboard.keyboardHeight + 60) : height)
     generateOTP()
   });
  
@@ -56,13 +54,21 @@ function OTP(props){
           break;
         case 'directTransfer':
           console.log("[OTP] on Direct Transfer", data)
-          sendDirectTransfer(data)
+          sendDirectTransfer(data, 'direct_transfer')
           break
+        case 'acceptPayment':
+          console.log("[OTP] on Accept Payment", data)
+          sendDirectTransfer({
+            ...data,
+            from: JSON.parse(data.to_account),
+            to: JSON.parse(data.from_account)
+          }, 'scan_payment')
       }
     } 
   }
 
   const completeOTPField = () => {
+    console.log('errorMessage', errorMessage)
     let finalOtp = '';
     for (var i = 0; i < 6; i++) {
       let item = otp[i]
@@ -111,14 +117,15 @@ function OTP(props){
         // disabled here
       }
       if(i == 5){
-        // this.completeOTPField(i)      
+        // this.completeOTPField(i)
+        otpTextInput[i].blur()
       }
       return  
     }
 
   };
 
-  const sendDirectTransfer = (data) => {
+  const sendDirectTransfer = (data, payload) => {
     console.log('OTP Create Request API Call')
     let parameter = {
       from: {
@@ -132,7 +139,8 @@ function OTP(props){
       amount: data.amount,
       currency: data.currency,
       notes: data.notes,
-      charge: data.charge
+      charge: data.charge,
+      payload: payload
     }
     console.log('[SEND directTransfer] parameter', parameter)
     setIsLoading(true)
@@ -292,11 +300,10 @@ function OTP(props){
         clause: '=',
       }]
     };
-    setErrorMessage(false)
+    setIsLoading(true)
     console.log('[OTP] parameters', JSON.stringify(parameters))
     Api.request( Routes.notificationSettingsRetrieve, parameters, (response) => {
         setIsLoading(false)
-        setErrorMessage(false)
         console.log("[OTP] Retrieve OTP", response)
         if(response.data.length > 0){
           console.log('[OTP Success]');
@@ -336,7 +343,6 @@ function OTP(props){
         placeholder={'•'}
         keyboardType={'numeric'}
         key={i}
-        autoFocus={activeIndex == i}
         ref={ref => otpTextInput[i] = ref}
       />
     );
@@ -421,7 +427,9 @@ function OTP(props){
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'space-evenly',
-            position: keyboard.keyboardShown ? 'relative' : 'absolute'
+            position: 'absolute',
+            bottom: 10,
+            left: 0
           }}>
             <Button 
               style={{

@@ -16,7 +16,6 @@ class ProposalCard extends Component {
     super(props);
   }
 
-
   withdrawAlert(item){
     Alert.alert(
       'Confirmation Message!',
@@ -155,7 +154,11 @@ class ProposalCard extends Component {
           width: '70%',
           justifyContent: 'center',
         }}>
-          <Rating ratings={''} style={[{flex: 2}]}></Rating>
+        {
+          item.rating != null && (
+            <Rating ratings={item.rating} style={[{flex: 2}]}></Rating>
+          )
+        }
         </View>
         
         <View style={{
@@ -179,7 +182,6 @@ class ProposalCard extends Component {
 
 
   _footer = (item, index) => {
-    console.log('[item==============]', item);
     const {user, theme } = this.props.state;
     const { data, request } = this.props;
     return (
@@ -248,7 +250,8 @@ class ProposalCard extends Component {
                             request: request,
                             currency: request.currency,
                             amount: request.amount,
-                            status: request.status
+                            status: request.status,
+                            menuFlag: false
                           }
                         });
                       }}
@@ -270,7 +273,6 @@ class ProposalCard extends Component {
   _myFooter = (item, index) => {
     const {user, theme} = this.props.state;
     const { data, request } = this.props;
-    console.log('[item==============]', item);
     return (
       <View>
         <View
@@ -305,7 +307,7 @@ class ProposalCard extends Component {
             </View>
           )}
             {
-              (item.status == 'approved') && (
+              (item.status == 'approved' || request.peer_status == 'approved') && (
                 <View
                   style={{
                     width: '100%',
@@ -344,7 +346,6 @@ class ProposalCard extends Component {
   render() {
     const { data, request } = this.props;
     const { user } = this.props.state;
-    console.log('user', user)
     return (
       <View>
         {

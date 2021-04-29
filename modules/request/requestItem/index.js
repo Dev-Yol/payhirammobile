@@ -76,7 +76,6 @@ class RequestItem extends Component {
     };
     this.setState({isLoading: true});
     Api.request(Routes.requestPeerRetrieveItem, parameter, (response) => {
-      // console.log('response', JSON.stringify(response));
       this.setState({isLoading: false});
       if (response.data.length > 0) {
         this.setState({
@@ -106,6 +105,7 @@ class RequestItem extends Component {
       title: data.code,
       payload: 'request'
     }
+    console.log('parameter', parameter)
     Api.request(Routes.customMessengerGroupCreate, parameter, response => {
       this.setState({ isLoading: false })
       if (response.error == null) {
@@ -169,7 +169,6 @@ class RequestItem extends Component {
   }
 
   onChangeTerms(item){
-    console.log('[OnChange]', item);
     this.setState({
       modalStatus: 'update',
       peerRequest: item
@@ -271,12 +270,20 @@ class RequestItem extends Component {
                 </View>
               )
             }
+
+            {
+              (peers) && (
+                this.renderProposals(peers)
+              )
+            }
             {
               (data.status > 0) && (
                 <View style={{
                   width: '100%',
                   backgroundColor: Color.danger,
                   height: 70,
+                  position: 'absolute',
+                  bottom: 0,
                   justifyContent: 'center',
                   alignItems: 'center'
                 }}>
@@ -285,12 +292,6 @@ class RequestItem extends Component {
                     color: Color.white
                   }}>Proposals to this request was closed.</Text>
                 </View>
-              )
-            }
-
-            {
-              (peers) && (
-                this.renderProposals(peers)
               )
             }
             {

@@ -17,14 +17,7 @@ import {FlatList, TouchableOpacity} from 'react-native';
 import { Picker } from '@react-native-community/picker';
 import {Routes, Color, Helper, BasicStyles} from 'common';
 import Skeleton from 'components/Loading/Skeleton';
-import {
-  Spinner,
-  Rating,
-  CustomModal,
-  Empty,
-  UserImage,
-  SystemNotification,
-} from 'components';
+import Message from 'components/Message/index.js'
 import Api from 'services/api/index.js';
 import Currency from 'services/Currency.js';
 import {connect} from 'react-redux';
@@ -71,7 +64,8 @@ class Requests extends Component {
       page: 'public',
       unReadPeerRequests: [],
       unReadRequests: [],
-      activeIndex: 0
+      activeIndex: 0,
+      messageEmpty: null
     };
   }
 
@@ -104,13 +98,7 @@ class Requests extends Component {
   }
 
   handleBackPress = () => {
-    const {user} = this.props.state;
-    console.log('back button');
-    if (user) {
-      return true;
-    } else {
-      return false;
-    }
+    return true
   };
 
   retrieve = (scroll, flag, loading = true) => {
@@ -128,13 +116,18 @@ class Requests extends Component {
         column: 'created_at',
         order: 'desc'
       },
-      mode: 'all'
+      mode: 'all',
+      target: 'all',
+      shipping: 'all'
     }
     if(page == 'personal'){
       parameters['request_account_id'] = user.id
     }
     if(parameter && parameter.target.toLowerCase() != 'all'){
       parameters['target'] = parameter.target
+    }
+    if(parameter && parameter.shipping.toLowerCase() != 'all'){
+      parameters['shipping'] = parameter.shipping
     }
     if(parameter && parameter.type.toLowerCase() != 'all'){
       parameters['type'] = Helper.getRequestTypeCode(parameter.type)
@@ -151,7 +144,19 @@ class Requests extends Component {
     if(page == 'public'){
       parameters['status'] = 0
     }
+    if(page == 'onNegotiation'){
+      parameters['status'] = 0
+      parameters['peer_status'] = 'requesting'
+    }
+    if(page == 'onDelivery'){
+      parameters['status'] = 1
+      parameters['peer_status'] = 'approved'
+    }
     if(page == 'history'){
+      parameters['status'] = 2
+      parameters['peer_status'] = 'approved'
+    }
+    if(page == 'history' || page == 'onNegotiation' || page == 'onDelivery'){
       parameters['mode'] = 'history'
     }
     if(user.scope_location != null){
@@ -169,24 +174,38 @@ class Requests extends Component {
     console.log('parameters', parameters)
     this.setState({isLoading: (loading == false) ? false : true});
     Api.request(Routes.requestRetrieveMobile, parameters, response => {
+      console.log('[response.data]', response.data)
       this.setState({
         // size: response.size ? response.size : 0,
         isLoading: false
       });
-        if(response.data.length > 0){
-          this.setState({
-            // data: flag == false ? response.data : response.data,
-            data: flag == false ? response.data : _.uniqBy([...this.state.data, ...response.data], 'code'),
-            numberOfPages: parseInt(response.size / this.state.limit) + (response.size % this.state.limit ? 1 : 0),
-            offset: flag == false ? 1 : (this.state.offset + 1)
-          })
-        }else{
-          this.setState({
-            data: flag == false ? [] : this.state.data,
-            numberOfPages: null,
-            offset: flag == false ? 0 : this.state.offset
-          })
+      if(response.data.length > 0){
+        this.setState({
+          // data: flag == false ? response.data : response.data,
+          messageEmpty: null,
+          data: flag == false ? response.data : _.uniqBy([...this.state.data, ...response.data], 'id'),
+          numberOfPages: parseInt(response.size / this.state.limit) + (response.size % this.state.limit ? 1 : 0),
+          offset: flag == false ? 1 : (this.state.offset + 1)
+        })
+      }else{
+        this.setState({
+          data: flag == false ? [] : this.state.data,
+          numberOfPages: null,
+          offset: flag == false ? 0 : this.state.offset
+        })
+        if(page == 'public'){
+          this.setState({messageEmpty: `Hi ${user.username}!` + ' ' + 'Grab the chance to process requests and the great chance to earn. Click the button below to get started.'})
         }
+        if(page == 'onNegotiation'){
+          this.setState({messageEmpty: `Hi ${user.username}!` + ' ' + 'Seems like you do not make any proposals yet. Click the button below to get started.'})
+        }
+        if(page == 'onDelivery'){
+          this.setState({messageEmpty: `Hi ${user.username}!` + ' ' + 'Seems like you do not have ongoing transaction yet. Click the button below to get started.'})
+        }
+        if(page == 'history'){
+          this.setState({messageEmpty: `Hi ${user.username}!` + ' ' + 'Seems like you do not have completed transaction. Click the button below to get started.'})
+        }
+      }
       },
       (error) => {
         console.log('error', error)
@@ -347,7 +366,7 @@ class Requests extends Component {
                 }}
                   key={index}
                   >
-                  <RequestCard 
+                  <RequestCard
                     onConnectRequest={(item) => {this.connectRequest(item)}}
                     data={item}
                     navigation={this.props.navigation}
@@ -362,7 +381,7 @@ class Requests extends Component {
                 paddingLeft: 10,
                 paddingRight: 10
               }}>
-                <Empty refresh={true} onRefresh={() => this.onRefresh()} />
+                <Message message={this.state.messageEmpty} navigation={this.props.navigation}/>
               </View>
             )}
             {
@@ -411,11 +430,11 @@ class Requests extends Component {
             bottom: 70
           }]}
           onPress={() => {
-            // {
-            //   user.status == 'verified' ? 
-            //   this.props.navigation.navigate('createRequestStack') : this.validate()
-            // }
-              this.props.navigation.navigate('createRequestStack')
+            {
+              (user.status == 'VERIFIED' || user.status == 'GRANTED') ? 
+              this.props.navigation.navigate('createRequestStack') : this.validate()
+            }
+              // this.props.navigation.navigate('createRequestStack')
           }}>
           <FontAwesomeIcon
             icon={faPlus}
@@ -454,9 +473,12 @@ class Requests extends Component {
               page: value,
               activeIndex: index,
               offset: 0,
-              data: []
+              data: [],
+              isLoading: true
             })
-            this.retrieve(false, false, true)
+            setTimeout(() => {
+              this.retrieve(false, false, true)
+            }, 1000)
           }}
           from={'request'}
         />  

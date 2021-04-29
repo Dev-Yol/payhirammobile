@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, Alert, Dimensions, TextInput, KeyboardAvoidingView} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, Alert, Dimensions, TextInput, KeyboardAvoidingView, AppState} from 'react-native';
 import {NavigationActions, StackActions} from 'react-navigation';
 import Button from 'components/Form/Button.js';
 import styles from 'modules/otp/Styles.js';
@@ -8,6 +8,9 @@ import {Routes, Color, Helper, BasicStyles} from 'common';
 import {Spinner} from 'components';
 import {connect} from 'react-redux';
 import Api from 'services/api';
+import FingerprintPopup from 'modules/basics/FingerPrint'
+import FingerprintScanner from 'react-native-fingerprint-scanner';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const height = Math.round(Dimensions.get('window').height);
 
@@ -31,13 +34,75 @@ class OTP extends Component {
       }],
       activeIndex: 0,
       otpTextInput: [],
-      errorMessage: null
+      errorMessage: null,
+      popupShowed: false,
+      hasCredential: false
     };
     this.otpTextInput = []
   }
 
-  componentDidMount() {
-    this.generateOTP();
+  async componentDidMount() {
+    // const { enableFingerPrint } = this.props.state;
+    console.log(await AsyncStorage.getItem(`${Helper.APP_NAME}fingerprint`));
+    if(await AsyncStorage.getItem('username') !== null && await AsyncStorage.getItem('password') !== null && await AsyncStorage.getItem(`${Helper.APP_NAME}fingerprint`) == "true"){
+      await this.setState({hasCredential: true, popupShowed: true})
+      console.log('==============================================',  this.props.state);
+    }else{
+      await this.setState({hasCredential: false, popupShowed: false})
+      this.generateOTP();
+    }
+  }
+
+
+  handleFingerprintDismissed = async() => {
+    await this.setState({ popupShowed: false });
+  };
+
+  componentWillUnmount() {
+    AppState.removeEventListener('change', this.handleAppStateChange);
+  }
+
+  detectFingerprintAvailable = () => {
+    FingerprintScanner
+      .isSensorAvailable()
+      .catch(error => this.setState({ errorMessage: error.message, biometric: error.biometric }));
+  }
+
+  handleAppStateChange = (nextAppState) => {
+    if (this.state.appState && this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
+      FingerprintScanner.release();
+      this.detectFingerprintAvailable();
+    }
+    this.setState({ appState: nextAppState });
+  }
+
+  continueTrasaction(){
+    const { data } = this.props.navigation.state.params
+    if(data){
+      switch(data.payload){
+        case 'createRequest':
+          console.log('[FingerPrint] On createRequest', data)
+          this.sendCreateRequest(data.data)
+          break;
+        case 'transferFund':
+          console.log('[OTP] On transferFund', data)
+          this.sendTransferFund(data.data)
+          break;
+        case 'directTransfer':
+          console.log("[OTP] on Direct Transfer", data)
+          this.sendDirectTransfer(data, 'direct_transfer')
+          break
+        case 'acceptPayment': {
+            console.log("[OTP] on Accept Payment", data)
+            this.sendDirectTransfer({
+              ...data,
+              from: JSON.parse(data.to_account),
+              to: JSON.parse(data.from_account)
+            }, 'scan_payment')          
+          }
+          break
+      }
+    } 
   }
 
   handleResult = () => {
@@ -55,7 +120,16 @@ class OTP extends Component {
           break;
         case 'directTransfer':
           console.log("[OTP] on Direct Transfer", data)
-          this.sendDirectTransfer(data)
+          this.sendDirectTransfer(data, 'direct_transfer')
+          break
+        case 'acceptPayment': {
+            console.log("[OTP] on Accept Payment", data)
+            this.sendDirectTransfer({
+              ...data,
+              from: JSON.parse(data.to_account),
+              to: JSON.parse(data.from_account)
+            }, 'scan_payment')          
+          }
           break
       }
     } 
@@ -116,15 +190,16 @@ class OTP extends Component {
         // disabled here
       }
       if(i == 5){
-        // this.completeOTPField(i)      
+        // this.completeOTPField(i) 
+        this.otpTextInput[i].blur()     
       }
       return  
     }
 
   };
 
-  sendDirectTransfer = (data) => {
-    console.log('OTP Create Request API Call')
+  sendDirectTransfer = (data, payload) => {
+    console.log('OTP Create Request API Call', data)
     let parameter = {
       from: {
         code: data.from.code,
@@ -137,7 +212,8 @@ class OTP extends Component {
       amount: data.amount,
       currency: data.currency,
       notes: data.notes,
-      charge: data.charge
+      charge: data.charge,
+      payload: payload
     }
     console.log('[SEND directTransfer] parameter', parameter)
     this.setState({isLoading: true});
@@ -145,11 +221,17 @@ class OTP extends Component {
         this.setState({isLoading: false});
         console.log('[OTP] Create Request response', response)
         if(response.error == null){
-          this.navigateToScreen('directTransferDrawer', 'transferFundScreen', {
-            ...data,
-            success: true,
-            code: data.to.code
-          })          
+          if(payload == 'direct_transfer'){
+            this.navigateToScreen('directTransferDrawer', 'transferFundScreen', {
+              ...data,
+              success: true,
+              code: data.to.code
+            }) 
+          }else{
+            this.navigateToScreen('Dashboard', 'Dashboard', {
+              data: null
+            })
+          }        
         }else{
           Alert.alert(
             "Error Message",
@@ -218,7 +300,7 @@ class OTP extends Component {
       code: data.code,
       account_code: user.code
     }
-    console.log('[Fund Transfer] data', parameter)
+    console.log('[Fund Transfer] parameter', parameter)
     this.setState({isLoading: true});
     Api.request(Routes.requestManageByThread, parameter, response => {
         this.setState({isLoading: false});
@@ -302,31 +384,27 @@ class OTP extends Component {
     };
     this.setState({isLoading: true});
     console.log('[OTP] parameters', JSON.stringify(parameters))
-    Api.request( Routes.notificationSettingsRetrieve, parameters, (response) => {
+    Api.request(Routes.notificationSettingsRetrieve, parameters, (response) => {
+      console.log('[OTP] response', response)
         this.setState({
           isLoading: false,
           errorMessage: null
         })
-        console.log("[OTP] Retrieve OTP", response)
         if(response.data.length > 0){
-          console.log('[OTP Success]');
+          console.log('[OTP Success]', response.data);
           this.handleResult() 
         }else{
           this.setState({
             errorMessage: 'Invalid Code.'
           })
         }
-      },
-      (error) => {
-        this.setState({isLoading: false, errorMessage: 'Invalid Code'});
-        console.log('[OTP Error]', parameter);
-      },
+      }
     );
   };
 
   render() {
     const { user, theme } = this.props.state;
-    const { isLoading } = this.state;
+    const { isLoading, popupShowed, hasCredential } = this.state;
     const { otp } = this.state;
     let inputs = []
     for (let i = 0; i < 6; i++) {
@@ -357,108 +435,127 @@ class OTP extends Component {
         />
       );
     }
-
-    return (
-      <KeyboardAvoidingView
-        style={{
-          flex: 1
-        }}
-        behavior={'height'}
-        >
-        {this.state.isLoading ? <Spinner mode="overlay" /> : null}
-        {(user) && (
-          <View style={{
-            width: '100%',
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-            height: height,
-            marginTop: 20
-          }}>
-            <View style={styles.OTPContainer}>
-              <View style={styles.OTPTextContainer}>
-                <Text style={[BasicStyles.standardFontSize, {textAlign: 'center'}]}>
-                  Please type the one time pass code sent to {user.email}.
-                </Text>
-              </View>
-              <View style={styles.OTPInputContainer}>
-                  {
-                    this.state.errorMessage != null && (
-                      <View style={{
-                        alignItems: 'center',
-                        paddingBottom: 20
-                      }}>
-                        <Text style={{
-                          color: Color.danger,
-                          textAlign: 'center'
-                        }}>Opps! {this.state.errorMessage}</Text>
-                      </View>
-                    )
-                  }
-                  <View style={{
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                    width: '90%',
-                    marginLeft: '5%',
-                    marginRight: '5%'
-                  }}>
-                  {inputs}
-                  </View>
-              </View>
-              <View style={{
-                flexDirection: 'row',
-                justifyContent: 'center',
-                alignItems: 'center',
-                width: '90%',
-                marginLeft: '5%',
-                marginRight: '5%'
-              }}>
-                <Text>
-                  Didn't receive a code?
-                </Text>
-                <TouchableOpacity
-                  onPress={this.generateOTP}>
-                  <Text style={{
-                    fontSize: BasicStyles.standardFontSize,
-                    color: Color.success,
-                    marginLeft: 5
-                  }}>
-                    Click to resend.
+    {
+      return hasCredential == false && popupShowed == false ? 
+      (
+        <KeyboardAvoidingView
+          style={{
+            flex: 1
+          }}
+          behavior={'height'}
+          >
+          {this.state.isLoading ? <Spinner mode="overlay" /> : null}
+          {(user) && (
+            <View style={{
+              width: '100%',
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: height,
+              marginTop: 20
+            }}>
+              <View style={styles.OTPContainer}>
+                <View style={styles.OTPTextContainer}>
+                  <Text style={[BasicStyles.standardFontSize, {textAlign: 'center'}]}>
+                    Please type the one time pass code sent to {user.email}.
                   </Text>
-                </TouchableOpacity>
+                </View>
+                <View style={styles.OTPInputContainer}>
+                    {
+                      this.state.errorMessage != null && (
+                        <View style={{
+                          alignItems: 'center',
+                          paddingBottom: 20
+                        }}>
+                          <Text style={{
+                            color: Color.danger,
+                            textAlign: 'center'
+                          }}>Opps! {this.state.errorMessage}</Text>
+                        </View>
+                      )
+                    }
+                    <View style={{
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                      width: '90%',
+                      marginLeft: '5%',
+                      marginRight: '5%'
+                    }}>
+                    {inputs}
+                    </View>
+                </View>
+                <View style={{
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  width: '90%',
+                  marginLeft: '5%',
+                  marginRight: '5%'
+                }}>
+                  <Text>
+                    Didn't receive a code?
+                  </Text>
+                  <TouchableOpacity
+                    onPress={this.generateOTP}>
+                    <Text style={{
+                      fontSize: BasicStyles.standardFontSize,
+                      color: theme ? theme.secondary : Color.secondary,
+                      marginLeft: 5
+                    }}>
+                      Click to resend.
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+                
               </View>
-              
             </View>
-          </View>
-        )}
-        {
-          (user) && (
-            <View style={styles.ButtonContainer}>
-              <Button 
-                style={{
-                  backgroundColor: Color.danger,
-                  width: '48%',
-                  marginRight: '1%',
-                  marginLeft: '1%'
-                }}
-                title={'Back'}
-                onClick={() => this.props.navigation.pop()}
-              />
-              <Button 
-                style={{
-                  backgroundColor: theme ? theme.secondary : Color.secondary,
-                  width: '48%',
-                  marginRight: '1%',
-                  marginLeft: '1%'
-                }}
-                title={'Continue'}
-                onClick={() => this.completeOTPField()}
-              />
-            </View>
-          )
-        }
-      </KeyboardAvoidingView>
-    );
+          )}
+          {
+            (user) && (
+              <View style={styles.ButtonContainer}>
+                <Button 
+                  style={{
+                    backgroundColor: Color.danger,
+                    width: '48%',
+                    marginRight: '1%',
+                    marginLeft: '1%'
+                  }}
+                  title={'Back'}
+                  onClick={() => this.props.navigation.pop()}
+                />
+                <Button 
+                  style={{
+                    backgroundColor: theme ? theme.secondary : Color.secondary,
+                    width: '48%',
+                    marginRight: '1%',
+                    marginLeft: '1%'
+                  }}
+                  title={'Continue'}
+                  onClick={() => this.completeOTPField()}
+                />
+              </View>
+            )
+          }
+        </KeyboardAvoidingView>
+      ):(
+        <View>
+          {
+            this.state.popupShowed == false ? 
+            <View style ={{marginTop: '50%'}}>
+              <Spinner mode="overlay" />
+            </View> :
+                <FingerprintPopup
+                  style={styles.popup}
+                  title = "Complete transaction with FingerPrint"
+                  handlePopupDismissed={() => this.handleFingerprintDismissed()}
+                  handlePopupDismissedLegacy={() => this.handleFingerprintDismissed()}
+                  onAuthenticate={() => this.continueTrasaction()}
+                />
+          }
+        </View>
+      )
+      
+    };
   }
 }
 

@@ -15,6 +15,7 @@ import {Routes, Color, Helper, BasicStyles} from 'common';
 import {Spinner, Empty, SystemNotification} from 'components';
 import Api from 'services/api/index.js';
 import Currency from 'services/Currency.js';
+import Skeleton from 'components/Loading/Skeleton';
 import {NavigationActions} from 'react-navigation';
 import {connect} from 'react-redux';
 import {Dimensions} from 'react-native';
@@ -22,7 +23,7 @@ import BalanceCard from 'modules/generic/BalanceCard.js';
 import TransactionCard from 'modules/generic/TransactionCard.js';
 import QRCodeModal from 'components/Modal/QRCode';
 import { faStar as faStarRegular } from '@fortawesome/free-regular-svg-icons';
-import { faHandHoldingUsd, faMoneyBillWave, faFileInvoice, faWallet } from '@fortawesome/free-solid-svg-icons';
+import { faHandHoldingUsd, faMoneyBillWave, faFileInvoice, faWallet, faQrcode } from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import ButtonWithIcon from 'components/Form/ButtonWithIcon';
 const width = Math.round(Dimensions.get('window').width);
@@ -37,7 +38,8 @@ class Summary extends Component {
       isLoading: false,
       selected: null,
       showRatings: true,
-      history: []
+      history: [],
+      currentLedger: null
     };
   }
 
@@ -48,11 +50,7 @@ class Summary extends Component {
       this.retrieveSummaryLedger();
     }
   }
-
-  redirect = (route) => {
-    this.props.navigation.navigate(route);
-  };
-
+  
   redirectDrawer = (route) => {
     const navigateAction = NavigationActions.navigate({
       routeName: 'Requests',
@@ -72,16 +70,22 @@ class Summary extends Component {
     this.setState({isLoading: true});
     Api.request(Routes.ledgerDashboard, parameter, (response) => {
       this.setState({isLoading: false});
-      if (response != null) {
-        setLedger(response.data.ledger);
+      if (response.data != null) {
+        console.log('Ledger', response.data.ledger)
+        // setLedger(response.data.ledger[0]);
         this.setState({
-          history: response.data.history
+          history: response.data.history,
+          currentLedger: response.data.ledger ? response.data.ledger[0] : null
         })
       } else {
-        setLedger(null);
+        // setLedger(null);
+        this.setState({
+          history: null,
+          currentLedger: null
+        })
       }
     }, error => {
-      this.setState({isLoading: false});
+      this.setState({isLoading: false, history: null, currentLedger: null});
     });
   };
 
@@ -209,7 +213,7 @@ class Summary extends Component {
   }
 
   render() {
-    const { showRatings, isLoading, history } = this.state;
+    const { showRatings, isLoading, history, currentLedger } = this.state;
     const { ledger, theme } = this.props.state;
     return (
       <View>
@@ -217,18 +221,50 @@ class Summary extends Component {
         showsVerticalScrollIndicator={false}>
           <View style={{
             ...styles.MainContainer,
-            marginTop: Platform.OS == 'ios' ? 100 : 60,
+            marginTop: Platform.OS == 'ios' ? 60 : 60,
             minHeight: height
           }}>
 
             {
-              (ledger != null && ledger.length > 0) && ledger.map((item, index) => (
+              (ledger != null && ledger.length > 0) && (
                 <BalanceCard
-                  key={index}
-                  data={item}
+                  data={ledger}
                 />
-              ))
+              )
             }
+            {
+              (currentLedger) && (
+                <BalanceCard data={currentLedger}/>
+              )
+            }
+            
+            {
+              (isLoading) && (
+                <Skeleton size={1} />
+              )
+            }
+
+            {
+              (isLoading == false) && (
+                <TouchableOpacity
+                  style={{
+                    width: '90%',
+                    paddingTop: 20,
+                    marginLeft: '5%',
+                    marginRight: '5%',
+                  }}
+                  onPress={() => {this.props.navigation.navigate('currencyStack')
+                }}>
+                  <Text style={{
+                    width: '100%',
+                    textAlign: 'center',
+                    color: theme ? theme.secondary : Color.secondary,
+                    fontWeight: 'bold'
+                  }}>View More</Text>
+                </TouchableOpacity>
+              )
+            }
+            
 
             <Text style={{
               width: '100%',
@@ -273,7 +309,7 @@ class Summary extends Component {
                 onClick={() => {
                   this.props.navigation.navigate('createRequestStack', {
                     data: {
-                      type: 'Send',
+                      type: 'Send Cash',
                       description: 'Allow other peers to fulfill your transaction when you to send money to your family, friends, or to businesses',
                       id: 1,
                       money_type: 'cash'
@@ -309,27 +345,54 @@ class Summary extends Component {
               />   
             </View>
 
-            <ButtonWithIcon 
-              title={'Send to Wallet(Free)'}
-              onClick={() => {
-                this.props.navigation.navigate('qrCodeScannerStack', {
-                  payload: 'transfer'
-                })
-              }}
-              description={'Transfer money through PayHiram to PayHiram Account'}
-              style={{
-                width: '90%',
-                marginLeft: '5%',
-                marginRight: '5%',
-                marginTop: 20,
-                height: 150,
-                backgroundColor: theme ? theme.secondary : Color.secondary,
-              }}
-              icon={faWallet}
-              descriptionStyle={{
-                fontSize: BasicStyles.standardFontSize
-              }}
-            />
+            <View style={{
+              flexDirection: 'row',
+              width: '90%',
+              marginLeft: '5%',
+              marginRight: '5%',
+              marginTop: 20
+            }}>
+              <ButtonWithIcon 
+                title={'Send to Wallet(FREE)'}
+                onClick={() => {
+                  this.props.navigation.navigate('qrCodeScannerStack', {
+                    payload: 'transfer'
+                  })
+                }}
+                description={'Transfer money through PayHiram to PayHiram Account'}
+                style={{
+                  width: '49%',
+                  marginRight: '1%',
+                  height: 150,
+                  backgroundColor: theme ? theme.secondary : Color.secondary,
+                }}
+                icon={faWallet}
+                descriptionStyle={{
+                  fontSize: BasicStyles.standardFontSize
+                }}
+              />
+
+              <ButtonWithIcon 
+                title={'Scan Payment(FREE)'}
+                onClick={() => {
+                  this.props.navigation.navigate('qrCodeScannerStack', {
+                    payload: 'scan_payment'
+                  })
+                }}
+                description={'Scan qr code from your customer.'}
+                style={{
+                  width: '49%',
+                  marginLeft: '1%',
+                  height: 150,
+                  backgroundColor: theme ? theme.secondary : Color.secondary,
+                }}
+                icon={faQrcode}
+                descriptionStyle={{
+                  fontSize: BasicStyles.standardFontSize
+                }}
+              />
+
+            </View>
             {
               (history && history.length > 0) && this.renderTransactionHeader()
             }
@@ -345,12 +408,14 @@ class Summary extends Component {
                       <TransactionCard data={item} key={index}/>
                     ))
                   }
+              {
+                isLoading && (<Skeleton size={2}/>)
+              }
                 </View>
               )
             }
           </View>
         </ScrollView>
-        {isLoading ? <Spinner mode="overlay" /> : null}
         {/* {
           showRatings && (
             <View style={{

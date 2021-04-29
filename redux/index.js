@@ -43,7 +43,15 @@ const types = {
   SET_FILTER_DATA: 'SET_FILTER_DATA',
   SET_DEVICE_LOCATION: 'SET_DEVICE_LOCATION',
   SET_PARAMETER: 'SET_PARAMETER',
-  SET_DEEPLINK_ROUTE: 'SET_DEEPLINK_ROUTE'
+  SET_DEEPLINK_ROUTE: 'SET_DEEPLINK_ROUTE',
+  SET_CURRENCY_BAL: 'SET_CURRENCY_BAL',
+  SET_ACCEPT_PAYMENT: 'SET_ACCEPT_PAYMENT',
+  SET_COMMENTS: 'SET_COMMENTS',
+  SET_CURRENT_TICKET_ID: 'SET_CURRENT_TICKET_ID',
+  SET_FROM: 'SET_FROM',
+  SET_PAYMENT_CONFIRMATION: 'SET_PAYMENT_CONFIRMATION',
+  SET_ENABLE_FINGER_PRINT: 'SET_ENABLE_FINGER_PRINT',
+  VIEW_CHANGE_PASS: 'VIEW_CHANGE_PASS'
 };
 
 export const actions = {
@@ -163,6 +171,30 @@ export const actions = {
   },
   setDeepLinkRoute(deepLinkRoute) {
     return {type: types.SET_DEEPLINK_ROUTE, deepLinkRoute}
+  },
+  setCurrencyBal(currencyBal) {
+    return {type: types.SET_CURRENCY_BAL, currencyBal}
+  },
+  setAcceptPayment(acceptPayment) {
+    return {type: types.SET_ACCEPT_PAYMENT, acceptPayment}
+  },
+  setComments(comments) {
+    return {type: types.SET_COMMENTS, comments}
+  },
+  setCurrentTicketId(currentTicketId) {
+    return {type: types.SET_CURRENT_TICKET_ID, currentTicketId}
+  },
+  setFrom(location_from) {
+    return {type: types.SET_FROM, location_from}
+  },
+  setPaymentConfirmation(flag) {
+    return {type: types.SET_PAYMENT_CONFIRMATION, flag}
+  },
+  setEnableFingerPrint(enable){
+    return {type: types.SET_ENABLE_FINGER_PRINT, enable}
+  },
+  viewChangePass(changePassword) {
+    return {type: types.VIEW_CHANGE_PASS, changePassword}
   }
 };
 
@@ -210,7 +242,18 @@ const initialState = {
   circleSearch: null,
   filterData: null,
   deviceLocation: null,
-  deepLinkRoute: null
+  deepLinkRoute: null,
+  currencyBal: null,
+  acceptPayment: null,
+  location_from: null,
+  comments: {
+    id: null,
+    commentList: []
+  },
+  changePassword: 0,
+  currentTicketId: null,
+  paymentConfirmation: false,
+  enableFingerPrint: false,
 };
 
 storeData = async (key, value) => {
@@ -246,6 +289,11 @@ const reducer = (state = initialState, action) => {
   const { filterData } = action;
   const { deviceLocation } = action;
   const { parameter, deepLinkRoute } = action;
+  const { parameter, currencyBal } = action;
+  const { acceptPayment, location_from } = action;
+  const { comments } = action;
+  const { enable } = action;
+  const { changePassword } = action;
   switch (type) {
     case types.LOGOUT:
       storeData('token', '');
@@ -363,7 +411,7 @@ const reducer = (state = initialState, action) => {
       let updatedMessagesOnGroup = null;
       if (state.messagesOnGroup != null) {
         let oldMessages = state.messagesOnGroup.messages;
-        if (oldMessages == null) {
+        if (oldMessages == null || oldMessages.length == 0) {
           let temp = [];
           temp.push(message);
           updatedMessagesOnGroup = {
@@ -593,6 +641,50 @@ const reducer = (state = initialState, action) => {
         ...state,
         deepLinkRoute,
       }
+    case types.SET_CURRENCY_BAL:
+      return {
+        ...state,
+        currencyBal,
+      };
+    case types.SET_ACCEPT_PAYMENT:
+      return {
+        ...state,
+        acceptPayment
+      }
+    case types.SET_COMMENTS:
+      if(comments.id == state.currentTicketId) {
+        return {
+          ...state,
+          comments,
+        };
+      }
+    case types.SET_CURRENT_TICKET_ID:
+      return {
+        ...state,
+        currentTicketId,
+      };
+    case types.SET_FROM:
+      return {
+        ...state,
+        location_from,
+      };
+    case types.SET_PAYMENT_CONFIRMATION:
+      return {
+        ...state,
+        paymentConfirmation: flag
+      };
+    case types.SET_ENABLE_FINGER_PRINT:
+      console.log('[enable finger print::]', enable == false ? "true" : "false");
+      storeData('fingerprint', enable == false ? "true" : "false");
+      return {
+        ...state,
+        enableFingerPrint: enable,
+      };
+    case types.VIEW_CHANGE_PASS:
+      return {
+        ...state,
+        changePassword,
+      };
     default:
       return {...state, nav: state.nav};
   }

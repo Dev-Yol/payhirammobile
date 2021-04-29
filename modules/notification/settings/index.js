@@ -12,11 +12,13 @@ class NotificationSettings extends Component {
       login: false,
       pin: false,
       isLoading: false,
-      id: null
+      id: null,
+      enable: false
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
+    // this.setState({enable: await AsyncStorage.getItem(`${Helper.APP_NAME}fingerprint`)})
     let parameter = {
       condition: [{
         value: this.props.state.user.id,
@@ -82,8 +84,16 @@ class NotificationSettings extends Component {
     })
   }
 
-  changeState(status){
-    this.update(status)
+  async changeState(status){
+    const { setEnableFingerPrint } = this.props;
+    const {enable} = this.state
+    if(status = 'fingerPrint'){
+      await this.setState({enable : !enable})
+      this.update(status)
+      setEnableFingerPrint(enable);
+    }else{
+      this.update(status)
+    }
   }
 
   render() {
@@ -109,7 +119,19 @@ class NotificationSettings extends Component {
                 ios_backgroundColor={Color.danger}
                 />
             </View>
-            <View style={{flexDirection: 'row', borderBottomWidth: 1, borderColor: Color.gray, padding: 20}}>
+            {/* <View style={{flexDirection: 'row', borderBottomWidth: 1, borderColor: Color.gray, padding: 20}}>
+              <View style={{flex: 1}}>
+                <Text>Fingerprint</Text>
+                <Text style={{fontSize: 10}}>Use for a convenient way to accept and process transactions.</Text>
+              </View>
+              <Switch
+                trackColor={{ false: Color.danger, true: theme ? theme.primary : Color.primary }}
+                thumbColor={'white'} onValueChange={() => this.changeState('fingerPrint')}
+                value={this.state.enable}
+                ios_backgroundColor={Color.danger}
+                />
+            </View> */}
+            {/* <View style={{flexDirection: 'row', borderBottomWidth: 1, borderColor: Color.gray, padding: 20}}>
               <View style={{flex: 1}}>
                 <Text>Account PIN</Text>
                 <Text style={{fontSize: 10}}>Receive new PIN from email everytime there's a login with my account.</Text>
@@ -120,7 +142,7 @@ class NotificationSettings extends Component {
                 value={this.state.pin}
                 ios_backgroundColor={Color.danger}
                 />
-            </View>
+            </View> */}
           </View>
         </ScrollView>
       </View>
@@ -134,6 +156,9 @@ const mapStateToProps = (state) => ({state: state});
 const mapDispatchToProps = (dispatch) => {
   const {actions} = require('@redux');
   return {
+    setEnableFingerPrint(isEnable){
+      dispatch(actions.setEnableFingerPrint(isEnable));
+    }
   };
 };
 

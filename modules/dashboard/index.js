@@ -8,7 +8,8 @@ import {
   ScrollView,
   FlatList,
   StyleSheet,
-  TouchableOpacity
+  TouchableOpacity,
+  BackHandler
 } from 'react-native';
 import {Routes, Color, Helper, BasicStyles} from 'common';
 import {connect} from 'react-redux';
@@ -28,9 +29,26 @@ class Dashboard extends Component {
     this.state = {
       showRatings: true,
       page: 'summary',
-      activeIndex: 0
+      activeIndex: 0,
+      isLoading: false
     };
   }
+
+  componentDidMount(){
+    this.backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      this.handleBackPress,
+    );
+  }
+
+
+  componentWillUnmount() {
+    this.backHandler.remove();
+  }
+
+  handleBackPress = () => {
+    return true
+  };
 
   render() {
     const { showRatings, isLoading, history, activeIndex } = this.state;
@@ -77,7 +95,7 @@ class Dashboard extends Component {
             })
           }}
           from={'dashboard'}
-        />  
+        />
       </View>
     );
   }

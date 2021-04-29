@@ -38,7 +38,6 @@ class TransferFundCard extends Component {
     console.log('[RequestItem] Retrieve parameter', parameter)
     Api.request(Routes.requestPeerRetrieveItem, parameter, (response) => {
       this.setState({isLoading: false});
-      console.log('response', response.data.account)
       if (response.data.length > 0) {
         this.setState({
           peer: response.data
@@ -100,7 +99,7 @@ class TransferFundCard extends Component {
   render() {
     const {user, theme, messengerGroup} = this.props.state
     const { data } = this.props.navigation.state.params;
-    console.log('[transferFund] data', data)
+    console.log('[transferFUnd]', data)
     return (
       <SafeAreaView key={data}>
         <ScrollView

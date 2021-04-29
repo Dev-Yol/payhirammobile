@@ -33,15 +33,16 @@ class AddLocation extends Component {
     */
     if (this.state.addingAddress && this.props.state.location != null) {
       // this.setState({ isAddingAddressName: true })
-      if(location.latitude == null || location.longitude == null || location.route == null || location.locality == null || location.region == null || location.country == null){
-        Alert.alert(
-          'Error Message',
-          'Invalid Pinned Location',
-          [
-            {text: 'Ok', onPress: () => console.log('Cancel'), style: 'cancel'}
-          ],
-          { cancelable: false }
-        )
+      if(location.route == null && location.region != null){
+        location.route = location.locality
+        this.addAddress()
+      }else if(location.route != null && location.region == null){
+        location.region = location.locality
+        this.addAddress()
+      }else if(location.route == null && location.region == null){
+        location.route = location.locality
+        location.region = location.locality
+        this.addAddress()
       }else{
         this.addAddress()
       }
@@ -67,7 +68,11 @@ class AddLocation extends Component {
     this.setState({ selectedAddress: index });
     setDefaultAddress(this.state.addresses[index]);
     console.log('[default]', this.props.state.defaultAddress);
-    this.props.navigation.pop()
+    if(this.props.state.location_from == 'proposal'){
+      this.props.navigation.navigate('requestItemStack', {data: this.props.state.request});
+    }else{
+      this.props.navigation.pop()
+    }
   };
 
   renderAddresses = () => {
@@ -170,12 +175,12 @@ class AddLocation extends Component {
     })
   }
 
-  redirect = (route) => {
-    this.props.navigation.navigate(route);
+  redirect = (route, param) => {
+    this.props.navigation.navigate(route, {data: param});
   };
 
   render() {
-    const {location} = this.props.state
+    const {location, location_from, theme} = this.props.state
     const {isLoading} = this.state
     return (
       <View style={{
@@ -196,18 +201,19 @@ class AddLocation extends Component {
             const {setLocation} = await this.props
             await setLocation(null)
             console.log('[lcoation again]', this.props.state.location);
-            await this.redirect('locationWithMapStack')
+            await this.redirect('locationWithMapStack', this.props.from)
             await this.setState({addingAddress: true})
           }}
           title={'Add Address'}
           style={{
-            backgroundColor: Color.secondary,
+            backgroundColor: theme ? theme.secondary : Color.secondary,
             position: 'absolute',
             bottom: 10,
             left: '5%',
             right: '5%',
             width: '90%'
           }}
+          from={'proposal'}
         />
         <Modal
           animationType="fade"

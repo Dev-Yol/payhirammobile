@@ -70,7 +70,7 @@ const DirectTransferStack = createStackNavigator({
   transferFundScreen: {
     screen: TransferFund,
     navigationOptions: ({navigation}) => ({
-      title: 'Direct Transfer',
+      title: 'Send Money',
       headerLeft: <HeaderOptionsConnect navigationProps={navigation} />,
       ...BasicStyles.headerDrawerStyle
     }),

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {View, Text, TouchableOpacity, Platform} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faUsers, faUser, faClock, faTachometerAlt, faPaperPlane, faMoneyBillWave} from '@fortawesome/free-solid-svg-icons';
+import {faUsers, faUser, faClock, faTachometerAlt, faPaperPlane, faMoneyBillWave, faHandshake, faWalking, faHistory} from '@fortawesome/free-solid-svg-icons';
 import {NavigationActions, StackActions} from 'react-navigation';
 import {BasicStyles, Color} from 'common';
 import {connect} from 'react-redux';
@@ -39,7 +39,8 @@ class Footer extends Component {
     const { theme } = this.props.state;
     return(
       <View
-        style={{          alignItems: 'center',
+        style={{          
+          alignItems: 'center',
           justifyContent: 'center',
           width: '100%',
           position: 'absolute',
@@ -61,7 +62,7 @@ class Footer extends Component {
                   style={{
                     justifyContent: 'center',
                     alignItems: 'center',
-                    width: '33%',
+                    width: '20%',
                     flexDirection: 'row'
                   }}
                   >
@@ -82,7 +83,7 @@ class Footer extends Component {
                   style={{
                     justifyContent: 'center',
                     alignItems: 'center',
-                    width: '34%',
+                    width: '20%',
                     flexDirection: 'row'
                   }}
                   >
@@ -98,16 +99,56 @@ class Footer extends Component {
                   />
                 </TouchableOpacity>
                 <TouchableOpacity
-                  onPress={() => this.props.onSelect('history', 2)}
+                  onPress={() => this.props.onSelect('onNegotiation', 2)}
                   style={{
                     justifyContent: 'center',
                     alignItems: 'center',
-                    width: '33%',
+                    width: '20%',
                     flexDirection: 'row'
                   }}
                   >
                   <FontAwesomeIcon
-                    icon={faClock}
+                    icon={faHandshake}
+                    size={18}
+                    style={[
+                      BasicStyles.iconStyle,
+                      {
+                        color: selected == 'onNegotiation' ? Color.white : gray,
+                      },
+                    ]}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => this.props.onSelect('onDelivery', 3)}
+                  style={{
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    width: '20%',
+                    flexDirection: 'row'
+                  }}
+                  >
+                  <FontAwesomeIcon
+                    icon={faWalking}
+                    size={18}
+                    style={[
+                      BasicStyles.iconStyle,
+                      {
+                        color: selected == 'onDelivery' ? Color.white : gray,
+                      },
+                    ]}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => this.props.onSelect('history', 4)}
+                  style={{
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    width: '20%',
+                    flexDirection: 'row'
+                  }}
+                  >
+                  <FontAwesomeIcon
+                    icon={faHistory}
                     size={18}
                     style={[
                       BasicStyles.iconStyle,
@@ -280,7 +321,7 @@ class Footer extends Component {
                 />
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={() => this.navigateToScreen('Circle')}
+                onPress={() => this.navigateToScreen('Support')}
                 style={{
                   justifyContent: 'center',
                   alignItems: 'center',

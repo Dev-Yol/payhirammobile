@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import React, {Component} from 'react';
 import styles from './Style';
 import {NavigationActions, StackActions} from 'react-navigation';
-import {ScrollView, Text, View, Image, TouchableOpacity} from 'react-native';
+import {ScrollView, Text, View, Image, TouchableOpacity, Linking } from 'react-native';
 import { connect } from 'react-redux';
 import { Helper, BasicStyles, Color, Routes } from 'common';
 import Config from 'src/config.js';
@@ -87,12 +87,12 @@ class Slider extends Component {
                   }
 
                   {
-                    user.status == 'verified' && (
+                    (user.status == 'GRANTED' || user.status == 'VERIFIED') && (
                       <FontAwesomeIcon
                         icon={faCheckCircle}
                         size={20}
                         style={{
-                          color: 'aqua',
+                          color: theme ? theme.secondary : Color.secondary,
                           marginTop: -15,
                           marginLeft: 60
                         }}
@@ -136,10 +136,11 @@ class Slider extends Component {
                   </TouchableOpacity>
 
                 </View>
-              ) : <Text style={[styles.sectionHeadingStyle, {
-              paddingTop: 150,
-              backgroundColor: theme ? theme.primary : Color.primary
-            }]}>
+              ) : 
+              <Text style={[styles.sectionHeadingStyle, {
+                paddingTop: 150,
+                backgroundColor: theme ? theme.primary : Color.primary
+              }]}>
               Welcome to {Helper.company}!
             </Text>}
             {Helper.DrawerMenu.length > 0 &&
@@ -171,7 +172,9 @@ class Slider extends Component {
         </ScrollView>
         
         <View style={styles.footerContainer}>
-          <Text>A product of {Helper.company}</Text>
+          <Text
+            style={{color: theme ? theme.primary : Color.primary, textDecorationLine: 'underline'}}
+           onPress={() => Linking.openURL('http://increment.ltd/')}>A product of {Helper.company}</Text>
         </View>
       </View>
     );
