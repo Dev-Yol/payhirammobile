@@ -2,6 +2,7 @@ import { createStackNavigator } from 'react-navigation-stack';
 import Login from 'modules/basics/rounded/LoginWithFingerPrint';
 import FingerprintScan from '../modules/basics/FingerPrintScanner';
 import ForgotPassword from 'modules/basics/rounded/ForgotPassword';
+import VerifyEmail from 'modules/basics/rounded/VerifyEmail';
 import Register from 'modules/basics/rounded/Register';
 import Drawer from './Drawer';
 import NotificationStack from 'modules/notification/Drawer.js';
