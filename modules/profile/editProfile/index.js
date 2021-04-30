@@ -158,9 +158,9 @@ class EditProfile extends Component {
       response.data[0].content.map(element => {
         this.state.uploadedID.push(element)
       })
-      if(response.data[0].content.length == 4){
-        this.setState({ reachMax : true })
-      }
+      // if(response.data[0].content.length  4){
+      //   this.setState({ reachMax : true })
+      // }
     })
     this.verifyApplication()
   }
@@ -251,25 +251,25 @@ class EditProfile extends Component {
 
   uploadMessage = () => {
     const { reachMax } = this.state
-    if(reachMax == true){
-      Alert.alert(
-        'Message',
-        'You have reached the maximum number of uploads',
-        [
-          { text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel' }
-        ],
-        { cancelable: false }
-      )
-    }else{
+    // if(reachMax == true){
+    //   Alert.alert(
+    //     'Message',
+    //     `Please upload minimum of four(4) ID's`,
+    //     [
+    //       { text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel' }
+    //     ],
+    //     { cancelable: false }
+    //   )
+    // }else{
       Alert.alert(
         'Notice',
-        "You are only allowed to upload maximum of Four(4) ID's",
+        "Please upload at least Four(4) ID's",
         [
           { text: 'Ok', onPress: () => this.uploadId(), style: 'cancel' }
         ],
         { cancelable: false }
       )
-    }
+    // }
   }
 
   uploadId = () => {
@@ -309,7 +309,7 @@ class EditProfile extends Component {
               imageData.append('payload', 'upload_image')
                 Api.upload(Routes.accountCardsCreate, imageData, response => {
                   if (response.data !== null) {
-                    this.retrieve();
+                    this.retrieveUploadedId();
                     Alert.alert(
                       'Message',
                       'ID successfully uploaded',
@@ -345,7 +345,7 @@ class EditProfile extends Component {
         { cancelable: false }
       )
       return
-    } else if (this.state.first_name == dataRetrieve.first_name || this.state.middle_name == dataRetrieve.middle_name || this.state.last_name == dataRetrieve.last_name || this.state.sex == dataRetrieve.sex) {
+    } else if (this.state.first_name == dataRetrieve.first_name && this.state.middle_name == dataRetrieve.middle_name && this.state.last_name == dataRetrieve.last_name && this.state.sex == dataRetrieve.sex) {
       Alert.alert(
         'Message',
         'Nothing is Updated',
