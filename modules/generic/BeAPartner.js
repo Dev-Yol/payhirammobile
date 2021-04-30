@@ -58,7 +58,7 @@ class BeAPartner extends Component {
                     <Button
                       title={'Learn More'}
                       onClick={() => {
-                        this.props.navigation.navigate('editProfileStack')
+                        this.props.navigation.navigate('partnerPlansStack')
                       }}
                       style={{
                         width: '50%',

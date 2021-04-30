@@ -50,7 +50,8 @@ const types = {
   SET_FROM: 'SET_FROM',
   SET_PAYMENT_CONFIRMATION: 'SET_PAYMENT_CONFIRMATION',
   SET_ENABLE_FINGER_PRINT: 'SET_ENABLE_FINGER_PRINT',
-  VIEW_CHANGE_PASS: 'VIEW_CHANGE_PASS'
+  VIEW_CHANGE_PASS: 'VIEW_CHANGE_PASS',
+  SET_PART: 'SET_PART'
 };
 
 export const actions = {
@@ -141,6 +142,9 @@ export const actions = {
   viewMenu(isViewing){
     return {type: types.VIEW_MENU, isViewing}
   },
+  setPart(part){
+    return {type: types.SET_PART, part}
+  },
   viewShare(isShow){
     return {type: types.VIEW_SHARE, isShow}
   },
@@ -197,6 +201,7 @@ export const actions = {
 const date = new Date()
 const initialState = {
   token: null,
+  part: null,
   user: null,
   notifications: null,
   messenger: null,
@@ -287,7 +292,7 @@ const reducer = (state = initialState, action) => {
   const { acceptPayment, location_from } = action;
   const { comments } = action;
   const { enable } = action;
-  const { changePassword } = action;
+  const { changePassword, part } = action;
   switch (type) {
     case types.LOGOUT:
       // storeData('token', '');
@@ -609,6 +614,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         circleSearch
+      };
+    case types.SET_PART:
+      return {
+        ...state,
+        part
       };
     case types.SET_FILTER_DATA:
       return {
