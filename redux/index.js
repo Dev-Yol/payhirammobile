@@ -43,6 +43,7 @@ const types = {
   SET_FILTER_DATA: 'SET_FILTER_DATA',
   SET_DEVICE_LOCATION: 'SET_DEVICE_LOCATION',
   SET_PARAMETER: 'SET_PARAMETER',
+  SET_DEEPLINK_ROUTE: 'SET_DEEPLINK_ROUTE',
   SET_CURRENCY_BAL: 'SET_CURRENCY_BAL',
   SET_ACCEPT_PAYMENT: 'SET_ACCEPT_PAYMENT',
   SET_COMMENTS: 'SET_COMMENTS',
@@ -168,6 +169,9 @@ export const actions = {
   setParameter(parameter) {
     return {type: types.SET_PARAMETER, parameter}
   },
+  setDeepLinkRoute(deepLinkRoute) {
+    return {type: types.SET_DEEPLINK_ROUTE, deepLinkRoute}
+  },
   setCurrencyBal(currencyBal) {
     return {type: types.SET_CURRENCY_BAL, currencyBal}
   },
@@ -238,6 +242,7 @@ const initialState = {
   circleSearch: null,
   filterData: null,
   deviceLocation: null,
+  deepLinkRoute: null,
   currencyBal: null,
   acceptPayment: null,
   location_from: null,
@@ -283,7 +288,7 @@ const reducer = (state = initialState, action) => {
   const { circleSearch } = action;
   const { filterData } = action;
   const { deviceLocation } = action;
-  const { parameter, currencyBal } = action;
+  const { parameter, deepLinkRoute, currencyBal } = action;
   const { acceptPayment, location_from } = action;
   const { comments } = action;
   const { enable } = action;
@@ -630,6 +635,11 @@ const reducer = (state = initialState, action) => {
         ...state,
         ledger,
       };
+    case types.SET_DEEPLINK_ROUTE:
+      return {
+        ...state,
+        deepLinkRoute,
+      }
     case types.SET_CURRENCY_BAL:
       return {
         ...state,
