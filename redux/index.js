@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import Data from 'services/Data';
-import {Helper, Color} from 'common';
-import {Routes} from 'common';
+import { Helper, Color } from 'common';
+import { Routes } from 'common';
 import Api from '../services/api';
 
 const types = {
@@ -56,70 +56,70 @@ const types = {
 
 export const actions = {
   login: (user, token) => {
-    return {type: types.LOGIN, user, token};
+    return { type: types.LOGIN, user, token };
   },
   logout() {
-    return {type: types.LOGOUT};
+    return { type: types.LOGOUT };
   },
   updateUser: (user) => {
-    return {type: types.UPDATE_USER, user};
+    return { type: types.UPDATE_USER, user };
   },
   setNotifications(unread, notifications) {
-    return {type: types.SET_NOTIFICATIONS, unread, notifications};
+    return { type: types.SET_NOTIFICATIONS, unread, notifications };
   },
   setMessenger(unread, messages) {
-    return {type: types.SET_MESSAGES, unread, messages};
+    return { type: types.SET_MESSAGES, unread, messages };
   },
   setLedger(ledger) {
-    return {type: types.SET_LEDGER, ledger};
+    return { type: types.SET_LEDGER, ledger };
   },
   setUserLedger(userLedger) {
-    return {type: types.SET_USER_LEDGER, userLedger};
+    return { type: types.SET_USER_LEDGER, userLedger };
   },
   setMessengerGroup(messengerGroup) {
-    return {type: types.SET_MESSENGER_GROUP, messengerGroup};
+    return { type: types.SET_MESSENGER_GROUP, messengerGroup };
   },
   updateMessengerGroup(messengerGroup) {
-    return {type: types.UPDATE_MESSENGER_GROUP, messengerGroup};
+    return { type: types.UPDATE_MESSENGER_GROUP, messengerGroup };
   },
   updateMessagesOnGroupByPayload(messages) {
-    return {type: types.UPDATE_MESSAGES_ON_GROUP_BY_PAYLOAD, messages};
+    return { type: types.UPDATE_MESSAGES_ON_GROUP_BY_PAYLOAD, messages };
   },
   setMessagesOnGroup(messagesOnGroup) {
-    return {type: types.SET_MESSAGES_ON_GROUP, messagesOnGroup};
+    return { type: types.SET_MESSAGES_ON_GROUP, messagesOnGroup };
   },
   updateMessagesOnGroup(message) {
-    return {type: types.UPDATE_MESSAGES_ON_GROUP, message};
+    return { type: types.UPDATE_MESSAGES_ON_GROUP, message };
   },
   updateMessageByCode(message) {
-    return {type: types.UPDATE_MESSAGE_BY_CODE, message};
+    return { type: types.UPDATE_MESSAGE_BY_CODE, message };
   },
   setLocation(location) {
-    return {type: types.SET_LOCATION, location};
+    return { type: types.SET_LOCATION, location };
   },
   updateNotifications(unread, notification) {
-    return {type: types.UPDATE_NOTIFICATIONS, unread, notification};
+    return { type: types.UPDATE_NOTIFICATIONS, unread, notification };
   },
   setSearchParameter(searchParameter) {
-    return {type: types.SET_SEARCH_PARAMETER, searchParameter};
+    return { type: types.SET_SEARCH_PARAMETER, searchParameter };
   },
   setRequests(requests) {
-    return {type: types.SET_REQUESTS, requests};
+    return { type: types.SET_REQUESTS, requests };
   },
   setRequest(request) {
-    return {type: types.SET_REQUEST, request};
+    return { type: types.SET_REQUEST, request };
   },
   updateRequests(request) {
-    return {type: types.UPDATE_REQUESTS, request};
+    return { type: types.UPDATE_REQUESTS, request };
   },
   setPinFlag(pinFlag) {
-    return {type: types.SET_PIN_FLAG, pinFlag};
+    return { type: types.SET_PIN_FLAG, pinFlag };
   },
   setSystemNotification(systemNotification) {
-    return {type: types.SET_SYSTEM_NOTIFICATION, systemNotification};
+    return { type: types.SET_SYSTEM_NOTIFICATION, systemNotification };
   },
   setProduct(product) {
-    return {type: types.SET_PRODUCT, product};
+    return { type: types.SET_PRODUCT, product };
   },
   setSelectedProductId(productId) {
     return {
@@ -128,73 +128,73 @@ export const actions = {
     };
   },
   setQRCodeModal(isVisible) {
-    return {type: types.QRCODE_MODAL, isVisible};
+    return { type: types.QRCODE_MODAL, isVisible };
   },
   setTheme(theme) {
-    return {type: types.SET_THEME, theme};
+    return { type: types.SET_THEME, theme };
   },
   setRequestInput(requestInput) {
-    return {type: types.SET_REQUEST_INPUT, requestInput};
+    return { type: types.SET_REQUEST_INPUT, requestInput };
   },
   setIsValidOtp(isValidOtp) {
-    return {type: types.SET_VALIDATE_OTP, isValidOtp};
+    return { type: types.SET_VALIDATE_OTP, isValidOtp };
   },
-  viewMenu(isViewing){
-    return {type: types.VIEW_MENU, isViewing}
+  viewMenu(isViewing) {
+    return { type: types.VIEW_MENU, isViewing }
   },
-  viewShare(isShow){
-    return {type: types.VIEW_SHARE, isShow}
+  viewShare(isShow) {
+    return { type: types.VIEW_SHARE, isShow }
   },
   setDefaultAddress(defaultAddress) {
-    return {type: types.SET_DEFAULT_ADDRESS, defaultAddress}
+    return { type: types.SET_DEFAULT_ADDRESS, defaultAddress }
   },
   setUnReadMessages(messages) {
-    return {type: types.SET_UNREAD_MESSAGES, messages}
+    return { type: types.SET_UNREAD_MESSAGES, messages }
   },
   setUnReadPeerRequest(message) {
-    return {type: types.SET_UNREAD_PEER_REQUEST, messages}
+    return { type: types.SET_UNREAD_PEER_REQUEST, messages }
   },
   setUnReadRequests(requests) {
-    return {type: types.SET_UNREAD_REQUESTS, requests}
+    return { type: types.SET_UNREAD_REQUESTS, requests }
   },
   setCircleSearch(circleSearch) {
-    return {type: types.SET_CIRCLE_SEARCH, circleSearch}
+    return { type: types.SET_CIRCLE_SEARCH, circleSearch }
   },
   setFilterData(filterData) {
-    return {type: types.SET_FILTER_DATA, filterData}
+    return { type: types.SET_FILTER_DATA, filterData }
   },
   setDeviceLocation(deviceLocation) {
-    return {type: types.SET_DEVICE_LOCATION, deviceLocation}
+    return { type: types.SET_DEVICE_LOCATION, deviceLocation }
   },
   setParameter(parameter) {
-    return {type: types.SET_PARAMETER, parameter}
+    return { type: types.SET_PARAMETER, parameter }
   },
   setDeepLinkRoute(deepLinkRoute) {
     return {type: types.SET_DEEPLINK_ROUTE, deepLinkRoute}
   },
   setCurrencyBal(currencyBal) {
-    return {type: types.SET_CURRENCY_BAL, currencyBal}
+    return { type: types.SET_CURRENCY_BAL, currencyBal }
   },
   setAcceptPayment(acceptPayment) {
-    return {type: types.SET_ACCEPT_PAYMENT, acceptPayment}
+    return { type: types.SET_ACCEPT_PAYMENT, acceptPayment }
   },
   setComments(comments) {
-    return {type: types.SET_COMMENTS, comments}
+    return { type: types.SET_COMMENTS, comments }
   },
   setCurrentTicketId(currentTicketId) {
-    return {type: types.SET_CURRENT_TICKET_ID, currentTicketId}
+    return { type: types.SET_CURRENT_TICKET_ID, currentTicketId }
   },
   setFrom(location_from) {
-    return {type: types.SET_FROM, location_from}
+    return { type: types.SET_FROM, location_from }
   },
   setPaymentConfirmation(flag) {
-    return {type: types.SET_PAYMENT_CONFIRMATION, flag}
+    return { type: types.SET_PAYMENT_CONFIRMATION, flag }
   },
-  setEnableFingerPrint(enable){
-    return {type: types.SET_ENABLE_FINGER_PRINT, enable}
+  setEnableFingerPrint(enable) {
+    return { type: types.SET_ENABLE_FINGER_PRINT, enable }
   },
   viewChangePass(changePassword) {
-    return {type: types.VIEW_CHANGE_PASS, changePassword}
+    return { type: types.VIEW_CHANGE_PASS, changePassword }
   }
 };
 
@@ -273,17 +273,17 @@ storeData = async (key, value) => {
 // }
 
 const reducer = (state = initialState, action) => {
-  const {type, user, token} = action;
-  const {messages, unread, message} = action;
-  const {messengerGroup, messagesOnGroup} = action;
-  const {location, notification} = action;
-  const {searchParameter, requests} = action;
-  const {systemNotification} = action;
-  const {product, productId} = action;
-  const {isVisible, isShow} = action;
-  const {theme} = action;
-  const {requestInput} = action;
-  const {isValidOtp} = action;
+  const { type, user, token } = action;
+  const { messages, unread, message } = action;
+  const { messengerGroup, messagesOnGroup } = action;
+  const { location, notification } = action;
+  const { searchParameter, requests } = action;
+  const { systemNotification } = action;
+  const { product, productId } = action;
+  const { isVisible, isShow } = action;
+  const { theme } = action;
+  const { requestInput } = action;
+  const { isValidOtp } = action;
   const { isViewing, request, defaultAddress } = action;
   const { circleSearch } = action;
   const { filterData } = action;
@@ -293,6 +293,7 @@ const reducer = (state = initialState, action) => {
   const { comments } = action;
   const { enable } = action;
   const { changePassword } = action;
+  const { currentTicketId } = action;
   switch (type) {
     case types.LOGOUT:
       // storeData('token', '');
@@ -303,7 +304,7 @@ const reducer = (state = initialState, action) => {
       storeData('token', token);
       console.log('LOGIN', true);
       Data.setToken(token);
-      return {...state, user, token};
+      return { ...state, user, token };
     case types.UPDATE_USER:
       return {
         ...state,
@@ -504,7 +505,7 @@ const reducer = (state = initialState, action) => {
       };
     case types.UPDATE_REQUESTS:
       let newRequests = state.requests.map((item, index) => {
-        if(item.code == request.code){
+        if (item.code == request.code) {
           return {
             ...item,
             status: request.status
@@ -550,7 +551,7 @@ const reducer = (state = initialState, action) => {
       storeData('index', '' + theme.index);
       Color.setPrimary(theme.primary);
       Color.setSecondary(theme.secondary);
-      Color.setTertiary(theme.tertiary);  
+      Color.setTertiary(theme.tertiary);
       Color.setFourth(theme.fourth);
       return {
         ...state,
@@ -573,16 +574,16 @@ const reducer = (state = initialState, action) => {
         ...state,
         isViewing,
       };
-    case types.SET_DEFAULT_ADDRESS: 
+    case types.SET_DEFAULT_ADDRESS:
       return {
         ...state,
         defaultAddress
       }
-    case types.SET_UNREAD_MESSAGES: 
+    case types.SET_UNREAD_MESSAGES:
       let newUnread = []
-      if(messages.length == null){
+      if (messages.length == null) {
         newUnread = []
-      }else{
+      } else {
         newUnread = state.unReadMessages.push(messages)
       }
       return {
@@ -594,11 +595,11 @@ const reducer = (state = initialState, action) => {
         ...state,
         isShow,
       };
-    case types.SET_UNREAD_PEER_REQUEST: 
+    case types.SET_UNREAD_PEER_REQUEST:
       let newUnreadPeerRequest = []
-      if(messages == null){
+      if (messages == null) {
         newUnreadPeerRequest = []
-      }else{
+      } else {
         newUnreadPeerRequest = state.unReadPeerRequest.push(messages)
       }
       return {
@@ -651,12 +652,10 @@ const reducer = (state = initialState, action) => {
         acceptPayment
       }
     case types.SET_COMMENTS:
-      if(comments.id == state.currentTicketId) {
-        return {
-          ...state,
-          comments,
-        };
-      }
+      return {
+        ...state,
+        comments,
+      };
     case types.SET_CURRENT_TICKET_ID:
       return {
         ...state,
@@ -685,7 +684,7 @@ const reducer = (state = initialState, action) => {
         changePassword,
       };
     default:
-      return {...state, nav: state.nav};
+      return { ...state, nav: state.nav };
   }
 };
 export default reducer;
