@@ -125,7 +125,7 @@ class Slider extends Component {
                       <Text style={{
                       fontWeight: 'bold',
                       color: Color.white}}>
-                        Verified
+                        Be a Partner
                       </Text> :
                       <Text style={{
                       fontWeight: 'bold',

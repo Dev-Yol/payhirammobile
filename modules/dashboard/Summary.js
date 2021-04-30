@@ -9,7 +9,8 @@ import {
   FlatList,
   StyleSheet,
   Platform,
-  TouchableOpacity
+  TouchableOpacity,
+  Alert
 } from 'react-native';
 import {Routes, Color, Helper, BasicStyles} from 'common';
 import {Spinner, Empty, SystemNotification} from 'components';
@@ -26,6 +27,8 @@ import { faStar as faStarRegular } from '@fortawesome/free-regular-svg-icons';
 import { faHandHoldingUsd, faMoneyBillWave, faFileInvoice, faWallet, faQrcode } from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import ButtonWithIcon from 'components/Form/ButtonWithIcon';
+import Verify from 'modules/generic/Verify'
+import BePartner from 'modules/generic/BeAPartner'
 const width = Math.round(Dimensions.get('window').width);
 const height = Math.round(Dimensions.get('window').height);
 
@@ -71,7 +74,6 @@ class Summary extends Component {
     Api.request(Routes.ledgerDashboard, parameter, (response) => {
       this.setState({isLoading: false});
       if (response.data != null) {
-        console.log('Ledger', response.data.ledger)
         // setLedger(response.data.ledger[0]);
         this.setState({
           history: response.data.history,
@@ -142,11 +144,33 @@ class Summary extends Component {
     //
   };
 
+  invalidAcccess(){
+    Alert.alert(
+      'Message',
+      'In order to Create Request, Please Verify your Account.',
+      [
+        {text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel'}
+      ],
+      { cancelable: false }
+    )
+  }
+
   submitRating = (index) => {
     this.setState({
       showRatings: false,
       ratingIndex: index
     })
+  }
+
+  alertMessage = () => {
+    Alert.alert(
+      'Notice',
+      'In order to Create Request, Please Verify your Account.',
+      [
+        {text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel'}
+      ],
+      { cancelable: false }
+    )
   }
 
   rating = () => {
@@ -214,7 +238,7 @@ class Summary extends Component {
 
   render() {
     const { showRatings, isLoading, history, currentLedger } = this.state;
-    const { ledger, theme } = this.props.state;
+    const { ledger, theme, user } = this.props.state;
     return (
       <View>
         <ScrollView 
@@ -240,7 +264,7 @@ class Summary extends Component {
             
             {
               (isLoading) && (
-                <Skeleton size={1} />
+                <Skeleton size={1} template={'block'} height={125}/>
               )
             }
 
@@ -264,7 +288,15 @@ class Summary extends Component {
                 </TouchableOpacity>
               )
             }
-            
+
+            {
+              (user && user.status == 'NOT_VERIFIED' && user.account_type != 'PARTNER') && 
+              (<Verify {...this.props}/>)
+            }
+            {
+              (user && user.status != 'NOT_VERIFIED' && user.account_type != 'PARTNER')&&
+              (<BePartner {...this.props} />)
+            }
 
             <Text style={{
               width: '100%',
@@ -288,33 +320,41 @@ class Summary extends Component {
               <ButtonWithIcon 
                 title={'Cash In'}
                 onClick={() => {
-                  this.props.navigation.navigate('createRequestStack', {
-                    data: {
-                      type: 'Deposit',
-                      description: 'Allow other peers to find your deposits Payhiram',
-                      id: 3,
-                      money_type: 'e-wallet'
-                    }
-                  })
+                  if(user && Helper.checkStatus(user) == true){
+                    this.props.navigation.navigate('createRequestStack', {
+                      data: {
+                        type: 'Deposit',
+                        description: 'Allow other peers to find your deposits Payhiram',
+                        id: 3,
+                        money_type: 'e-wallet'
+                      }
+                    })
+                  }else{
+                    this.invalidAcccess()
+                  }
                 }}
                 style={{
                   width: '30%',
                   backgroundColor: theme ? theme.primary : Color.primary,
                 }}
                 icon={faHandHoldingUsd}
-              />   
-
+              />
               <ButtonWithIcon 
                 title={'Send Cash'}
                 onClick={() => {
-                  this.props.navigation.navigate('createRequestStack', {
-                    data: {
-                      type: 'Send Cash',
-                      description: 'Allow other peers to fulfill your transaction when you to send money to your family, friends, or to businesses',
-                      id: 1,
-                      money_type: 'cash'
-                    }
-                  })
+                  if(user && Helper.checkStatus(user) == true){
+                    this.props.navigation.navigate('createRequestStack', {
+                      data: {
+                        type: 'Send Cash',
+                        description: 'Allow other peers to fulfill your transaction when you to send money to your family, friends, or to businesses',
+                        id: 1,
+                        money_type: 'cash'
+                      }
+                    })
+                  }else{
+                    this.invalidAcccess()
+                  }
+                  
                 }}
                 style={{
                   width: '30%',
@@ -328,14 +368,19 @@ class Summary extends Component {
               <ButtonWithIcon 
                 title={'Bills Payment'}
                 onClick={() => {
-                  this.props.navigation.navigate('createRequestStack', {
-                    data: {
-                      type: 'Bills and Payment',
-                      description: "Don't have time and want to pay your bills? Allow other peers to pay your bills.",
-                      id: 4,
-                      money_type: 'cash'
-                    }
-                  })
+                  if(user && Helper.checkStatus(user) == true){
+                    this.props.navigation.navigate('createRequestStack', {
+                      data: {
+                        type: 'Bills and Payment',
+                        description: "Don't have time and want to pay your bills? Allow other peers to pay your bills.",
+                        id: 4,
+                        money_type: 'cash'
+                      }
+                    })
+                  }else{
+                    // alert here
+                    this.invalidAcccess()
+                  }
                 }}
                 style={{
                   width: '30%',
@@ -409,7 +454,7 @@ class Summary extends Component {
                     ))
                   }
               {
-                isLoading && (<Skeleton size={2}/>)
+                isLoading && (<Skeleton size={2} template={'block'} height={50}/>)
               }
                 </View>
               )

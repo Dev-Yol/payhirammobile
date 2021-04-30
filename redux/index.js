@@ -295,8 +295,8 @@ const reducer = (state = initialState, action) => {
   const { changePassword } = action;
   switch (type) {
     case types.LOGOUT:
-      storeData('token', '');
-      // AsyncStorage.clear()
+      // storeData('token', '');
+      AsyncStorage.clear()
       console.log("[LOGOUT]");
       return Object.assign({}, initialState);
     case types.LOGIN:

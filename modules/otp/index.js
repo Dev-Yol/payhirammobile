@@ -43,10 +43,10 @@ class OTP extends Component {
 
   async componentDidMount() {
     // const { enableFingerPrint } = this.props.state;
+    console.log('==============================================',  this.props.state);
     console.log(await AsyncStorage.getItem(`${Helper.APP_NAME}fingerprint`));
     if(await AsyncStorage.getItem('username') !== null && await AsyncStorage.getItem('password') !== null && await AsyncStorage.getItem(`${Helper.APP_NAME}fingerprint`) == "true"){
       await this.setState({hasCredential: true, popupShowed: true})
-      console.log('==============================================',  this.props.state);
     }else{
       await this.setState({hasCredential: false, popupShowed: false})
       this.generateOTP();
@@ -56,6 +56,7 @@ class OTP extends Component {
 
   handleFingerprintDismissed = async() => {
     await this.setState({ popupShowed: false });
+    this.props.navigation.pop()
   };
 
   componentWillUnmount() {
@@ -74,6 +75,23 @@ class OTP extends Component {
       this.detectFingerprintAvailable();
     }
     this.setState({ appState: nextAppState });
+  }
+
+  showUnbaleToProcessModal(show){
+    if(show == true){
+      setTimeout(() => {
+        Alert.alert(
+          "Error Message",
+          "Unable to process request",
+          [
+            { text: "Ok", onPress: () => {
+              this.props.navigation.pop()
+            }}
+          ],
+          { cancelable: false }
+        );
+      }, 60000)
+    }
   }
 
   continueTrasaction(){
@@ -217,8 +235,10 @@ class OTP extends Component {
     }
     console.log('[SEND directTransfer] parameter', parameter)
     this.setState({isLoading: true});
+    this.showUnbaleToProcessModal(true);
     Api.request(Routes.ledgerDirectTransfer, parameter, response => {
         this.setState({isLoading: false});
+        this.showUnbaleToProcessModal(false);
         console.log('[OTP] Create Request response', response)
         if(response.error == null){
           if(payload == 'direct_transfer'){
@@ -255,8 +275,10 @@ class OTP extends Component {
   sendCreateRequest = (parameter) => {
     console.log('OTP Create Request API Call')
     this.setState({isLoading: true});
+    this.showUnbaleToProcessModal(true);
     Api.request(Routes.requestCreate, parameter, response => {
         this.setState({isLoading: false});
+        this.showUnbaleToProcessModal(false);
         console.log('[OTP] Create Request response', response)
         if(response.data != null){
           this.props.navigation.navigate('requestItemStack', {
@@ -302,8 +324,10 @@ class OTP extends Component {
     }
     console.log('[Fund Transfer] parameter', parameter)
     this.setState({isLoading: true});
+    this.showUnbaleToProcessModal(true);
     Api.request(Routes.requestManageByThread, parameter, response => {
         this.setState({isLoading: false});
+        this.showUnbaleToProcessModal(false);
         console.log('[OTP] Transfer fund response', response)
         if(response.error != null){
           Alert.alert(
@@ -542,7 +566,10 @@ class OTP extends Component {
           {
             this.state.popupShowed == false ? 
             <View style ={{marginTop: '50%'}}>
-              <Spinner mode="overlay" />
+              <View>
+                <Spinner mode="overlay" />
+                <Text style={{marginTop: 50, marginRight:'auto', marginLeft: 'auto'}}>Processing Request</Text>
+              </View>
             </View> :
                 <FingerprintPopup
                   style={styles.popup}
