@@ -85,6 +85,8 @@ export default {
   educationsRetrieve: apiUrl + 'educations/retrieve',
   circleUpdate: apiUrl + 'my_circle/update',
   circleDelete: apiUrl + 'my_circle/delete',
+  plansCreate: apiUrl + 'plans/create',
+  retrievelocationScopes: apiUrl + 'location_scopes/retrieve',
   retrieveSavedAddresses: apiUrl + 'locations/retrieve',
   addAddress: apiUrl + 'locations/create',
   removeAddress: apiUrl + 'locations/delete',

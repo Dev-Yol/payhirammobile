@@ -105,6 +105,24 @@ export default {
     //   money_type: 'cash',
     // },
   ],
+  partner: [
+    {
+      value: 'BASIC',
+      description: `10,000`
+    },
+    {
+      value: 'STANDARD',
+      description: '50,000'
+    },
+    {
+      value: 'ENTERPRISE',
+      description: '100,000'
+    },
+    {
+      value: 'BUSINESS',
+      description: '500,000'
+    }
+  ],
   fulfillmentBorrowTypes: [
     {
       value: 101,

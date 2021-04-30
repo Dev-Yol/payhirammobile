@@ -118,10 +118,10 @@ class Slider extends Component {
                       borderRadius: 30,
                       backgroundColor: theme ? theme.secondary : Color.secondary
                     }}
-                    onPress={() => {this.redirect("editProfileStack")}}
+                    onPress={() => (user?.status == 'NOT_VERIFIED') ? this.redirect("editProfileStack") : this.redirect('partnerPlansStack')}
                   >
                   {
-                    user.status == 'VERIFIED' || user.status == 'GRANTED' ?
+                    (user.status == 'VERIFIED' || user.status == 'GRANTED') ?
                       <Text style={{
                       fontWeight: 'bold',
                       color: Color.white}}>
