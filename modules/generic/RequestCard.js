@@ -324,7 +324,7 @@ class RequestCard extends Component {
                 (item.approved == false && item.peer_status != 'approved') && (
                   <Button
                     onClick={() => {
-                      if(user.status == 'NOT_VERIFIED'){
+                      if(Helper.checkStatus(user) == false){
                         this.validate()
                       }else{
                         if(item.peer_flag == false){
@@ -543,9 +543,9 @@ class RequestCard extends Component {
           <View style={{
             width: '50%'
           }}>
-            {(user && data.account.code != user.code && this.props.from == 'request') && this._footer(data)}
+            {(user && data.account.code != user.code && this.props.from == 'request' && user?.plan?.status == 'approved') && this._footer(data)}
             {(user && data.account.code == user.code && this.props.from == 'request') && this._myFooter(data)}
-            {(user && data.account.code != user.code && this.props.from == 'request_item') && this._footerRequestItem(data)}
+            {(user && data.account.code != user.code && this.props.from == 'request_item' && user?.plan?.status == 'approved') && this._footerRequestItem(data)}
           </View>
         </View>
         

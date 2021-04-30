@@ -21,7 +21,8 @@ class AddLocation extends Component {
       addingAddress: false,
       value: '',
       isLoading: false,
-      executing: false
+      executing: false,
+      location: null
     };
   }
 
@@ -64,19 +65,28 @@ class AddLocation extends Component {
   }
 
   selectHandler = (index) => {
-    const {setDefaultAddress} = this.props;
     this.setState({ selectedAddress: index });
-    setDefaultAddress(this.state.addresses[index]);
-    console.log('[default]', this.props.state.defaultAddress);
-    if(this.props.state.location_from == 'proposal'){
+    const { params } = this.props.navigation.state;
+    if(params?.payload == 'plans'){
+      this.setState({
+        location: this.state.addresses[index]
+      })
+    }else if(this.props.state.location_from == 'proposal'){
+      const {setDefaultAddress} = this.props;
+      setDefaultAddress(this.state.addresses[index]);
+      console.log('[default]', this.props.state.defaultAddress);
       this.props.navigation.navigate('requestItemStack', {data: this.props.state.request});
     }else{
+      const {setDefaultAddress} = this.props;
+      setDefaultAddress(this.state.addresses[index]);
+      console.log('[default]', this.props.state.defaultAddress);
       this.props.navigation.pop()
     }
   };
 
   renderAddresses = () => {
     const { addresses } = this.state
+    const { theme } = this.props.state;
     return addresses.map((address, index) => {
       return (
         <AddressTile
@@ -88,7 +98,7 @@ class AddLocation extends Component {
           onPress={this.selectHandler}
           deletingClicked={() => this.alertMessage(index)}
           backgroundColor={
-            this.state.selectedAddress === index ? '#22B173' : '#FFFFFF'
+            this.state.selectedAddress === index ? (theme ? theme.secondary : Color.secondary) : '#FFFFFF'
           }
           fontColor={
             this.state.selectedAddress === index ? '#FFFFFF' : '#000000'
@@ -175,13 +185,61 @@ class AddLocation extends Component {
     })
   }
 
+  setAppointment(){
+    const { user } = this.props.state;
+    const { params } = this.props.navigation.state;
+    if(user == null || (user?.plan?.status.toLowerCase() == 'pending')){
+      Alert.alert(
+        'Message',
+        'You have pending request, you may upgrade or downgrade account once the request is resolved.',
+        [
+          {text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel'}
+        ],
+        { cancelable: false }
+      )
+      return
+    }
+    if(!params?.data ||  this.state.location == null){
+      Alert.alert(
+        'Message',
+        'Invalid Accessed.',
+        [
+          {text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel'}
+        ],
+        { cancelable: false }
+      )
+      return
+    }
+    let parameter = {
+      account_id: user.id,
+      plan: params.data.value,
+      amount: params.data.amount,
+      currency: params.data.currency,
+      status: 'pending',
+      location: this.state.location
+    };
+    this.setState({isLoading: true});
+    Api.request(Routes.plansCreate, parameter, (response) => {
+      this.setState({isLoading: false})
+      const { updateUser } = this.props;
+      updateUser({
+        ...user,
+        plan: parameter
+      })
+      this.props.navigation.navigate('partnerPlansStack');
+    }, error => {
+      this.setState({isLoading: false})
+    })
+  }
+
   redirect = (route, param) => {
     this.props.navigation.navigate(route, {data: param});
   };
 
   render() {
     const {location, location_from, theme} = this.props.state
-    const {isLoading} = this.state
+    const {isLoading, addresses} = this.state
+    const { params } = this.props.navigation.state;
     return (
       <View style={{
         flex: 1,
@@ -195,26 +253,54 @@ class AddLocation extends Component {
 
           </View>
         </ScrollView>
+        {
+          (params?.payload == 'plans' && addresses.length > 0) && (
+            <View style={{
+              position: 'absolute',
+              bottom: 10,
+              width: '100%'
+            }}>
+              <Button
+                onClick={() => {
+                  this.setAppointment()
+                }}
+                title={'Set Appointment'}
+                style={{
+                  backgroundColor: theme ? theme.secondary : Color.secondary,
+                  left: '5%',
+                  right: '5%',
+                  width: '90%'
+                }}
+              />
+            </View>
+          )
+        }
 
-        <Button
-          onClick={async () => {
-            const {setLocation} = await this.props
-            await setLocation(null)
-            console.log('[lcoation again]', this.props.state.location);
-            await this.redirect('locationWithMapStack', this.props.from)
-            await this.setState({addingAddress: true})
-          }}
-          title={'Add Address'}
-          style={{
-            backgroundColor: theme ? theme.secondary : Color.secondary,
-            position: 'absolute',
-            bottom: 10,
-            left: '5%',
-            right: '5%',
-            width: '90%'
-          }}
-          from={'proposal'}
-        />
+        {
+          (!params?.payload || addresses.length == 0) && (
+            <Button
+              onClick={async () => {
+                const {setLocation} = await this.props
+                await setLocation(null)
+                console.log('[lcoation again]', this.props.state.location);
+                await this.redirect('locationWithMapStack', this.props.from)
+                await this.setState({addingAddress: true})
+              }}
+              title={'Add Address'}
+              style={{
+                backgroundColor: theme ? theme.secondary : Color.secondary,
+                position: 'absolute',
+                bottom: 10,
+                left: '5%',
+                right: '5%',
+                width: '90%'
+              }}
+              from={'proposal'}
+            />
+          )
+        }
+
+        
         <Modal
           animationType="fade"
           transparent={true}
@@ -310,7 +396,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     // updateUser: (user) => dispatch(actions.updateUser(user)),
     setLocation: (location) => dispatch(actions.setLocation(location)),
-    setDefaultAddress: (defaultAddress) => dispatch(actions.setDefaultAddress(defaultAddress))
+    setDefaultAddress: (defaultAddress) => dispatch(actions.setDefaultAddress(defaultAddress)),
+    updateUser: (user) => dispatch(actions.updateUser(user))
   };
 };
 

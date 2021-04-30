@@ -3,14 +3,18 @@ import {
   View,
   Text,
   ScrollView,
-  Image
+  Image,
+  Dimensions,
+  Alert
 } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faUserShield } from '@fortawesome/free-solid-svg-icons';
+import { faUserShield, faUser, faCheck } from '@fortawesome/free-solid-svg-icons';
 import { BasicStyles, Color, Helper } from 'common';
 import { connect } from 'react-redux';
 import Button from 'components/Form/Button';
 import { Spinner } from 'components';
+import Api from 'services/api/index.js';
+const height = Math.round(Dimensions.get('window').height);
 
 class Plans extends Component {
   constructor(props) {
@@ -20,114 +24,189 @@ class Plans extends Component {
     };
   }
 
+  upgradePlan(item){
+    const { user } = this.props.state;
+    if(user == null || (user?.plan?.status.toLowerCase() == 'pending')){
+      Alert.alert(
+        'Message',
+        'You have pending request, you may upgrade or downgrade account once the request is resolved.',
+        [
+          {text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel'}
+        ],
+        { cancelable: false }
+      )
+      return
+    }
+    let parameter = {
+      account_id: user.id,
+      plan: item.value,
+      amount: item.amount,
+      currency: item.currency,
+      status: 'pending',
+    };
+    this.setState({isLoading: true});
+    Api.request(Routes.plansCreate, parameter, (response) => {
+      this.setState({isLoading: false})
+    }, error => {
+      this.setState({isLoading: false})
+    })
+  }
+
   componentDidMount = () => {
     const { user } = this.props.state
   }
- 
+
   render() {
     const { isLoading } = this.state
     const { user, theme } = this.props.state;
     return (
-        <ScrollView
-          showsVerticalScrollIndicator={false}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}>
+        {isLoading ? <Spinner mode="overlay" /> : null}
         <View style={{
-            paddingLeft: 20,
-            paddingRight: 20,
-            paddingTop: this.props.paddingTop ? this.props.paddingTop : 0,
-            width: '100%'
-          }}>
-            {
-                Helper.partner.map((item, index) => {
-                    return (
-                    <View
-                    style={{
+          paddingLeft: 20,
+          paddingRight: 20,
+          paddingTop: this.props.paddingTop ? this.props.paddingTop : 0,
+          width: '100%'
+        }}>
+          {
+            Helper.partner.map((item, index) => {
+              return (
+                <View
+                  style={{
+                    width: '100%',
+                    borderRadius: 12,
+                    padding: 10,
+                    borderWidth: 1,
+                    borderColor: Color.lightGray,
+                    marginTop: 25,
+                    marginBottom: index == (Helper.partner.length - 1) ? 100 : 0 ,
+                    backgroundColor: user?.plan?.plan.toLowerCase() == item.value.toLowerCase() ? (theme ? theme.primary : Color.primary) : Color.white
+                  }}
+                  key={index}>
+                    <View style={{
+                      width: '100%'
+                    }}>
+                      <View style={{
+                        flexDirection: 'row',
                         width: '100%',
-                        marginTop: 35,
-                        borderRadius: 12,
-                        paddingLeft: 10,
-                        paddingRight: 10,
-                        padding: 15,
-                        backgroundColor: theme ? theme.primary : Color.primary
-                        }}
-                        key={index}>
-                    {/* <View style={{
-                      width: '100%',
-                      flexDirection: 'row',
-                    }}> */}
-                        <View style={{
-                          width: '100%'
-                        }}>
-                          <Text style={{color: 'white', fontWeight: 'bold', textAlign: 'center', marginBottom: '3%'}}>{item.value}</Text>
-                        <Text style={{
-                          fontSize: BasicStyles.standardFontSize + 20,
-                          textAlign: 'justify',
-                          color: Color.black,
-                          padding: 50,
-                          bottom: 5,
-                          paddingLeft: 20,
-                          paddingRight: 20,
-                          marginBottom: 5,
-                          marginRight: 30,
-                          marginLeft: 30,
-                          borderRadius: 5,
-                          backgroundColor: Color.white,
-                          fontWeight: 'bold'
-                        }}>
-                          {item.description}
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                      }}>
+                        <FontAwesomeIcon
+                          icon={item.icon} 
+                          color={user?.plan?.plan.toLowerCase() == item.value.toLowerCase() ? Color.white : Color.black}
+                          />
+                        <Text 
+                          style={{
+                            paddingLeft: 10,
+                            color: user?.plan?.plan.toLowerCase() == item.value.toLowerCase() ? Color.white : Color.black
+                          }}>
+                          {item.value}
                         </Text>
-                        <Image source={require('assets/Partners.png')} style={{
-                            height: 150,
-                            width: 150,
-                            marginRight: '-20%',
-                            marginLeft: '45%',
-                            position: 'absolute',
-                            marginTop: '13%'
-                          }}/>
-                        
-                        <View style={{
-                            width: '100%',
+                      </View>
+                      <Text style={{
+                        textAlign: 'center',
+                        paddingTop: 20,
+                        fontWeight: 'bold',
+                        color: user?.plan?.plan.toLowerCase() == item.value.toLowerCase() ? Color.white : Color.black
+                      }}>
+                        {item.description}
+                      </Text>
+
+                      {
+                        (user?.plan?.plan.toLowerCase() == item.value.toLowerCase()) && (
+                          <Text style={{
+                            color: Color.white,
                             textAlign: 'center',
-                            justifyContent: 'center',
-                            marginLeft: '28%'
-                        }}>
+                            paddingTop: 5,
+                          }}>{user?.plan?.status.toUpperCase()}</Text>
+                        )
+                      }
+
+                      {
+                        item.items.map((iItem) => (
+                          <View style={{
+                            flexDirection: 'row',
+                            paddingTop: 5,
+                            paddingBottom: 5
+                          }}>
+                            <FontAwesomeIcon icon={faCheck} color={Color.success}/>
+                            <Text style={{
+                              paddingLeft: 10,
+                              color: user?.plan?.plan.toLowerCase() == item.value.toLowerCase() ? Color.white : Color.black
+                            }}>{iItem.title}</Text>
+                            
+                          </View>
+
+                        ))
+                      }
+                      
+                      <View style={{
+                        width: '100%',
+                        textAlign: 'center',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        flexDirection: 'row'
+                      }}>
+                        {
+                          (user?.plan?.plan.toLowerCase() != item.value.toLowerCase()) && (
                             <Button
-                            title={'Apply Now'}
-                            onClick={() => {
-                                this.props.navigation.navigate('locationScopesStack', {item})
-                            }}
-                            style={{
-                                width: '45%',
-                                backgroundColor: theme ? theme.secondary : Color.secondary,
+                              title={'Requirements'}
+                              onClick={() => {
+                              }}
+                              style={{
+                                width: '35%',
+                                backgroundColor: theme ? theme.primary : Color.primary,
                                 height: 40,
                                 marginTop: 5
-                            }}
-                            textStyle={{
+                              }}
+                              textStyle={{
                                 fontSize: BasicStyles.standardFontSize,
                                 color: Color.white
-                            }}
+                              }}
                             />
-                        </View>
-                        </View>
-                        {/* <View style={{
-                        width: '40%',
-                        alignItems: 'flex-end'
-                        }}>
-                        <FontAwesomeIcon icon={faUserShield} style={{
-                            color: Color.white
-                        }}
-                        size={100}
-                        />
-                        </View> */}
+                          )
+                        }
+                        
+                          {
+                            (user.plan == null || user?.plan?.plan.toLowerCase() != item.value.toLowerCase()) && (
+                              <Button
+                                title={user?.plan !== null ? (user.plan.amount > item.amount ? 'Downgrade' : 'Upgrade') : 'Apply Now'}
+                                onClick={() => {
+                                  if(user && user.plan){
+                                    this.upgradePlan(item)
+                                  }else{
+                                    this.props.navigation.navigate('addLocationStack', {
+                                      data: item,
+                                      payload: 'plans'
+                                    })
+                                  }
+                                }}
+                                style={{
+                                  width: '35%',
+                                  backgroundColor: (user && ((user.plan && user.plan.amount < item.amount) || user.plan == null)) ? (theme ? theme.secondary : Color.secondary) : Color.white,
+                                  height: 40,
+                                  marginTop: 5,
+                                  marginLeft: 5,
+                                  borderWidth: (user && ((user.plan && user.plan.amount < item.amount) || user.plan == null)) ? 0 : 1,
+                                  borderColor: Color.lightGray
+                                }}
+                                textStyle={{
+                                  fontSize: BasicStyles.standardFontSize,
+                                  color: (user && ((user.plan && user.plan.amount < item.amount) || user.plan == null)) ? Color.white : Color.black
+                                }}
+                              />
+                            )
+                          }
+                      </View>
                     </View>
-                    )
-                })
-            }
-                  
-                  
-                {/* </View> */}
-          
-          </View>
-        </ScrollView>
+                </View>
+              )
+            })
+          }
+        </View>
+      </ScrollView>
     );
   }
 }

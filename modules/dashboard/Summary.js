@@ -290,11 +290,11 @@ class Summary extends Component {
             }
 
             {
-              (user && user.status == 'NOT_VERIFIED' && user.account_type != 'PARTNER') && 
+              (user && Helper.checkStatus(user) == false) && 
               (<Verify {...this.props}/>)
             }
             {
-              (user && user.status != 'NOT_VERIFIED' && user.account_type != 'PARTNER')&&
+              (user && Helper.checkStatus(user) == true && user?.plan == null)&&
               (<BePartner {...this.props} />)
             }
 

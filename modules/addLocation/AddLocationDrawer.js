@@ -54,7 +54,7 @@ const AddLocationStack = createStackNavigator({
   addLocationScreen: {
     screen: AddLocation,
     navigationOptions: ({navigation}) => ({
-      title: 'ADDRESS',
+      title: navigation.state?.params?.payload == 'plans' ? 'Select Service Location' : 'ADDRESS',
       headerLeft: <HeaderOptionsConnect navigationProps={navigation} />,
       ...BasicStyles.headerDrawerStyle
     }),

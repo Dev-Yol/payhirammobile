@@ -7,7 +7,7 @@ export default {
     padding: 10
   },
   MainContainer: {
-    flex: 1,
+    flex: 1
   },
   text: {
     color: Color.normalGray

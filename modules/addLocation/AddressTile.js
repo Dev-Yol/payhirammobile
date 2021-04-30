@@ -69,9 +69,6 @@ class AddressTile extends Component {
           <FontAwesomeIcon 
             icon={faTrashAlt}
             size={BasicStyles.iconSize}
-            style={{
-              color: Color.primary
-            }}
           />
         </TouchableOpacity>
       </TouchableOpacity>

@@ -6,6 +6,7 @@ import {
   faPaperPlane,
 } from '@fortawesome/free-solid-svg-icons';
 import { faMoneyBillWaveAlt, faCog, faHome, faEnvelope, faUsers, faPalette, faShieldAlt, faHandshake, faTachometerAlt, faHeadset } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faCertificate, faBuilding, faCity } from '@fortawesome/free-solid-svg-icons';
 import { faComment } from '@fortawesome/free-regular-svg-icons';
 export default {
   company: 'Increment Technologies Inc.',
@@ -108,19 +109,67 @@ export default {
   partner: [
     {
       value: 'BASIC',
-      description: `10,000`
+      description: `PHP 10, 000 Limit / Day`,
+      icon: faUser,
+      amount: 10000,
+      currency: 'PHP',
+      items: [{
+        title: 'Service to one location only'
+      }, {
+        title: 'Process Send Cash'
+      }, {
+        title: 'Process Cash Ins'
+      }, {
+        title: 'Process Withdrawals'
+      }]
     },
     {
       value: 'STANDARD',
-      description: '50,000'
-    },
-    {
-      value: 'ENTERPRISE',
-      description: '100,000'
+      description: 'PHP 50, 000 Limit / Day',
+      icon: faCertificate,
+      amount: 50000,
+      currency: 'PHP',
+      items: [{
+        title: 'Service to one location only'
+      }, {
+        title: 'Process Send Cash'
+      }, {
+        title: 'Process Cash Ins'
+      }, {
+        title: 'Process Withdrawals'
+      }]
     },
     {
       value: 'BUSINESS',
-      description: '500,000'
+      description: 'PHP 100, 000 Limit / Day',
+      icon: faBuilding,
+      amount: 100000,
+      currency: 'PHP',
+      items: [{
+        title: 'Service to one location only'
+      }, {
+        title: 'Process Send Cash'
+      }, {
+        title: 'Process Cash Ins'
+      }, {
+        title: 'Process Withdrawals'
+      }]
+    },
+    {
+      value: 'ENTERPRISE',
+      description: 'PHP 500, 000 Limit / Day',
+      icon: faCity,
+      amount: 500000,
+      currency: 'PHP',
+      items: [{
+        title: 'Service to one location only'
+      }, {
+        title: 'Process Send Cash'
+      }, {
+        title: 'Process Cash Ins'
+      }, {
+        title: 'Process Withdrawals'
+      }]
     }
   ],
   fulfillmentBorrowTypes: [

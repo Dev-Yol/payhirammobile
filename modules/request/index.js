@@ -84,6 +84,7 @@ class Requests extends Component {
   }
 
   componentDidMount() {
+    const { user } = this.props.state;
     this.backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
       this.handleBackPress,
@@ -92,6 +93,10 @@ class Requests extends Component {
     this.focusListener = this.props.navigation.addListener('didFocus', () => {
       this.onFocusFunction()
     })
+    this.setState({messageEmpty: `Hi ${user?.username}!` + ' ' + (user?.account_type != 'USER' ? 'Create any requests and let our trusted partners process your requests . Click the button below to get started.' : 'Create any requests and let our trusted partners process your requests . Click the button below to get started.')})
+    if(this.state.isLoading == false){
+      this.retrieve(false, true)
+    }
   }
 
   componentWillUnmount() {
@@ -366,25 +371,29 @@ class Requests extends Component {
             }
           }
         }}>
-          <View style={Style.MainContainer}> 
+          <View style={{
+            ...Style.MainContainer,
+            height: height
+          }}> 
           
             {
-              (user && user.status == 'NOT_VERIFIED' && data.length > 0) && 
+              (user && Helper.checkStatus(user) == false) && 
               (
                 <Verify {...this.props} paddingTop={50} />
-                )
-              }
+              )
+            }
             {
-              (user && user.status != 'NOT_VERIFIED' && user.account_type != 'PARTNER' && data?.length > 0) && 
+              (user && Helper.checkStatus(user) == true && user?.plan == null) && 
               (
                 <BePartner {...this.props} paddingTop={50} />
               )
             }
             {data.length == 0 && isLoading == false && (
               <View style={{
-                marginTop: (user?.status == 'NOT_VERIFIED' || user.account_type != 'PARTNER') ? 100 : 0,
+                marginTop: user && Helper.checkStatus(user) == true && user?.plan != null  ? 100 : 0,
                 paddingLeft: 10,
-                paddingRight: 10
+                paddingRight: 10,
+                width: '100%'
               }}>
                 <Message message={this.state.messageEmpty} navigation={this.props.navigation}/>
               </View>
@@ -392,7 +401,7 @@ class Requests extends Component {
             {
               (data && data.length > 0) && data.map((item, index) => (
                 <View style={{
-                  marginTop: ((index == 0 && user?.status != 'NOT_VERIFIED' && user?.account_type != 'PARTNER') ? 0 : (index == 0 && user?.status == 'NOT_VERIFIED') ? 0 : (index == 0 && user?.status != 'NOT_VERIFIED' && user.account_type == 'PARTNER') ? 70: 0),
+                  marginTop:  70,
                   marginBottom: (index == data.length - 1 && isLoading == false) ? 100 : 0,
                   borderBottomWidth: 10,
                   borderBottomColor: Color.lightGray,
