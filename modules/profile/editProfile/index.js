@@ -19,7 +19,7 @@ import {
   faUpload,
   faEdit
 } from '@fortawesome/free-solid-svg-icons';
-import { BasicStyles, Color, Routes } from 'common';
+import { BasicStyles, Color, Routes, Helper } from 'common';
 import { Rating, DateTime } from 'components';
 import { connect } from 'react-redux';
 import UserImage from 'components/User/Image';
@@ -30,6 +30,7 @@ import Skeleton from 'components/Loading/Skeleton';
 import ImageModal from 'components/Modal/ImageModal';
 import ImageResizer from 'react-native-image-resizer';
 import Config from 'src/config.js';
+import MessageAlert from 'modules/generic/MessageAlert'
 
 const gender = [{
   title: 'Male',
@@ -451,12 +452,6 @@ class EditProfile extends Component {
               backgroundColor: theme ? theme.primary : Color.primary,
             }}>
 
-            {/* {
-              this.state.profile && ( */}
-
-            {/* )
-            } */}
-
             <TouchableOpacity
               style={{
                 height: 110,
@@ -518,52 +513,26 @@ class EditProfile extends Component {
             }
 
             {
-              (user.status == 'VERIFIED' || user.status == 'GRANTED') && (
-                <FontAwesomeIcon
-                  icon={faCheckCircle}
-                  size={15}
-                  style={{
-                    color: 'aqua',
-                    marginTop: -17,
-                    marginLeft: 65
-                  }}
-                />
-              )
-            }
-            {
               this.state.rating != null && (
                 <Rating ratings={this.state.rating} rating={' '} style={[{ flex: 2 }]}></Rating>
               )
             }
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              {(user.status == 'VERIFIED' || user.status == 'GRANTED') && (
+              {Helper.checkStatus(user) >= Helper.emailVerified && (
                 <FontAwesomeIcon
                   icon={faCheckCircle}
-                  style={{ color: 'blue', marginLeft: 5 }}
+                  style={{ color: Color.white, marginLeft: 5 }}
                   size={15}
                 />
               )}
-              <Text style={{ color: Color.white, marginLeft: '1%' }}>{user.status}</Text>
+              <Text style={{ color: Color.white, marginLeft: '1%', fontStyle: 'italic'}}>{Helper.accountStatus(user)}</Text>
             </View>
-            {
-              this.state.verifyButton == true && (
-                <Button 
-                  style={{
-                    backgroundColor: theme ? theme.secondary : Color.secondary,
-                    width: '50%',
-                    marginRight: '10%',
-                    marginLeft: '15%',
-                    marginTop: '1%'
-                  }}
-                  title={'Apply for Verification'}
-                  onClick={() => Linking.openURL('https://calendly.com/payhiramph/shortdiscussion')}
-                />
-              )
-            }
           </View>
 
           {isLoading ? <Spinner mode="overlay" /> : null}
           <View>
+            <MessageAlert />
+
             <Text
               style={{
                 borderBottomWidth: 1,

@@ -21,6 +21,7 @@ class Plans extends Component {
     super(props);
     this.state = {
       isLoading: false,
+      selected: null
     };
   }
 
@@ -54,10 +55,18 @@ class Plans extends Component {
 
   componentDidMount = () => {
     const { user } = this.props.state
+    if(user == null && (user && user.plan == null)){
+      return
+    }
+    let selected = Helper.getPartner(user.plan.plan, Helper.partner)
+    console.log('selected', selected)
+    this.setState({
+      selected: selected.length > 0 ? selected[0] : selected
+    })
   }
 
   render() {
-    const { isLoading } = this.state
+    const { isLoading, selected } = this.state
     const { user, theme } = this.props.state;
     return (
       <ScrollView
@@ -70,7 +79,110 @@ class Plans extends Component {
           width: '100%'
         }}>
           {
-            Helper.partner.map((item, index) => {
+            user && user.plan == null && (
+              <Text style={{
+                fontSize: BasicStyles.standardFontSize,
+                textAlign: 'justify',
+                paddingBottom: 10,
+                paddingTop: 10
+              }}>
+                Hi {user.username}! Be one of our Partners and Grab the chance to earn 80% in every transaction. Enjoy earning! Select the category of partners below and click Apply Now.
+              </Text>
+            )
+          }
+
+          {
+            (selected && user && user.plan) && (
+              <View
+                style={{
+                  width: '100%',
+                  borderRadius: 12,
+                  padding: 10,
+                  borderWidth: 1,
+                  borderColor: Color.lightGray,
+                  marginBottom: 100,
+                  marginTop: 25,
+                  backgroundColor: theme ? theme.primary : Color.primary
+                }}>
+                  <View style={{
+                    width: '100%'
+                  }}>
+                    <View style={{
+                      flexDirection: 'row',
+                      width: '100%',
+                      alignItems: 'center',
+                      justifyContent: 'center'
+                    }}>
+                      <FontAwesomeIcon
+                        icon={selected.icon} 
+                        color={Color.white}
+                        />
+                      <Text 
+                        style={{
+                          paddingLeft: 10,
+                          color: Color.white
+                        }}>
+                        {selected.value}
+                      </Text>
+                    </View>
+                    <Text style={{
+                      textAlign: 'center',
+                      paddingTop: 20,
+                      fontWeight: 'bold',
+                      color: Color.white,
+                      paddingBottom: 10
+                    }}>
+                      {selected.description}
+                    </Text>
+
+                    {
+                      selected.items.map((iItem) => (
+                        <View style={{
+                          flexDirection: 'row',
+                          paddingTop: 5,
+                          paddingBottom: 5
+                        }}>
+                          <FontAwesomeIcon icon={faCheck} color={Color.success}/>
+                          <Text style={{
+                            paddingLeft: 10,
+                            color: Color.white
+                          }}>{iItem.title}</Text>
+                          
+                        </View>
+
+                      ))
+                    }
+
+                    <View style={{
+                        width: '100%',
+                        textAlign: 'center',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        flexDirection: 'row',
+                        marginTop: 10
+                      }}>
+                        <Button
+                          title={user.plan.status.toUpperCase()}
+                          onClick={() => {
+                          }}
+                          style={{
+                            width: '35%',
+                            backgroundColor: theme ? theme.secondary : Color.secondary,
+                            height: 40,
+                            marginTop: 5
+                          }}
+                          textStyle={{
+                            fontSize: BasicStyles.standardFontSize,
+                            color: Color.white
+                          }}
+                        />
+                    </View>
+                  </View>
+              </View>
+            )
+          }
+          {
+            (user && user.plan == null) && Helper.partner.map((item, index) => {
               return (
                 <View
                   style={{
@@ -79,7 +191,7 @@ class Plans extends Component {
                     padding: 10,
                     borderWidth: 1,
                     borderColor: Color.lightGray,
-                    marginTop: 25,
+                    marginTop: index == 0 ? 0 : 25,
                     marginBottom: index == (Helper.partner.length - 1) ? 100 : 0 ,
                     backgroundColor: user?.plan?.plan.toLowerCase() == item.value.toLowerCase() ? (theme ? theme.primary : Color.primary) : Color.white
                   }}

@@ -172,6 +172,13 @@ export default {
       }]
     }
   ],
+  getPartner(plan, partners){
+    return partners.map((item) => {
+      if(item.value.toLowerCase() == plan.toLowerCase()){
+        return item
+      }
+    })
+  },
   fulfillmentBorrowTypes: [
     {
       value: 101,
@@ -454,9 +461,36 @@ export default {
       return false
     }
     switch(user.status.toLowerCase()){
-      case 'not_verified': return false;break
-      case 'verified': return false;break
-      default: return true;break
+      case 'not_verified': return 0;break
+      case 'verified': return 1;break
+      case 'account_verified': return 2; break;
+      case 'basic_verified': return 3; break;
+      case 'standard_verified': return 4; break;
+      case 'business_verified': return 5; break;
+      case 'enterprise_verified': return 6; break;
+      default: return 7;break
     }
-  }
+  },
+  accountStatus(user){
+    if(user == null){
+      return false
+    }
+    switch(user.status.toLowerCase()){
+      case 'not_verified': return 'Not Verified';break
+      case 'verified': return 'Email Verified';break
+      case 'account_verified': return 'Account Verified'; break;
+      case 'basic_verified': return 'Basic Verified'; break;
+      case 'standard_verified': return 'Standard Verified'; break;
+      case 'business_verified': return 'Business Verified'; break;
+      case 'enterprise_verified': return 'Enterprise Verified'; break;
+      default: return 'Granted';break
+    }
+  },
+  notVerified: 0,
+  emailVerified: 1,
+  accountVerified: 2,
+  basicVerified: 3,
+  standardVerified: 4,
+  businessVerified: 5,
+  enterpriseVerified: 6
 };

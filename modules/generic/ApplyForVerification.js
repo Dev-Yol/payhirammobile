@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Alert } from 'react-native';
+import { View, Text, StyleSheet, Linking } from 'react-native';
 import Currency from 'services/Currency';
 import {connect} from 'react-redux';
-import { Color, BasicStyles, Helper, Routes } from 'common';
+import { Color, BasicStyles, Helper } from 'common';
 import Skeleton from 'components/Loading/Skeleton';
 import Button from 'components/Form/Button';
-import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
+import { faUserShield } from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import Api from 'services/api/index.js';
 
-class Verify extends Component {
+class ApplyForVerification extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -17,47 +16,7 @@ class Verify extends Component {
     }
   }
 
-  sendEmail(){
-    const { user } = this.props.state;
-    if(user == null){
-      return
-    }
-    let parameter = {
-      condition: [{
-        value: user.code,
-        column: 'code',
-        clause: '='
-      }]
-    }
-    this.setState({isLoading: true})
-    Api.request(Routes.accountSendEmailVerification, parameter, response => {
-      this.setState({isLoading: false})
-      console.log('response', response)
-      if(response.data.length > 0){
-        Alert.alert(
-          'Message',
-          'Verification email sent to ' + user.email + '.',
-          [
-            {text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel'}
-          ],
-          { cancelable: false }
-        )
-      }else{
-        Alert.alert(
-          'Message',
-          'Invalid accessed',
-          [
-            {text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel'}
-          ],
-          { cancelable: false }
-        )
-      }
-    }, error => {
-      this.setState({
-        isLoading: false,
-      })
-    }) 
-  }
+  
 
   render() {
     const { data } = this.props;
@@ -74,7 +33,7 @@ class Verify extends Component {
             <View
               style={{
                 width: '100%',
-                marginTop: 10,
+                marginTop: 20,
                 borderRadius: 12,
                 paddingLeft: 10,
                 paddingRight: 10,
@@ -91,18 +50,17 @@ class Verify extends Component {
                   <Text style={{
                     fontSize: BasicStyles.standardFontSize,
                     textAlign: 'justify',
-                    color: Color.white,
-                    paddingBottom: 10
+                    color: Color.white
                   }}>
-                    Hi {user.username}! Your email address is not verified. You can verify by clicking the button below.
+                    Hi {user.username}! Your account is not verified. We require our customers to be fully verified, via zoom or google meet, before they can proceed to transact. Please choose a schedule by clicking the button below:
                   </Text>
                   <View style={{
                     width: '100%',
                   }}>
                     <Button
-                      title={'Verify'}
+                      title={'Schedule'}
                       onClick={() => {
-                        this.sendEmail()
+                        Linking.openURL('https://calendly.com/payhiramph/shortdiscussion')
                       }}
                       style={{
                         width: '50%',
@@ -120,7 +78,7 @@ class Verify extends Component {
                   width: '40%',
                   alignItems: 'flex-end'
                 }}>
-                  <FontAwesomeIcon icon={faEnvelope} style={{
+                  <FontAwesomeIcon icon={faUserShield} style={{
                     color: Color.white
                   }}
                   size={100}
@@ -146,5 +104,5 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Verify);
+export default connect(mapStateToProps, mapDispatchToProps)(ApplyForVerification);
 

@@ -27,7 +27,7 @@ import { faStar as faStarRegular } from '@fortawesome/free-regular-svg-icons';
 import { faHandHoldingUsd, faMoneyBillWave, faFileInvoice, faWallet, faQrcode } from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import ButtonWithIcon from 'components/Form/ButtonWithIcon';
-import Verify from 'modules/generic/Verify'
+import MessageAlert from 'modules/generic/MessageAlert'
 import BePartner from 'modules/generic/BeAPartner'
 const width = Math.round(Dimensions.get('window').width);
 const height = Math.round(Dimensions.get('window').height);
@@ -288,13 +288,9 @@ class Summary extends Component {
                 </TouchableOpacity>
               )
             }
-
+            <MessageAlert/>
             {
-              (user && Helper.checkStatus(user) == false) && 
-              (<Verify {...this.props}/>)
-            }
-            {
-              (user && Helper.checkStatus(user) == true && user?.plan == null)&&
+              (user && Helper.checkStatus(user) == Helper.accountVerified && user?.plan == null)&&
               (<BePartner {...this.props} />)
             }
 
@@ -320,7 +316,7 @@ class Summary extends Component {
               <ButtonWithIcon 
                 title={'Cash In'}
                 onClick={() => {
-                  if(user && Helper.checkStatus(user) == true){
+                  if(user && Helper.checkStatus(user) >= Helper.accountVerified){
                     this.props.navigation.navigate('createRequestStack', {
                       data: {
                         type: 'Deposit',
@@ -342,7 +338,7 @@ class Summary extends Component {
               <ButtonWithIcon 
                 title={'Send Cash'}
                 onClick={() => {
-                  if(user && Helper.checkStatus(user) == true){
+                  if(user && Helper.checkStatus(user) >= Helper.accountVerified){
                     this.props.navigation.navigate('createRequestStack', {
                       data: {
                         type: 'Send Cash',
@@ -368,7 +364,7 @@ class Summary extends Component {
               <ButtonWithIcon 
                 title={'Bills Payment'}
                 onClick={() => {
-                  if(user && Helper.checkStatus(user) == true){
+                  if(user && Helper.checkStatus(user) >= Helper.accountVerified){
                     this.props.navigation.navigate('createRequestStack', {
                       data: {
                         type: 'Bills and Payment',

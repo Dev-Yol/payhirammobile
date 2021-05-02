@@ -86,28 +86,25 @@ class Slider extends Component {
                     )
                   }
 
-                  {
-                    (user.status == 'GRANTED' || user.status == 'VERIFIED') && (
-                      <FontAwesomeIcon
-                        icon={faCheckCircle}
-                        size={20}
-                        style={{
-                          color: theme ? theme.secondary : Color.secondary,
-                          marginTop: -15,
-                          marginLeft: 60
-                        }}
-                      />
-                    )
-                  }
-
                   <Text  style={{
                     color: Color.white,
                     fontWeight: 'bold',
                     fontSize: 16,
-                    marginTop: 10
+                    marginTop: 10,
+                    marginBottom: 5
                   }}>
                     Hi {user.username}!
                   </Text>
+                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    {Helper.checkStatus(user) >= Helper.emailVerified && (
+                      <FontAwesomeIcon
+                        icon={faCheckCircle}
+                        style={{ color: Color.white, marginLeft: 5 }}
+                        size={15}
+                      />
+                    )}
+                    <Text style={{ color: Color.white, marginLeft: '1%', fontStyle: 'italic'}}>{Helper.accountStatus(user)}</Text>
+                  </View>
                   <TouchableOpacity
                     style={{
                       marginTop: 10,
@@ -118,10 +115,10 @@ class Slider extends Component {
                       borderRadius: 30,
                       backgroundColor: theme ? theme.secondary : Color.secondary
                     }}
-                    onPress={() => (user?.status == 'NOT_VERIFIED') ? this.redirect("editProfileStack") : this.redirect('partnerPlansStack')}
+                    onPress={() => Helper.checkStatus(user) < Helper.emailVerified ? this.redirect("editProfileStack") : this.redirect('partnerPlansStack')}
                   >
                   {
-                    ((user.status == 'VERIFIED' || user.status == 'GRANTED')) ?
+                    (Helper.checkStatus(user) > Helper.notVerified) ?
                       <Text style={{
                       fontWeight: 'bold',
                       color: Color.white}}>

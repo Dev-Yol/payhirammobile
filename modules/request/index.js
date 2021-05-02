@@ -30,7 +30,7 @@ import RequestCard from 'modules/generic/RequestCard';
 import { Pager, PagerProvider } from '@crowdlinker/react-native-pager';
 import _ from 'lodash';
 import Footer from 'modules/generic/Footer'
-import Verify from 'modules/generic/Verify'
+import MessageAlert from 'modules/generic/MessageAlert'
 import BePartner from 'modules/generic/BeAPartner'
 import Header from 'modules/generic/Header'
 const height = Math.round(Dimensions.get('window').height);
@@ -309,14 +309,6 @@ class Requests extends Component {
     return <View style={Style.Separator} />;
   };
 
-  checkStatus(user){
-    switch(user.status.toLowerCase()){
-      case 'not_verified': return false;break
-      case 'verified': return false;break
-      default: return true;break
-    }
-  }
-
   _flatList = () => {
     const {selected, isLoading, data} = this.state;
     const {user} = this.props.state;
@@ -373,24 +365,19 @@ class Requests extends Component {
         }}>
           <View style={{
             ...Style.MainContainer,
-            height: height
+            height: height,
+            marginTop: 70
           }}> 
           
+            <MessageAlert from={'request'}/>
             {
-              (user && Helper.checkStatus(user) == false) && 
+              (user && Helper.checkStatus(user) == Helper.accountVerified && user?.plan == null) && 
               (
-                <Verify {...this.props} paddingTop={50} />
-              )
-            }
-            {
-              (user && Helper.checkStatus(user) == true && user?.plan == null) && 
-              (
-                <BePartner {...this.props} paddingTop={50} />
+                <BePartner {...this.props} paddingTop={0} />
               )
             }
             {data.length == 0 && isLoading == false && (
               <View style={{
-                marginTop: user && Helper.checkStatus(user) == true && user?.plan != null  ? 100 : 0,
                 paddingLeft: 10,
                 paddingRight: 10,
                 width: '100%'
@@ -401,7 +388,6 @@ class Requests extends Component {
             {
               (data && data.length > 0) && data.map((item, index) => (
                 <View style={{
-                  marginTop:  70,
                   marginBottom: (index == data.length - 1 && isLoading == false) ? 100 : 0,
                   borderBottomWidth: 10,
                   borderBottomColor: Color.lightGray,
@@ -466,7 +452,7 @@ class Requests extends Component {
           }]}
           onPress={() => {
             {
-              (user?.status == 'VERIFIED' || user?.status == 'GRANTED') ? 
+              (Helper.checkStatus(user) >= Helper.accountVerified) ? 
               this.props.navigation.navigate('createRequestStack') : this.validate()
             }
               // this.props.navigation.navigate('createRequestStack')
