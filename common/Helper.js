@@ -93,12 +93,12 @@ export default {
       description: 'Cash In to your wallet and let our nearby partners process or pickup the cash from your specified location.',
       money_type: 'e-wallet',
     },
-    {
-      id: 4,
-      type: 'Bills and Payments',
-      description: "Don't have time and want to pay your bills either online or onsite? Our partners will handle your payments",
-      money_type: 'cash',
-    }
+    // {
+    //   id: 4,
+    //   type: 'Bills and Payments',
+    //   description: "Don't have time and want to pay your bills either online or onsite? Our partners will handle your payments",
+    //   money_type: 'cash',
+    // }
     // {
     //   id: 5,
     //   type: 'Accept Payment',

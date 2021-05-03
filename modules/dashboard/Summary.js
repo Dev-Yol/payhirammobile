@@ -362,14 +362,14 @@ class Summary extends Component {
               /> 
 
               <ButtonWithIcon 
-                title={'Bills Payment'}
+                title={'Withdrawal'}
                 onClick={() => {
                   if(user && Helper.checkStatus(user) >= Helper.accountVerified){
                     this.props.navigation.navigate('createRequestStack', {
                       data: {
-                        type: 'Bills and Payment',
-                        description: "Don't have time and want to pay your bills? Allow other peers to pay your bills.",
-                        id: 4,
+                        type: 'Withdrawal',
+                        description: "Allow other peers to fulfill your withdrawals from Payhiram.",
+                        id: 2,
                         money_type: 'cash'
                       }
                     })

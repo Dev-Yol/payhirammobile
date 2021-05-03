@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {View, Text, TouchableOpacity, Platform} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faUsers, faUser, faClock, faTachometerAlt, faPaperPlane, faMoneyBillWave, faHandshake, faWalking, faHistory, faCogs} from '@fortawesome/free-solid-svg-icons';
+import {faUsers, faUser, faHeadset, faClock, faTachometerAlt, faPaperPlane, faMoneyBillWave, faHandshake, faWalking, faHistory, faCogs} from '@fortawesome/free-solid-svg-icons';
 import {NavigationActions, StackActions} from 'react-navigation';
 import {BasicStyles, Color} from 'common';
 import {connect} from 'react-redux';
@@ -380,7 +380,7 @@ class Footer extends Component {
                 }}
                 >
                 <FontAwesomeIcon
-                  icon={faUsers}
+                  icon={faHeadset}
                   size={18}
                   style={[
                     BasicStyles.iconStyle,
