@@ -173,11 +173,12 @@ export default {
     }
   ],
   getPartner(plan, partners){
-    return partners.map((item) => {
+    for (let index = 0; index < partners.length; index++) {
+      let item = partners[index];
       if(item.value.toLowerCase() == plan.toLowerCase()){
         return item
       }
-    })
+    }
   },
   fulfillmentBorrowTypes: [
     {

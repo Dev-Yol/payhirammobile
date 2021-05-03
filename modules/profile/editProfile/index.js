@@ -73,23 +73,6 @@ class EditProfile extends Component {
     this.retrieve()
     this.retrieveUploadedId()
     this.verifyApplication()
-    // if ((this.state.email != null || this.state.first_name != null || this.state.middle_name != null || this.state.last_name != null ||
-    //   this.state.sex != null || this.state.uploadedID.length > 2) && (user.status != 'GRANTED' || user.status != 'VERIFIED') ) {
-    //   // this.state.sex != null || this.state.address != null || this.state.birthDate != null) && user.status != 'granted'){
-    //   Alert.alert(
-    //     'Verification Link',
-    //     'Click the button below for an appointment.',
-    //     [
-    //       { text: 'Ok', onPress: () => console.log('Generate Link') },
-    //       {
-    //         text: 'Cancel',
-    //         onPress: () => console.log('Cancel Pressed'),
-    //         style: 'cancel',
-    //       }
-    //     ],
-    //     { cancelable: false }
-    //   )
-    // }
   }
 
   retrieve = () => {
@@ -264,7 +247,7 @@ class EditProfile extends Component {
     // }else{
       Alert.alert(
         'Notice',
-        "Please upload at least Four(4) ID's",
+        "Please upload at least 2(4) ID's (Back to Back)",
         [
           { text: 'Ok', onPress: () => this.uploadId(), style: 'cancel' }
         ],
