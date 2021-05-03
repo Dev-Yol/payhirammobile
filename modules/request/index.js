@@ -365,10 +365,9 @@ class Requests extends Component {
         }}>
           <View style={{
             ...Style.MainContainer,
-            height: height,
+            height: height + 400,
             marginTop: 70
           }}> 
-          
             <MessageAlert from={'request'}/>
             {
               (user && Helper.checkStatus(user) == Helper.accountVerified && user?.plan == null) && 
@@ -376,6 +375,7 @@ class Requests extends Component {
                 <BePartner {...this.props} paddingTop={0} />
               )
             }
+          
             {data.length == 0 && isLoading == false && (
               <View style={{
                 paddingLeft: 10,

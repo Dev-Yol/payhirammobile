@@ -59,9 +59,8 @@ class Plans extends Component {
       return
     }
     let selected = Helper.getPartner(user.plan.plan, Helper.partner)
-    console.log('selected', selected)
     this.setState({
-      selected: selected.length > 0 ? selected[0] : selected
+      selected: selected
     })
   }
 
