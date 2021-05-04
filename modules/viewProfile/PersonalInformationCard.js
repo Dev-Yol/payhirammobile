@@ -43,6 +43,7 @@ class PersonalInformationCard extends Component {
   render() {
     let { _renderTextIcon } = this
     const { user } = this.props
+    console.log(user, 'user');
     return (
         <View style={{
           flexDirection: 'row',
@@ -50,12 +51,12 @@ class PersonalInformationCard extends Component {
           alignItems: 'flex-start'
         }}>
           <View style={{width: '100%'}}>
-            {_renderTextIcon(faUserCircle, user?.information?.first_name + ' ' + user?.information?.last_name || 'No data', 'Full Name')}
+            {_renderTextIcon(faUserCircle, user?.first_name + ' ' + user?.last_name || 'No data', 'Full Name')}
             {_renderTextIcon(faEnvelope, user?.email || 'No data', 'Email')}
-            {_renderTextIcon(faUserCircle,  user?.information?.sex || 'No data', 'Gender')}
-            {_renderTextIcon(faPhoneAlt, user?.information?.cellular_number || 'No data', 'Phone Number')}
-            {_renderTextIcon(faCalendarAlt, user?.information?.birth_date_human || 'No data', 'Birth Date')}
-            {_renderTextIcon(faMapMarkerAlt, user?.information?.address || 'No data', 'Address')}
+            {_renderTextIcon(faUserCircle,  user?.sex || 'No data', 'Gender')}
+            {_renderTextIcon(faPhoneAlt, user?.cellular_number || 'No data', 'Phone Number')}
+            {_renderTextIcon(faCalendarAlt, user?.birth_date || 'No data', 'Birth Date')}
+            {_renderTextIcon(faMapMarkerAlt, user?.address || 'No data', 'Address')}
           </View>
         </View>
     )

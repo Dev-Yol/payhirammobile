@@ -28,7 +28,8 @@ class ViewProfile extends Component {
       connection: null,
       title: 'Send Request',
       status: false,
-      connections: []
+      connections: [],
+      account_information: null
     };
   }
   componentDidMount() {
@@ -122,7 +123,6 @@ class ViewProfile extends Component {
     this.setState({ isLoading: true });
     Api.request(Routes.circleCreate, parameter, response => {
       this.setState({ isLoading: false })
-      console.log(response, "================response upon sending request,===============");
       this.retrieveAccount();
       
     });
@@ -141,7 +141,7 @@ class ViewProfile extends Component {
       this.setState({ isLoading: false })
       this.retrieveConnections();
       if (response.data.length > 0) {
-        this.retrieveEducationalBackground(response.data[0].id);
+        this.retrieveAccountInformation(response.data[0].id, response.data[0]);
         this.setState({ user: this.props.navigation.state.params.user ? this.props.navigation.state.params.user : response.data[0] })
         this.setState({status: true});
       } else {
@@ -150,7 +150,7 @@ class ViewProfile extends Component {
     });
   }
 
-  retrieveEducationalBackground = (id) => {
+  retrieveAccountInformation = (id, user) => {
     let parameter = {
       condition: [{
         value: id,
@@ -159,20 +159,20 @@ class ViewProfile extends Component {
       }]
     }
     this.setState({ isLoading: true });
-    Api.request(Routes.educationsRetrieve, parameter, response => {
+    Api.request(Routes.accountInformationRetrieve, parameter, response => {
       this.setState({ isLoading: false })
       if (response.data.length > 0) {
-        this.setState({ educationalBackground: response.data[0] })
+        response.data[0]['email'] = user.email;
+        this.setState({ account_information: response.data[0] })
       } else {
-        this.setState({ educationalBackground: null })
+        this.setState({ account_information: null })
       }
     });
   }
 
   render() {
-    const { user } = this.state
+    const { user, account_information } = this.state
     const { theme } = this.props.state;
-    console.log(user && user, 'hey');
     return (
       <View>
         <View>
@@ -218,9 +218,9 @@ class ViewProfile extends Component {
                     <Rating ratings={user.rating} label={null}></Rating>
                   </View>
                 )}
-                { this.state.status === true && (
+                { this.state.status === true && this.state.user?.status && (
                 <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 5, marginBottom: 15 }}>
-                  <FontAwesomeIcon
+                  {this.state.user?.status === 'VERIFIED' && <FontAwesomeIcon
                     icon={faCheckCircle}
                     size={16}
                     style={{
@@ -228,8 +228,8 @@ class ViewProfile extends Component {
                       color: Color.info,
                       borderRadius: 20, 
                     }}
-                  />
-                  <Text style={{ fontStyle: 'italic' }}>  Verified</Text>
+                  />}
+                  <Text style={{ fontStyle: 'italic' }}>  {this.state.user?.status}</Text>
                 </View>)}
                 { this.state.status === true && (
                 <View>
@@ -275,7 +275,7 @@ class ViewProfile extends Component {
                       }}>
                       PERSONAL INFORMATION
                     </Text>
-                    <PersonalInformationCard user={this.props.navigation.state.params.user ? user.account : this.state.status === true && this.state.connection ? this.state.connection.account : user} />
+                    <PersonalInformationCard user={this.props.navigation.state.params.user ? account_information : this.state.status === true && this.state.connection ? this.state.connection.account : account_information} />
                   </View>
                 )
               }
