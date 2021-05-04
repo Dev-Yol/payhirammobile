@@ -58,7 +58,8 @@ class Plans extends Component {
     if(user == null && (user && user.plan == null)){
       return
     }
-    let selected = Helper.getPartner(user.plan.plan, Helper.partner)
+    console.log('[plan]', user)
+    let selected = Helper.getPartner(user?.plan?.plan, Helper.partner)
     this.setState({
       selected: selected
     })
@@ -192,7 +193,7 @@ class Plans extends Component {
                     borderColor: Color.lightGray,
                     marginTop: index == 0 ? 0 : 25,
                     marginBottom: index == (Helper.partner.length - 1) ? 100 : 0 ,
-                    backgroundColor: user?.plan?.plan.toLowerCase() == item.value.toLowerCase() ? (theme ? theme.primary : Color.primary) : Color.white
+                    backgroundColor: user?.plan?.plan?.toLowerCase() == item.value.toLowerCase() ? (theme ? theme.primary : Color.primary) : Color.white
                   }}
                   key={index}>
                     <View style={{
@@ -206,12 +207,12 @@ class Plans extends Component {
                       }}>
                         <FontAwesomeIcon
                           icon={item.icon} 
-                          color={user?.plan?.plan.toLowerCase() == item.value.toLowerCase() ? Color.white : Color.black}
+                          color={user?.plan?.plan?.toLowerCase() == item.value.toLowerCase() ? Color.white : Color.black}
                           />
                         <Text 
                           style={{
                             paddingLeft: 10,
-                            color: user?.plan?.plan.toLowerCase() == item.value.toLowerCase() ? Color.white : Color.black
+                            color: user?.plan?.plan?.toLowerCase() == item.value.toLowerCase() ? Color.white : Color.black
                           }}>
                           {item.value}
                         </Text>
@@ -220,13 +221,13 @@ class Plans extends Component {
                         textAlign: 'center',
                         paddingTop: 20,
                         fontWeight: 'bold',
-                        color: user?.plan?.plan.toLowerCase() == item.value.toLowerCase() ? Color.white : Color.black
+                        color: user?.plan?.plan?.toLowerCase() == item.value.toLowerCase() ? Color.white : Color.black
                       }}>
                         {item.description}
                       </Text>
 
                       {
-                        (user?.plan?.plan.toLowerCase() == item.value.toLowerCase()) && (
+                        (user?.plan?.plan?.toLowerCase() == item.value.toLowerCase()) && (
                           <Text style={{
                             color: Color.white,
                             textAlign: 'center',
@@ -245,7 +246,7 @@ class Plans extends Component {
                             <FontAwesomeIcon icon={faCheck} color={Color.success}/>
                             <Text style={{
                               paddingLeft: 10,
-                              color: user?.plan?.plan.toLowerCase() == item.value.toLowerCase() ? Color.white : Color.black
+                              color: user?.plan?.plan?.toLowerCase() == item.value.toLowerCase() ? Color.white : Color.black
                             }}>{iItem.title}</Text>
                             
                           </View>
@@ -261,11 +262,10 @@ class Plans extends Component {
                         flexDirection: 'row'
                       }}>
                         {
-                          (user?.plan?.plan.toLowerCase() != item.value.toLowerCase()) && (
+                          (user?.plan?.plan?.toLowerCase() != item.value.toLowerCase()) && (
                             <Button
                               title={'Requirements'}
-                              onClick={() => {
-                              }}
+                              onClick={() => {this.props.navigation.navigate('verificationStack', {type: item.value})}}
                               style={{
                                 width: '35%',
                                 backgroundColor: theme ? theme.primary : Color.primary,
@@ -281,7 +281,7 @@ class Plans extends Component {
                         }
                         
                           {
-                            (user.plan == null || user?.plan?.plan.toLowerCase() != item.value.toLowerCase()) && (
+                            (user.plan == null || user?.plan?.plan?.toLowerCase() != item.value.toLowerCase()) && (
                               <Button
                                 title={user?.plan !== null ? (user.plan.amount > item.amount ? 'Downgrade' : 'Upgrade') : 'Apply Now'}
                                 onClick={() => {

@@ -175,7 +175,7 @@ export default {
   getPartner(plan, partners){
     for (let index = 0; index < partners.length; index++) {
       let item = partners[index];
-      if(item.value.toLowerCase() == plan.toLowerCase()){
+      if(item.value.toLowerCase() == plan?.toLowerCase()){
         return item
       }
     }
