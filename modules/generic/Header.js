@@ -49,7 +49,6 @@ class Header extends Component {
   render (){
     const { selected, from } = this.props;
     const { theme, notifications, location, defaultAddress } = this.props.state;
-    console.log('[defaultAddress]', defaultAddress, '[location]', location)
     const { filter } = this.state;
     return(
       <View

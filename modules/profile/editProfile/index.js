@@ -69,7 +69,6 @@ class EditProfile extends Component {
   }
 
   componentDidMount = () => {
-    const { user } = this.props.state
     this.retrieve()
     this.retrieveUploadedId()
     this.verifyApplication()
@@ -77,7 +76,7 @@ class EditProfile extends Component {
 
   retrieve = () => {
     const { user } = this.props.state;
-    if (user === null) {
+    if (user == null) {
       return
     }
     let parameter = {
@@ -107,7 +106,7 @@ class EditProfile extends Component {
           // address: data[0].address,
           profile: data[0]
         })
-        this.verifyApplication()
+        // this.verifyApplication()
         // if(data.birth_date != null){
         //   this.setState({
         //     dateFlag: true,
@@ -130,6 +129,7 @@ class EditProfile extends Component {
   }
 
   retrieveUploadedId = () => {
+    const { setImageCount } = this.props
     const { user } = this.props.state
     // this.state.uploadedID = []
     let parameter = {
@@ -138,6 +138,8 @@ class EditProfile extends Component {
     }
     this.setState({ isLoading: true })
     Api.request(Routes.accountCardsRetrieve, parameter, response => {
+      let numImage = response.data[0].content.length
+      setImageCount(numImage)
       this.setState({ isLoading: false })
       response.data[0].content.map(element => {
         this.state.uploadedID.push(element)
@@ -146,13 +148,13 @@ class EditProfile extends Component {
       //   this.setState({ reachMax : true })
       // }
     })
-    this.verifyApplication()
+    // this.verifyApplication()
   }
 
   verifyApplication = () => {
-    const { first_name, middle_name, last_name, sex, uploadedID} = this.state
-    if(first_name != null && middle_name != null && last_name != null && sex != null && uploadedID.length == 4 && (user.status != 'VERIFIED' || user.status != 'GRANTED')){
-      this.setState({verifyButton: true})
+    const { first_name, middle_name, last_name, sex} = this.state
+    if(first_name != null && middle_name != null && last_name != null && sex != null){
+      this.props.setScheduleShow(true)
     }
   }
 
@@ -247,9 +249,10 @@ class EditProfile extends Component {
     // }else{
       Alert.alert(
         'Notice',
-        "Please upload at least 2(4) ID's (Back to Back)",
+        "Please upload at least two(2) ID's (Back to Back)",
         [
-          { text: 'Ok', onPress: () => this.uploadId(), style: 'cancel' }
+          { text: 'Ok', onPress: () => this.uploadId(), style: 'cancel' },
+          { text: 'Cancel', onPress: () => console.log('cancel'), style: 'cancel' }
         ],
         { cancelable: false }
       )
@@ -613,6 +616,9 @@ class EditProfile extends Component {
                     <Text>Upload ID</Text>
                 </View>
               </TouchableOpacity>
+              <Text onPress={() => {this.props.navigation.navigate('verificationStack', {type: 'PROFILE'})}} style={{textDecorationLine: 'underline', backgroundColor: theme ? theme.primary : Color.primary, color: Color.white, textAlign: 'center', padding: 10}}>
+                View all list of valid IDs
+              </Text>
               <View style={{
               flexDirection: 'row',
               flex: 1,
@@ -738,6 +744,8 @@ const mapStateToProps = state => ({ state: state });
 const mapDispatchToProps = dispatch => {
   const { actions } = require('@redux');
   return {
+    setImageCount: (imageCount) => dispatch(actions.setImageCount(imageCount)),
+    setScheduleShow: (scheduleShow) => dispatch(actions.setScheduleShow(scheduleShow))
   };
 };
 

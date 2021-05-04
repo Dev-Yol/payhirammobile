@@ -20,7 +20,7 @@ class ApplyForVerification extends Component {
 
   render() {
     const { data } = this.props;
-    const { theme, user } = this.props.state;
+    const { theme, user, imageCount, scheduleShow } = this.props.state;
     return (
       <View style={{
         paddingLeft: 20,
@@ -52,26 +52,37 @@ class ApplyForVerification extends Component {
                     textAlign: 'justify',
                     color: Color.white
                   }}>
-                    Hi {user.username}! Your account is not verified. We require our customers to be fully verified, via zoom or google meet, before they can proceed to transact. Please choose a schedule by clicking the button below:
+                    {
+                      (imageCount >= 2 && scheduleShow == true) ?
+                      <Text>Hi {user.username}! Your account is not verified. We require our customers to be fully verified, via zoom or google meet, before they can proceed to transact. Please choose a schedule by clicking the button below:</Text>
+                      :
+                      <Text>Hi {user.username}! Your account is not verified. We require our customers to be fully verified, via zoom or google meet, before they can proceed to transact. Please provide all of your personal information to set schedule.</Text>
+                    }
                   </Text>
                   <View style={{
                     width: '100%',
                   }}>
-                    <Button
-                      title={'Schedule'}
-                      onClick={() => {
-                        Linking.openURL('https://calendly.com/payhiramph/shortdiscussion')
-                      }}
-                      style={{
-                        width: '50%',
-                        backgroundColor: Color.white,
-                        height: 40
-                      }}
-                      textStyle={{
-                        fontSize: BasicStyles.standardFontSize,
-                        color: Color.black
-                      }}
-                    />
+                    {
+                      (imageCount >= 2 && scheduleShow == true)  &&
+                      (
+                      <Button
+                        title={'Schedule'}
+                        onClick={() => {
+                          Linking.openURL('https://calendly.com/payhiramph/shortdiscussion')
+                        }}
+                        style={{
+                          width: '50%',
+                          backgroundColor: Color.white,
+                          height: 40
+                        }}
+                        textStyle={{
+                          fontSize: BasicStyles.standardFontSize,
+                          color: Color.black
+                        }}
+                      />)
+                      // :
+                      // <Text style={{fontSize: BasicStyles.standardFontSize, color: Color.black, backgroundColor: Color.white, borderRadius: 25, padding: 5, textAlign: 'center'}}>"Please provide all of your personal information to set schedule."</Text>
+                    }
                   </View>
                 </View>
                 <View style={{
@@ -101,6 +112,7 @@ const mapStateToProps = (state) => ({state: state});
 const mapDispatchToProps = (dispatch) => {
   const {actions} = require('@redux');
   return {
+    setImageCount: (imageCount) => dispatch(actions.setImageCount(imageCount))
   };
 };
 

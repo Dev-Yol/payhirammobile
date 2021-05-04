@@ -35,6 +35,7 @@ import SupportStack from 'components/Support/SupportDrawer.js';
 import UpdateTicketStack from 'components/Support/UpdateTicket/UpdateTicketDrawer.js';
 import PrivacyStack from 'modules/privacy/Drawer';
 import GuidelinesStack from 'modules/guidelines/GuidelinesDrawer';
+import VerificationStack from 'modules/verificationID/VerificationDrawer';
 import LocationWithMapViewerStack from 'components/Location/LocationViewerDrawer.js';
 import CurrencyStack from 'modules/currency/CurrencyDrawer.js';
 import AcceptPaymentStack from 'modules/acceptPayment/drawer.js';
@@ -144,6 +145,7 @@ const PrimaryNav = createStackNavigator(
     paymentMethodsStack: { screen: PaymentMethodsStack },
     privacyStack: { screen: PrivacyStack},
     guidelinesStack: { screen: GuidelinesStack},
+    verificationStack: { screen: VerificationStack},
     directTransferDrawer: { screen: DirectTransferStack },
     currencyStack: { screen: CurrencyStack },
     acceptPaymentStack: { screen: AcceptPaymentStack },

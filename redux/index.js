@@ -52,7 +52,10 @@ const types = {
   SET_PAYMENT_CONFIRMATION: 'SET_PAYMENT_CONFIRMATION',
   SET_ENABLE_FINGER_PRINT: 'SET_ENABLE_FINGER_PRINT',
   VIEW_CHANGE_PASS: 'VIEW_CHANGE_PASS',
-  SET_PART: 'SET_PART'
+  SET_PART: 'SET_PART',
+  SET_IMAGE_COUNT: 'SET_IMAGE_COUNT',
+  SET_SCHEDULE_SHOW: 'SET_SCHEDULE_SHOW',
+  SET_TYPE: 'SET_TYPE'
 };
 
 export const actions = {
@@ -146,6 +149,9 @@ export const actions = {
   setPart(part){
     return {type: types.SET_PART, part}
   },
+  setType(typePlan){
+    return {type: types.SET_TYPE, typePlan}
+  },
   viewShare(isShow) {
     return { type: types.VIEW_SHARE, isShow }
   },
@@ -199,6 +205,12 @@ export const actions = {
   },
   viewChangePass(changePassword) {
     return { type: types.VIEW_CHANGE_PASS, changePassword }
+  },
+  setImageCount(imageCount) {
+    return { type: types.SET_IMAGE_COUNT, imageCount }
+  },
+  setScheduleShow(scheduleShow) {
+    return { type: types.SET_SCHEDULE_SHOW, scheduleShow }
   }
 };
 
@@ -240,6 +252,7 @@ const initialState = {
   requestInput: null,
   isValidOtp: false,
   isViewing: false,
+  typePlan: null,
   isShow: false,
   defaultAddress: null,
   unReadPeerRequest: [],
@@ -259,6 +272,8 @@ const initialState = {
   currentTicketId: null,
   paymentConfirmation: false,
   enableFingerPrint: false,
+  imageCount: 0,
+  scheduleShow: false
 };
 
 storeData = async (key, value) => {
@@ -298,7 +313,7 @@ const reducer = (state = initialState, action) => {
   const { comments } = action;
   const { enable } = action;
   const { changePassword, part } = action;
-  const { currentTicketId } = action;
+  const { currentTicketId, imageCount, scheduleShow, typePlan } = action;
   switch (type) {
     case types.LOGOUT:
       // storeData('token', '');
@@ -508,6 +523,16 @@ const reducer = (state = initialState, action) => {
         ...state,
         request
       };
+    case types.SET_IMAGE_COUNT:
+      return {
+        ...state,
+        imageCount
+      };
+    case types.SET_SCHEDULE_SHOW:
+      return {
+        ...state,
+        scheduleShow
+      };
     case types.UPDATE_REQUESTS:
       let newRequests = state.requests.map((item, index) => {
         if (item.code == request.code) {
@@ -583,6 +608,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         defaultAddress
+      }
+    case types.SET_TYPE:
+      return {
+        ...state,
+        typePlan
       }
     case types.SET_UNREAD_MESSAGES:
       let newUnread = []
