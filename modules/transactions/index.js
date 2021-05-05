@@ -21,7 +21,7 @@ class Transactions extends Component {
   }
 
   componentDidMount(){
-    this.retrieve(false)
+    this.retrieve(true)
   }
 
   onChange(item, type){
@@ -93,8 +93,8 @@ class Transactions extends Component {
             }
           }}>
           <View style={{
-            marginTop: Platform.OS == 'ios' ? 50 : 50,
-            marginBottom: Platform.OS == 'ios' ? 105 : 105
+            marginTop: Platform.OS == 'ios' ? 50 : 10,
+            marginBottom: Platform.OS == 'ios' ? 105 : 130
           }}>
             <View style={Styles.MainContainer}>
               {
