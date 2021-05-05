@@ -10,7 +10,6 @@ class NotificationSettings extends Component {
     super(props);
     this.state = {
       login: false,
-      pin: false,
       isLoading: false,
       id: null,
       enable: false
@@ -19,6 +18,10 @@ class NotificationSettings extends Component {
 
   async componentDidMount() {
     // this.setState({enable: await AsyncStorage.getItem(`${Helper.APP_NAME}fingerprint`)})
+    this.retrieve();
+  }
+
+  retrieve = () => {
     let parameter = {
       condition: [{
         value: this.props.state.user.id,
@@ -26,30 +29,33 @@ class NotificationSettings extends Component {
         clause: '='
       }]
     };
+    this.setState({isLoading: true})
+    Api.request(Routes.notificationSettingsRetrieve, parameter, response => {
+      this.setState({isLoading: false})
+      if(response.data.length > 0) {
+        this.setState({
+          login: response.data[0].email_login == 0 ? false : true,
+          id: response.data[0].id
+        })
+      }
+    })
+  }
+
+  create = () => {
     let param = {
       account_id: this.props.state.user.id,
-      email_login: 0,
+      email_login: 1,
       email_otp: 0,
       email_pin: 0,
       sms_login: 0,
       sms_otp: 0
     }
-    this.setState({isLoading: true})
-    Api.request(Routes.notificationSettingsRetrieve, parameter, response => {
+    Api.request(Routes.notificationSettingsCreate, param, response => {
       this.setState({isLoading: false})
-      if(response.data.length === 0) {
-        console.log("wala pa");
-        this.setState({isLoading: true})
-        Api.request(Routes.notificationSettingsCreate, param, response => {
-          this.setState({isLoading: false})
-        })
-      } else {
-        console.log("naa na", response);
-        this.setState({isLoading: false})
+      if(response.data !== null) {
         this.setState({
-          login: response.data[0].email_login == 0 ? false : true,
-          pin: response.data[0].email_pin == 0 ? false : true,
-          id: response.data[0].id
+          login: true,
+          id: response.data
         })
       }
     })
@@ -57,21 +63,17 @@ class NotificationSettings extends Component {
 
   update = (status) => {
     let login = this.state.login
-    let pin = this.state.pin
     if(status === 'login') {
       this.setState({login: !this.state.login})
       login = !this.state.login
-    } else {
-      this.setState({pin: !this.state.pin})
-      pin = !this.state.pin
     }
 
     let parameter = {
+      account_id: this.props.state.user.id,
       id: this.state.id,
       email_login: login ? 1 : 0,
-      email_pin: pin ? 1 : 0,
-      account_id: this.props.state.user.id,
       email_otp: 0,
+      email_pin: 0,
       sms_login: 0,
       sms_otp: 0
     }
@@ -79,7 +81,6 @@ class NotificationSettings extends Component {
     Api.request(Routes.notificationSettingsUpdate, parameter, response => {
       this.setState({isLoading: false})
       if(response.data.length === 0) {
-        this.setState({isLoading: true})
       }
     })
   }
@@ -87,12 +88,20 @@ class NotificationSettings extends Component {
   async changeState(status){
     const { setEnableFingerPrint } = this.props;
     const {enable} = this.state
-    if(status = 'fingerPrint'){
+    if(status == 'fingerPrint'){
       await this.setState({enable : !enable})
-      this.update(status)
+      if(this.state.id !== null) {
+        this.update(status)
+      } else {
+        this.create();
+      }
       setEnableFingerPrint(enable);
     }else{
-      this.update(status)
+      if(this.state.id !== null) {
+        this.update(status)
+      } else {
+        this.create();
+      }
     }
   }
 
