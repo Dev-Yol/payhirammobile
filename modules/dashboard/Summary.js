@@ -223,7 +223,8 @@ class Summary extends Component {
           style={{
             width: '30%'
           }}
-          onPress={() => {this.props.onChange("history")
+          onPress={() => {this.props.navigation.navigate('transactionsStack')
+          // onPress={() => {this.props.onChange("history")
         }}>
           <Text style={{
             width: '100%',
