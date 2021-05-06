@@ -129,9 +129,9 @@ class EditProfile extends Component {
   }
 
   retrieveUploadedId = () => {
+    this.state.uploadedID = []
     const { setImageCount } = this.props
     const { user } = this.props.state
-    // this.state.uploadedID = []
     let parameter = {
       account_id: user.id,
       payload: 'image_upload'
@@ -297,6 +297,7 @@ class EditProfile extends Component {
                 Api.upload(Routes.accountCardsCreate, imageData, response => {
                   if (response.data !== null) {
                     this.retrieveUploadedId();
+                    this.retrieve()
                     Alert.alert(
                       'Message',
                       'ID successfully uploaded',

@@ -62,7 +62,7 @@ class Reviews extends Component {
       if(data.peer == null){
         Alert.alert(
           "Error Message",
-          'Invalid request of page.',
+          'Invalid request of page.', 
           [
             { text: "Ok", onPress: () => {
               this.props.navigation.pop()
