@@ -273,6 +273,7 @@ class RequestCard extends Component {
   };
 
   _footer = (item) => {
+    console.log('[iiiiiiiiiiiiiiteeeeeeeem]', item);
     const {user, theme} = this.props.state;
     return (
       <View>
@@ -290,7 +291,7 @@ class RequestCard extends Component {
               {
                 (item.approved == true || item.peer_status == 'approved') && (
                   <Button
-                    onClick={() => {
+                    onClick={() => {0
                       this.props.navigation.navigate('messagesStack', {
                         data: {
                           id: item.id,
