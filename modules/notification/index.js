@@ -53,7 +53,9 @@ class Notifications extends Component{
         from: 'notification'
       })
     }else{
-      this.props.navigation.navigate('transactionsStack')
+      this.props.navigation.navigate('transactionsStack', {
+        from: 'notification'
+      })
     }
   }
   
