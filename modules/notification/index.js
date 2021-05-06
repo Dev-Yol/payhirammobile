@@ -39,11 +39,13 @@ class Notifications extends Component{
     // console.log('[]')
     const { user } = this.props.state;
     if(payload === 'thread'){
-      items.amount = items.amount.amount
-      items.currency = items.currency.currency
-      console.log('ITEMS::', items);
+      let temp = items;
+      console.log('ITEMS::', temp);
+      temp.amount = items?.amount?.amount
+      temp.currency = items?.currency?.currency
+      temp.title = temp.route.substring(temp.route.lastIndexOf('/') + 1)
       this.props.navigation.navigate('messagesStack', {
-        data: items
+        data: temp
       })
     }else if(payload === 'Peer Request'){
       this.props.navigation.navigate('requestItemStack', {
@@ -75,12 +77,12 @@ class Notifications extends Component{
       }
     }
     // this.setState({isLoading: true})
-    console.log('[parameter]', parameter)
+    console.log('[parameter]',Routes.notificationsRetrieve, parameter)
     Api.request(Routes.notificationsRetrieve, parameter, notifications => {
       console.log("[RESTRIEVE]", notifications.data)
       // this.setState({isLoading: false})
       this.setState({data: notifications.data})
-      setNotifications(notifications.size, notifications.data)
+      setNotifications(notifications.size, this.state.data)
     }, error => {
       this.setState({isLoading: false})
     })
