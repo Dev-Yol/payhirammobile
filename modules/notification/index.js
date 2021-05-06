@@ -38,12 +38,18 @@ class Notifications extends Component{
   async redirect(payload, item, payloadValue, items){
     // console.log('[]')
     const { user } = this.props.state;
+    const { setViewField } = this.props;
     if(payload === 'thread'){
-      let temp = items;
+      let temp = {
+        amount: items?.amount?.amount,
+        currency: items?.currency?.currency,
+        title: items.route.substring(items.route.lastIndexOf('/') + 1)
+      };
       console.log('ITEMS::', temp);
-      temp.amount = items?.amount?.amount
-      temp.currency = items?.currency?.currency
-      temp.title = temp.route.substring(temp.route.lastIndexOf('/') + 1)
+      setViewField(true)
+      // temp.amount = items?.amount?.amount
+      // temp.currency = items?.currency?.currency
+      // temp.title = temp.route.substring(temp.route.lastIndexOf('/') + 1)
       this.props.navigation.navigate('messagesStack', {
         data: temp
       })
@@ -63,6 +69,7 @@ class Notifications extends Component{
   retrieve = () => {
     const { setNotifications } = this.props;
     const { user } = this.props.state;
+    const { setViewField } = this.props;
     if(user == null){
       return
     }
@@ -79,6 +86,7 @@ class Notifications extends Component{
       }
     }
     // this.setState({isLoading: true})
+    setViewField(true)
     console.log('[parameter]',Routes.notificationsRetrieve, parameter)
     Api.request(Routes.notificationsRetrieve, parameter, notifications => {
       console.log("[RESTRIEVE]", notifications.data)
@@ -179,7 +187,8 @@ const mapDispatchToProps = dispatch => {
     setRequests: (requests) => dispatch(actions.setRequests(requests)),
     setUserLedger: (userLedger) => dispatch(actions.setUserLedger(userLedger)),
     setSearchParameter: (searchParameter) => dispatch(actions.setSearchParameter(searchParameter)),
-    setNotifications: (unread, notifications) => dispatch(actions.setNotifications(unread, notifications))
+    setNotifications: (unread, notifications) => dispatch(actions.setNotifications(unread, notifications)),
+    setViewField: (view) => dispatch(actions.setViewField(view))
   };
 };
 

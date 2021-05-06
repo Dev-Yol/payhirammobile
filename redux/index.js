@@ -55,7 +55,8 @@ const types = {
   SET_PART: 'SET_PART',
   SET_IMAGE_COUNT: 'SET_IMAGE_COUNT',
   SET_SCHEDULE_SHOW: 'SET_SCHEDULE_SHOW',
-  SET_TYPE: 'SET_TYPE'
+  SET_TYPE: 'SET_TYPE',
+  SET_VIEW_FIELD: 'VIEW_FIELD',
 };
 
 export const actions = {
@@ -211,6 +212,9 @@ export const actions = {
   },
   setScheduleShow(scheduleShow) {
     return { type: types.SET_SCHEDULE_SHOW, scheduleShow }
+  },
+  setViewField(view) {
+    return { type: types.SET_VIEW_FIELD, view }
   }
 };
 
@@ -273,7 +277,8 @@ const initialState = {
   paymentConfirmation: false,
   enableFingerPrint: false,
   imageCount: 0,
-  scheduleShow: false
+  scheduleShow: false,
+  viewField: false
 };
 
 storeData = async (key, value) => {
@@ -314,6 +319,7 @@ const reducer = (state = initialState, action) => {
   const { enable } = action;
   const { changePassword, part } = action;
   const { currentTicketId, imageCount, scheduleShow, typePlan } = action;
+  const { view } = action
   switch (type) {
     case types.LOGOUT:
       // storeData('token', '');
@@ -722,6 +728,12 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         changePassword,
+      };
+    case types.SET_VIEW_FIELD:
+      console.log('[View Filed]', view);
+      return {
+        ...state,
+        viewField: view,
       };
     default:
       return { ...state, nav: state.nav };
