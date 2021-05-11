@@ -161,56 +161,6 @@ class Footer extends Component {
               </View>
             )
         }
-
-        {
-          from == 'requestUser' && (
-              <View style={{
-                flexDirection: 'row',
-              }}>
-                <TouchableOpacity
-                  onPress={() => this.props.onSelect('public', 0)}
-                  style={{
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    width: '50%',
-                    flexDirection: 'row'
-                  }}
-                  >
-
-                  <FontAwesomeIcon
-                    icon={faUsers}
-                    size={18}
-                    style={[
-                      BasicStyles.iconStyle,
-                      {
-                        color: selected == 'public' ? Color.white : gray,
-                      },
-                    ]}
-                    />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => this.props.onSelect('personal', 1)}
-                  style={{
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    width: '50%',
-                    flexDirection: 'row'
-                  }}
-                  >
-                  <FontAwesomeIcon
-                    icon={faUser}
-                    size={18}
-                    style={[
-                      BasicStyles.iconStyle,
-                      {
-                        color: selected == 'personal' ? Color.white : gray,
-                      },
-                    ]}
-                    />
-                </TouchableOpacity>
-              </View>
-            )
-        }
         
         {
           from == 'dashboard' && (

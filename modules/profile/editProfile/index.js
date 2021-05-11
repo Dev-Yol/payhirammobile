@@ -106,7 +106,7 @@ class EditProfile extends Component {
           // address: data[0].address,
           profile: data[0]
         })
-        // this.verifyApplication()
+        this.verifyApplication()
         // if(data.birth_date != null){
         //   this.setState({
         //     dateFlag: true,
@@ -152,10 +152,13 @@ class EditProfile extends Component {
   }
 
   verifyApplication = () => {
+    const { setScheduleShow } = this.props
+    const { scheduleShow } = this.props.state
     const { first_name, middle_name, last_name, sex} = this.state
     if(first_name != null && middle_name != null && last_name != null && sex != null){
-      this.props.setScheduleShow(true)
+      setScheduleShow(true)
     }
+    console.log(first_name, middle_name, last_name, sex)
   }
 
   upload = () => {
@@ -319,7 +322,7 @@ class EditProfile extends Component {
     })}
 
   update = () => {
-    const { user } = this.props.state;
+    const { user, setScheduleShow } = this.props.state;
     const { dataRetrieve } = this.state
     if (user == null) {
       return
@@ -372,7 +375,7 @@ class EditProfile extends Component {
       parameters, (response) => {
         this.setState({ isLoading: false });
         this.retrieve()
-        console.log('[response]', response);
+        setScheduleShow(true)
         alert('Updated Successfully');
       },
       (error) => {

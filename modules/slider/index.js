@@ -54,6 +54,7 @@ class Slider extends Component {
 
   render () {
     const { user, theme } = this.props.state;
+    console.log('[here]e', Helper.checkStatus(user))
     return (
       <View style={styles.container}>
         <ScrollView>
@@ -115,10 +116,10 @@ class Slider extends Component {
                       borderRadius: 30,
                       backgroundColor: theme ? theme.secondary : Color.secondary
                     }}
-                    onPress={() => Helper.checkStatus(user) < Helper.emailVerified ? this.redirect("editProfileStack") : this.redirect('partnerPlansStack')}
+                    onPress={() => Helper.checkStatus(user) <= Helper.emailVerified ? this.redirect("editProfileStack") : this.redirect('partnerPlansStack')}
                   >
                   {
-                    (Helper.checkStatus(user) > Helper.notVerified) ?
+                    (Helper.checkStatus(user) > Helper.emailVerified) ?
                       <Text style={{
                       fontWeight: 'bold',
                       color: Color.white}}>

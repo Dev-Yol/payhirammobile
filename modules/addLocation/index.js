@@ -74,12 +74,12 @@ class AddLocation extends Component {
     }else if(this.props.state.location_from == 'proposal'){
       const {setDefaultAddress} = this.props;
       setDefaultAddress(this.state.addresses[index]);
-      console.log('[default]', this.props.state.defaultAddress);
+      console.log('[defaulthh]', this.props.state.defaultAddress);
       this.props.navigation.navigate('requestItemStack', {data: this.props.state.request});
     }else{
       const {setDefaultAddress} = this.props;
       setDefaultAddress(this.state.addresses[index]);
-      console.log('[default]', this.props.state.defaultAddress);
+      console.log('[default]', this.props.state.defaultAddress, this.state.addresses[index]);
       this.props.navigation.pop()
     }
   };
@@ -124,7 +124,7 @@ class AddLocation extends Component {
     this.setState({isLoading: true})
     Api.request(Routes.retrieveSavedAddresses, parameters, response => {
       this.setState({addresses: response.data});
-      console.log("RESPONSE", response);
+      // console.log("RESPONSE", response);
       this.setState({isLoading: false});
     }, error => {
       console.log('retrieving addresses error: ', error)
@@ -144,11 +144,11 @@ class AddLocation extends Component {
       country: location.country,
       address_type: 'NULL'
     }
-    console.log("parameters: ", parameters)
+    // console.log("parameters: ", parameters)
     this.setState({isLoading: true, executing: true})
     Api.request(Routes.addAddress, parameters, response => {
       // const {setLocation} = this.props
-      console.log('=================== \nAdding Address Response: \n===================', response)
+      // console.log('=================== \nAdding Address Response: \n===================', response)
       this.retrieveAddresses();
       this.setState({isAddingAddressName: false, addingAddress: false})
       this.setState({isLoading: false, executing: false, value: ''})
@@ -280,8 +280,8 @@ class AddLocation extends Component {
           (!params?.payload || addresses.length == 0) && (
             <Button
               onClick={async () => {
-                const {setLocation} = await this.props
-                await setLocation(null)
+                // const {setLocation} = await this.props
+                // await setLocation(null)
                 console.log('[lcoation again]', this.props.state.location);
                 await this.redirect('locationWithMapStack', this.props.from)
                 await this.setState({addingAddress: true})
