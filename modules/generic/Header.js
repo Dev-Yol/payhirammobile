@@ -164,11 +164,11 @@ class Header extends Component {
             }}
             numberOfLines={1}
             >{
-              defaultAddress !== null 
+              defaultAddress != null 
               ? 
-                defaultAddress.address
+                defaultAddress.route
               :
-                location !== null
+                location != null
                 ? 
                   location.address 
                 : 

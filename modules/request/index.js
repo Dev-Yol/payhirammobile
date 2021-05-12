@@ -1,29 +1,20 @@
 import React, {Component} from 'react';
 import Style from './Style.js';
 import {
-  TextInput,
   View,
-  Image,
-  TouchableHighlight,
-  Text,
   Alert,
   ScrollView,
   BackHandler,
-  ToastAndroid,
-  Platform,
   SafeAreaView
 } from 'react-native';
 import {FlatList, TouchableOpacity} from 'react-native';
-import { Picker } from '@react-native-community/picker';
 import {Routes, Color, Helper, BasicStyles} from 'common';
 import Skeleton from 'components/Loading/Skeleton';
 import Message from 'components/Message/index.js'
 import Api from 'services/api/index.js';
-import Currency from 'services/Currency.js';
 import {connect} from 'react-redux';
-import Config from 'src/config.js';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faStar, faPlus, faSearch} from '@fortawesome/free-solid-svg-icons';
+import {faPlus} from '@fortawesome/free-solid-svg-icons';
 import {Dimensions} from 'react-native';
 import ProposalModal from 'modules/generic/ProposalModal';
 import RequestCard from 'modules/generic/RequestCard';
@@ -32,7 +23,6 @@ import _ from 'lodash';
 import Footer from 'modules/generic/Footer'
 import MessageAlert from 'modules/generic/MessageAlert'
 import BePartner from 'modules/generic/BeAPartner'
-import Header from 'modules/generic/Header'
 const height = Math.round(Dimensions.get('window').height);
 class Requests extends Component {
   constructor(props) {
@@ -448,14 +438,13 @@ class Requests extends Component {
             height: 60,
             width: 60,
             borderRadius: 30,
-            bottom: 70
+            bottom: user?.account_type != 'USER' ? 70 : 25
           }]}
           onPress={() => {
             {
               (Helper.checkStatus(user) >= Helper.accountVerified) ? 
               this.props.navigation.navigate('createRequestStack') : this.validate()
             }
-              // this.props.navigation.navigate('createRequestStack')
           }}>
           <FontAwesomeIcon
             icon={faPlus}
@@ -485,26 +474,6 @@ class Requests extends Component {
                   connectModal: false,
                 })
             }></ProposalModal>
-          )
-        }
-        {
-          user?.account_type == 'USER' && (
-            <Footer
-              {...this.props}
-              selected={this.state.page} onSelect={async (value, index) => {
-                await this.setState({
-                  page: value,
-                  activeIndex: index,
-                  offset: 0,
-                  data: [],
-                  isLoading: true
-                })
-                setTimeout(() => {
-                  this.retrieve(false, false, true)
-                }, 1000)
-              }}
-              from={'requestUser'}
-            />
           )
         }
         {

@@ -70,7 +70,7 @@ class Verify extends Component {
         width: '100%'
       }}>
         {
-          (Helper.checkStatus() ==  false && user) && (
+          (user) && (
             <View
               style={{
                 width: '100%',
@@ -92,7 +92,8 @@ class Verify extends Component {
                     fontSize: BasicStyles.standardFontSize,
                     textAlign: 'justify',
                     color: Color.white,
-                    paddingBottom: 10
+                    paddingBottom: 10,
+                    width: '100%'
                   }}>
                     Hi {user.username}! Your email address is not verified. You can verify by clicking the button below.
                   </Text>

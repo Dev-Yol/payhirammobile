@@ -273,7 +273,6 @@ class RequestCard extends Component {
   };
 
   _footer = (item) => {
-    console.log('[iiiiiiiiiiiiiiteeeeeeeem]', item);
     const {user, theme} = this.props.state;
     return (
       <View>
