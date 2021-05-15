@@ -41,10 +41,13 @@ class CreateRequest extends Component {
       edited: false,
       currentPosition: 0,
       stepLabels: ['Type', 'Location', 'Details', 'Preview'],
-      errorMessage: null
+      errorMessage: null,
+      locations: null,
+      proceed: false
     };
   }
   componentDidMount() {
+    this.retrieveLocationScope()
     const { params } = this.props.navigation.state;
     if(params && params.data){
       this.handleSelectFulfillment(params.data)
@@ -54,6 +57,27 @@ class CreateRequest extends Component {
     this.setState({
       currentDate: date.setDate(date.getDate())
     })
+  }
+
+  retrieveLocationScope = () => {
+    const {user} = this.props.state;
+    if (user == null) {
+      return;
+    }
+    let parameter ={
+      account_id: user.id
+    }
+    Api.request(Routes.retrievelocationScopes, parameter, (response) => {
+      this.setState({isLoading: false});
+      if (response.data.length > 0) {
+        this.setState({locations: response.data})
+      } else {
+        this.state.locations = null
+      }
+    }, error => {
+      console.log('response', error)
+      this.setState({isLoading: false});
+    });
   }
 
  retrieveSummaryLedger = () => {
@@ -127,6 +151,27 @@ class CreateRequest extends Component {
         this.setState({
           errorMessage: 'Location is required'
         })
+        return
+      }
+      if(defaultAddress != null && this.state.locations != null){
+        let a = false
+        this.state.locations.map(element => {
+          if(element.route != defaultAddress.route){
+            a = true
+          }else{
+            a = false
+          }
+        })
+        if(a === true){
+          Alert.alert(
+            'Error Message',
+            'No available partner in the area selected. Please change request location to continue.',
+            [
+              {text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel'}
+            ],
+            { cancelable: false }
+          )
+        }
         return
       }
       if(currentPosition == 2){
@@ -616,6 +661,7 @@ class CreateRequest extends Component {
   render() {
     const { ledger, theme } = this.props.state;
     const { currentPosition, errorMessage } = this.state;
+    console.log('curr', currentPosition);
     return (
       <KeyboardAvoidingView
       style={{
