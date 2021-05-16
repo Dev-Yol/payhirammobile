@@ -117,7 +117,7 @@ class Requests extends Component {
       target: 'all',
       shipping: 'all'
     }
-    if(page == 'personal'){
+    if(page == 'personal' || user.account_type == 'USER'){
       parameters['request_account_id'] = user.id
     }
     if(parameter && parameter.target.toLowerCase() != 'all'){
@@ -368,8 +368,8 @@ class Requests extends Component {
           
             {data.length == 0 && isLoading == false && (
               <View style={{
-                paddingLeft: 10,
-                paddingRight: 10,
+                paddingLeft: 20,
+                paddingRight: 20,
                 width: '100%'
               }}>
                 <Message message={this.state.messageEmpty} navigation={this.props.navigation}/>

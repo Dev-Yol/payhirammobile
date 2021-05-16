@@ -129,9 +129,9 @@ class Notifications extends Component{
             flex: 1,
             height: height
           }}>
-            {notifications.notifications == null || (notifications.notifications != null && notifications.notifications == null) && (<Empty refresh={true} onRefresh={() => this.retrieve()}/>)}
+            {notifications == null || (notifications && notifications.notifications == null) && (<Empty refresh={true} onRefresh={() => this.retrieve()}/>)}
             {
-              notifications.notifications && notifications.notifications.map((item, index) => (
+              (notifications && notifications.notifications) && notifications.notifications.map((item, index) => (
                 <TouchableHighlight
                   onPress={() => this.redirect(item.payload, item.id, item.payload_value, item)}
                   underlayColor={Color.gray}
