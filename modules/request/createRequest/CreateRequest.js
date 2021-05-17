@@ -156,7 +156,7 @@ class CreateRequest extends Component {
       if(defaultAddress != null && this.state.locations != null){
         let a = false
         this.state.locations.map(element => {
-          if(element.route != defaultAddress.route){
+          if(element.route != defaultAddress.locality){
             a = true
           }else{
             a = false

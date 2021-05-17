@@ -68,7 +68,7 @@ class ApplyForVerification extends Component {
                       <Button
                         title={'Schedule'}
                         onClick={() => {
-                          Linking.openURL('https://calendly.com/payhiramph/shortdiscussion')
+                          Linking.openURL('https://calendly.com/payhiramph/videocallverification')
                         }}
                         style={{
                           width: '50%',

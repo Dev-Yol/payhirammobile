@@ -96,9 +96,7 @@ class Ledgers extends Component {
             ))
           }
           {
-            isLoading && (
-              <Skeleton size={2}/>
-            )
+            isLoading && (<Skeleton size={1} template={'block'} height={50}/>)
           }
           </View>
         </ScrollView>

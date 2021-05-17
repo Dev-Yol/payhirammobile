@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Dimensions, ScrollView, Modal, TextInput, TouchableHighlight, Alert } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Dimensions, ScrollView, Modal, TextInput, TouchableHighlight, Alert, Linking } from 'react-native';
 import { connect } from 'react-redux';
 import AddressTile from 'modules/addLocation/AddressTile.js';
 import Style from 'modules/addLocation/Style.js';
@@ -202,7 +202,7 @@ class AddLocation extends Component {
     if(!params?.data ||  this.state.location == null){
       Alert.alert(
         'Message',
-        'Invalid Accessed.',
+        'Please select location.',
         [
           {text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel'}
         ],
@@ -226,6 +226,7 @@ class AddLocation extends Component {
         ...user,
         plan: parameter
       })
+      Linking.openURL('https://calendly.com/payhiramph/videocallverification')
       this.props.navigation.navigate('partnerPlansStack');
     }, error => {
       this.setState({isLoading: false})

@@ -11,7 +11,12 @@ class HeaderOptions extends Component {
     super(props);
   }
   back = () => {
-    this.props.navigationProps.pop();
+    console.log(this.props.navigationProps.state.params, 'dfasdfasdf')
+    if(this.props.navigationProps.state.params.data.payload == 'plans'){
+      
+    }else{
+      this.props.navigationProps.pop();
+    }
   };
 
   componentDidMount(){

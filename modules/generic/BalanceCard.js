@@ -50,7 +50,7 @@ class BalanceCard extends Component {
           )
         }
         {
-          this.state.isLoading && (<Skeleton size={1} template={'block'} height={50}/>)
+          this.state.isLoading && (<Skeleton size={2} template={'block'} height={50}/>)
         }
         
       </View>
