@@ -100,7 +100,6 @@ class Notifications extends Component{
 
   render() {
     const { notifications } = this.props.state;
-    console.log('NOTIFICATION', notifications);
     const { selected, isLoading } = this.state;
 
     return (

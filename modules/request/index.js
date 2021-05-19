@@ -193,7 +193,7 @@ class Requests extends Component {
           this.setState({messageEmpty: `Hi ${user.username}!` + ' ' + (user.account_type != 'USER' ? 'Create any requests and let our trusted partners process your requests . Click the button below to get started.' : 'Create any requests and let our trusted partners process your requests . Click the button below to get started.')})
         }
         if(page == 'public'){
-          this.setState({messageEmpty: `Hi ${user.username}!` + ' ' + 'Grab the chance to process requests and the great chance to earn. Click the button below to get started.'})
+          this.setState({messageEmpty: `Hi ${user.username}!` + ' ' + (user.account_type == 'USER' ? 'Create any requests and let our trusted partners process your requests . Click the button below to get started.' :'Grab the chance to process requests and the great chance to earn. Click the button below to get started.')})
         }
         if(page == 'onNegotiation'){
           this.setState({messageEmpty: `Hi ${user.username}!` + ' ' + 'Seems like you do not make any proposals yet. Click the button below to get started.'})

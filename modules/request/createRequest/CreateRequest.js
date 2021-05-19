@@ -47,6 +47,7 @@ class CreateRequest extends Component {
     };
   }
   componentDidMount() {
+    this.setState({currentPosition: 0})
     this.retrieveLocationScope()
     const { params } = this.props.navigation.state;
     if(params && params.data){
@@ -154,15 +155,16 @@ class CreateRequest extends Component {
         return
       }
       if(defaultAddress != null && this.state.locations != null){
-        let a = false
+        let counter = 0
         this.state.locations.map(element => {
           if(element.route != defaultAddress.locality){
-            a = true
+            // a = true
           }else{
-            a = false
+            // a = false
+            counter ++
           }
         })
-        if(a === true){
+        if(counter == 0){
           Alert.alert(
             'Error Message',
             'No available partner in the area selected. Please change request location to continue.',
@@ -171,6 +173,8 @@ class CreateRequest extends Component {
             ],
             { cancelable: false }
           )
+        }else{
+          this.setState({currentPosition: currentPosition + 1})
         }
         return
       }
