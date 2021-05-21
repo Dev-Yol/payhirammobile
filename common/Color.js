@@ -19,15 +19,15 @@ export default {
   info:'#0066FF',
   fourth: fourth,
   setPrimary(color){
-    primary = color
+    this.primary = color
   },
   setSecondary(color){
-    secondary = color
+    this.secondary = color
   },
   setTertiary(color){
-    tertiary = color
+    this.tertiary = color
   },
   setFourth(color){
-    fourth = color
+    this.fourth = color
   }
 }

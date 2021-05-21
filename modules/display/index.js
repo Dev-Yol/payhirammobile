@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { View, Text, TextInput, StyleSheet, Dimensions, ScrollView } from 'react-native';
 import { connect } from 'react-redux'
+import { Helper } from 'common';
 import ThemeSettingTile from 'modules/display/ThemeSettingTile.js';
-import { H1 } from 'native-base';
+import AsyncStorage from '@react-native-community/async-storage';
 const height = Math.round(Dimensions.get('window').height);
 
 const dummyThemeData = [
@@ -36,17 +37,16 @@ class Display extends Component {
     };
   }
 
-  componentDidMount(){
+  componentDidMount() {
     const { theme } = this.props.state;
     if(theme == null){
       return
     }
-    console.log('them', theme)
     this.setState({
       selectedTile: theme.index
     })
   }
-
+  
   selectHandler = (index) => {
     let _theme = dummyThemeData[index].colors
     const {setTheme} = this.props;
@@ -57,7 +57,6 @@ class Display extends Component {
       fourth: _theme[3],
       index: index
     });
-    console.log(_theme)
     this.setState({selectedTile: index});
   };
 
@@ -68,7 +67,7 @@ class Display extends Component {
         <ThemeSettingTile
           id={index}
           key={index}
-          selectedTile={(theme && parseInt(theme.index) == index) ? true : false}
+          selectedTile={theme && theme?.index === undefined ? data.primary === theme?.primary : (theme != undefined ? index === parseInt(theme.index) : index === this.state.selectedTile) ? true : false}
           onSelect={this.selectHandler}
           themeTitle={data.title}
           colors={data.details}
