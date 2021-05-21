@@ -579,7 +579,7 @@ const reducer = (state = initialState, action) => {
         qrCodeModal: isVisible.isVisible,
       };
     case types.SET_THEME:
-      console.log('tertiary', theme.tertiary);
+      console.log('[theme store]', theme)
       storeData('primary', theme.primary);
       storeData('secondary', theme.secondary);
       storeData('tertiary', theme.tertiary);

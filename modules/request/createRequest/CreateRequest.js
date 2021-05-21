@@ -58,6 +58,7 @@ class CreateRequest extends Component {
     this.setState({
       currentDate: date.setDate(date.getDate())
     })
+    this.setState({location: null})
   }
 
   retrieveLocationScope = () => {
@@ -154,13 +155,11 @@ class CreateRequest extends Component {
         })
         return
       }
-      if(defaultAddress != null && this.state.locations != null){
+      if(currentPosition == 1 && defaultAddress != null && this.state.locations != null){
         let counter = 0
         this.state.locations.map(element => {
           if(element.route != defaultAddress.locality){
-            // a = true
           }else{
-            // a = false
             counter ++
           }
         })
@@ -188,6 +187,12 @@ class CreateRequest extends Component {
         if(ledger && amount > ledger.available_balance){
           this.setState({
             errorMessage: 'Insufficient Balance'
+          })
+          return
+        }
+        if(amount == 0){
+          this.setState({
+            errorMessage: 'Amount must not be 0'
           })
           return
         }
@@ -665,7 +670,6 @@ class CreateRequest extends Component {
   render() {
     const { ledger, theme } = this.props.state;
     const { currentPosition, errorMessage } = this.state;
-    console.log('curr', currentPosition);
     return (
       <KeyboardAvoidingView
       style={{
