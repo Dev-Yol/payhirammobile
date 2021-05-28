@@ -11,7 +11,7 @@ import { faComment } from '@fortawesome/free-regular-svg-icons';
 export default {
   company: 'Increment Technologies Inc.',
   APP_NAME: '@Payhiram_',
-  APP_NAME_BASIC: 'PayHiram',
+  APP_NAME_BASIC: 'Payhiram',
   APP_EMAIL: 'support@payhiram.ph',
   APP_WEBSITE: 'www.payhiram.increment.ltd',
   APP_HOST: 'com.payhiram',
