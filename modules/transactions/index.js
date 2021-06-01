@@ -1,5 +1,14 @@
 import React, {Component} from 'react';
-import { View, Text, ScrollView, TextInput, TouchableOpacity, SafeAreaView, Platform} from 'react-native';
+import {
+  View,
+  Text,
+  ScrollView,
+  TextInput,
+  TouchableOpacity,
+  SafeAreaView,
+  Platform,
+  Dimensions
+} from 'react-native';
 import Api from 'services/api/index.js';
 import { BasicStyles, Color, Routes} from 'common';
 import Styles from './Styles.js'
@@ -8,6 +17,7 @@ import TransactionCard from 'modules/generic/TransactionCard';
 import Skeleton from 'components/Loading/Skeleton';
 import _ from 'lodash';
 import { Spinner } from 'components';
+const height = Math.round(Dimensions.get('window').height);
 
 class Transactions extends Component {
   constructor(props) {
@@ -73,10 +83,13 @@ class Transactions extends Component {
   render() {
     const { data, isLoading } = this.state;
     return (
-      <SafeAreaView>
+      <SafeAreaView style={{
+        flex: 1,
+      }}>
         <ScrollView
           showsVerticalScrollIndicator={false}
-          scrollEventThrottle={16}
+          style={{
+          }}
           onScroll={(event) => {
             let scrollingHeight = event.nativeEvent.layoutMeasurement.height + event.nativeEvent.contentOffset.y
             let totalHeight = event.nativeEvent.contentSize.height
@@ -93,22 +106,26 @@ class Transactions extends Component {
             }
           }}>
           <View style={{
-            marginTop: Platform.OS == 'ios' ? 50 : 10,
-            marginBottom: Platform.OS == 'ios' ? 105 : 130
+            minHeight: height + 40,
+            paddingLeft: 20,
+            paddingRight: 20
           }}>
-            <View style={Styles.MainContainer}>
-              {
-                data && data.map((item, index) => (
-                  <TransactionCard key={index} data={item}/>
-                ))
-              }
+            {
+              data && data.map((item, index) => (
+                <TransactionCard
+                  key={index}
+                  style={{
+                    marginTop: index == 0 ? 25 : 0,
+                    marginBottom: index == (data.length - 1) ? 25 : 0,
+                  }}
+                  data={item}/>
+              ))
+            }
             {
               isLoading && (<Skeleton size={2} template={'block'} height={50}/>)
             }
-            </View>
         </View>
       </ScrollView>
-      {/* {isLoading ? <Spinner mode="overlay" /> : null} */}
     </SafeAreaView>
     );
   }

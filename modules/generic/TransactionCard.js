@@ -12,65 +12,64 @@ class TransactionCard extends Component {
     const { data } = this.props;
     const { theme } = this.props.state;
     return (
-      <View>
-        <ScrollView showsHorizontalScrollIndicator={false}>
-          <View style={Styles.MainContainer}>
-            {
-              data && (
-                <TouchableOpacity style={Styles.Card}>
-                  <View
-                  style={{
-                    flexGrow: 1,
-                    width: '60%'
-                  }}>
-                    <Text style={{
-                      color: theme ? theme.secondary : Color.secondary,
-                      fontSize: BasicStyles.standardFontSize - 1,
-                      paddingTop: 10
-                    }}>{data.created_at_human}</Text>
+      <View style={{
+        width: '100%',
+        ...this.props.style,
+      }}>
+        {
+          data && (
+            <TouchableOpacity style={Styles.Card}>
+              <View
+              style={{
+                flexGrow: 1,
+                width: '60%'
+              }}>
+                <Text style={{
+                  color: theme ? theme.secondary : Color.secondary,
+                  fontSize: BasicStyles.standardFontSize - 1,
+                  paddingTop: 10
+                }}>{data.created_at_human}</Text>
+                <Text style={{
+                  fontSize: BasicStyles.standardFontSize,
+                  paddingTop: 10,
+                  paddingBottom: 10
+                }}>{data.description}</Text>
+                {
+                  data.code && (
                     <Text style={{
                       fontSize: BasicStyles.standardFontSize,
-                      paddingTop: 10,
                       paddingBottom: 10
-                    }}>{data.description}</Text>
-                    {
-                      data.code && (
-                        <Text style={{
-                          fontSize: BasicStyles.standardFontSize,
-                          paddingBottom: 10
-                        }}>Transaction #: ****{data.code.substr(data.code.length - 8, data.code.length - 1)}</Text>
-                      )
-                    }
-                  </View>
-                  <View style={{
-                    width: '40%'
-                  }}>
-                    {
-                      data.amount < 0 ? (
-                        <Text style={{
-                          color: Color.danger,
-                          fontSize: BasicStyles.standardFontSize,
-                          fontWeight: 'bold',
-                          textAlign: 'right'
-                        }}>{Currency.display(data.amount, data.currency)}</Text>
-                      )
-                      :
-                      (
-                        <Text style={{
-                          color: theme ? theme.secondary : Color.secondary,
-                          fontSize: BasicStyles.standardFontSize,
-                          fontWeight: 'bold',
-                          textAlign: 'right'
-                        }}>{Currency.display(data.amount, data.currency)}</Text>
-                      )
-                    }
-                  </View>
-                </TouchableOpacity>
-              )
-            }     
-            
-          </View>
-        </ScrollView>
+                    }}>Transaction #: ****{data.code.substr(data.code.length - 8, data.code.length - 1)}</Text>
+                  )
+                }
+              </View>
+              <View style={{
+                width: '40%'
+              }}>
+                {
+                  data.amount < 0 ? (
+                    <Text style={{
+                      color: Color.danger,
+                      fontSize: BasicStyles.standardFontSize,
+                      fontWeight: 'bold',
+                      textAlign: 'right'
+                    }}>{Currency.display(data.amount, data.currency)}</Text>
+                  )
+                  :
+                  (
+                    <Text style={{
+                      color: theme ? theme.secondary : Color.secondary,
+                      fontSize: BasicStyles.standardFontSize,
+                      fontWeight: 'bold',
+                      textAlign: 'right'
+                    }}>{Currency.display(data.amount, data.currency)}</Text>
+                  )
+                }
+              </View>
+            </TouchableOpacity>
+          )
+        }     
+        
       </View>
     );
   }
