@@ -1,9 +1,11 @@
 import { connect } from 'react-redux';
 class NotificationHandler{
   onRegister = (token) => {
+    console.log('a')
   }
 
   onOpenNotification = (notify) => {
+    console.log('b')
     // console.log("[App] onOpenNotification", notify)
   }
 

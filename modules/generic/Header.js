@@ -48,7 +48,7 @@ class Header extends Component {
 
   render (){
     const { selected, from } = this.props;
-    const { theme, notifications, location, defaultAddress } = this.props.state;
+    const { theme, notifications, location, defaultAddress, user } = this.props.state;
     const { filter } = this.state;
     return(
       <View
@@ -150,31 +150,39 @@ class Header extends Component {
                 </View>
             </TouchableOpacity>
           </View>
-          <CurrentLoc />
-          <TouchableOpacity
-            onPress={() => this.redirect('locationWithMapStack')}
-            style={{
-              width: width,
-              marginLeft: 10,
-            }}>
-            <Text style={{
-              fontSize: BasicStyles.standardFontSize,
-              fontWeight: 'bold',
-              width: width - 40
-            }}
-            numberOfLines={1}
-            >{
-              defaultAddress != null 
-              ? 
-                defaultAddress.route
-              :
-                location != null
-                ? 
-                  location.address 
-                : 
-                  'Set Location'
-            }</Text>
-          </TouchableOpacity>
+          {
+            user?.account_type != 'USER' && (
+              <CurrentLoc />
+            )
+          }
+          {
+            user?.account_type != 'USER' && (
+              <TouchableOpacity
+                onPress={() => this.redirect('locationWithMapStack')}
+                style={{
+                  width: width,
+                  marginLeft: 10,
+                }}>
+                <Text style={{
+                  fontSize: BasicStyles.standardFontSize,
+                  fontWeight: 'bold',
+                  width: width - 40
+                }}
+                numberOfLines={1}
+                >{
+                  defaultAddress != null 
+                  ? 
+                    defaultAddress.route
+                  :
+                    location != null
+                    ? 
+                      location.address 
+                    : 
+                      'Set Location'
+                }</Text>
+              </TouchableOpacity>
+            )
+          }
       </View>
         
     )
