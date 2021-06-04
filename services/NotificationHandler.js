@@ -1,15 +1,21 @@
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
-class NotificationHandler{
+class NotificationHandler extends Component{
+  constructor(props){
+    super(props);
+    this.state = {
+    };
+  }
+
   onRegister = (token) => {
-    console.log('a')
   }
 
   onOpenNotification = (notify) => {
-    console.log('b')
     // console.log("[App] onOpenNotification", notify)
   }
 
   onNotification = (notify) => {
+    console.log('notify', notify)
     const { user } = this.props.state;
     let data = null
     if(user == null || !notify.data){
@@ -145,6 +151,10 @@ class NotificationHandler{
       }
       break
     }
+  }
+
+  render(){
+    return
   }
 }
 

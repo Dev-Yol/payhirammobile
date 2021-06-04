@@ -235,10 +235,10 @@ class OTP extends Component {
     }
     console.log('[SEND directTransfer] parameter', parameter)
     this.setState({isLoading: true});
-    this.showUnbaleToProcessModal(true);
+    // this.showUnbaleToProcessModal(true);
     Api.request(Routes.ledgerDirectTransfer, parameter, response => {
         this.setState({isLoading: false});
-        this.showUnbaleToProcessModal(false);
+        // this.showUnbaleToProcessModal(false);
         console.log('[OTP] Create Request response', response)
         if(response.error == null){
           if(payload == 'direct_transfer'){
@@ -275,10 +275,10 @@ class OTP extends Component {
   sendCreateRequest = (parameter) => {
     console.log('OTP Create Request API Call')
     this.setState({isLoading: true});
-    this.showUnbaleToProcessModal(true);
+    // this.showUnbaleToProcessModal(true);
     Api.request(Routes.requestCreate, parameter, response => {
         this.setState({isLoading: false});
-        this.showUnbaleToProcessModal(false);
+        // this.showUnbaleToProcessModal(false);
         console.log('[OTP] Create Request response', response)
         if(response.data != null){
           this.props.navigation.navigate('requestItemStack', {
@@ -324,10 +324,10 @@ class OTP extends Component {
     }
     console.log('[Fund Transfer] parameter', parameter)
     this.setState({isLoading: true});
-    this.showUnbaleToProcessModal(true);
+    // this.showUnbaleToProcessModal(true);
     Api.request(Routes.requestManageByThread, parameter, response => {
         this.setState({isLoading: false});
-        this.showUnbaleToProcessModal(false);
+        // this.showUnbaleToProcessModal(false);
         console.log('[OTP] Transfer fund response', response)
         if(response.error != null){
           Alert.alert(

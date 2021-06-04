@@ -54,7 +54,6 @@ class Slider extends Component {
 
   render () {
     const { user, theme } = this.props.state;
-    console.log('[here]e', Helper.checkStatus(user))
     return (
       <View style={styles.container}>
         <ScrollView>
