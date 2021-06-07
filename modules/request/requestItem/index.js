@@ -300,7 +300,7 @@ class RequestItem extends Component {
             </View>
         </ScrollView>
         {
-          (user.username == data.account.username) && (data.status == 0) && (
+          (user?.username == data.account.username) && (data.status == 0) && (
             <View style={{
               width: '100%',
               flexDirection: 'row',

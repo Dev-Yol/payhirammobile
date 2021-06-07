@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { SafeAreaView } from 'react-native';
 import { connect } from 'react-redux';
 class NotificationHandler extends Component{
   constructor(props){
@@ -8,9 +9,11 @@ class NotificationHandler extends Component{
   }
 
   onRegister = (token) => {
+    console.log('a')
   }
-
+  
   onOpenNotification = (notify) => {
+    console.log('a')
     // console.log("[App] onOpenNotification", notify)
   }
 
@@ -154,7 +157,9 @@ class NotificationHandler extends Component{
   }
 
   render(){
-    return
+    return(
+      <SafeAreaView></SafeAreaView>
+    )
   }
 }
 
