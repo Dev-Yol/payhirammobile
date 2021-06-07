@@ -71,11 +71,11 @@ class AddLocation extends Component {
       this.setState({
         location: this.state.addresses[index]
       })
-    }else if(this.props.state.location_from == 'proposal'){
-      const {setDefaultAddress} = this.props;
-      setDefaultAddress(this.state.addresses[index]);
-      console.log('[defaulthh]', this.props.state.defaultAddress);
-      this.props.navigation.navigate('requestItemStack', {data: this.props.state.request});
+    // }else if(this.props.state.location_from == 'proposal'){
+    //   const {setDefaultAddress} = this.props;
+    //   setDefaultAddress(this.state.addresses[index]);
+    //   console.log('[defaulthh]', this.props.state.defaultAddress);
+    //   this.props.navigation.navigate('requestItemStack', {data: this.props.state.request});
     }else{
       const {setDefaultAddress} = this.props;
       setDefaultAddress(this.state.addresses[index]);
@@ -296,7 +296,7 @@ class AddLocation extends Component {
                 right: '5%',
                 width: '90%'
               }}
-              from={'proposal'}
+              from={'request'}
             />
           )
         }

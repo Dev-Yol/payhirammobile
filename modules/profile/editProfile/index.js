@@ -64,7 +64,8 @@ class EditProfile extends Component {
       reachMax: false,
       radioSelected: 'male',
       rating: null,
-      verifyButton: false
+      verifyButton: false,
+      imageId: null
     };
   }
 
@@ -138,9 +139,9 @@ class EditProfile extends Component {
     }
     this.setState({ isLoading: true })
     Api.request(Routes.accountCardsRetrieve, parameter, response => {
+      this.setState({ isLoading: false })
       let numImage = response.data[0].content.length
       setImageCount(numImage)
-      this.setState({ isLoading: false })
       response.data[0].content.map(element => {
         this.state.uploadedID.push(element)
       })
@@ -158,7 +159,6 @@ class EditProfile extends Component {
     if(first_name != null && middle_name != null && last_name != null && sex != null){
       setScheduleShow(true)
     }
-    console.log(first_name, middle_name, last_name, sex)
   }
 
   upload = () => {
@@ -495,7 +495,7 @@ class EditProfile extends Component {
             </TouchableOpacity>
 
             {
-              user.username && (
+              user?.username && (
                 <Text style={[{ fontWeight: 'bold', color: Color.white }]}>
                   {user.username}
                 </Text>
@@ -561,31 +561,6 @@ class EditProfile extends Component {
             <View style={{ width: '90%', marginLeft: '5%' }}>
               <Text>Gender</Text>
               {this.gender()}
-              {/* <View
-                style={{
-                  borderColor: Color.gray,
-                  borderWidth: 1,
-                  paddingLeft: 10,
-                  marginBottom: 20,
-                  borderRadius: 5,
-                }}>
-                <Picker
-                  selectedValue={this.state.sex}
-                  onValueChange={(sex) => this.setState({ sex })}
-                  style={BasicStyles.pickerStyleCreate}
-                  required={true}>
-                  {
-                    gender.map((item, index) => {
-                      return (
-                        <Picker.Item
-                          key={index}
-                          label={item.title}
-                          value={item.value} />
-                      )
-                    })
-                  }
-                </Picker>
-              </View> */}
             </View>
             <View>
               <Text
@@ -640,7 +615,7 @@ class EditProfile extends Component {
                           borderColor: Color.gray,
                           margin: 1
                         }}
-                          onPress={() => { this.setState({ imageModal: true, urlID: item.payload_value }) }}
+                          onPress={() => { this.setState({ imageModal: true, urlID: item.payload_value, imageId: item.id }) }}
                           key={index}>
                           <Image
                             source={{ uri: Config.BACKEND_URL  + item.payload_value }}
@@ -654,7 +629,7 @@ class EditProfile extends Component {
                     }
                   })
                 }
-                <ImageModal visible={this.state.imageModal} url={Config.BACKEND_URL  + this.state.urlID} action={() => { this.setState({ imageModal: false }) }}></ImageModal>
+                <ImageModal visible={this.state.imageModal} deleteID={this.state.imageId} url={Config.BACKEND_URL  + this.state.urlID} successDel={() => this.retrieveUploadedId()} action={() => { this.setState({ imageModal: false }) }}></ImageModal>
               </View>
             </View>
           </View>

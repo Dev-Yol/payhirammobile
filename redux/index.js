@@ -325,6 +325,11 @@ const reducer = (state = initialState, action) => {
       storeData('token', '');
       // AsyncStorage.clear()
       console.log("[LOGOUT]");
+      setTimeout(() => {
+        // this.navigateToLogin('Login')
+        console.log('df', this.props)
+        // this.props.navigation.navigate('loginStack');
+      }, 100)
       return Object.assign({}, initialState);
     case types.LOGIN:
       storeData('token', token);
@@ -739,4 +744,5 @@ const reducer = (state = initialState, action) => {
       return { ...state, nav: state.nav };
   }
 };
+
 export default reducer;

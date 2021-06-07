@@ -184,7 +184,7 @@ class CreateRequest extends Component {
           })
           return
         }
-        if(ledger && amount > ledger.available_balance){
+        if(ledger && (amount > ledger.available_balance)){
           this.setState({
             errorMessage: 'Insufficient Balance'
           })
