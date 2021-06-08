@@ -328,7 +328,7 @@ class EditProfile extends Component {
       return
     } else if (this.state.first_name == null || this.state.middle_name == null || this.state.last_name == null || this.state.sex == null) {
       Alert.alert(
-        'Error Message',
+        'Try Again',
         'Please fill in all the fields.',
         [
           { text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel' }
@@ -349,7 +349,7 @@ class EditProfile extends Component {
     }
     // }else if(this.state.cellular_number.length != 11 || (this.state.cellular_number.substr(0, 2) != '09')){
     //   Alert.alert(
-    //     'Error Message',
+    //     'Try Again',
     //     'Please input a valid phone number.',
     //     [
     //       {text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel'}

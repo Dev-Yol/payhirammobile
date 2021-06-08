@@ -34,7 +34,7 @@ class Reviews extends Component {
     const { user } = this.props.state;
     if(user == null || data == null){
       Alert.alert(
-        "Error Message",
+        "Try Again",
         'Invalid request of page.',
         [
           { text: "Ok", onPress: () => {
@@ -61,7 +61,7 @@ class Reviews extends Component {
       }
       if(data.peer == null){
         Alert.alert(
-          "Error Message",
+          "Try Again",
           'Invalid request of page.', 
           [
             { text: "Ok", onPress: () => {
@@ -149,7 +149,7 @@ class Reviews extends Component {
     const { user } = this.props.state;
     if(user == null || data == null){
       Alert.alert(
-        "Error Message",
+        "Try Again",
         'Invalid request of page.',
         [
           { text: "Ok", onPress: () => {  
