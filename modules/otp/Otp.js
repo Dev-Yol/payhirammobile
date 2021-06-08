@@ -155,7 +155,7 @@ function OTP(props){
           })          
         }else{
           Alert.alert(
-            "Error Message",
+            "Try Again",
             response.error,
             [
               { text: "Ok", onPress: () => {
@@ -228,7 +228,7 @@ function OTP(props){
         console.log('[OTP] Transfer fund response', response)
         if(response.error != null){
           Alert.alert(
-            "Error Message",
+            "Try Again",
             response.error,
             [
               { text: "Ok", onPress: () => {

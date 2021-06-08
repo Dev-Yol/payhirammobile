@@ -58,7 +58,7 @@ class Plans extends Component {
     if(user == null && (user && user.plan == null)){
       return
     }
-    console.log('[plan]', user)
+    console.log('[plan]', user, '[Helper]', Helper.partner)
     let selected = Helper.getPartner(user?.plan?.plan, Helper.partner)
     this.setState({
       selected: selected
@@ -178,6 +178,22 @@ class Plans extends Component {
                         />
                     </View>
                   </View>
+              </View>
+            )
+          }
+          {
+            (user.plan.status === 'approved' && selected && user && user.plan) && (
+              <View
+                style={{
+                  width: '100%',
+                  borderRadius: 12,
+                  padding: 10,
+                  borderWidth: 1,
+                  borderColor: Color.lightGray,
+                  backgroundColor: theme ? theme.primary : Color.primary,
+                  marginTop: '-20%'
+                }}>
+                  <Text style={{color: Color.white, textAlign: 'center'}}>Message: Do you want to Upgrade or Downgrade your choosen plan? Message us directly at support@payhiram.ph</Text>
               </View>
             )
           }

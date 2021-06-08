@@ -165,7 +165,7 @@ class CreateRequest extends Component {
         })
         if(counter == 0){
           Alert.alert(
-            'Error Message',
+            'Try Again',
             'No available partner in the area selected. Please change request location to continue.',
             [
               {text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel'}
@@ -232,7 +232,7 @@ class CreateRequest extends Component {
       return
     }else if(this.state.target == null || this.state.type == null || this.state.money_type == null || this.state.amount == null ||  this.state.amount == "" || this.state.neededOn == null || this.state.reason == null || this.state.reason == "" || defaultAddress == null || this.state.target == null) {
       Alert.alert(
-        'Error Message',
+        'Try Again',
         'All fields with (*) are required.',
         [
           {text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel'}
@@ -242,7 +242,7 @@ class CreateRequest extends Component {
       return
     }else if(parseInt(this.state.amount) < 1000){
       Alert.alert(
-        'Error Message',
+        'Try Again',
         'Amount must not be less than 1000',
         [
           {text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel'}

@@ -81,7 +81,7 @@ class OTP extends Component {
     if(show == true){
       setTimeout(() => {
         Alert.alert(
-          "Error Message",
+          "Try Again",
           "Unable to process request",
           [
             { text: "Ok", onPress: () => {
@@ -254,7 +254,7 @@ class OTP extends Component {
           }        
         }else{
           Alert.alert(
-            "Error Message",
+            "Try Again",
             response.error,
             [
               { text: "Ok", onPress: () => {
@@ -331,7 +331,7 @@ class OTP extends Component {
         console.log('[OTP] Transfer fund response', response)
         if(response.error != null){
           Alert.alert(
-            "Error Message",
+            "Try Again",
             response.error,
             [
               { text: "Ok", onPress: () => {

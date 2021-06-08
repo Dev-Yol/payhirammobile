@@ -57,7 +57,8 @@ class Requests extends Component {
       unReadPeerRequests: [],
       unReadRequests: [],
       activeIndex: 0,
-      messageEmpty: null
+      messageEmpty: null,
+      numberOfPages: 0
     };
   }
 
@@ -196,7 +197,7 @@ class Requests extends Component {
           this.setState({messageEmpty: `Hi ${user.username}!` + ' ' + (user.account_type == 'USER' ? 'Create any requests and let our trusted partners process your requests . Click the button below to get started.' :'Grab the chance to process requests and the great chance to earn. Click the button below to get started.')})
         }
         if(page == 'onNegotiation'){
-          this.setState({messageEmpty: `Hi ${user.username}!` + ' ' + 'Seems like you do not make any proposals yet. Click the button below to get started.'})
+          this.setState({messageEmpty: `Hi ${user.username}!` + ' ' + 'Seems like you do not make any proposals yet. Go to public page and make proposals.'})
         }
         if(page == 'onDelivery'){
           this.setState({messageEmpty: `Hi ${user.username}!` + ' ' + 'Seems like you do not have ongoing transaction yet. Click the button below to get started.'})
@@ -372,7 +373,7 @@ class Requests extends Component {
                 paddingRight: 20,
                 width: '100%'
               }}>
-                <Message message={this.state.messageEmpty} navigation={this.props.navigation}/>
+                <Message page={this.state.page} message={this.state.messageEmpty} navigation={this.props.navigation}/>
               </View>
             )}
             {

@@ -116,7 +116,7 @@ class ProposalModal extends Component {
 
     if(request.money_type != 'cash' && ledger.available_balance < request.amount){
       Alert.alert(
-        'Error Message!',
+        'Try Again!',
         'You have insufficient balance.',
         [
           {text: 'OK', onPress: () => {
