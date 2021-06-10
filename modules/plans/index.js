@@ -162,7 +162,7 @@ class Plans extends Component {
                         marginTop: 10
                       }}>
                         <Button
-                          title={user.plan.status.toUpperCase()}
+                          title={user?.plan?.status.toUpperCase()}
                           onClick={() => {
                           }}
                           style={{
@@ -182,7 +182,7 @@ class Plans extends Component {
             )
           }
           {
-            (user.plan.status === 'approved' && selected && user && user.plan) && (
+            (user?.plan?.status === 'approved' && selected && user && user.plan) && (
               <View
                 style={{
                   width: '100%',
