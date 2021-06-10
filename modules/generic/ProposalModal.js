@@ -243,6 +243,7 @@ class ProposalModal extends Component {
                       onConnectRequest={(data) => data}
                       data={request}
                       navigation={this.props.navigation}
+                      // from={'request'}
                       from={'proposal'}
                       />
                   </View>
@@ -326,7 +327,8 @@ class ProposalModal extends Component {
                           route={'addLocationStack'}
                           closeOnClick={() => this.props.closeModal()}
                           navigation={this.props.navigation}
-                          from={'proposal'}
+                          from={'request'}
+                          // from={'proposal'}
                         />
                       )
                     }
