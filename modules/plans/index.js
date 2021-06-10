@@ -186,14 +186,10 @@ class Plans extends Component {
               <View
                 style={{
                   width: '100%',
-                  borderRadius: 12,
-                  padding: 10,
-                  borderWidth: 1,
-                  borderColor: Color.lightGray,
-                  backgroundColor: theme ? theme.primary : Color.primary,
-                  marginTop: '-20%'
+                  paddingLeft: 40,
+                  paddingRight: 40
                 }}>
-                  <Text style={{color: Color.white, textAlign: 'center'}}>Message: Do you want to Upgrade or Downgrade your choosen plan? Message us directly at support@payhiram.ph</Text>
+                  <Text style={{color: Color.black, textAlign: 'center'}}>To upgrade or downgrade your account, kindly send us an email through support@payhiram.ph</Text>
               </View>
             )
           }
