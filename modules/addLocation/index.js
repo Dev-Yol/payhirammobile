@@ -121,6 +121,7 @@ class AddLocation extends Component {
       limit: 100,
       offset: 0
     }
+    console.log('[retrieve address]', parameters)
     this.setState({isLoading: true})
     Api.request(Routes.retrieveSavedAddresses, parameters, response => {
       this.setState({addresses: response.data});
