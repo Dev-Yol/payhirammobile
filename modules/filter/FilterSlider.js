@@ -194,7 +194,7 @@ class FilterSlider extends Component {
             width: '100%',
             marginLeft: '90%',
             marginTop: '-6%'
-          }}>{amount}</Text>
+          }}>{this.state.amount < 1000 ? this.setState({amount: 1000}) : this.state.amount}</Text>
         </View>
         <SliderPicker 
           callback={position => {
@@ -563,9 +563,10 @@ class FilterSlider extends Component {
                 type={'date'}
                 placeholder={this.state.needed_on}
                 borderColor= {'white'}
+                borderBottomColor={'white'}
                 height={40}
                 style={{
-                  borderColor: 0,
+                  borderColor: 'white',
                   borderWidth: 0,
                   height: 40,
                   width: '50%',

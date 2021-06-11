@@ -65,17 +65,18 @@ class AddLocation extends Component {
   }
 
   selectHandler = (index) => {
+    console.log(this.props.state)
     this.setState({ selectedAddress: index });
     const { params } = this.props.navigation.state;
     if(params?.payload == 'plans'){
       this.setState({
         location: this.state.addresses[index]
       })
-    // }else if(this.props.state.location_from == 'proposal'){
-    //   const {setDefaultAddress} = this.props;
-    //   setDefaultAddress(this.state.addresses[index]);
-    //   console.log('[defaulthh]', this.props.state.defaultAddress);
-    //   this.props.navigation.navigate('requestItemStack', {data: this.props.state.request});
+    }else if(this.props.state.location_from == 'request'){
+      const {setLocation} = this.props;
+      setLocation(this.state.addresses[index], this.state.addresses[index]);
+      console.log('[defaulthh]', this.props.state.location);
+      this.props.navigation.pop()
     }else{
       const {setDefaultAddress} = this.props;
       setDefaultAddress(this.state.addresses[index]);
@@ -121,7 +122,6 @@ class AddLocation extends Component {
       limit: 100,
       offset: 0
     }
-    console.log('[retrieve address]', parameters)
     this.setState({isLoading: true})
     Api.request(Routes.retrieveSavedAddresses, parameters, response => {
       this.setState({addresses: response.data});

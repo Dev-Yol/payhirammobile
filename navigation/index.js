@@ -1,6 +1,6 @@
 import { createStackNavigator } from 'react-navigation-stack';
-// import Login from 'modules/basics/rounded/LoginWithFingerPrintV1';
-import Login from 'modules/basics/rounded/LoginWithFingerPrint';
+import Login from 'modules/basics/rounded/LoginWithFingerPrintV1';
+// import Login from 'modules/basics/rounded/LoginWithFingerPrint';
 import FingerprintScan from '../modules/basics/FingerPrintScanner';
 import ForgotPassword from 'modules/basics/rounded/ForgotPassword';
 import VerifyEmail from 'modules/basics/rounded/VerifyEmail';

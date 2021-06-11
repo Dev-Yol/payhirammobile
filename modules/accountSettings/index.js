@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import {
   Text,
   View,
-  TextInput,
-  TouchableHighlight,
   ScrollView,
   Dimensions,
   SafeAreaView
@@ -17,7 +15,6 @@ import { Spinner } from 'components';
 import Button from 'components/Form/Button';
 import TextInputWithLabel from 'components/Form/TextInputWithLabel';
 import QRCode from 'react-native-qrcode-svg';
-import { ColorPropType } from 'react-native';
 const height = Math.round(Dimensions.get('window').height);
 
 class AccountSettings extends Component {
@@ -155,7 +152,7 @@ class AccountSettings extends Component {
               
             
 
-            <TextInputWithLabel 
+            {/* <TextInputWithLabel 
               variable={user.username}
               onChange={(value) => {}}
               label={'Username'}
@@ -163,7 +160,24 @@ class AccountSettings extends Component {
               onError={false}
               editable={false}
               required={false}
-            />
+            /> */}
+
+            <View style={{
+              width: '100%',
+              flexDirection: 'row',
+              marginTop: 10
+            }}>
+              <Text style={{
+                fontSize: BasicStyles.standardFontSize
+              }}>
+                Username
+              </Text>
+              <Text style={{
+                paddingLeft: 5,
+                color: Color.danger
+              }}>*</Text>
+              <Text style={{marginLeft: '65%'}}>{user.username}</Text>
+            </View>
 
             <TextInputWithLabel 
               variable={this.state.email}

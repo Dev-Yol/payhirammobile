@@ -356,7 +356,7 @@ class Requests extends Component {
         }}>
           <View style={{
             ...Style.MainContainer,
-            height: height + 400,
+            minHeight: height + 400,
             marginTop: 70
           }}> 
             <MessageAlert from={'request'}/>
