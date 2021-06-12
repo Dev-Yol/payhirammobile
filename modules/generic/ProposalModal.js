@@ -177,7 +177,9 @@ class ProposalModal extends Component {
     }else{
       let parameter = {
         id: data.id,
-        charge: charge
+        account_id: data.account_id,
+        charge: charge,
+        request_id: data.request_id
       }
       if(request && request.shipping.toLowerCase() == 'pickup' && defaultAddress){
         parameter['location_id'] = defaultAddress.id

@@ -14,12 +14,12 @@ class HeaderOptions extends Component {
     this.props.navigationProps.pop();
   };
 
-  // componentDidMount(){
-  //   if(this.props.navigationProps?.state?.params?.data == 'proposal'){
-  //     const { setFrom } = this.props
-  //     setFrom(this.props.navigationProps.state.params.data)
-  //   }
-  // }
+  componentDidMount(){
+    if(this.props.navigationProps?.state?.params?.from == 'request'){
+      const { setFrom } = this.props
+      setFrom(this.props.navigationProps.state.params.from)
+    }
+  }
 
   render() {
     return (

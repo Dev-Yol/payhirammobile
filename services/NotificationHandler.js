@@ -1,11 +1,21 @@
 import React, { Component } from 'react';
-import { SafeAreaView } from 'react-native';
+import { View, Text } from 'react-native';
 import { connect } from 'react-redux';
+
 class NotificationHandler extends Component{
   constructor(props){
     super(props);
     this.state = {
     };
+  }
+
+  componentDidMount() {
+    const { notificationHandler } = this.props;
+    notificationHandler(this);
+  }
+  componentWillUnmount() {
+   const { notificationHandler } = this.props;
+   notificationHandler(undefined);
   }
 
   onRegister = (token) => {
@@ -18,7 +28,6 @@ class NotificationHandler extends Component{
   }
 
   onNotification = (notify) => {
-    console.log('notify', notify)
     const { user } = this.props.state;
     let data = null
     if(user == null || !notify.data){
@@ -63,20 +72,20 @@ class NotificationHandler extends Component{
             console.log("[Public Requests]", data)
             unReadRequests.push(data)
             const { setUnReadRequests } = this.props;
-            setUnReadRequests($unReadRequests);
+            setUnReadRequests(unReadRequests);
+            // setUnReadRequests($unReadRequests);
           }else if(data.target == 'partners'){
             const { user } = this.props.state;
             if(user == null){
               return
             }else{
-              console.log("[Partner Requests]", data.scope)
-
-              console.log("[Partner Requests] user", user.plan.original.data[0])
+              console.log("[Partner Requests]", user)
               if(user.scope_location.includes(data.scope)){
                 console.log("[Partner Requests] added", data)
                 unReadRequests.push(data)
                 const { setUnReadRequests } = this.props;
-                setUnReadRequests($unReadRequests);
+                setUnReadRequests(unReadRequests);
+                // setUnReadRequests($unReadRequests);
               }else{
                 console.log("[Partner Requests] Empty")
               }
@@ -92,7 +101,7 @@ class NotificationHandler extends Component{
             const { setRequest } = this.props;
             setRequest({
               ...request,
-              status: data.status
+              status: data?.status
             })
             return
           }
@@ -158,7 +167,11 @@ class NotificationHandler extends Component{
 
   render(){
     return(
-      <SafeAreaView></SafeAreaView>
+      <View>
+        <Text>
+          hi
+        </Text>
+      </View>
     )
   }
 }

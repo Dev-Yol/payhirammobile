@@ -204,7 +204,7 @@ class EditProfile extends Component {
                       'Message',
                       'Image successfully uploaded',
                       [
-                        { text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel' }
+                        { text: 'Ok', onPress: () => this.retrieveUploadedId(), style: 'cancel' }
                       ],
                       { cancelable: false }
                     )
@@ -220,7 +220,7 @@ class EditProfile extends Component {
                       'Message',
                       'Image successfully updated',
                       [
-                        { text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel' }
+                        { text: 'Ok', onPress: () => this.retrieveUploadedId(), style: 'cancel' }
                       ],
                       { cancelable: false }
                     )
@@ -629,7 +629,7 @@ class EditProfile extends Component {
                     }
                   })
                 }
-                <ImageModal visible={this.state.imageModal} deleteID={this.state.imageId} url={Config.BACKEND_URL  + this.state.urlID} successDel={() => this.retrieveUploadedId()} action={() => { this.setState({ imageModal: false }) }}></ImageModal>
+                <ImageModal visible={this.state.imageModal} deleteID={this.state.imageId} url={Config.BACKEND_URL  + this.state.urlID} successDel={() => this.retrieve()} action={() => { this.setState({ imageModal: false }), this.retrieveUploadedId() }}></ImageModal>
               </View>
             </View>
           </View>

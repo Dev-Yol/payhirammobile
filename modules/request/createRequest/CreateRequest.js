@@ -26,7 +26,7 @@ class CreateRequest extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      location: null,
+      // location: null,
       currency: 'PHP',
       shipping: 'pickup',
       neededOn: null,
@@ -58,7 +58,7 @@ class CreateRequest extends Component {
     this.setState({
       currentDate: date.setDate(date.getDate())
     })
-    this.setState({location: null})
+    // this.setState({location: null})
   }
 
   retrieveLocationScope = () => {
@@ -132,8 +132,9 @@ class CreateRequest extends Component {
   };
 
   footerHandler(action){
-    const { ledger, defaultAddress } = this.props.state;
-    const { currentPosition, fulfillmentType, location } = this.state;
+    const { ledger, location } = this.props.state;
+    const { currentPosition, fulfillmentType } = this.state;
+    // const { currentPosition, fulfillmentType, location } = this.state;
     const { amount, neededOn, reason, type } = this.state;
     this.setState({
       errorMessage: null
@@ -149,16 +150,16 @@ class CreateRequest extends Component {
         })
         return
       }
-      if(currentPosition == 1 && defaultAddress == null){
+      if(currentPosition == 1 && location == null){
         this.setState({
           errorMessage: 'Location is required'
         })
         return
       }
-      if(currentPosition == 1 && defaultAddress != null && this.state.locations != null){
+      if(currentPosition == 1 && location != null && this.state.locations != null){
         let counter = 0
         this.state.locations.map(element => {
-          if(element.route != defaultAddress.locality){
+          if(element.route != location.locality){
           }else{
             counter ++
           }
@@ -227,10 +228,10 @@ class CreateRequest extends Component {
 
 
   createRequest = () => {
-    const {user, defaultAddress} = this.props.state;
+    const {user, location} = this.props.state;
     if(user == null){
       return
-    }else if(this.state.target == null || this.state.type == null || this.state.money_type == null || this.state.amount == null ||  this.state.amount == "" || this.state.neededOn == null || this.state.reason == null || this.state.reason == "" || defaultAddress == null || this.state.target == null) {
+    }else if(this.state.target == null || this.state.type == null || this.state.money_type == null || this.state.amount == null ||  this.state.amount == "" || this.state.neededOn == null || this.state.reason == null || this.state.reason == "" || location == null || this.state.target == null) {
       Alert.alert(
         'Try Again',
         'All fields with (*) are required.',
@@ -258,7 +259,7 @@ class CreateRequest extends Component {
       coupon: null,
       currency: this.state.currency,
       interest: null,
-      location_id: defaultAddress.id,
+      location_id: location.id,
       max_charge: this.state.maximumProcessingCharge,
       months_payable: null,
       needed_on: this.state.neededOn,
@@ -422,8 +423,9 @@ class CreateRequest extends Component {
   }
 
   secondStep = () => {
-    const { location } = this.state;
-    const { defaultAddress } = this.props.state;
+    // const { location } = this.state;
+    const { location } = this.props.state;
+    console.log('[locat]', location)
     return(
         <View style={{
           width: '100%',
@@ -448,17 +450,17 @@ class CreateRequest extends Component {
                 width: '50%'
               }}
               onPress={() => {
-                this.props.navigation.navigate('addLocationStack')
+                this.props.navigation.navigate('addLocationStack', {from:'request'})
               }}
               >
-              { defaultAddress != null ?
+              { location != null ?
               <Text></Text> :  <FontAwesomeIcon icon={faMapMarkerAlt} size={BasicStyles.standardFontSize} color={Color.black} style={{marginLeft: '39%', marginTop: '3%'}}/>}
               <Text style={{
                 fontSize: BasicStyles.standardFontSize,
                 width: '100%',
                 textAlign: 'right',
                 marginTop: '-8%'
-              }}>{defaultAddress ? defaultAddress.route : 'Select Location'}</Text>
+              }}>{location ? location.route : 'Select Location'}</Text>
             </TouchableOpacity>
           </View>
 
@@ -468,8 +470,8 @@ class CreateRequest extends Component {
             borderRadius: BasicStyles.standardBorderRadius
           }}>
             {
-              defaultAddress && (
-                <MapViewer data={defaultAddress}/>
+              location && (
+                <MapViewer data={location}/>
               )
             }
           </View>
@@ -613,7 +615,7 @@ class CreateRequest extends Component {
   }
 
   fourthStep = () => {
-    const { user, defaultAddress } = this.props.state;
+    const { user, location } = this.props.state;
     return(
         <View style={{
           width: '100%',
@@ -622,7 +624,7 @@ class CreateRequest extends Component {
           height: height
         }}>
         {
-          (defaultAddress && user) && (
+          (location && user) && (
             <RequestCard 
               onConnectRequest={(item) => {
 
@@ -634,8 +636,8 @@ class CreateRequest extends Component {
                 coupon: null,
                 currency: this.state.currency,
                 interest: null,
-                location_id: defaultAddress.id,
-                location: defaultAddress,
+                location_id: location.id,
+                location: location,
                 max_charge: this.state.maximumProcessingCharge,
                 months_payable: null,
                 needed_on: this.state.neededOn,
