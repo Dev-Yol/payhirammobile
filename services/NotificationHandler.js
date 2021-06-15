@@ -168,9 +168,6 @@ class NotificationHandler extends Component{
   render(){
     return(
       <View>
-        <Text>
-          hi
-        </Text>
       </View>
     )
   }

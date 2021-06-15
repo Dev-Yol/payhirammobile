@@ -11,13 +11,13 @@ function SecutiryAlert(props) {
 
   const deAuthenticate = () => {
     props.reset()
-    setTimeout(() => {
-      navigationRef.current?.dispatch(StackActions.push({
-        routeName: 'loginStack',
-        index: 0,
-        key: null
-      }));
-    }, 500)
+    // setTimeout(() => {
+    //   navigationRef.current?.dispatch(StackActions.push({
+    //     routeName: 'loginStack',
+    //     index: 0,
+    //     key: null
+    //   }));
+    // }, 500)
     
   }
 
@@ -36,7 +36,7 @@ function SecutiryAlert(props) {
         }}>
           <Button
             onClick={() => {
-              deAuthenticate()
+              props.reset()
             }}
             title={'Logout'}
             style={{
@@ -80,7 +80,7 @@ function SecutiryAlert(props) {
         }}>
           <Button
             onClick={() => {
-              deAuthenticate()
+              props.reset()
             }}
             title={'Logout'}
             style={{

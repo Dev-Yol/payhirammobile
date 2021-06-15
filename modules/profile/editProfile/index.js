@@ -527,14 +527,16 @@ class EditProfile extends Component {
               style={{
                 borderBottomWidth: 1,
                 padding: 15,
+                paddingTop: 20,
+                paddingBottom: 20,
                 marginBottom: 10,
                 fontWeight: 'bold',
-                borderColor: Color.gray,
+                borderColor: Color.lightGray,
               }}>
               Basic Settings
             </Text>
 
-            <Text style={{ marginLeft: 20 }}>First Name</Text>
+            <Text style={{ marginLeft: 20, paddingTop: 10, paddingBottom: 10 }}>First Name</Text>
             <TextInput
               style={[BasicStyles.formControl, { alignSelf: 'center' }]}
               placeholder={'Enter your First Name'}
@@ -542,7 +544,7 @@ class EditProfile extends Component {
               value={this.state.first_name}
               required={true}
             />
-            <Text style={{ marginLeft: 20 }}>Middle Name</Text>
+            <Text style={{ marginLeft: 20, paddingTop: 10, paddingBottom: 10 }}>Middle Name</Text>
             <TextInput
               style={[BasicStyles.formControl, { alignSelf: 'center' }]}
               placeholder={'Enter your Middle Name'}
@@ -550,7 +552,7 @@ class EditProfile extends Component {
               value={this.state.middle_name}
               required={true}
             />
-            <Text style={{ marginLeft: 20 }}>Last Name</Text>
+            <Text style={{ marginLeft: 20, paddingTop: 10, paddingBottom: 10 }}>Last Name</Text>
             <TextInput
               style={[BasicStyles.formControl, { alignSelf: 'center' }]}
               placeholder={'Enter your Last Name'}
@@ -562,48 +564,83 @@ class EditProfile extends Component {
               <Text>Gender</Text>
               {this.gender()}
             </View>
-            <View>
-              <Text
+
+            <View style={{
+              width: '100%',
+              paddingTop: 20,
+              paddingBottom: 20,
+              paddingLeft: 20,
+              paddingRight: 20,
+              alignItems: 'center'
+            }}>
+              <Button
+                title={'Update'}
+                onClick={() => this.update()}
                 style={{
-                  borderBottomWidth: 1,
-                  padding: 15,
-                  marginBottom: 10,
+                  width: '50%',
+                  borderColor: theme ? theme.secondary : Color.secondary,
+                  backgroundColor: Color.white,
+                  borderWidth: 1
+                }}
+                textStyle={{
                   fontWeight: 'bold',
-                  borderColor: Color.gray,
-                }}>
-                ID's
-              </Text>
-              <TouchableOpacity
-                style={
-                  {
-                    borderColor: Color.gray,
-                    borderWidth: 1,
-                    backgroundColor: Color.gray,
-                    borderRadius: 25,
-                    position: 'absolute',
-                    padding: 10,
-                    marginTop: '0%',
-                    marginLeft: '55%'
-                  }}
-                onPress={() => this.uploadMessage()}>
-                <View style={{ flexDirection: 'row' }}>
-                  <FontAwesomeIcon
-                    icon={faUpload}
-                    style={{ marginRight: 18, marginLeft: 10 }}
-                    size={15}
-                    />
-                    <Text>Upload ID</Text>
-                </View>
-              </TouchableOpacity>
-              <Text onPress={() => {this.props.navigation.navigate('verificationStack', {type: 'PROFILE'})}} style={{textDecorationLine: 'underline', backgroundColor: theme ? theme.primary : Color.primary, color: Color.white, textAlign: 'center', padding: 10}}>
-                View all list of valid IDs
-              </Text>
+                  color: theme ? theme.secondary : Color.secondary,
+                }}
+              />
+            </View>
+            <View style={{
+            }}>
               <View style={{
-              flexDirection: 'row',
-              flex: 1,
-              flexWrap: 'wrap',
-              alignItems: 'flex-start'
+                flexDirection: 'row',
+                borderTopWidth: 1,
+                borderTopColor: Color.lightGray,
+                justifyContent: 'space-between',
+                width: '100%',
+                alignItems: 'center',
+                paddingBottom: 20,
+                paddingTop: 20,
+                paddingLeft: 20,
+                paddingRight: 20
               }}>
+                <Text
+                  style={{
+                    fontWeight: 'bold',
+                  }}>
+                  Your uploaded IDs
+                </Text>
+                <Button
+                  title={'Upload ID'}
+                  onClick={() => this.uploadMessage()}
+                  style={{
+                    width: '40%',
+                    backgroundColor: theme ? theme.primary : Color.primary
+                  }}
+                />
+                {/*<TouchableOpacity
+                                  style={
+                                    {
+                                      borderWidth: 1,
+                                      backgroundColor: Color.gray,
+                                      borderRadius: 25
+                                    }}
+                                  onPress={() => this.uploadMessage()}>
+                                  <View style={{ flexDirection: 'row' }}>
+                                    <FontAwesomeIcon
+                                      icon={faUpload}
+                                      style={{ marginRight: 18, marginLeft: 10 }}
+                                      size={15}
+                                      />
+                                      <Text>Upload ID</Text>
+                                  </View>
+                                </TouchableOpacity>*/}
+              </View>
+              <View style={{
+                  flexDirection: 'row',
+                  flex: 1,
+                  flexWrap: 'wrap',
+                  alignItems: 'flex-start',
+                  marginBottom: 100
+                }}>
                 {
                   this.state.uploadedID.map((item, index) => {
                     if(item.payload == "upload_image"){
@@ -630,6 +667,28 @@ class EditProfile extends Component {
                   })
                 }
                 <ImageModal visible={this.state.imageModal} deleteID={this.state.imageId} url={Config.BACKEND_URL  + this.state.urlID} successDel={() => this.retrieve()} action={() => { this.setState({ imageModal: false }), this.retrieveUploadedId() }}></ImageModal>
+              
+                <View style={{
+                  width: '100%',
+                  alignItems: 'center',
+                  paddingTop: 20
+                }}>
+                  <Button
+                    title={'View all list of valid IDs'}
+                    onClick={() => {
+                        this.props.navigation.navigate('verificationStack', {type: 'PROFILE'})
+                      }
+                    }
+                    style={{
+                      width: '40%',
+                      backgroundColor: Color.white
+                    }}
+                    textStyle={{
+                      color: theme ? theme.primary : Color.primary,
+                      fontWeight: 'bold'
+                    }}
+                  />
+                </View>
               </View>
             </View>
           </View>
@@ -700,18 +759,7 @@ class EditProfile extends Component {
             </View>
           </View> */}
 
-          <Button
-            title={'Update'}
-            onClick={() => this.update()}
-            style={{
-              width: '90%',
-              marginRight: '5%',
-              marginLeft: '5%',
-              marginTop: '5%',
-              marginBottom: '5%',
-              backgroundColor: theme ? theme.secondary : Color.secondary
-            }}
-          />
+          
         </ScrollView>
       </View>
     );

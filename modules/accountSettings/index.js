@@ -164,19 +164,18 @@ class AccountSettings extends Component {
 
             <View style={{
               width: '100%',
-              flexDirection: 'row',
-              marginTop: 10
+              alignItems: 'center',
+              marginTop: 10,
+              paddingTop: 20,
+              paddingBottom: 20,
             }}>
               <Text style={{
-                fontSize: BasicStyles.standardFontSize
+                fontSize: BasicStyles.standardFontSize,
+                textAlign: 'center',
+                fontSize: 16
               }}>
-                Username
+                Hi {user?.username}, your QRCode will reset every five minutes so transactions will not be allowed once the QRCode is expired. Always revisit this page everytime you do transaction.
               </Text>
-              <Text style={{
-                paddingLeft: 5,
-                color: Color.danger
-              }}>*</Text>
-              <Text style={{marginLeft: '65%'}}>{user.username}</Text>
             </View>
 
             <TextInputWithLabel 
