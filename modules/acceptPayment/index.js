@@ -187,7 +187,7 @@ class AcceptPaymentStack extends Component {
       setPaymentConfirmation(true)
       this.setState({isLoading: false, summaryLoading: false});
     }, error => {
-      console.log('response', error)
+      console.log('error', error)
       this.setState({isLoading: false, summaryLoading: false});
     });
   }

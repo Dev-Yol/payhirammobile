@@ -15,9 +15,7 @@ import Currency from 'services/Currency';
 import Api from 'services/api/index.js';
 import RequestCard from 'modules/generic/RequestCard';
 import LocationTextInput from 'components/Form/LocationTextInput';
-import {
-  Spinner
-} from 'components';
+import {Spinner} from 'components';
 
 const height = Math.round(Dimensions.get('window').height)
 class ProposalModal extends Component {
@@ -184,11 +182,12 @@ class ProposalModal extends Component {
       if(request && request.shipping.toLowerCase() == 'pickup' && defaultAddress){
         parameter['location_id'] = defaultAddress.id
       }
-      console.log('[Update proposal]', parameter)
       this.setState({
         isLoading: true
       })
-      Api.request(Routes.requestPeerUpdate, parameter, (response) => {
+      console.log('[Update proposal]', parameter)
+      Api.request(Routes.requestPeerUpdate, parameter, response => {
+        console.log('[response]', response)
         this.setState({
           isLoading: false
         })
