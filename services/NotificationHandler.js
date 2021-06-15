@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, Alert } from 'react-native';
 import { connect } from 'react-redux';
+import { navigationRef } from 'modules/generic/SecurityAlert';
 
 class NotificationHandler extends Component{
   constructor(props){
@@ -79,7 +80,7 @@ class NotificationHandler extends Component{
             if(user == null){
               return
             }else{
-              console.log("[Partner Requests]", user)
+              console.log("[Partner Requests]", data)
               if(user.scope_location.includes(data.scope)){
                 console.log("[Partner Requests] added", data)
                 unReadRequests.push(data)
@@ -114,8 +115,8 @@ class NotificationHandler extends Component{
         break
       case 'payments': {
         const { setAcceptPayment } = this.props;
-        let topicId = topic.length > 1 ? topic[1] : null
-        console.log('[payments]', data)
+        let topicId = data.topic.length > 1 ? data.topic.split('-')[1] : null
+        console.log('[payments]', data, '[df]', topicId)
         if(topicId && parseInt(topicId) == user.id){
           if(data.transfer_status == 'requesting'){
             setAcceptPayment(data)
@@ -131,7 +132,7 @@ class NotificationHandler extends Component{
                   style: "cancel"
                 },
                 { text: "Yes", onPress: () => {
-                  this.props.navigation.navigate('recievePaymentRequestStack')
+                  navigationRef.current?._navigation.navigate('recievePaymentRequestStack')
                 } }
               ]
             );            
@@ -141,7 +142,7 @@ class NotificationHandler extends Component{
             setAcceptPayment(data)
             const { setPaymentConfirmation } = this.props;
             setPaymentConfirmation(false)
-            this.props.navigation.navigate('Dashboard')
+            navigationRef.current?._navigation.navigate('Dashboard')
           }
 
         }else{
@@ -187,6 +188,7 @@ const mapDispatchToProps = dispatch => {
     updateMessagesOnGroup: (message) => dispatch(actions.updateMessagesOnGroup(message)),
     viewChangePass: (changePassword) => dispatch(actions.viewChangePass(changePassword)),
     setComments: (comments) => dispatch(actions.setComments(comments)),
+    setAcceptPayment: (acceptPayment) => dispatch(actions.setAcceptPayment(acceptPayment)),
     setPaymentConfirmation: (flag) => dispatch(actions.setPaymentConfirmation(flag))
   };
 };
