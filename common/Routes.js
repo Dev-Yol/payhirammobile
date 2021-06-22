@@ -102,5 +102,7 @@ export default {
   enableSupportRetrieve: apiUrl + 'enable_supports/retrieve',
   commentCreate: apiUrl + 'comments/create',
   commentsRetrieve: apiUrl + 'comments/retrieve',
-  replyCreate: apiUrl + 'comment_replies/create'
+  replyCreate: apiUrl + 'comment_replies/create',
+  deviceCreate: apiUrl + 'device_info/create',
+  deviceRetrieve: apiUrl + 'device_info/retrieve'
 };

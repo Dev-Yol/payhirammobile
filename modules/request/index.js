@@ -5,9 +5,13 @@ import {
   Alert,
   ScrollView,
   BackHandler,
-  SafeAreaView
+  SafeAreaView,
+  FlatList, 
+  TouchableOpacity, 
+  Modal,
+  Text,
+  Image
 } from 'react-native';
-import {FlatList, TouchableOpacity} from 'react-native';
 import {Routes, Color, Helper, BasicStyles} from 'common';
 import Skeleton from 'components/Loading/Skeleton';
 import Message from 'components/Message/index.js'
@@ -17,12 +21,15 @@ import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faPlus} from '@fortawesome/free-solid-svg-icons';
 import {Dimensions} from 'react-native';
 import ProposalModal from 'modules/generic/ProposalModal';
+import Button from 'components/Form/Button';
 import RequestCard from 'modules/generic/RequestCard';
 import { Pager, PagerProvider } from '@crowdlinker/react-native-pager';
+import Config from 'src/config.js';
 import _ from 'lodash';
 import Footer from 'modules/generic/Footer'
 import MessageAlert from 'modules/generic/MessageAlert'
 import BePartner from 'modules/generic/BeAPartner'
+import DeviceInfo from 'react-native-device-info';
 const height = Math.round(Dimensions.get('window').height);
 class Requests extends Component {
   constructor(props) {
@@ -58,7 +65,8 @@ class Requests extends Component {
       unReadRequests: [],
       activeIndex: 0,
       messageEmpty: null,
-      numberOfPages: 0
+      numberOfPages: 0,
+      showModal: false
     };
   }
 
@@ -98,6 +106,63 @@ class Requests extends Component {
   handleBackPress = () => {
     return true
   };
+
+  authorize = () => {
+    const { user } = this.props.state;
+    if(user == null){
+      return
+    }
+    console.log('[user]', user.device_info)
+    let deviceId = DeviceInfo.getDeviceId();
+    let model = DeviceInfo.getModel();
+    let uniqueId = DeviceInfo.getUniqueId();
+    DeviceInfo.getManufacturer().then((manufacturer) => {
+      this.setState({manufacturers: manufacturer})
+      console.log('[device]s', deviceId, '[model]', model, '[uniqueId]', uniqueId, '[manufacturer]', this.state.manufacturers, '[os]', Platform.OS)
+      if(user.device_info == null){
+        console.log('[primary]')
+        let parameters = {
+          account_id: user.id,
+          model: model,
+          unique_code: uniqueId,
+          details: JSON.stringify({manufacturer: this.state.manufacturers, os: Platform.OS, deviceId: deviceId}),
+          status: 'primary'
+        }
+        console.log('[primary]', parameters)
+        Api.request(Routes.deviceCreate, parameters, response => {
+          console.log('[ressssssssssssspnse]', response)
+        }, error => {
+          console.log('[device error: ]', error)
+        })
+      }else{
+        console.log('[F]')
+        let parameter = {
+          account_id: user.id,
+          model: model,
+          unique_code: uniqueId,
+          details: JSON.stringify({manufacturer: this.state.manufacturers, os: Platform.OS, deviceId: deviceId}),
+          status: 'secondary'
+        }
+        console.log('[secondary]', parameter)
+        Api.request(Routes.deviceCreate, parameter, response => {
+          console.log('[responseeeeeeeeeee]', response)
+        }, error => {
+          console.log('[device errors: ]', error)
+        })
+      }
+    });
+  }
+
+  logout = () => {
+    //clear storage
+    const { logout, setActiveRoute } = this.props;
+    logout();
+    // setActiveRoute(null)
+    setTimeout(() => {
+      // this.navigateToLogin('Login')
+      this.props.navigation.navigate('loginStack');
+    }, 100)
+  }
 
   retrieve = (scroll, flag, loading = true) => {
     const { setParameter } = this.props
@@ -409,7 +474,8 @@ class Requests extends Component {
       isLoading,
       connectModal,
       connectSelected,
-      activeIndex
+      activeIndex,
+      showModal
     } = this.state;
     const {theme, user} = this.props.state;
     const { data } = this.state;
@@ -497,6 +563,284 @@ class Requests extends Component {
             />  
           )
         }
+        {
+            (showModal && user) && (
+              <Modal
+                visible={showModal}
+                animationType={'slide'}
+                transparent={true}>
+                <View style={{
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                  flex: 1
+                }}>
+                  <View style={{
+                    minHeight: 100,
+                    paddingLeft: 10,
+                    paddingRight: 10,
+                    paddingTop: 20,
+                    paddingBottom: 20,
+                    borderRadius: 12,
+                    width: '80%',
+                    marginRight: '10%',
+                    marginLeft: '10%',
+                    backgroundColor: 'white'
+                  }}>
+
+                      <Text style={{
+                        fontSize: 16,
+                        fontWeight: 'bold',
+                        paddingTop: 10,
+                        textAlign: 'center',
+                      }}>
+                        OTP CODE
+                      </Text>
+
+                      <Text style={{
+                        fontSize: 15,
+                        // paddingTop: '10%',
+                        textAlign: 'center',
+                        padding: 5,
+                        color: 'gray'
+                      }}>
+                        Check your notifications, we have sent you a code to your primary device, please enter it below and press 'Verify'.
+                      </Text>
+
+                      <View style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        alignItems: 'space-between',
+                        width: '100%',
+                        marginTop: 10,
+                        padding: 10
+                      }}>
+                        <Button
+                          onClick={() => this.logout()}
+                          title={'Logout'}
+                          style={{
+                            borderColor: Color.danger,
+                            borderWidth: 1,
+                            width: '45%',
+                            height: 50,
+                            borderRadius: 25,
+                            backgroundColor: 'transparent'
+                          }}
+                          textStyle={{
+                            color: Color.danger,
+                            fontSize: BasicStyles.standardFontSize
+                          }}
+                        />
+                        <Button
+                          onClick={() => this.authorize()}
+                          title={'Authorize'}
+                          style={{
+                            backgroundColor: theme ? theme.secondary : Color.secondary,
+                            width: '50%',
+                            borderRadius: 25
+                          }}
+                        />
+                      </View>
+                  </View>
+                </View>
+
+              </Modal>
+            )
+
+            // SECONDARY DEVICE  LOGOUT AND AUTHORIZE
+            // (showModal && user) && (
+            //   <Modal
+            //     visible={showModal}
+            //     animationType={'slide'}
+            //     transparent={true}>
+            //     <View style={{
+            //       alignItems: 'center',
+            //       justifyContent: 'center',
+            //       backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            //       flex: 1
+            //     }}>
+            //       <View style={{
+            //         minHeight: 100,
+            //         paddingLeft: 10,
+            //         paddingRight: 10,
+            //         paddingTop: 20,
+            //         paddingBottom: 20,
+            //         borderRadius: 12,
+            //         width: '80%',
+            //         marginRight: '10%',
+            //         marginLeft: '10%',
+            //         backgroundColor: 'white'
+            //       }}>
+
+            //           {
+            //             /*Action buttons*/
+            //           }
+
+            //           <Text style={{
+            //             fontSize: 16,
+            //             fontWeight: 'bold',
+            //             paddingTop: 10,
+            //             textAlign: 'center',
+            //           }}>
+            //             WELCOME TO PAYHIRAM.PH
+            //           </Text>
+
+            //           <Text style={{
+            //             fontSize: 15,
+            //             paddingTop: 3,
+            //             textAlign: 'center',
+            //             marginBottom: '10%'
+            //           }}>
+            //             Your Transfer of Choice
+            //           </Text>
+
+            //           <View style={{
+            //             width: '100%',
+            //             alignItems: 'center'
+            //           }}>
+            //             <Image source={require('assets/Device.png')} style={{
+            //               height: 100,
+            //               width: 100
+            //             }}/>
+            //           </View>
+
+            //           <Text style={{
+            //             fontSize: 14,
+            //             paddingTop: '10%',
+            //             textAlign: 'center',
+            //             padding: 10,
+            //             color: 'gray',
+            //             fontStyle: 'italic'
+            //           }}>
+            //             You are seeing this because you are loggin in to this device for the first time or you have reached the maximum number of trusted devices that can be added. Click 'Authorize' button to link this device.
+            //           </Text>
+
+            //           <View style={{
+            //             flexDirection: 'row',
+            //             justifyContent: 'space-between',
+            //             alignItems: 'space-between',
+            //             width: '100%',
+            //             marginTop: 10,
+            //             padding: 10
+            //           }}>
+            //             <Button
+            //               onClick={() => this.logout()}
+            //               title={'Logout'}
+            //               style={{
+            //                 borderColor: Color.danger,
+            //                 borderWidth: 1,
+            //                 width: '45%',
+            //                 height: 50,
+            //                 borderRadius: 25,
+            //                 backgroundColor: 'transparent'
+            //               }}
+            //               textStyle={{
+            //                 color: Color.danger,
+            //                 fontSize: BasicStyles.standardFontSize
+            //               }}
+            //             />
+            //             <Button
+            //               onClick={() => this.authorize()}
+            //               title={'Authorize'}
+            //               style={{
+            //                 backgroundColor: theme ? theme.secondary : Color.secondary,
+            //                 width: '50%',
+            //                 borderRadius: 25
+            //               }}
+            //             />
+            //           </View>
+            //       </View>
+            //     </View>
+
+            //   </Modal>
+            // )
+
+            // AUTHORIZE MODAL
+
+            // (showModal && user) && (
+            //   <Modal
+            //     visible={showModal}
+            //     animationType={'slide'}
+            //     transparent={true}>
+            //     <View style={{
+            //       alignItems: 'center',
+            //       justifyContent: 'center',
+            //       backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            //       flex: 1
+            //     }}>
+            //       <View style={{
+            //         minHeight: 100,
+            //         paddingLeft: 10,
+            //         paddingRight: 10,
+            //         paddingTop: 20,
+            //         paddingBottom: 20,
+            //         borderRadius: 12,
+            //         width: '80%',
+            //         marginRight: '10%',
+            //         marginLeft: '10%',
+            //         backgroundColor: 'white'
+            //       }}>
+
+            //           <Text style={{
+            //             fontSize: 16,
+            //             fontWeight: 'bold',
+            //             paddingTop: 10,
+            //             textAlign: 'center',
+            //           }}>
+            //             WELCOME TO PAYHIRAM.PH
+            //           </Text>
+
+            //           <Text style={{
+            //             fontSize: 15,
+            //             paddingTop: 3,
+            //             textAlign: 'center',
+            //             marginBottom: '10%'
+            //           }}>
+            //             Your Transfer of Choice
+            //           </Text>
+
+            //           <View style={{
+            //             width: '100%',
+            //             alignItems: 'center'
+            //           }}>
+            //             <Image source={require('assets/Device.png')} style={{
+            //               height: 100,
+            //               width: 100
+            //             }}/>
+            //           </View>
+
+            //           <Text style={{
+            //             fontSize: 14,
+            //             paddingTop: '10%',
+            //             textAlign: 'center',
+            //             padding: 10,
+            //             color: 'gray',
+            //             fontStyle: 'italic'
+            //           }}>
+            //             Use this device as your primary device and receive security notifications once there's an activity of your account.
+            //           </Text>
+
+            //           <View style={{
+            //             width: '100%',
+            //             alignItems: 'center',
+            //             marginTop: 5
+            //           }}>
+            //             <Button
+            //               onClick={() => this.authorize()}
+            //               title={'Authorize'}
+            //               style={{
+            //                 backgroundColor: theme ? theme.secondary : Color.secondary,
+            //                 width: '50%',
+            //                 borderRadius: 25
+            //               }}
+            //             />
+            //           </View>
+            //       </View>
+            //     </View>
+
+            //   </Modal>
+            // )
+          }
       </SafeAreaView>
     );
   }

@@ -103,7 +103,7 @@ class ProposalModal extends Component {
     const { request } = this.props;
     const { charge, currency, data } = this.state;
 
-    console.log('[send proposal] request', request)
+    console.log('[send proposal] request', request, data, user == null || request == null || (request && request.type == 3 && ledger == null), charge <= 0 || currency == null)
     if(user == null || request == null || (request && request.type == 3 && ledger == null)){
       return
     }
@@ -111,7 +111,7 @@ class ProposalModal extends Component {
       this.check()
       return
     }
-
+    
     if(request.money_type != 'cash' && ledger.available_balance < request.amount){
       Alert.alert(
         'Try Again!',
@@ -126,7 +126,8 @@ class ProposalModal extends Component {
       return
     }
 
-    if(data == null){
+    if(data === null){
+      console.log('[')
       if(request.account == null){
         return
       }
@@ -144,8 +145,9 @@ class ProposalModal extends Component {
       this.setState({
         isLoading: true
       })
+      console.log('[Send proposal] sdf', parameter)
       Api.request(Routes.requestPeerCreate, parameter, response => {
-        console.log('[Send proposal] Success', response.error)
+        console.log('[Send proposal] Success', response.error, response)
         if(response.error == null){
           this.setState({
             isLoading: false
@@ -167,12 +169,14 @@ class ProposalModal extends Component {
           )
         }
       }, error => {
+        console.log('[error]', error)
         this.setState({
           isLoading: false
         })
       });
      
     }else{
+      console.log('[Update proposal]')
       let parameter = {
         id: data.id,
         account_id: data.account_id,

@@ -159,7 +159,8 @@ class CreateRequest extends Component {
       if(currentPosition == 1 && location != null && this.state.locations != null){
         let counter = 0
         this.state.locations.map(element => {
-          if(element.route != location.locality){
+          console.log('[element]', element, '[locatin]', location)
+          if(element.city != location.locality){
           }else{
             counter ++
           }

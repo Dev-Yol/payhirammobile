@@ -7,7 +7,8 @@ import {
   faHandshake,
   faShieldAlt,
   faBookOpen,
-  faLock
+  faLock,
+  faMobileAlt
 } from '@fortawesome/free-solid-svg-icons';
 const navigation = [
   {
@@ -29,6 +30,11 @@ const navigation = [
     title: 'Security',
     route: 'notificationSettingsStack',
     icon: faLock
+  },
+  {
+    title: 'Devices',
+    route: 'devicesStack',
+    icon: faMobileAlt
   },
   {
     title: 'Display',
