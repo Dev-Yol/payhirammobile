@@ -104,5 +104,6 @@ export default {
   commentsRetrieve: apiUrl + 'comments/retrieve',
   replyCreate: apiUrl + 'comment_replies/create',
   deviceCreate: apiUrl + 'device_info/create',
-  deviceRetrieve: apiUrl + 'device_info/retrieve'
+  deviceRetrieve: apiUrl + 'device_info/retrieve',
+  deviceUpdate: apiUrl + 'device_info/update'
 };
