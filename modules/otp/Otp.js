@@ -167,7 +167,7 @@ function OTP(props){
         }
       },
       (error) => {
-        console.log('API ERROR', error);
+        console.log('API ERRORB', error);
         setIsLoading(false)
       },
     );
@@ -187,7 +187,7 @@ function OTP(props){
         }
       },
       (error) => {
-        console.log('API ERROR', error);
+        console.log('API ERRORC', error);
         setIsLoading(false)
       },
     );
@@ -253,7 +253,7 @@ function OTP(props){
         }
       },
       (error) => {
-        console.log('API ERROR', error);
+        console.log('API ERRORA', error);
         setIsLoading(false)
       },
     );

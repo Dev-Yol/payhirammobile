@@ -23,7 +23,6 @@ class Location extends Component {
   componentDidMount(){
     this.retrieveLocationScopes()
     const { part } = this.props.state
-    console.log('[fasdf]', part)
   }
 
   retrieveLocationScopes = () => {

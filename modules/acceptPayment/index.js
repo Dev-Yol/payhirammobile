@@ -10,7 +10,7 @@ import {connect} from 'react-redux';
 import {BasicStyles, Color, Routes, Helper} from 'common';
 import Api from 'services/api/index.js';
 import {NavigationActions, StackActions} from 'react-navigation';
-import BalanceCard from 'modules/generic/BalanceCard';import {
+import {
   Spinner
 } from 'components';
 import TextInputWithoutLabel from 'components/Form/TextInputWithoutLabel'

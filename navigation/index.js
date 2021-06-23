@@ -44,6 +44,7 @@ import ReceivePaymentRequestStack from 'modules/acceptPayment/receiving/Drawer';
 import PartnerPlansStack from 'modules/plans/PlansDrawer.js';
 import LocationScopesStack from 'modules/location/LocationDrawer.js';
 import CommentsStack from 'components/Comments/Drawer.js';
+import DevicesStack from 'modules/devices/DevicesDrawer.js';
 
 // login stack
 const LoginStack = createStackNavigator(
@@ -154,7 +155,8 @@ const PrimaryNav = createStackNavigator(
     recievePaymentRequestStack: { screen: ReceivePaymentRequestStack},
     partnerPlansStack: { screen: PartnerPlansStack},
     locationScopesStack: { screen: LocationScopesStack},
-    commentsStack: { screen: CommentsStack}
+    commentsStack: { screen: CommentsStack},
+    devicesStack: { screen: DevicesStack},
   },
   {
     // Default config for all screens
