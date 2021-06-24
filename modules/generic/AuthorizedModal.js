@@ -200,41 +200,9 @@ class AuthorizedModal extends Component {
                 </Text>
                 <Otp
                 blockedFlag={false}
+                back={() => {this.props.back()}}
+                verify={() => {this.props.authorize()}}
                 />
-                <View style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'space-between',
-                  width: '100%',
-                  marginTop: 25,
-                  padding: 10
-                }}>
-                  <Button
-                    onClick={() => this.props.back()}
-                    title={'Cancel'}
-                    style={{
-                      borderColor: Color.danger,
-                      borderWidth: 1,
-                      width: '45%',
-                      height: 50,
-                      borderRadius: 25,
-                      backgroundColor: 'transparent'
-                    }}
-                    textStyle={{
-                      color: Color.danger,
-                      fontSize: BasicStyles.standardFontSize
-                    }}
-                  />
-                  <Button
-                    onClick={() => this.authorize()}
-                    title={'Verify'}
-                    style={{
-                      backgroundColor: theme ? theme.secondary : Color.secondary,
-                      width: '50%',
-                      borderRadius: 25
-                    }}
-                  />
-                </View>
             </View>
           </View>
 

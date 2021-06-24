@@ -105,5 +105,6 @@ export default {
   replyCreate: apiUrl + 'comment_replies/create',
   deviceCreate: apiUrl + 'device_info/create',
   deviceRetrieve: apiUrl + 'device_info/retrieve',
-  deviceUpdate: apiUrl + 'device_info/update'
+  deviceUpdate: apiUrl + 'device_info/update',
+  getKilometer: apiUrl + 'locations/distance_request'
 };
