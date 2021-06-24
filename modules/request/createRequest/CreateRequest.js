@@ -82,6 +82,28 @@ class CreateRequest extends Component {
     });
   }
 
+  retrieveLocationDistance = (latitudeFrom, longitudeFrom, latitudeTo, longitudeTo) => {
+    const {user} = this.props.state;
+    if (user == null) {
+      return;
+    }
+    let parameter = {
+      latitudeFrom: latitudeFrom,
+      longitudeFrom: longitudeFrom,
+      latitudeTo: latitudeTo,
+      longitudeTo: longitudeTo
+    }
+    console.log('[parameter]', parameter)
+    this.setState({isLoading: true});
+    Api.request(Routes.getKilometer, parameter, (response) => {
+      this.setState({isLoading: false});
+      console.log('[response]', response)
+    }, error => {
+      console.log('response', error)
+      this.setState({isLoading: false});
+    });
+  }
+
  retrieveSummaryLedger = () => {
     const {user} = this.props.state;
     const { setLedger } = this.props;
@@ -114,8 +136,6 @@ class CreateRequest extends Component {
       target: item.payload
     })
   }
-
-
 
   handleSelectFulfillment = (item) => {
     this.setState({
@@ -159,10 +179,12 @@ class CreateRequest extends Component {
       if(currentPosition == 1 && location != null && this.state.locations != null){
         let counter = 0
         this.state.locations.map(element => {
-          console.log('[element]', element, '[locatin]', location)
-          if(element.city != location.locality){
+          console.log('[element]', element, '[locatin]', location, '[abcd]')
+          if(!location.locality.includes(element.city)){
+            console.log('[herr]', location.locality.includes(element.city))
           }else{
             counter ++
+            this.retrieveLocationDistance(element.latitude, element.longitude, location.latitude, location.longitude)
           }
         })
         if(counter == 0){
@@ -175,6 +197,7 @@ class CreateRequest extends Component {
             { cancelable: false }
           )
         }else{
+          // get kilometer
           this.setState({currentPosition: currentPosition + 1})
         }
         return
@@ -426,7 +449,6 @@ class CreateRequest extends Component {
   secondStep = () => {
     // const { location } = this.state;
     const { location } = this.props.state;
-    console.log('[locat]', location)
     return(
         <View style={{
           width: '100%',

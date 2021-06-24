@@ -1,13 +1,9 @@
 import React, {Component} from 'react';
-import styles from 'components/Modal/Style.js';
-import {Text, View, TouchableOpacity, TextInput, Dimensions} from 'react-native';
-import Modal from "react-native-modal";
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import {Text, View, TextInput, Dimensions} from 'react-native';
 import { connect } from 'react-redux';
 import { Color , BasicStyles, Helper, Routes} from 'common';
 import { Spinner } from 'components';
-import Currency from 'services/Currency.js';
+import Button from 'components/Form/Button';
 import Api from 'services/api/index.js';
 const width = Math.round(Dimensions.get('window').width);
 const height = Math.round(Dimensions.get('window').height);
@@ -59,7 +55,7 @@ class Otp extends Component {
     );
   }
 
-  submit = () => {
+  authorize = () => {
     let finalOtp = '';
     this.setState({
       errorMessage: null
@@ -92,15 +88,19 @@ class Otp extends Component {
     }
     console.log('paramter', parameter)
     this.setState({isLoading: true})
-    Api.request(Routes.notificationSettingsRetrieve, parameter, response => {
+    Api.request(Routes.notificationSettingsRetrieve, parameter, (response) => {
       this.setState({isLoading: false})
+      this.setState({
+        isLoading: false,
+        errorMessage: null
+      })
       if(response.data.length > 0){
-        this.setState({errorMessage: null, successFlag: true})
-        this.setState({successMessage: 'Sucessfully Verified'});
+        console.log('[OTP Success]', response.data);
+        this.props.verify() 
       }else{
-        // blocked account
-        this.setState({successMessage: null, successFlag: false})
-        this.setState({errorMessage: 'Sorry, you are not authorize to proceed the transaction. Please get back after 30 minutes. Or you can email at ' + Helper.APP_EMAIL + ' as well if you want to resolve the account ASAP.'})
+        this.setState({
+          errorMessage: 'Invalid Code.'
+        })
       }
     });
   }
@@ -246,22 +246,51 @@ class Otp extends Component {
   }
   render(){
     const { isLoading, successFlag, successMessage } = this.state;
+    const { theme, user } = this.props.state;
     return (
-        <View style={{height: height - 650,
-            width: width - 100,
-            borderRadius: 10,
-            backgroundColor: Color.white}}>
-            <View>
-            {this.props.blockedFlag == false && successFlag == false && successMessage == null && (this._otp())}
-            {this.props.blockedFlag == true && (this._blocked())}
-            {successFlag == true && successMessage != null && (this._success())}
-            </View>
-            {/* {
-            this.props.blockedFlag == false && (
-                this.footerActions()
-            )
-            } */}
-        {isLoading ? <Spinner mode="overlay"/> : null }
+        <View style={{height: height - 600,
+          width: width - 100,
+          borderRadius: 10,
+          backgroundColor: Color.white}}>
+          <View>
+          {this.props.blockedFlag == false && successFlag == false && successMessage == null && (this._otp())}
+          {this.props.blockedFlag == true && (this._blocked())}
+          {successFlag == true && successMessage != null && (this._success())}
+          </View>
+          <View style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'space-between',
+            width: '100%',
+            marginLeft: 5
+          }}>
+            <Button
+              onClick={() => this.props.back()}
+              title={'Cancel'}
+              style={{
+                borderColor: Color.danger,
+                borderWidth: 1,
+                width: '45%',
+                height: 50,
+                borderRadius: 25,
+                backgroundColor: 'transparent'
+              }}
+              textStyle={{
+                color: Color.danger,
+                fontSize: BasicStyles.standardFontSize
+              }}
+            />
+            <Button
+              onClick={() => this.authorize()}
+              title={'Verify'}
+              style={{
+                backgroundColor: theme ? theme.secondary : Color.secondary,
+                width: '50%',
+                borderRadius: 25
+              }}
+            />
+          </View>
+          {isLoading ? <Spinner mode="overlay"/> : null }
         </View>
     );
   }

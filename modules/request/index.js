@@ -132,22 +132,31 @@ class Requests extends Component {
   }
 
   generateOTP = () => {
-    const {user} = props.state;
+    let deviceId = DeviceInfo.getDeviceId();
+    let model = DeviceInfo.getModel();
+    let uniqueId = DeviceInfo.getUniqueId();
+    const {user} = this.props.state;
     if(user == null){
       return
     }
     let parameters = {
-      account_id: user.id
-      // lacking uniqueId
+      account_id: user.id,
+      unique_code: user.device_info.unique_code,
+      curr_unique_id: uniqueId,
+      curr_device_id: deviceId,
+      curr_model: model
     };
+    console.log('[parameter]', parameters)
     this.setState({isLoading: true})
     Api.request(
       Routes.notificationSettingOtp,
       parameters,
       (data) => {
         this.setState({isLoading: false})
+        console.log('[data]', data)
       },
       (error) => {
+        console.log('[Errora]', error)
         this.setState({isLoading: false})
       },
     );
@@ -163,6 +172,7 @@ class Requests extends Component {
     if(user == null){
       return
     }
+    this.setState({isLoading: true})
     let deviceId = DeviceInfo.getDeviceId();
     let model = DeviceInfo.getModel();
     let uniqueId = DeviceInfo.getUniqueId();
@@ -177,8 +187,22 @@ class Requests extends Component {
           status: 'primary'
         }
         console.log('[primary_parameters]', parameters)
+        this.setState({isLoading: true})
         Api.request(Routes.deviceCreate, parameters, response => {
+          this.setState({isLoading: false})
           console.log('[primary_response]', response)
+          if(response.data > 0){
+            this.setState({AuthShowModal: false})
+          }else{
+            Alert.alert(
+              'Message',
+              'Please try Again!',
+              [
+                {text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel'}
+              ],
+              { cancelable: false }
+            )
+          }
         }, error => {
           console.log('[device error: ]', error)
         })
@@ -628,6 +652,7 @@ class Requests extends Component {
             showModals={showModals}
             title={"Check your notifications, we have sent you a code to your primary device, please enter it below and press 'Verify'."}
             back={() => {this.back()}}
+            authorize={() => {this.authorize()}}
             />
           )
         }

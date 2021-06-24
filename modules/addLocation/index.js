@@ -219,6 +219,7 @@ class AddLocation extends Component {
       status: 'pending',
       location: this.state.location
     };
+    console.log('[parameter]', parameter)
     this.setState({isLoading: true});
     Api.request(Routes.plansCreate, parameter, (response) => {
       this.setState({isLoading: false})
