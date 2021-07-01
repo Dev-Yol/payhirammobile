@@ -41,30 +41,25 @@ class Devices extends Component {
   }
 
   update = (item) => {
-    // let login = this.state.login
-    // if (status === 'login') {
-    //   this.setState({ login: !this.state.login })
-    //   login = !this.state.login
-    // }
-
     let parameter = {
       account_id: this.props.state.user.id,
       id: item.id,
-      status: item.status
+      status: 'primary'
     }
     this.setState({ isLoading: true })
     Api.request(Routes.deviceUpdate, parameter, response => {
       this.setState({ isLoading: false })
-      console.log('[update]', response)
+      if(response.data > 0){
+        this.retrieve()
+      }
     })
   }
 
   changeState(item) {
-    console.log('[statuss]', item)
     if (item.status === 'primary') {
       Alert.alert(
         'Message',
-        'Action not allowed, there must be one primary device. ',
+        'Action not allowed, there must be only one primary device. ',
         [
           {text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel'}
         ],

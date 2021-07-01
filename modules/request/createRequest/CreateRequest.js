@@ -43,7 +43,8 @@ class CreateRequest extends Component {
       stepLabels: ['Type', 'Location', 'Details', 'Preview'],
       errorMessage: null,
       locations: null,
-      proceed: false
+      proceed: false,
+      continued: 0
     };
   }
   componentDidMount() {
@@ -93,11 +94,14 @@ class CreateRequest extends Component {
       latitudeTo: latitudeTo,
       longitudeTo: longitudeTo
     }
-    console.log('[parameter]', parameter)
+    console.log('[parameterssssssss]', parameter)
     this.setState({isLoading: true});
     Api.request(Routes.getKilometer, parameter, (response) => {
       this.setState({isLoading: false});
       console.log('[response]', response)
+      if(Number(parseInt(response.data)) <= 5){
+        this.setState({continued: 1})
+      }
     }, error => {
       console.log('response', error)
       this.setState({isLoading: false});
@@ -179,15 +183,14 @@ class CreateRequest extends Component {
       if(currentPosition == 1 && location != null && this.state.locations != null){
         let counter = 0
         this.state.locations.map(element => {
-          console.log('[element]', element, '[locatin]', location, '[abcd]')
           if(!location.locality.includes(element.city)){
-            console.log('[herr]', location.locality.includes(element.city))
+            this.retrieveLocationDistance(element.latitude, element.longitude, location.latitude, location.longitude)
           }else{
             counter ++
             this.retrieveLocationDistance(element.latitude, element.longitude, location.latitude, location.longitude)
           }
         })
-        if(counter == 0){
+        if(counter == 0 && this.state.continued == 0){
           Alert.alert(
             'Try Again',
             'No available partner in the area selected. Please change request location to continue.',
