@@ -5,6 +5,7 @@ import { Color , BasicStyles, Helper, Routes} from 'common';
 import { Spinner } from 'components';
 import Button from 'components/Form/Button';
 import Api from 'services/api/index.js';
+import DeviceInfo from 'react-native-device-info';
 const width = Math.round(Dimensions.get('window').width);
 const height = Math.round(Dimensions.get('window').height);
 class Otp extends Component {
@@ -39,12 +40,20 @@ class Otp extends Component {
     if(user == null){
       return
     }
+    
+    let deviceId = DeviceInfo.getDeviceId();
+    let model = DeviceInfo.getModel();
+    let uniqueId = DeviceInfo.getUniqueId();
     let parameters = {
       account_id: user.id,
+      unique_code: user.device_info.unique_code,
+      curr_unique_id: uniqueId,
+      curr_device_id: deviceId,
+      curr_model: model
     };
     this.setState({isLoading: true})
     Api.request(
-      Routes.notificationSettingOtp,
+      Routes.notificationSettingDeviceOtp,
       parameters,
       (data) => {
         this.setState({isLoading: false})
@@ -196,7 +205,7 @@ class Otp extends Component {
           this.state.errorMessage != null && (
             <View style={{
               alignItems: 'center',
-              paddingBottom: 20
+              paddingBottom: 5
             }}>
               <Text style={{
                 color: Color.danger,
@@ -248,7 +257,8 @@ class Otp extends Component {
     const { isLoading, successFlag, successMessage } = this.state;
     const { theme, user } = this.props.state;
     return (
-        <View style={{height: height - 600,
+        <View style={{
+          height: height - 560,
           width: width - 100,
           borderRadius: 10,
           backgroundColor: Color.white}}>

@@ -163,16 +163,13 @@ class NotificationHandler extends Component{
         
       }
       break
-      case 'primary_device': {
-        console.log('[primary_device]')
-        // const { setComments } = this.props;
-        // let topicId = topic.length > 1 ? topic[1] : null
-        // console.log('[comments]', data)
-        // if(topicId && parseInt(topicId) == user.id){
-        //   setComments(data)
-        // }else{
-
-        // }
+      case 'device': {
+        console.log('[dataddd]', data)
+        if(parseInt(data.to) == user.id){
+          console.log("[Notifications] data", data)
+          const { updateNotifications } = this.props;
+          updateNotifications(1, data)
+        }
       }
       break
     }

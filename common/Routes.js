@@ -54,6 +54,7 @@ export default {
   notificationSettingsCreate: apiUrl + 'notification_settings/create',
   notificationSettingsUpdate: apiUrl + 'notification_settings/update',
   notificationSettingOtp: apiUrl + 'notification_settings/update_otp',
+  notificationSettingDeviceOtp: apiUrl + 'notification_settings/otp_device',
   imageUpload: apiUrl + 'images/upload',
   imageRetrieve: apiUrl + 'images/retrieve',
   imageUploadUnLink: apiUrl + 'images/upload_un_link',

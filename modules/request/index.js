@@ -64,7 +64,10 @@ class Requests extends Component {
       numberOfPages: 0,
       AuthShowModal: false,
       SecShowModal: false,
-      showModals: false
+      showModals: false,
+      click: 0,
+      devices: [],
+      qualifed: 0
     };
   }
 
@@ -81,7 +84,10 @@ class Requests extends Component {
   }
 
   componentDidMount() {
-    this.validateDevice()
+    this.retrieveDevice()
+    if(this.state.click < 1){
+      this.validateDevice()
+    }
     const { user } = this.props.state;
     this.backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
@@ -106,22 +112,45 @@ class Requests extends Component {
     return true
   };
 
+  retrieveDevice = () => {
+    const { user } = this.props.state;
+    const uniqueId = DeviceInfo.getUniqueId();
+    let parameter = {
+      condition: [{
+        value: user.id,
+        column: 'account_id',
+        clause: '='
+      }]
+    };
+    this.setState({ isLoading: true })
+    Api.request(Routes.deviceRetrieve, parameter, response => {
+      this.setState({ isLoading: false })
+      if(response.data.length > 0) {
+        this.setState({ devices: response.data})
+        response.data.filter(el => {
+          if(el.unique_code === uniqueId){
+            return this.state.qualifed + 1
+          }
+        })
+      }else {
+        this.setState({ devices: [] })
+      }
+    })
+  }
+
   validateDevice = () => {
     const { user } = this.props.state;
     if(user == null){
       return
     }
-    console.log('[user]', user.device_info)
     const uniqueId = DeviceInfo.getUniqueId();
     if(user.device_info == null){
       this.setState({AuthShowModal: true})
+    }else if(this.state.qualifed >= 1 && user?.device_info?.unique_code != uniqueId){
+      this.setState({SecShowModal: true})
     }else{
-      if(user?.device_info?.unique_code != uniqueId){
-        this.setState({SecShowModal: true})
-      }else{
-        this.setState({SecShowModal: false})
-        this.setState({AuthShowModal: false})
-      }
+      this.setState({SecShowModal: false})
+      this.setState({AuthShowModal: false})
     }
   }
 
@@ -149,7 +178,7 @@ class Requests extends Component {
     console.log('[parameter]', parameters)
     this.setState({isLoading: true})
     Api.request(
-      Routes.notificationSettingOtp,
+      Routes.notificationSettingDeviceOtp,
       parameters,
       (data) => {
         this.setState({isLoading: false})
@@ -172,6 +201,9 @@ class Requests extends Component {
     if(user == null){
       return
     }
+    if(user.device_info == null && this.state.click === 1){
+      return
+    }
     this.setState({isLoading: true})
     let deviceId = DeviceInfo.getDeviceId();
     let model = DeviceInfo.getModel();
@@ -179,6 +211,7 @@ class Requests extends Component {
     DeviceInfo.getManufacturer().then((manufacturer) => {
       this.setState({manufacturers: manufacturer})
       if(user.device_info == null){
+        this.setState({click: 1})
         let parameters = {
           account_id: user.id,
           model: model,
@@ -217,6 +250,20 @@ class Requests extends Component {
         console.log('[secondary_parameter]', parameter)
         Api.request(Routes.deviceCreate, parameter, response => {
           console.log('[secondary_response]', response)
+          if(response.data > 0){
+            this.setState({AuthShowModal: false})
+            this.setState({SecShowModal: false})
+            this.setState({showModals: false})
+          }else{
+            Alert.alert(
+              'Message',
+              'Please try Again!',
+              [
+                {text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel'}
+              ],
+              { cancelable: false }
+            )
+          }
         }, error => {
           console.log('[device errors: ]', error)
         })
@@ -331,12 +378,11 @@ class Requests extends Component {
           this.setState({messageEmpty: `Hi ${user.username}!` + ' ' + 'Seems like you do not have completed transaction. Click the button below to get started.'})
         }
       }
-      },
-      (error) => {
-        console.log('error', error)
-        this.setState({isLoading: false});
-      }
-    ); 
+    },
+    (error) => {
+      console.log('erroraa', error)
+      this.setState({isLoading: false});
+    }); 
   };
 
   onRefresh = () => {
@@ -565,7 +611,7 @@ class Requests extends Component {
           style={[Style.floatingButton, {
             backgroundColor: theme ? theme.secondary : Color.secondary,
             height: 60,
-            width: 60,
+            width: 60,  
             borderRadius: 30,
             bottom: user?.account_type != 'USER' ? 70 : 25
           }]}

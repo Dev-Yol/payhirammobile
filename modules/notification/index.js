@@ -30,6 +30,7 @@ class Notifications extends Component{
     const { notifications } = this.props.state;
     if(notifications && notifications.length > 0){
       //
+      this.retrieve()
     }else{
       this.retrieve()
     }
@@ -87,9 +88,9 @@ class Notifications extends Component{
     }
     // this.setState({isLoading: true})
     setViewField(true)
-    console.log('[parameter]',Routes.notificationsRetrieve, parameter)
+    console.log('[parameter]', parameter)
     Api.request(Routes.notificationsRetrieve, parameter, notifications => {
-      console.log("[RESTRIEVE]", notifications.data)
+      console.log("[RESTRIEVE]", notifications)
       // this.setState({isLoading: false})
       this.setState({data: notifications.data})
       setNotifications(notifications.size, this.state.data)
