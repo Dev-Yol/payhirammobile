@@ -160,6 +160,7 @@ class RequestCard extends Component {
   };
 
   _subHeader = (item) => {
+    console.log('[>>>>>>>>>>>ITEM]', item)
     const {user, theme} = this.props.state;
     return (
       <View>
@@ -282,7 +283,7 @@ class RequestCard extends Component {
             marginBottom: 10,
             marginTop: 10
           }}>
-          {(user.account_type != 'USER') && (
+          {(user.account_type == 'PARTNER') && (
             <View
               style={{
                 width: '100%'
@@ -419,6 +420,7 @@ class RequestCard extends Component {
 
   _footerRequestItem = (item) => {
     const {user, theme} = this.props.state;
+    console.log('[userrrrrrrrrrrr]', user)
     return (
       <View>
         <View
@@ -427,7 +429,7 @@ class RequestCard extends Component {
             marginBottom: 10,
             marginTop: 10
           }}>
-          {(user.account_type != 'USER' && item.peer_flag == false) && (
+          {(user.account_type == 'PARTNER' && item.peer_flag == false) && (
             <View
               style={{
                 width: '100%'

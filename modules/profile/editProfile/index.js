@@ -156,7 +156,7 @@ class EditProfile extends Component {
     const { setScheduleShow } = this.props
     const { scheduleShow } = this.props.state
     const { first_name, middle_name, last_name, sex} = this.state
-    if(first_name != null && middle_name != null && last_name != null && sex != null){
+    if(first_name != null && middle_name != null && last_name != null){
       setScheduleShow(true)
     }
   }
@@ -326,7 +326,7 @@ class EditProfile extends Component {
     const { dataRetrieve } = this.state
     if (user == null) {
       return
-    } else if (this.state.first_name == null || this.state.middle_name == null || this.state.last_name == null || this.state.sex == null) {
+    } else if (this.state.first_name == null || this.state.middle_name == null || this.state.last_name == null) {
       Alert.alert(
         'Try Again',
         'Please fill in all the fields.',

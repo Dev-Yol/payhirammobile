@@ -30,7 +30,7 @@ class Notifications extends Component{
     const { notifications } = this.props.state;
     if(notifications && notifications.length > 0){
       //
-      this.retrieve()
+      // this.retrieve()
     }else{
       this.retrieve()
     }

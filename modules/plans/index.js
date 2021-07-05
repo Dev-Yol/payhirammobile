@@ -86,7 +86,7 @@ class Plans extends Component {
                 paddingBottom: 10,
                 paddingTop: 10
               }}>
-                Hi {user.username}! Be one of our Partners and Grab the chance to earn 80% in every transaction. Enjoy earning! Select the category of partners below and click Apply Now.
+                Hi {user.username}! Be one of our Partners and Grab the chance to earn 80% in every transaction. Select the category of partners below and click Apply Now. Enjoy earning!
               </Text>
             )
           }

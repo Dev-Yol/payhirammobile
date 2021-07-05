@@ -97,7 +97,7 @@ class Requests extends Component {
     this.focusListener = this.props.navigation.addListener('didFocus', () => {
       this.onFocusFunction()
     })
-    this.setState({messageEmpty: `Hi ${user?.username}!` + ' ' + (user?.account_type != 'USER' ? 'Create any requests and let our trusted partners process your requests . Click the button below to get started.' : 'Create any requests and let our trusted partners process your requests . Click the button below to get started.')})
+    this.setState({messageEmpty: `Hi ${user?.username}!` + ' ' + (user?.account_type == 'PARTNER' ? 'Create any requests and let our trusted partners process your requests . Click the button below to get started.' : 'Create any requests and let our trusted partners process your requests . Click the button below to get started.')})
     if(this.state.isLoading == false){
       this.retrieve(false, true)
     }
@@ -124,12 +124,15 @@ class Requests extends Component {
     };
     this.setState({ isLoading: true })
     Api.request(Routes.deviceRetrieve, parameter, response => {
+      console.log('[response device request]', response)
       this.setState({ isLoading: false })
       if(response.data.length > 0) {
         this.setState({ devices: response.data})
-        response.data.filter(el => {
-          if(el.unique_code === uniqueId){
-            return this.state.qualifed + 1
+        response.data.map(el => {
+          console.log('[here]', response.data);
+          if(el.unique_code != uniqueId){
+            this.setState({qualifed: 1})
+            this.validateDevice()
           }
         })
       }else {
@@ -139,6 +142,7 @@ class Requests extends Component {
   }
 
   validateDevice = () => {
+    console.log('[count]', this.state.qualifed)
     const { user } = this.props.state;
     if(user == null){
       return
@@ -290,7 +294,7 @@ class Requests extends Component {
       target: 'all',
       shipping: 'all'
     }
-    if(page == 'personal' || user.account_type == 'USER'){
+    if(page == 'personal' || user.account_type != 'PARTNER'){
       parameters['request_account_id'] = user.id
     }
     if(parameter && parameter.target.toLowerCase() != 'all'){
@@ -363,10 +367,10 @@ class Requests extends Component {
           offset: flag == false ? 0 : this.state.offset
         })
         if(page == 'personal'){
-          this.setState({messageEmpty: `Hi ${user.username}!` + ' ' + (user.account_type != 'USER' ? 'Create any requests and let our trusted partners process your requests . Click the button below to get started.' : 'Create any requests and let our trusted partners process your requests . Click the button below to get started.')})
+          this.setState({messageEmpty: `Hi ${user.username}!` + ' ' + (user.account_type != 'PARTNER' ? 'Create any requests and let our trusted partners process your requests . Click the button below to get started.' : 'Create any requests and let our trusted partners process your requests . Click the button below to get started.')})
         }
         if(page == 'public'){
-          this.setState({messageEmpty: `Hi ${user.username}!` + ' ' + (user.account_type == 'USER' ? 'Create any requests and let our trusted partners process your requests . Click the button below to get started.' :'Grab the chance to process requests and the great chance to earn. Click the button below to get started.')})
+          this.setState({messageEmpty: `Hi ${user.username}!` + ' ' + (user.account_type != 'PARTNER' ? 'Create any requests and let our trusted partners process your requests . Click the button below to get started.' :'Grab the chance to process requests and the great chance to earn. Click the button below to get started.')})
         }
         if(page == 'onNegotiation'){
           this.setState({messageEmpty: `Hi ${user.username}!` + ' ' + 'Seems like you do not make any proposals yet. Go to public page and make proposals.'})
@@ -586,7 +590,6 @@ class Requests extends Component {
       showModals
     } = this.state;
     const {theme, user} = this.props.state;
-    const { data } = this.state;
     return (
       <SafeAreaView style={{
         flex: 1
@@ -613,7 +616,7 @@ class Requests extends Component {
             height: 60,
             width: 60,  
             borderRadius: 30,
-            bottom: user?.account_type != 'USER' ? 70 : 25
+            bottom: user?.account_type == 'PARTNER' ? 70 : 25
           }]}
           onPress={() => {
             {
@@ -652,7 +655,7 @@ class Requests extends Component {
           )
         }
         {
-          user?.account_type != 'USER' && (
+          user?.account_type == 'PARTNER' && (
             <Footer
               {...this.props}
               selected={this.state.page} onSelect={async (value, index) => {

@@ -31,6 +31,7 @@ class Devices extends Component {
     };
     this.setState({ isLoading: true })
     Api.request(Routes.deviceRetrieve, parameter, response => {
+      console.log('[response Device]', response)
       this.setState({ isLoading: false })
       if(response.data.length > 0) {
         this.setState({ data: response.data})

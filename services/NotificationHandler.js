@@ -96,23 +96,6 @@ class NotificationHandler extends Component{
           }
         }
         break
-      case 'update-request': {
-          const { requests, request } = this.props.state;
-          if(request != null && request.code == data.code){
-            const { setRequest } = this.props;
-            setRequest({
-              ...request,
-              status: data?.status
-            })
-            return
-          }
-          if(requests.length > 0){
-            const { setUpdateRequests } = this.props;
-            setUpdateRequests(data)
-            return
-          }
-        }
-        break
       case 'payments': {
         const { setAcceptPayment } = this.props;
         let topicId = data.topic.length > 1 ? data.topic.split('-')[1] : null
