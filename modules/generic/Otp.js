@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Text, View, TextInput, Dimensions} from 'react-native';
+import {Text, View, TextInput, Dimensions, TouchableOpacity} from 'react-native';
 import { connect } from 'react-redux';
 import { Color , BasicStyles, Helper, Routes} from 'common';
 import { Spinner } from 'components';
@@ -36,7 +36,7 @@ class Otp extends Component {
   }
 
   generateOTP = () => {
-    const {user} = props.state;
+    const {user} = this.props.state;
     if(user == null){
       return
     }
@@ -51,11 +51,13 @@ class Otp extends Component {
       curr_device_id: deviceId,
       curr_model: model
     };
+    console.log('[parameters]', parameters)
     this.setState({isLoading: true})
     Api.request(
       Routes.notificationSettingDeviceOtp,
       parameters,
       (data) => {
+        console.log('[sdf]', data)
         this.setState({isLoading: false})
       },
       (error) => {
@@ -248,7 +250,7 @@ class Otp extends Component {
             textDecorationLine: 'underline',
             fontSize: 12
           }}
-          onClicK={() => {this.generateOTP()}}>Click to resend.</Text>
+          onPress={() => this.generateOTP()}>Click to resend.</Text>
         </View>
       </View>
     );

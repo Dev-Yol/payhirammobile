@@ -98,7 +98,7 @@ class CreateRequest extends Component {
     this.setState({isLoading: true});
     Api.request(Routes.getKilometer, parameter, (response) => {
       this.setState({isLoading: false});
-      console.log('[response]', response)
+      console.log('[responseKilo]', response)
       if(Number(parseInt(response.data)) <= 5){
         this.setState({continued: 1})
       }
@@ -486,7 +486,7 @@ class CreateRequest extends Component {
                 width: '100%',
                 textAlign: 'right',
                 marginTop: '-8%'
-              }}>{location ? location.route : 'Select Location'}</Text>
+              }}>{location ? (location.route != 'test' ? location.route : 'Select Location')  : 'Select Location'}</Text>
             </TouchableOpacity>
           </View>
 

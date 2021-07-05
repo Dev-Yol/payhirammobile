@@ -221,7 +221,8 @@ class AddLocation extends Component {
     };
     console.log('[parameter]', parameter)
     this.setState({isLoading: true});
-    Api.request(Routes.plansCreate, parameter, (response) => {
+    Api.request(Routes.plansCreate, parameter, response => {
+      console.log('[response]', response)
       this.setState({isLoading: false})
       const { updateUser } = this.props;
       updateUser({
