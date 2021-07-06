@@ -384,7 +384,7 @@ class Requests extends Component {
       }
     },
     (error) => {
-      console.log('erroraa', error)
+      console.log('Request error', error)
       this.setState({isLoading: false});
     }); 
   };

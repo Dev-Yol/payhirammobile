@@ -345,6 +345,7 @@ class ProposalCard extends Component {
 
   render() {
     const { data, request } = this.props;
+    console.log('[proposal card]', data)
     const { user } = this.props.state;
     return (
       <View>

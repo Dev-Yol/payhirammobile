@@ -74,8 +74,10 @@ class RequestItem extends Component {
       account_code: user.code,
       account_request_code: data.account.code
     };
+    console.log('[asfda]', parameter)
     this.setState({isLoading: true});
     Api.request(Routes.requestPeerRetrieveItem, parameter, (response) => {
+      console.log('[ppppperrrs>>>>>>>>>>]', response)
       this.setState({isLoading: false});
       if (response.data.length > 0) {
         this.setState({

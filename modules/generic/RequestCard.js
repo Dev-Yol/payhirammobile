@@ -160,7 +160,7 @@ class RequestCard extends Component {
   };
 
   _subHeader = (item) => {
-    console.log('[>>>>>>>>>>>ITEM]', item)
+    // console.log('[>>>>>>>>>>>ITEM]', item)
     const {user, theme} = this.props.state;
     return (
       <View>
@@ -338,9 +338,9 @@ class RequestCard extends Component {
                         }
                       }
                     }}
-                    title={(item.peer_flag == true) ? 'View Proposal' : 'Send Proposal'}
+                    title={(item.peer_flag == true || item.peer_status === 'requesting') ? 'View Proposal' : 'Send Proposal'}
                     style={{
-                      backgroundColor: item.peer_flag == true ? (theme ? theme.primary : Color.primary) : (theme ? theme.secondary : Color.secondary),
+                      backgroundColor: (item.peer_flag == true || item.peer_status === 'requesting') ? (theme ? theme.primary : Color.primary) : (theme ? theme.secondary : Color.secondary),
                       width: '60%',
                       marginLeft: '40%',
                       height: 40,
@@ -420,7 +420,6 @@ class RequestCard extends Component {
 
   _footerRequestItem = (item) => {
     const {user, theme} = this.props.state;
-    console.log('[userrrrrrrrrrrr]', user)
     return (
       <View>
         <View
@@ -467,7 +466,8 @@ class RequestCard extends Component {
                 )
               }
               {
-                (item.approved == false && item.peer_status != 'approved') && (
+                (item.approved == false && item.peer_status != 'approved' && item.peer_status != 'requesting') && (
+                // (item.approved == false && item.peer_status != 'approved') && (
                   <Button
                     onClick={() => {
                       if(item.peer_flag == false){
@@ -538,6 +538,7 @@ class RequestCard extends Component {
             data.rating != null ? (
               <Rating ratings={data?.rating}></Rating>
               ):(
+
                 <View></View>
                 )
               }

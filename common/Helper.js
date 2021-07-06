@@ -473,6 +473,7 @@ export default {
     }
   },
   accountStatus(user){
+    console.log('[sdf]', user)
     if(user == null){
       return false
     }
