@@ -85,6 +85,7 @@ class CreateRequest extends Component {
 
   retrieveLocationDistance = (latitudeFrom, longitudeFrom, latitudeTo, longitudeTo) => {
     const {user} = this.props.state;
+    const {currentPosition} = this.state
     if (user == null) {
       return;
     }
@@ -94,13 +95,23 @@ class CreateRequest extends Component {
       latitudeTo: latitudeTo,
       longitudeTo: longitudeTo
     }
-    console.log('[parameterssssssss]', parameter)
+    console.log('[parametersss]', parameter)
     this.setState({isLoading: true});
     Api.request(Routes.getKilometer, parameter, (response) => {
+      console.log('[kilometer]', Number(parseInt(response.data)) <= 5)
       this.setState({isLoading: false});
-      console.log('[responseKilo]', response)
       if(Number(parseInt(response.data)) <= 5){
-        this.setState({continued: 1})
+        this.setState({currentPosition: currentPosition + 1})
+      }else{
+        Alert.alert(
+          'Try Again',
+          'No available partner in the area selected. Please change request location to continue.',
+          [
+            {text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel'}
+          ],
+          { cancelable: false }
+        )
+        return this.setState({currentPosition: 1})
       }
     }, error => {
       console.log('response', error)
@@ -181,28 +192,9 @@ class CreateRequest extends Component {
         return
       }
       if(currentPosition == 1 && location != null && this.state.locations != null){
-        let counter = 0
         this.state.locations.map(element => {
-          if(!location.locality.includes(element.city)){
-            this.retrieveLocationDistance(element.latitude, element.longitude, location.latitude, location.longitude)
-          }else{
-            counter ++
-            this.retrieveLocationDistance(element.latitude, element.longitude, location.latitude, location.longitude)
-          }
+          this.retrieveLocationDistance(element.latitude, element.longitude, location.latitude, location.longitude)
         })
-        if(counter == 0 && this.state.continued == 0){
-          Alert.alert(
-            'Try Again',
-            'No available partner in the area selected. Please change request location to continue.',
-            [
-              {text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel'}
-            ],
-            { cancelable: false }
-          )
-        }else{
-          // get kilometer
-          this.setState({currentPosition: currentPosition + 1})
-        }
         return
       }
       if(currentPosition == 2){
@@ -251,7 +243,6 @@ class CreateRequest extends Component {
       })
     }
   }
-
 
 
   createRequest = () => {
@@ -527,25 +518,25 @@ class CreateRequest extends Component {
         />
 
           {/*<TextInput
-                      value={this.state.amount}
-                      keyboardType={'numeric'}
-                      onChangeText={(input) => {
-                        if(ledger && ledger.available_balance < input){
-                          this.setState({
-                            errorMessage: 'Insufficient Balance!'
-                          })
-                        }else{
-                          this.setState({
-                            amount: input
-                          })  
-                        }
-                      }}
-                      style={{
-                        alignItems: 'center',
-                        fontSize: 52
-                      }}
-                      placeholder={'0.00'}
-                    />*/}
+            value={this.state.amount}
+            keyboardType={'numeric'}
+            onChangeText={(input) => {
+              if(ledger && ledger.available_balance < input){
+                this.setState({
+                  errorMessage: 'Insufficient Balance!'
+                })
+              }else{
+                this.setState({
+                  amount: input
+                })  
+              }
+            }}
+            style={{
+              alignItems: 'center',
+              fontSize: 52
+            }}
+            placeholder={'0.00'}
+          />*/}
           
           {/*
             ledger && (
