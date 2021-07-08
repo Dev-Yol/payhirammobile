@@ -84,10 +84,10 @@ class Requests extends Component {
   }
 
   componentDidMount() {
-    this.retrieveDevice()
-    if(this.state.click < 1){
-      this.validateDevice()
-    }
+    // this.retrieveDevice()
+    // if(this.state.click < 1){
+    //   this.validateDevice()
+    // }
     const { user } = this.props.state;
     this.backHandler = BackHandler.addEventListener(
       'hardwareBackPress',

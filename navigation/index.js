@@ -36,6 +36,7 @@ import SupportStack from 'components/Support/SupportDrawer.js';
 import UpdateTicketStack from 'components/Support/UpdateTicket/UpdateTicketDrawer.js';
 import PrivacyStack from 'modules/privacy/Drawer';
 import GuidelinesStack from 'modules/guidelines/GuidelinesDrawer';
+import CalendlyStack from 'modules/calendly/Drawer';
 import VerificationStack from 'modules/verificationID/VerificationDrawer';
 import LocationWithMapViewerStack from 'components/Location/LocationViewerDrawer.js';
 import CurrencyStack from 'modules/currency/CurrencyDrawer.js';
@@ -147,6 +148,7 @@ const PrimaryNav = createStackNavigator(
     updateTicketStack: { screen: UpdateTicketStack },
     paymentMethodsStack: { screen: PaymentMethodsStack },
     privacyStack: { screen: PrivacyStack},
+    calendlyStack: { screen: CalendlyStack},
     guidelinesStack: { screen: GuidelinesStack},
     verificationStack: { screen: VerificationStack},
     directTransferDrawer: { screen: DirectTransferStack },
