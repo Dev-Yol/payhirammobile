@@ -88,7 +88,7 @@ class Notifications extends Component{
     }
     // this.setState({isLoading: true})
     setViewField(true)
-    console.log('[parameter]', parameter)
+    console.log('[parameterNotification]', parameter)
     Api.request(Routes.notificationsRetrieve, parameter, notifications => {
       console.log("[RESTRIEVE]", notifications)
       // this.setState({isLoading: false})

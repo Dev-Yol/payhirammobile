@@ -31,7 +31,7 @@ class MessageAlert extends Component {
         }
         {
           (user && Helper.checkStatus(user) == Helper.emailVerified) && 
-          (<ApplyForVerification/>)
+          (<ApplyForVerification {...this.props}/>)
         }
       </View>
     );

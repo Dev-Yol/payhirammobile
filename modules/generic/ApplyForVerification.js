@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, Linking } from 'react-native';
-import Currency from 'services/Currency';
 import {connect} from 'react-redux';
 import { Color, BasicStyles, Helper } from 'common';
-import Skeleton from 'components/Loading/Skeleton';
 import Button from 'components/Form/Button';
 import { faUserShield } from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import { navigationRef } from 'modules/generic/SecurityAlert';
 
 class ApplyForVerification extends Component {
   constructor(props) {
@@ -15,8 +14,6 @@ class ApplyForVerification extends Component {
       isLoading: false
     }
   }
-
-  
 
   render() {
     const { data } = this.props;
@@ -63,7 +60,7 @@ class ApplyForVerification extends Component {
                     width: '100%',
                   }}>
                     {
-                      (imageCount >= 2 && scheduleShow == true)  &&
+                      (imageCount >= 2 && scheduleShow == true) ?
                       (
                       <Button
                         title={'Schedule'}
@@ -80,8 +77,23 @@ class ApplyForVerification extends Component {
                           color: Color.black
                         }}
                       />)
-                      // :
-                      // <Text style={{fontSize: BasicStyles.standardFontSize, color: Color.black, backgroundColor: Color.white, borderRadius: 25, padding: 5, textAlign: 'center'}}>"Please provide all of your personal information to set schedule."</Text>
+                      :
+                      (
+                      <Button
+                        title={'Setup Profile'}
+                        onClick={() => {
+                          navigationRef.current?._navigation.navigate('editProfileStack')
+                        }}
+                        style={{
+                          width: '50%',
+                          backgroundColor: Color.white,
+                          height: 40
+                        }}
+                        textStyle={{
+                          fontSize: BasicStyles.standardFontSize,
+                          color: Color.black
+                        }}
+                      />)
                     }
                   </View>
                 </View>
