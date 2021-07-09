@@ -229,8 +229,9 @@ class AddLocation extends Component {
         ...user,
         plan: parameter
       })
-      Linking.openURL('https://calendly.com/payhiramph/videocallverification')
-      this.props.navigation.navigate('partnerPlansStack');
+      // Linking.openURL('https://calendly.com/payhiramph/videocallverification')
+      this.props.navigation.navigate('calendlyStack');
+      // this.props.navigation.navigate('partnerPlansStack');
     }, error => {
       this.setState({isLoading: false})
     })

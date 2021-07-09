@@ -3,7 +3,6 @@ import { View, Text, StyleSheet, Alert } from 'react-native';
 import Currency from 'services/Currency';
 import {connect} from 'react-redux';
 import { Color, BasicStyles, Helper, Routes } from 'common';
-import Skeleton from 'components/Loading/Skeleton';
 import Button from 'components/Form/Button';
 import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
