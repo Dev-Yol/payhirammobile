@@ -487,7 +487,7 @@ class CreateRequest extends Component {
             borderRadius: BasicStyles.standardBorderRadius
           }}>
             {
-              location && (
+              (location && location.longitude != null && location.latitude != null) && (
                 <MapViewer data={location}/>
               )
             }
