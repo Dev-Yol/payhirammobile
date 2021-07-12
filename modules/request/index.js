@@ -85,9 +85,9 @@ class Requests extends Component {
 
   componentDidMount() {
     this.retrieveDevice()
-    if(this.state.click < 1){
-      this.validateDevice()
-    }
+    // if(this.state.click < 1){
+    //   this.validateDevice()
+    // }
     const { user } = this.props.state;
     this.backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
@@ -115,6 +115,7 @@ class Requests extends Component {
   retrieveDevice = () => {
     const { user } = this.props.state;
     const uniqueId = DeviceInfo.getUniqueId();
+    console.log('[unique]', uniqueId)
     let parameter = {
       condition: [{
         value: user.id,
@@ -133,17 +134,20 @@ class Requests extends Component {
           if(el.unique_code != uniqueId){
             this.setState({qualifed: 1})
             this.validateDevice()
+          }else if(el.unique_code == uniqueId){
+            this.setState({SecShowModal: false})
+            this.setState({AuthShowModal: false})
           }
         })
       }else {
-        this.setState({ devices: [] })
+        this.setState({AuthShowModal: true})
       }
     })
   }
 
   validateDevice = () => {
-    console.log('[count]', this.state.qualifed)
     const { user } = this.props.state;
+    console.log('[count]', this.state.qualifed, user.device_info)
     if(user == null){
       return
     }
