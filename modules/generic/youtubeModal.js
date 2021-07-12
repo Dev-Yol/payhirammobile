@@ -66,10 +66,9 @@ class AuthorizedModal extends Component {
             }}>
 
               <TouchableOpacity
-                onPress={() => {
-                  this.props.showModal = false
-                  console.log('[asdfasdf]')
-                }}>
+                onPress={() => 
+                  {this.props.close()}
+                }>
                 <FontAwesomeIcon
                 icon={faTimes}
                 style={{
