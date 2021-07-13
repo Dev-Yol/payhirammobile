@@ -57,6 +57,7 @@ const types = {
   SET_SCHEDULE_SHOW: 'SET_SCHEDULE_SHOW',
   SET_TYPE: 'SET_TYPE',
   SET_VIEW_FIELD: 'VIEW_FIELD',
+  SET_ACTIVITY_MODAL: 'SET_ACTIVITY_MODAL'
 };
 
 export const actions = {
@@ -215,6 +216,9 @@ export const actions = {
   },
   setViewField(view) {
     return { type: types.SET_VIEW_FIELD, view }
+  },
+  setActivityModal(flag){
+    return { type: types.SET_ACTIVITY_MODAL, flag }
   }
 };
 
@@ -278,7 +282,8 @@ const initialState = {
   enableFingerPrint: false,
   imageCount: 0,
   scheduleShow: false,
-  viewField: false
+  viewField: false,
+  activityModal: false
 };
 
 storeData = async (key, value) => {
@@ -319,7 +324,7 @@ const reducer = (state = initialState, action) => {
   const { enable } = action;
   const { changePassword, part } = action;
   const { currentTicketId, imageCount, scheduleShow, typePlan } = action;
-  const { view } = action
+  const { view, flag } = action
   switch (type) {
     case types.LOGOUT:
       storeData('token', '');
@@ -740,6 +745,11 @@ const reducer = (state = initialState, action) => {
         ...state,
         viewField: view,
       };
+    case types.SET_ACTIVITY_MODAL:
+      return{
+        ...state,
+        activityModal: flag
+      }
     default:
       return { ...state, nav: state.nav };
   }
