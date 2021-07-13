@@ -10,7 +10,6 @@ import {BasicStyles, Color, Helper} from 'common';
 import {connect} from 'react-redux';
 import Filter from 'modules/filter/FilterSlider';
 import CurrentLoc from 'components/Location/location.js'
-import Youtube from 'modules/generic/youtubeModal.js'
 
 const width = Math.round(Dimensions.get('window').width);
 const gray = '#999';
@@ -50,16 +49,10 @@ class Header extends Component {
     })
   }
 
-  showYoutube(){
-    this.setState({
-      youtube: !this.state.youtube
-    })
-  }
-
   render (){
     const { selected, from } = this.props;
     const { theme, notifications, location, defaultAddress, user } = this.props.state;
-    const { filter, youtube } = this.state;
+    const { filter } = this.state;
     return(
       <View
         style={{
@@ -81,16 +74,6 @@ class Header extends Component {
               }}
             />
           )}
-          {
-            youtube && (
-              <Youtube
-              close={() => {
-                this.setState({
-                  youtube: false
-                })
-              }} />
-            )
-          }
           <View style={{
             width: width,
             flexDirection: 'row',
@@ -123,7 +106,7 @@ class Header extends Component {
                     justifyContent: 'center',
                     alignItems: 'center'
                   }}
-                  onPress={() => this.showYoutube()}
+                  onPress={() => this.redirect('tutorialsStack')}
                   underlayColor={Color.secondary}
                   >
                   <FontAwesomeIcon icon={faYoutube} size={25} color={theme ? theme.primary : Color.primary}/>

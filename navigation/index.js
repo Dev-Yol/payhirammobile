@@ -46,8 +46,8 @@ import PartnerPlansStack from 'modules/plans/PlansDrawer.js';
 import LocationScopesStack from 'modules/location/LocationDrawer.js';
 import CommentsStack from 'components/Comments/Drawer.js';
 import DevicesStack from 'modules/devices/DevicesDrawer.js';
+import TutorialsStack from 'modules/tutorials/TutorialsDrawer.js';
 
-// login stack
 const LoginStack = createStackNavigator(
   {
     loginScreen: { screen: Login },
@@ -159,6 +159,7 @@ const PrimaryNav = createStackNavigator(
     locationScopesStack: { screen: LocationScopesStack},
     commentsStack: { screen: CommentsStack},
     devicesStack: { screen: DevicesStack},
+    tutorialsStack: { screen: TutorialsStack}
   },
   {
     // Default config for all screens
