@@ -84,10 +84,10 @@ class Requests extends Component {
   }
 
   componentDidMount() {
-    this.retrieveDevice()
-    //// if(this.state.click < 1){
-    ////   this.validateDevice()
-    //// }
+    // this.retrieveDevice()
+    // if(this.state.click < 1){
+    //   this.validateDevice()
+    // }
     const { user } = this.props.state;
     this.backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
@@ -676,7 +676,7 @@ class Requests extends Component {
             />  
           )
         }
-        {
+        {/*
           (AuthShowModal && user) && (
             <AuthorizedModal
             showModal={AuthShowModal}
@@ -685,8 +685,8 @@ class Requests extends Component {
             authorize={() => {this.authorize()}}
             ></AuthorizedModal>
           )
-        }
-        {
+        */}
+        {/*
           (SecShowModal && user) && (
             <AuthorizedModal
             showModal={SecShowModal}
@@ -696,8 +696,8 @@ class Requests extends Component {
             navigation={this.props.navigation}
             />
           )
-        }
-        {
+        */}
+        {/*
           (showModals && user) && (
             <AuthorizedModal
             showModals={showModals}
@@ -706,7 +706,7 @@ class Requests extends Component {
             authorize={() => {this.authorize()}}
             />
           )
-        }
+        */}
       </SafeAreaView>
     );
   }

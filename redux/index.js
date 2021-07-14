@@ -57,7 +57,8 @@ const types = {
   SET_SCHEDULE_SHOW: 'SET_SCHEDULE_SHOW',
   SET_TYPE: 'SET_TYPE',
   SET_VIEW_FIELD: 'VIEW_FIELD',
-  SET_ACTIVITY_MODAL: 'SET_ACTIVITY_MODAL'
+  SET_ACTIVITY_MODAL: 'SET_ACTIVITY_MODAL',
+  SET_MY_DEVICE: 'SET_MY_DEVICE'
 };
 
 export const actions = {
@@ -219,6 +220,9 @@ export const actions = {
   },
   setActivityModal(flag){
     return { type: types.SET_ACTIVITY_MODAL, flag }
+  },
+  setMyDevice(device){
+    return { type: types.SET_MY_DEVICE, device }
   }
 };
 
@@ -283,7 +287,8 @@ const initialState = {
   imageCount: 0,
   scheduleShow: false,
   viewField: false,
-  activityModal: false
+  activityModal: false,
+  myDevice: null
 };
 
 storeData = async (key, value) => {
@@ -324,7 +329,7 @@ const reducer = (state = initialState, action) => {
   const { enable } = action;
   const { changePassword, part } = action;
   const { currentTicketId, imageCount, scheduleShow, typePlan } = action;
-  const { view, flag } = action
+  const { view, flag, device } = action
   switch (type) {
     case types.LOGOUT:
       storeData('token', '');
@@ -344,7 +349,7 @@ const reducer = (state = initialState, action) => {
     case types.UPDATE_USER:
       return {
         ...state,
-        user,
+        user
       };
     case types.SET_NOTIFICATIONS:
       let notifications = {
@@ -749,6 +754,11 @@ const reducer = (state = initialState, action) => {
       return{
         ...state,
         activityModal: flag
+      }
+    case types.SET_MY_DEVICE:
+      return{
+        ...state,
+        myDevice: device
       }
     default:
       return { ...state, nav: state.nav };

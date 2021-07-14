@@ -84,7 +84,7 @@ class Header extends Component {
               style={{
                 flexDirection: 'row',
                 paddingTop: 5,
-                width: user?.account_type === 'PARTNER' ? width - 120 : width - 100,
+                width: width - 120,
                 alignItems: 'center',
                 paddingLeft: 10
               }}
@@ -97,25 +97,21 @@ class Header extends Component {
                 paddingLeft: 5
               }}>{Helper.APP_NAME_BASIC.toUpperCase()}</Text>
             </TouchableOpacity>
-            {
-              user?.account_type === 'PARTNER' && (
-                <TouchableOpacity
-                  style={{
-                    width: 40,
-                    height: 40,
-                    justifyContent: 'center',
-                    alignItems: 'center'
-                  }}
-                  onPress={() => this.redirect('tutorialsStack')}
-                  underlayColor={Color.secondary}
-                  >
-                  <FontAwesomeIcon icon={faYoutube} size={25} color={theme ? theme.primary : Color.primary}/>
-                </TouchableOpacity>
-              )
-            }
             <TouchableOpacity
               style={{
-                width: user?.account_type === 'PARTNER' ? 40 : 60,
+                width: 40,
+                height: 40,
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}
+              onPress={() => this.redirect('tutorialsStack')}
+              underlayColor={Color.secondary}
+              >
+              <FontAwesomeIcon icon={faYoutube} size={25} color={theme ? theme.primary : Color.primary}/>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                width: 40,
                 height: 40,
                 justifyContent: 'center',
                 alignItems: 'center'
@@ -127,7 +123,7 @@ class Header extends Component {
             </TouchableOpacity>
             <TouchableOpacity
               style={{
-                width: user?.account_type === 'PARTNER' ? 40 : 60,
+                width: 40,
                 height: 40,
                 justifyContent: 'center',
                 alignItems: 'center'
@@ -149,15 +145,15 @@ class Header extends Component {
                     (notifications && notifications.unread > 0) && (
                       <View style={{
                           backgroundColor: Color.danger,
-                          height: 20,
-                          width: 20,
+                          height: 18,
+                          width: 18,
                           borderRadius: 10,
                           justifyContent: 'center',
                           alignItems: 'center',
                           position: 'absolute',
                           zIndex: 1,
-                          right: 10,
-                          bottom: 1
+                          right: 8,
+                          bottom: 8
                         }}>
                           <Text style={{
                             color: Color.white,

@@ -88,10 +88,15 @@ class Devices extends Component {
               (data && data.length > 0) && data.map((item, index) => (
                 <View style={{ flexDirection: 'row', borderBottomWidth: 1, borderColor: Color.gray, padding: 20 }} key={index}>
                   <View style={{ flex: 1 }}>
-                    <Text style={{textTransform: 'uppercase'}}>{item.details?.manufacturer}</Text>
-                    <Text style={{ fontSize: 10 }}>Model: {item.model}</Text>
-                    <Text style={{ fontSize: 10 }}>OS: {item.details?.os}</Text>
-                    <Text style={{ fontSize: 10 }}>Device ID: {item.details?.deviceId}</Text>
+                    <Text style={{
+                      fontSize: 13,
+                      fontWeight: 'bold',
+                      paddingBottom: 10
+                    }}>{item.model}</Text>
+                    <Text style={{
+                      fontSize: 11,
+                      color: Color.gray
+                    }}>{item.unique_code}</Text>
                   </View>
                   <Switch
                     trackColor={{ false: Color.danger, true: theme ? theme.primary : Color.primary }}
