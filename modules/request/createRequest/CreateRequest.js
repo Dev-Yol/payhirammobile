@@ -44,7 +44,8 @@ class CreateRequest extends Component {
       errorMessage: null,
       locations: null,
       proceed: false,
-      continued: 0
+      continued: 0,
+      count: 0
     };
   }
   componentDidMount() {
@@ -101,17 +102,28 @@ class CreateRequest extends Component {
       console.log('[kilometer]', Number(parseInt(response.data)) <= 5)
       this.setState({isLoading: false});
       if(Number(parseInt(response.data)) <= 5){
+        console.log('[[asdfasf]', this.state.count)
         this.setState({currentPosition: currentPosition + 1})
-      }else{
-        Alert.alert(
-          'Try Again',
-          'No available partner in the area selected. Please change request location to continue.',
-          [
-            {text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel'}
-          ],
-          { cancelable: false }
-        )
-        return this.setState({currentPosition: 1})
+        this.setState({count: 0})
+      }else if(Number(parseInt(response.data)) > 5){
+        console.log('[[dfasd]', this.state.count)
+        this.setState({count: this.state.count += 1})
+        if(this.state.count <= 1){
+          Alert.alert(
+            'Try Again',
+            'No available partner in the area selected. Please change request location to continue.',
+            [
+              {text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel'}
+            ],
+            { cancelable: false }
+          )
+          return
+        }else if(this.state.count > 1){
+          console.log('[STOP]')
+        }
+        return
+
+        // return this.setState({currentPosition: 1})
       }
     }, error => {
       console.log('response', error)
@@ -195,6 +207,7 @@ class CreateRequest extends Component {
         this.state.locations.map(element => {
           this.retrieveLocationDistance(element.latitude, element.longitude, location.latitude, location.longitude)
         })
+        this.setState({count: 0})
         return
       }
       if(currentPosition == 2){

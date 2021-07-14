@@ -99,7 +99,6 @@ class NotificationHandler extends Component{
       case 'payments': {
         const { setAcceptPayment } = this.props;
         let topicId = data.topic.length > 1 ? data.topic.split('-')[1] : null
-        console.log('[payments]', data, '[df]', topicId)
         if(topicId && parseInt(topicId) == user.id){
           if(data.transfer_status == 'requesting'){
             setAcceptPayment(data)
@@ -147,7 +146,6 @@ class NotificationHandler extends Component{
       }
       break
       case 'device': {
-        console.log('[dataddd]', data)
         if(parseInt(data.to) == user.id){
           console.log("[Notifications] data", data)
           const { updateNotifications } = this.props;
