@@ -53,9 +53,17 @@ class Verify extends Component {
       }
     }, error => {
       this.setState({
-        isLoading: false,
+        isLoading: false
       })
-    }) 
+      Alert.alert(
+        'Error',
+        'Something went wrong. Please try again later',
+        [
+          {text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel'}
+        ],
+        { cancelable: false }
+      )
+    })
   }
 
   render() {

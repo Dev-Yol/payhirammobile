@@ -397,8 +397,6 @@ export default {
       value: 'Cash In'
     }, {
       value: 'Withdrawals'
-    }, {
-      value: 'Bills Payments'
     }]
   },
   showRequestType(type) {
