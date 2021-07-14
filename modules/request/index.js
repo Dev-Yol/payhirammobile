@@ -84,7 +84,7 @@ class Requests extends Component {
   }
 
   componentDidMount() {
-    this.retrieveDevice()
+    // this.retrieveDevice()
     // if(this.state.click < 1){
     //   this.validateDevice()
     // }
@@ -678,7 +678,7 @@ class Requests extends Component {
             />  
           )
         }
-        {
+        {/*
           (AuthShowModal && user) && (
             <AuthorizedModal
             showModal={AuthShowModal}
@@ -687,8 +687,8 @@ class Requests extends Component {
             authorize={() => {this.authorize()}}
             ></AuthorizedModal>
           )
-        }
-        {
+        */}
+        {/*
           (SecShowModal && user) && (
             <AuthorizedModal
             showModal={SecShowModal}
@@ -698,8 +698,8 @@ class Requests extends Component {
             navigation={this.props.navigation}
             />
           )
-        }
-        {
+        */}
+        {/*
           (showModals && user) && (
             <AuthorizedModal
             showModals={showModals}
@@ -708,7 +708,7 @@ class Requests extends Component {
             authorize={() => {this.authorize()}}
             />
           )
-        }
+        */}
       </SafeAreaView>
     );
   }
