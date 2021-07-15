@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, ScrollView, Image, TouchableOpacity, TouchableHighlight, Dimensions, Alert } from 'react-native';
-import { BasicStyles, Color, Routes } from 'common';
+import { Helper, Color, Routes } from 'common';
 import UserImage from 'components/User/Image.js';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faStar, faCheckCircle, faUserCircle, faChevronLeft, faAddressCard, faWallet } from '@fortawesome/free-solid-svg-icons';
@@ -71,6 +71,17 @@ class ViewProfile extends Component {
         this.setState({connection: item})
       }
     })
+  }
+
+  invalidAcccess(){
+    Alert.alert(
+      'Message',
+      'In order to Create Request, Please Verify your Account.',
+      [
+        {text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel'}
+      ],
+      { cancelable: false }
+    )
   }
 
   goBack = () => {
@@ -234,13 +245,20 @@ class ViewProfile extends Component {
                 { this.state.status === true && (
                 <View>
                 <TouchableOpacity
-                  onPress={() => this.props.navigation.navigate('directTransferDrawer', {
-                    data: {
-                      payload: 'transfer',
-                      code: this.props.navigation.state.params.user ? this.props.navigation.state.params.user.account.code : this.props.navigation.state.params.code,
-                      success: false
-                    }
-                  })}
+                  onPress={() => 
+                    {
+                    if(this.props.state.user && Helper.checkStatus(this.props.state.user) >= Helper.accountVerified){
+                      this.props.navigation.navigate('directTransferDrawer', {
+                        data: {
+                          payload: 'transfer',
+                          code: this.props.navigation.state.params.user ? this.props.navigation.state.params.user.account.code : this.props.navigation.state.params.code,
+                          success: false
+                        }
+                      })
+                    }else{
+                      this.invalidAcccess()
+                    }}
+                  }
                   style={{
                     flexDirection: 'row',
                     width: '90%',
