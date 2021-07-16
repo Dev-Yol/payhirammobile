@@ -351,7 +351,6 @@ class Summary extends Component {
                   }else{
                     this.invalidAcccess()
                   }
-                  
                 }}
                 style={{
                   width: '30%',
@@ -397,9 +396,13 @@ class Summary extends Component {
               <ButtonWithIcon 
                 title={'Send to Wallet(FREE)'}
                 onClick={() => {
-                  this.props.navigation.navigate('qrCodeScannerStack', {
-                    payload: 'transfer'
-                  })
+                  if(user && Helper.checkStatus(user) >= Helper.accountVerified){
+                    this.props.navigation.navigate('qrCodeScannerStack', {
+                      payload: 'transfer'
+                    })
+                  }else{
+                    this.invalidAcccess()
+                  }
                 }}
                 description={'Transfer money through PayHiram to PayHiram Account'}
                 style={{
@@ -417,9 +420,13 @@ class Summary extends Component {
               <ButtonWithIcon 
                 title={'Scan Payment(FREE)'}
                 onClick={() => {
-                  this.props.navigation.navigate('qrCodeScannerStack', {
-                    payload: 'scan_payment'
-                  })
+                  if(user && Helper.checkStatus(user) >= Helper.accountVerified){
+                    this.props.navigation.navigate('qrCodeScannerStack', {
+                      payload: 'scan_payment'
+                    })
+                  }else{
+                    this.invalidAcccess()
+                  }
                 }}
                 description={'Scan qr code from your customer.'}
                 style={{
