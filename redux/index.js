@@ -58,7 +58,8 @@ const types = {
   SET_TYPE: 'SET_TYPE',
   SET_VIEW_FIELD: 'VIEW_FIELD',
   SET_ACTIVITY_MODAL: 'SET_ACTIVITY_MODAL',
-  SET_MY_DEVICE: 'SET_MY_DEVICE'
+  SET_MY_DEVICE: 'SET_MY_DEVICE',
+  SET_REMAINING_BALANCE_PLAN: 'SET_REMAINING_BALANCE_PLAN'
 };
 
 export const actions = {
@@ -223,6 +224,9 @@ export const actions = {
   },
   setMyDevice(device){
     return { type: types.SET_MY_DEVICE, device }
+  },
+  setRemainingBalancePlan(remainingBalancePlan){
+    return { type: types.SET_REMAINING_BALANCE_PLAN, remainingBalancePlan }
   }
 };
 
@@ -288,7 +292,8 @@ const initialState = {
   scheduleShow: false,
   viewField: false,
   activityModal: false,
-  myDevice: null
+  myDevice: null,
+  remainingBalancePlan: 0
 };
 
 storeData = async (key, value) => {
@@ -329,7 +334,7 @@ const reducer = (state = initialState, action) => {
   const { enable } = action;
   const { changePassword, part } = action;
   const { currentTicketId, imageCount, scheduleShow, typePlan } = action;
-  const { view, flag, device } = action
+  const { view, flag, device, remainingBalancePlan } = action
   switch (type) {
     case types.LOGOUT:
       storeData('token', '');
@@ -759,6 +764,11 @@ const reducer = (state = initialState, action) => {
       return{
         ...state,
         myDevice: device
+      }
+    case types.SET_REMAINING_BALANCE_PLAN:
+      return{
+        ...state,
+        remainingBalancePlan
       }
     default:
       return { ...state, nav: state.nav };
