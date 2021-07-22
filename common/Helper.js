@@ -455,6 +455,14 @@ export default {
       return true;
     }
   },
+  validatePassword(password) {
+    const reg = /^(?=.*[0-9])(?=.*[- ?!@#$%^&*\/\\])(?=.*[A-Z])(?=.*[a-z])[a-zA-Z0-9- ?!@#$%^&*\/\\]{6,16}$/
+    if (reg.test(password) === false) {
+      return false;
+    } else {
+      return true;
+    }
+  },
   checkStatus(user){
     if(user == null){
       return false
