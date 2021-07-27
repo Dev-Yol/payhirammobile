@@ -88,7 +88,8 @@ class Requests extends Component {
     // if(this.state.click < 1){
     //   this.validateDevice()
     // }
-    const { user } = this.props.state;
+    const { user, remainingBalancePlan } = this.props.state;
+    console.log('[remaining balance]', remainingBalancePlan);
     this.backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
       this.handleBackPress,

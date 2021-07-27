@@ -127,7 +127,7 @@ class ProposalModal extends Component {
     }
 
     if(data === null){
-      console.log('[')
+      console.log('[', data, '[ress]', request)
       if(request.account == null){
         return
       }
