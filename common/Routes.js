@@ -32,7 +32,7 @@ export default {
   bookmarkCreate: apiUrl + 'bookmarks/create',
   requestPeerCreate: apiUrl + 'request_peers/create',
   requestPeerRetrieveItem: apiUrl + 'request_peers/retrieve_item',
-  requestPeerUpdate: apiUrl + 'request_peers/update_peer',
+requestPeerUpdate: apiUrl + 'request_peers/update_peer',
   // requestPeerUpdate: apiUrl + 'request_peers/update',
   requestPeerDelete: apiUrl + 'request_peers/delete',
   requestManageByThread: apiUrl + 'requests/manage_request_by_thread',
