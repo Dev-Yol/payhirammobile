@@ -80,15 +80,22 @@ class NotificationHandler extends Component{
             if(user == null){
               return
             }else{
-              console.log("[Partner Requests]", data)
-              if(user.scope_location.includes(data.scope)){
+              if(user.account_type === 'PARTNER' && (Number(data.account_id) != user.id)){
+                console.log("[Partner Requests]", data)
+                unReadRequests.push(data)
+                const { setUnReadRequests } = this.props;
+                setUnReadRequests(unReadRequests);
+              }else if(user.id === Number(data.account_id)){
+                console.log("[Same Requests]", data)
+                unReadRequests.push(data)
+                const { setUnReadRequests } = this.props;
+                setUnReadRequests(unReadRequests);
+              }else if((data.scope != '' || data.scope != null)&& (data.account_id != user.id) && (user.scope_location.includes(data.scope))){
                 console.log("[Partner Requests] added", data)
                 unReadRequests.push(data)
                 const { setUnReadRequests } = this.props;
                 setUnReadRequests(unReadRequests);
                 // setUnReadRequests($unReadRequests);
-              }else{
-                console.log("[Partner Requests] Empty")
               }
             }
           }else if(data.target == 'circle'){

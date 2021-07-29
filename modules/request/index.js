@@ -58,7 +58,6 @@ class Requests extends Component {
       data: [],
       page: 'public',
       unReadPeerRequests: [],
-      unReadRequests: [],
       activeIndex: 0,
       messageEmpty: null,
       numberOfPages: 0,
@@ -88,8 +87,8 @@ class Requests extends Component {
     // if(this.state.click < 1){
     //   this.validateDevice()
     // }
-    const { user, remainingBalancePlan } = this.props.state;
-    console.log('[remaining balance]', remainingBalancePlan);
+    const { user, remainingBalancePlan, unReadRequests } = this.props.state;
+    console.log('[remaining balance]', unReadRequests);
     this.backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
       this.handleBackPress,
@@ -280,7 +279,7 @@ class Requests extends Component {
 
   retrieve = (scroll, flag, loading = true) => {
     const { setParameter } = this.props
-    const {user, searchParameter, parameter, location, defaultAddress} = this.props.state;
+    const {user, unReadRequests, parameter, location, defaultAddress} = this.props.state;
     const { data, tempData, page } = this.state;
     if (user == null) {
       return;
@@ -318,18 +317,18 @@ class Requests extends Component {
     if(parameter && parameter.needed_on != null){
       parameters['needed_on'] = parameter.needed_on
     }
-    if(page == 'public'){
+    if(page == 'public' && user.account_type === 'PARTNER'){
       parameters['status'] = 0
     }
-    if(page == 'onNegotiation'){
+    if(page == 'onNegotiation' && user.account_type === 'PARTNER'){
       parameters['status'] = 0
       parameters['peer_status'] = 'requesting'
     }
-    if(page == 'onDelivery'){
+    if(page == 'onDelivery' && user.account_type === 'PARTNER'){
       parameters['status'] = 1
       parameters['peer_status'] = 'approved'
     }
-    if(page == 'history'){
+    if(page == 'history' && user.account_type === 'PARTNER'){
       parameters['status'] = 2
       parameters['peer_status'] = 'approved'
     }
@@ -363,6 +362,7 @@ class Requests extends Component {
           numberOfPages: parseInt(response.size / this.state.limit) + (response.size % this.state.limit ? 1 : 0),
           offset: flag == false ? 1 : (this.state.offset + 1)
         })
+        data.push(unReadRequests)
       }else{
         this.setState({
           data: flag == false ? [] : this.state.data,
@@ -454,13 +454,26 @@ class Requests extends Component {
 
   connectRequest = (item) => {
     const { setRequest } = this.props;
-    this.setState({
-      connectSelected: item,
-    });
-    setRequest(item)
-    setTimeout(() => {
-      this.setState({connectModal: true});
-    }, 500);
+    const { remainingBalancePlan } = this.props.state;
+    if((remainingBalancePlan - Number(item.amount)) < 0){
+      Alert.alert(
+        'Message',
+        `We're sorry to inform you that have reached the limit of transactions per day.`,
+        [
+          {text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel'}
+        ],
+        { cancelable: false }
+        )
+      return
+    }else{
+      this.setState({
+        connectSelected: item
+      });
+      setRequest(item)
+      setTimeout(() => {
+        this.setState({connectModal: true});
+      }, 500);
+    }
   };
 
   validate = () => {
