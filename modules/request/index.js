@@ -58,7 +58,6 @@ class Requests extends Component {
       data: [],
       page: 'public',
       unReadPeerRequests: [],
-      unReadRequests: [],
       activeIndex: 0,
       messageEmpty: null,
       numberOfPages: 0,
@@ -88,8 +87,8 @@ class Requests extends Component {
     // if(this.state.click < 1){
     //   this.validateDevice()
     // }
-    const { user, remainingBalancePlan } = this.props.state;
-    console.log('[remaining balance]', remainingBalancePlan);
+    const { user, remainingBalancePlan, unReadRequests } = this.props.state;
+    console.log('[remaining balance]', unReadRequests);
     this.backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
       this.handleBackPress,
@@ -280,7 +279,7 @@ class Requests extends Component {
 
   retrieve = (scroll, flag, loading = true) => {
     const { setParameter } = this.props
-    const {user, searchParameter, parameter, location, defaultAddress} = this.props.state;
+    const {user, unReadRequests, parameter, location, defaultAddress} = this.props.state;
     const { data, tempData, page } = this.state;
     if (user == null) {
       return;
@@ -363,6 +362,7 @@ class Requests extends Component {
           numberOfPages: parseInt(response.size / this.state.limit) + (response.size % this.state.limit ? 1 : 0),
           offset: flag == false ? 1 : (this.state.offset + 1)
         })
+        data.push(unReadRequests)
       }else{
         this.setState({
           data: flag == false ? [] : this.state.data,
