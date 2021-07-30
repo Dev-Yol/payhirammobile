@@ -88,7 +88,7 @@ class Requests extends Component {
     //   this.validateDevice()
     // }
     const { user, remainingBalancePlan, unReadRequests } = this.props.state;
-    console.log('[remaining balance]', unReadRequests);
+    console.log('[remaining balance]', remainingBalancePlan, unReadRequests);
     this.backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
       this.handleBackPress,
@@ -350,6 +350,7 @@ class Requests extends Component {
     console.log('parameters', parameters)
     this.setState({isLoading: (loading == false) ? false : true});
     Api.request(Routes.requestRetrieveMobile, parameters, response => {
+      console.log('[response]', response);
       this.setState({
         // size: response.size ? response.size : 0,
         isLoading: false
@@ -455,7 +456,8 @@ class Requests extends Component {
   connectRequest = (item) => {
     const { setRequest } = this.props;
     const { remainingBalancePlan } = this.props.state;
-    if((remainingBalancePlan - Number(item.amount)) < 0){
+    if((remainingBalancePlan - Number(item.amount)) === 0){
+    // if((remainingBalancePlan - Number(item.amount)) < 0){
       Alert.alert(
         'Message',
         `We're sorry to inform you that have reached the limit of transactions per day.`,

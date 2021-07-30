@@ -74,7 +74,6 @@ class RequestItem extends Component {
       account_code: user.code,
       account_request_code: data.account.code
     };
-    console.log('[asfda]', parameter)
     this.setState({isLoading: true});
     Api.request(Routes.requestPeerRetrieveItem, parameter, (response) => {
       console.log('[ppppperrrs>>>>>>>>>>]', response)
@@ -266,6 +265,7 @@ class RequestItem extends Component {
                   <RequestCard 
                     onConnectRequest={(item) => this.connectRequest(item)}
                     data={data}
+                    peers={peers}
                     navigation={this.props.navigation}
                     from={'request_item'}
                     />
