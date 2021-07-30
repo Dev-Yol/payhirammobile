@@ -273,7 +273,8 @@ class RequestCard extends Component {
     );
   };
 
-  _footer = (item) => {
+  _footer = (item, peers) => {
+    console.log('[iteeeeem, Request Card>>>]', item)
     const {user, theme} = this.props.state;
     return (
       <View>
@@ -289,7 +290,7 @@ class RequestCard extends Component {
                 width: '100%'
               }}>
               {
-                (item.approved == true || item.peer_status == 'approved') && (
+                ((item.approved == true || item.peer_status == 'approved') && peers != null) && (
                   <Button
                     onClick={() => {0
                       this.props.navigation.navigate('messagesStack', {
@@ -322,7 +323,7 @@ class RequestCard extends Component {
                 )
               }
               {
-                (item.approved == false && item.peer_status != 'approved') && (
+                ((item.approved == false && item.peer_status != 'approved') && peers == null) && (
                   <Button
                     onClick={() => {
                       if(Helper.checkStatus(user) == false){
@@ -338,9 +339,9 @@ class RequestCard extends Component {
                         }
                       }
                     }}
-                    title={(item.peer_flag == true || item.peer_status === 'requesting') ? 'View Proposal' : 'Send Proposal'}
+                    title={((item.peer_flag == true || item.peer_status === 'requesting') && peers != null) ? 'View Proposal' : 'Send Proposal'}
                     style={{
-                      backgroundColor: (item.peer_flag == true || item.peer_status === 'requesting') ? (theme ? theme.primary : Color.primary) : (theme ? theme.secondary : Color.secondary),
+                      backgroundColor: ((item.peer_flag == true || item.peer_status === 'requesting') && peers != null) ? (theme ? theme.primary : Color.primary) : (theme ? theme.secondary : Color.secondary),
                       width: '60%',
                       marginLeft: '40%',
                       height: 40,
@@ -363,6 +364,7 @@ class RequestCard extends Component {
 
 
   _myFooter = (item) => {
+    console.log('[status]', item)
     const {user, theme} = this.props.state;
     return (
       <View>
@@ -418,7 +420,8 @@ class RequestCard extends Component {
     );
   };
 
-  _footerRequestItem = (item) => {
+  _footerRequestItem = (item, peers) => {
+    console.log('[iteeeem Request Card]', item, peers)
     const {user, theme} = this.props.state;
     return (
       <View>
@@ -434,7 +437,7 @@ class RequestCard extends Component {
                 width: '100%'
               }}>
               {
-                (item.approved == true || item.peer_status == 'approved') && (
+                ((item.approved == true || item.peer_status == 'approved') && peers != null) && (
                   <Button
                     onClick={() => {
                       this.props.navigation.navigate('messagesStack', {
@@ -466,7 +469,7 @@ class RequestCard extends Component {
                 )
               }
               {
-                (item.approved == false && item.peer_status != 'approved' && item.peer_status != 'requesting') && (
+                ((item.approved == false && item.peer_status != 'approved' && item.peer_status != 'requesting') && peers == null) && (
                 // (item.approved == false && item.peer_status != 'approved') && (
                   <Button
                     onClick={() => {
@@ -479,7 +482,7 @@ class RequestCard extends Component {
                         })
                       }
                     }}
-                    title={(item.peer_flag == true) ? 'View Proposal' : 'Send Proposal'}
+                    title={(item.peer_flag == true && peers != null) ? 'View Proposal' : 'Send Proposal'}
                     style={{
                       backgroundColor: item.peer_flag == true ? (theme ? theme.primary : Color.primary) : (theme ? theme.secondary : Color.secondary),
                       width: '60%',
@@ -501,9 +504,10 @@ class RequestCard extends Component {
     );
   };
   render() {
-    const { data, from } = this.props;
+    const { data, from, peers } = this.props;
     const { user } = this.props.state;
     const { option } = this.state;
+    console.log('[peersssssss]', peers);
     return (
       <TouchableOpacity
       onPress={() => {
@@ -546,9 +550,9 @@ class RequestCard extends Component {
           <View style={{
             width: '50%'
           }}>
-            {(user && data.account.code != user.code && this.props.from == 'request' && user?.plan?.status == 'approved') && this._footer(data)}
+            {(user && data.account.code != user.code && this.props.from == 'request' && user?.plan?.status == 'approved') && this._footer(data, peers)}
             {(user && data.account.code == user.code && this.props.from == 'request') && this._myFooter(data)}
-            {(user && data.account.code != user.code && this.props.from == 'request_item' && user?.plan?.status == 'approved') && this._footerRequestItem(data)}
+            {(user && data.account.code != user.code && this.props.from == 'request_item' && user?.plan?.status == 'approved') && this._footerRequestItem(data, peers)}
           </View>
         </View>
         

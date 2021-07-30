@@ -1,14 +1,11 @@
 import React, { Component } from 'react';
-import Style from './Style.js';
 import { View, Text, ScrollView, FlatList, TouchableHighlight, SafeAreaView} from 'react-native';
-import {NavigationActions} from 'react-navigation';
 import { Routes, Color, Helper, BasicStyles } from 'common';
 import { Spinner } from 'components';
 import { connect } from 'react-redux';
 import { Empty } from 'components';
 import Api from 'services/api/index.js';
 import { Dimensions } from 'react-native';
-import { color } from 'react-native-reanimated';
 const height = Math.round(Dimensions.get('window').height);
 class Notifications extends Component{
   constructor(props){

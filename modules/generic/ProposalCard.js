@@ -192,7 +192,7 @@ class ProposalCard extends Component {
             marginBottom: 10,
           }}>
             {
-              (request && request.status == 0) && (
+              (request && request.status == 0 && item.status != 'approved') && (
                 <View
                   style={{
                     width: '100%',
@@ -280,7 +280,7 @@ class ProposalCard extends Component {
             flexDirection: 'row',
             marginBottom: 10,
           }}>
-          {(user.account_type != 'USER' && request.status == 0) && (
+          {(user.account_type != 'USER' && request.status == 0 && item.status != 'approved') && (
             <View
               style={{
                 width: '100%',
