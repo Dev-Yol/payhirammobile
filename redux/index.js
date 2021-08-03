@@ -59,7 +59,9 @@ const types = {
   SET_VIEW_FIELD: 'VIEW_FIELD',
   SET_ACTIVITY_MODAL: 'SET_ACTIVITY_MODAL',
   SET_MY_DEVICE: 'SET_MY_DEVICE',
-  SET_REMAINING_BALANCE_PLAN: 'SET_REMAINING_BALANCE_PLAN'
+  SET_REMAINING_BALANCE_PLAN: 'SET_REMAINING_BALANCE_PLAN',
+  SET_CONNECT_MODAL: 'SET_CONNECT_MODAL',
+  SET_CHARGE: 'SET_CHARGE'
 };
 
 export const actions = {
@@ -227,6 +229,12 @@ export const actions = {
   },
   setRemainingBalancePlan(remainingBalancePlan){
     return { type: types.SET_REMAINING_BALANCE_PLAN, remainingBalancePlan }
+  },
+  setConnectModal(connectModal) {
+    return { type: types.SET_CONNECT_MODAL, connectModal}
+  },
+  setCharge(charge) {
+    return { type: types.SET_CHARGE, charge}
   }
 };
 
@@ -293,7 +301,9 @@ const initialState = {
   viewField: false,
   activityModal: false,
   myDevice: null,
-  remainingBalancePlan: 0
+  remainingBalancePlan: 0,
+  connectModal: false,
+  charge: 0
 };
 
 storeData = async (key, value) => {
@@ -335,6 +345,8 @@ const reducer = (state = initialState, action) => {
   const { changePassword, part } = action;
   const { currentTicketId, imageCount, scheduleShow, typePlan } = action;
   const { view, flag, device, remainingBalancePlan } = action
+  const { connectModal } = action;
+  const { charge } = action;
   switch (type) {
     case types.LOGOUT:
       storeData('token', '');
@@ -769,6 +781,16 @@ const reducer = (state = initialState, action) => {
       return{
         ...state,
         remainingBalancePlan
+      }
+    case types.SET_CONNECT_MODAL:
+      return{
+        ...state,
+        connectModal
+      }
+    case types.SET_CHARGE:
+      return{
+        ...state,
+        charge
       }
     default:
       return { ...state, nav: state.nav };
