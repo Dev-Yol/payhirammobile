@@ -103,6 +103,24 @@ class NotificationHandler extends Component{
           }
         }
         break
+      case 'withdraw_requests': {
+          console.log('withdraw_requests', data)
+          // let unReadRequests = this.props.state.unReadRequests
+          // if(data.target == 'partners'){
+          //   const { user } = this.props.state;
+          //   if(user == null){
+          //     return
+          //   }else{
+          //     if(user.account_type === 'PARTNER' && (Number(data.account_id) != user.id)){
+          //       console.log("[Partner Requests]", data)
+          //       unReadRequests.push(data)
+          //       const { setUnReadRequests } = this.props;
+          //       setUnReadRequests(unReadRequests);
+          //     }
+          //   }
+          // }
+        }
+        break
       case 'payments': {
         const { setAcceptPayment } = this.props;
         let topicId = data.topic.length > 1 ? data.topic.split('-')[1] : null
