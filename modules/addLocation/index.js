@@ -81,7 +81,8 @@ class AddLocation extends Component {
       const {setDefaultAddress} = this.props;
       setDefaultAddress(this.state.addresses[index]);
       console.log('[default]', this.props.state.defaultAddress, this.state.addresses[index]);
-      this.props.navigation.pop()
+      this.props.setConnectModal(true);
+      this.props.navigation.pop();
     }
   };
 
@@ -402,7 +403,8 @@ const mapDispatchToProps = (dispatch) => {
     // updateUser: (user) => dispatch(actions.updateUser(user)),
     setLocation: (location) => dispatch(actions.setLocation(location)),
     setDefaultAddress: (defaultAddress) => dispatch(actions.setDefaultAddress(defaultAddress)),
-    updateUser: (user) => dispatch(actions.updateUser(user))
+    updateUser: (user) => dispatch(actions.updateUser(user)),
+    setConnectModal: (connectModal) => dispatch(actions.setConnectModal(connectModal)),
   };
 };
 

@@ -15,51 +15,50 @@ import Currency from 'services/Currency';
 import Api from 'services/api/index.js';
 import RequestCard from 'modules/generic/RequestCard';
 import LocationTextInput from 'components/Form/LocationTextInput';
-import {Spinner} from 'components';
+import { Spinner } from 'components';
 
 const height = Math.round(Dimensions.get('window').height)
 class ProposalModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        currency: 'PHP',
-        charge: 0,
-        isLoading: false,
-        summaryLoading: false,
-        data: null,
-        deliveryFee: 20
+      currency: 'PHP',
+      isLoading: false,
+      summaryLoading: false,
+      data: null,
+      deliveryFee: 20,
+      distance: 0
     };
   }
 
-  componentDidMount(){
-    if(this.props.from == 'update' && this.props.peerRequest != null){
+  componentDidMount() {
+    if (this.props.from == 'update' && this.props.peerRequest != null) {
       const { setDefaultAddress } = this.props;
       this.setState({
-        data: this.props.peerRequest,
-        charge: this.props.peerRequest.charge
+        data: this.props.peerRequest
       })
-      if(this.props.peerRequest.location){
-        setDefaultAddress(this.props.peerRequest.location)        
+      this.props.setCharge(this.props.peerRequest.charge)
+      if (this.props.peerRequest.location) {
+        setDefaultAddress(this.props.peerRequest.location)
       }
-    }else{
+    } else {
       this.setState({
-        data: null,
-        charge: 0
+        data: null
       })
     }
     const { request } = this.props;
-    if(request){
+    if (request) {
       this.setState({
         currency: request.currency
       })
     }
-    if(request && parseInt(request.type) == 3){
+    if (request && parseInt(request.type) == 3) {
       this.retrieveSummaryLedger()
     }
   }
 
   retrieveSummaryLedger = () => {
-    const {user} = this.props.state;
+    const { user } = this.props.state;
     const { setLedger } = this.props;
     if (user == null) {
       return;
@@ -68,9 +67,9 @@ class ProposalModal extends Component {
       account_id: user.id,
       account_code: user.code
     };
-    this.setState({isLoading: true, summaryLoading: true});
+    this.setState({ isLoading: true, summaryLoading: true });
     Api.request(Routes.ledgerSummary, parameter, (response) => {
-      this.setState({isLoading: false, summaryLoading: false});
+      this.setState({ isLoading: false, summaryLoading: false });
 
       if (response != null) {
         setLedger(response.data);
@@ -79,7 +78,7 @@ class ProposalModal extends Component {
       }
     }, error => {
       console.log('response', error)
-      this.setState({isLoading: false, summaryLoading: false});
+      this.setState({ isLoading: false, summaryLoading: false });
     });
   };
 
@@ -92,43 +91,125 @@ class ProposalModal extends Component {
       'Alert',
       'Please fill in all fields.',
       [
-        {text: 'Ok', onPress: () => console.log('Cancel Pressed'), style: 'cancel'}
+        { text: 'Ok', onPress: () => console.log('Cancel Pressed'), style: 'cancel' }
       ],
       { cancelable: false }
     )
   }
 
-  submit(){
+  getDistance = (latitudeFrom, longitudeFrom, latitudeTo, longitudeTo) => {
+    const { user } = this.props.state;
+    if (user == null) {
+      return;
+    }
+    let parameter = {
+      latitudeFrom: latitudeFrom,
+      longitudeFrom: longitudeFrom,
+      latitudeTo: latitudeTo,
+      longitudeTo: longitudeTo
+    }
+    this.setState({ isLoading: true });
+    Api.request(Routes.getKilometer, parameter, (response) => {
+      this.setState({
+        isLoading: false,
+        distance: response.data
+      });
+      let distance = parseFloat(this.props.scope?.minimum_distance) - parseFloat(response.data);
+      let char = this.props.state.charge;
+      if (parseFloat(distance) < 0) {
+        distance = parseFloat(distance) * -1;
+        distance = parseFloat(distance) * parseFloat(this.props.scope?.addition_charge_per_distance)
+        char = parseFloat(distance) + parseFloat(this.props.state.charge);
+      }
+      Alert.alert(
+        'Message',
+        `Your final processing fee is ${char}. Would you like to proceed?`,
+        [
+          {
+            text: 'No', onPress: () => {
+              this.props.setCharge(this.props.state.charge)
+            }, style: 'cancel'
+          },
+          {
+            text: 'Proceed', onPress: () => {
+              this.proceedSubmit(char)
+            }, style: 'cancel'
+          }
+        ],
+        { cancelable: false }
+      )
+    }, error => {
+      console.log('response', error)
+      this.setState({ isLoading: false });
+    });
+  }
+
+  submit = () => {
+    this.props.setConnectModal(true);
+    const { user, ledger, defaultAddress, charge } = this.props.state;
+    const { request } = this.props;
+    const { currency, data } = this.state;
+    if (charge === null || charge === '' || charge < this.props.scope?.minimum_charge || charge < 0) {
+      Alert.alert(
+        'Error',
+        `Invalid Processing Fee. The minimum charge is ${this.props.scope?.minimum_charge}.`,
+        [
+          {
+            text: 'Ok', onPress: () => {
+              return
+            }, style: 'cancel'
+          }
+        ],
+        { cancelable: false }
+      )
+      return
+    }
+    if (defaultAddress === null) {
+      Alert.alert(
+        'Error',
+        `Address is required.`,
+        [
+          {
+            text: 'Ok', onPress: () => {
+              return
+            }, style: 'cancel'
+          }
+        ],
+        { cancelable: false }
+      )
+      return
+    }
+    this.getDistance(defaultAddress.latitude, defaultAddress.longitude, this.props.data?.location?.latitude, this.props.data?.location?.longitude);
+  }
+
+  proceedSubmit = (charge) => {
     const { user, ledger, defaultAddress } = this.props.state;
     const { request } = this.props;
-    const { charge, currency, data } = this.state;
-
+    const { currency, data } = this.state;
     console.log('[send proposal] request', request, data, user == null || request == null || (request && request.type == 3 && ledger == null), charge <= 0 || currency == null)
-    if(user == null || request == null || (request && request.type == 3 && ledger == null)){
+    if (user == null || request == null || (request && request.type == 3 && ledger == null)) {
       return
     }
-    if(charge <= 0 || currency == null){
-      this.check()
-      return
-    }
-    
-    if(request.money_type != 'cash' && ledger.available_balance < request.amount){
+
+    if (request.money_type != 'cash' && ledger.available_balance < request.amount) {
       Alert.alert(
         'Try Again!',
         'You have insufficient balance.',
         [
-          {text: 'OK', onPress: () => {
-            
-          }},
+          {
+            text: 'OK', onPress: () => {
+
+            }
+          },
         ],
         { cancelable: false }
       )
       return
     }
 
-    if(data === null){
+    if (data === null) {
       console.log('[', data, '[ress]', request)
-      if(request.account == null){
+      if (request.account == null) {
         return
       }
       let parameter = {
@@ -139,7 +220,7 @@ class ProposalModal extends Component {
         account_id: user.id,
         to: request.account.code
       }
-      if(request && request.shipping.toLowerCase() == 'pickup' && defaultAddress){
+      if (request && request.shipping.toLowerCase() == 'pickup' && defaultAddress) {
         parameter['location_id'] = defaultAddress.id
       }
       this.setState({
@@ -148,22 +229,26 @@ class ProposalModal extends Component {
       console.log('[Send proposal] sdf', parameter)
       Api.request(Routes.requestPeerCreate, parameter, response => {
         console.log('[Send proposal] Success', response.error, response)
-        if(response.error == null){
+        if (response.error == null) {
           this.setState({
             isLoading: false
           })
-          this.props.closeModal()
-          this.props.navigation.navigate('requestItemStack', {data: {...this.props.data, peer_flag: true}, from: 'request'})
-        }else{
+          this.props.closeModal();
+          this.props.setCharge(0);
+          this.props.navigation.navigate('requestItemStack', { data: { ...this.props.data, peer_flag: true }, from: 'request' })
+        } else {
           Alert.alert(
             'Proposal already existed!',
             'Do you want to view the existing proposal?',
             [
-              {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-              {text: 'OK', onPress: () => {
-                this.props.closeModal()
-                this.props.navigation.navigate('requestItemStack', {data: {...this.props.data, peer_flag: true}})
-              }},
+              { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+              {
+                text: 'OK', onPress: () => {
+                  this.props.setCharge(0);
+                  this.props.closeModal()
+                  this.props.navigation.navigate('requestItemStack', { data: { ...this.props.data, peer_flag: true } })
+                }
+              },
             ],
             { cancelable: false }
           )
@@ -174,8 +259,8 @@ class ProposalModal extends Component {
           isLoading: false
         })
       });
-     
-    }else{
+
+    } else {
       console.log('[Update proposal]')
       let parameter = {
         id: data.id,
@@ -183,7 +268,7 @@ class ProposalModal extends Component {
         charge: charge,
         request_id: data.request_id
       }
-      if(request && request.shipping.toLowerCase() == 'pickup' && defaultAddress){
+      if (request && request.shipping.toLowerCase() == 'pickup' && defaultAddress) {
         parameter['location_id'] = defaultAddress.id
       }
       this.setState({
@@ -191,98 +276,99 @@ class ProposalModal extends Component {
       })
       console.log('[Update proposal]', parameter)
       Api.request(Routes.requestPeerUpdate, parameter, response => {
-        console.log('[response]', response)
         this.setState({
           isLoading: false
         })
         setTimeout(() => {
+          this.props.setCharge(0);
           this.props.closeModal()
           this.props.onRetrieve()
         }, 1000)
-        
+
       },
-      error => {
-        this.setState({
-          isLoading: false
-        })
-      }
+        error => {
+          this.setState({
+            isLoading: false
+          })
+        }
       );
     }
   }
 
   renderContent() {
-    const { ledger, theme, defaultAddress } = this.props.state;
+    const { ledger, theme, defaultAddress, charge } = this.props.state;
+    console.log(charge, '------------------------------------------');
     const { request } = this.props;
-    const { data, charge } = this.state;
+    const { data } = this.state;
     return (
       <View style={[Style.CreateRequestContainer, {
-          width: '100%',
-          height: '100%',
-          flex: 1
+        width: '100%',
+        height: '100%',
+        flex: 1
       }]}>
         <ScrollView style={{
-            width: '100%',
-            height: '100%',
-          }}
+          width: '100%',
+          height: '100%',
+        }}
           showsVerticalScrollIndicator={false}
-          >
+        >
           <View style={{
             height: height,
           }}>
-              {/*
+            {/*
                 (ledger != null && ledger.length > 0) && ledger.map(item => (
                   <BalanceCard
                     data={item}
                   />
                 ))
               */}
-              {
-                request && (
-                  <View style={{
-                    marginTop: 10,
-                    paddingLeft: 20,
-                    paddingRight: 20
-                  }}
-                  >
-                    <RequestCard 
-                      onConnectRequest={(data) => data}
-                      data={request}
-                      navigation={this.props.navigation}
-                      // from={'request'}
-                      from={'proposal'}
-                      />
-                  </View>
-                )
-              }
-            
-              {
-                request && (
-                  <View style={{
-                    height: 75,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    backgroundColor: theme ? theme.primary : Color.primary,
-                    flexDirection: 'row'
-                  }}>
-                    <FontAwesomeIcon icon={request.shipping.toLowerCase() == 'pickup' ? faPersonBooth : faShippingFast} color={Color.white} size={36}/>
-                    <Text style={{
-                      fontWeight: 'bold',
-                      fontSize: BasicStyles.standardFontSize,
-                      color: Color.white,
-                      paddingLeft: 10
-                    }}>FOR {request.shipping.toUpperCase()}</Text>
-                  </View>
-                )
-              }
+            {
+              request && (
+                <View style={{
+                  marginTop: 10,
+                  paddingLeft: 20,
+                  paddingRight: 20
+                }}
+                >
+                  <RequestCard
+                    onConnectRequest={(data) => data}
+                    data={request}
+                    navigation={this.props.navigation}
+                    // from={'request'}
+                    from={'proposal'}
+                  />
+                </View>
+              )
+            }
 
-              <View style={{
-                height: height,
-                width: '90%',
-                marginLeft: '5%',
-                marginRight: '5%',
-                paddingTop: 20
-              }}>
-                    {/*
+            {
+              request && (
+                <View style={{
+                  height: 75,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  backgroundColor: theme ? theme.primary : Color.primary,
+                  flexDirection: 'row'
+                }}>
+                  <FontAwesomeIcon icon={request.shipping.toLowerCase() == 'pickup' ? faPersonBooth : faShippingFast} color={Color.white} size={36} />
+                  <Text style={{
+                    fontWeight: 'bold',
+                    fontSize: BasicStyles.standardFontSize,
+                    color: Color.white,
+                    paddingLeft: 10
+                  }}>FOR {request.shipping.toUpperCase()}</Text>
+                </View>
+              )
+            }
+
+            <View style={{
+              height: height,
+              width: '90%',
+              marginLeft: '5%',
+              marginRight: '5%',
+              paddingTop: 20
+            }}>
+              {/*
                     <TextInputWithLabel 
                       variable={this.state.charge}
                       onChange={(value) => this.setState({charge: value})}
@@ -309,36 +395,36 @@ class ProposalModal extends Component {
                     />
                   */}
 
-                    <TextInputWithLabel 
-                      variable={charge}
-                      onChange={(value) => this.setState({charge: value})}
-                      label={'Your processing fee'}
-                      placeholder={charge ? charge.toString() : 'Amount'}
-                      onError={false}
-                      required={true}
-                      maxLength={4}
-                      keyboardType={'numeric'}
-                    />
+              <TextInputWithLabel
+                variable={charge}
+                onChange={(value) => this.props.setCharge(value)}
+                label={'Your processing fee'}
+                placeholder={charge ? charge.toString() : 'Amount'}
+                onError={false}
+                required={true}
+                maxLength={4}
+                keyboardType={'numeric'}
+              />
 
 
-                    {
-                      (request && request.shipping.toLowerCase() == 'pickup') && (
-                        <LocationTextInput 
-                          variable={defaultAddress !== null ? defaultAddress.route : null}
-                          label={'Your pick up location'}
-                          placeholder={'Select Location'}
-                          onError={false}
-                          required={true}
-                          route={'addLocationStack'}
-                          closeOnClick={() => this.props.closeModal()}
-                          navigation={this.props.navigation}
-                          from={'request'}
-                          // from={'proposal'}
-                        />
-                      )
-                    }
+              {
+                (request && request.shipping.toLowerCase() == 'pickup') && (
+                  <LocationTextInput
+                    variable={defaultAddress !== null ? defaultAddress.route : null}
+                    label={'Your pick up location'}
+                    placeholder={'Select Location'}
+                    onError={false}
+                    required={true}
+                    route={'addLocationStack'}
+                    closeOnClick={() => this.props.closeModal()}
+                    navigation={this.props.navigation}
+                    from={'request'}
+                  // from={'proposal'}
+                  />
+                )
+              }
 
-                    {/* <TextInputWithLabel 
+              {/* <TextInputWithLabel 
                     variable={this.state.deliveryFee}
                     onChange={(value) => this.setState({deliveryFee: value})}
                     label={'Delivery Fee'}
@@ -348,178 +434,178 @@ class ProposalModal extends Component {
                     required={true}
                     /> */}
 
-                  <View style={{
-                    width: '100%',
-                    flexDirection: 'row',
-                    paddingTop: 15,
-                    paddingBottom: 15,
-                  }}>
-                    <Text style={{
-                      width: '50%',
-                      textAlign: 'left',
-                      fontSize: BasicStyles.standardFontSize
-                    }}>
-                      Your share
-                    </Text>
-                    <Text style={{
-                        width: '50%',
-                        textAlign: 'right',
-                        fontSize: BasicStyles.standardFontSize,
-                        fontWeight: 'bold'
-                      }}>
-                      {
-                        // Currency.display(parseFloat((this.state.charge + this.state.deliveryFee) * Helper.partnerShare).toFixed(2), 'PHP')
-                        Currency.display(parseFloat(this.state.charge * Helper.partnerShare).toFixed(2), 'PHP')
-                      }
-                    </Text>
-                  </View>
-
-                  <View style={{
-                    width: '100%',
-                    flexDirection: 'row',
-                    paddingTop: 15,
-                    paddingBottom: 15,
-                  }}>
-                    <Text style={{
-                      width: '50%',
-                      textAlign: 'left',
-                      fontSize: BasicStyles.standardFontSize
-                    }}>
-                      Payhiram's share
-                    </Text>
-                    <Text style={{
-                        width: '50%',
-                        textAlign: 'right',
-                        fontSize: BasicStyles.standardFontSize,
-                        fontWeight: 'bold'
-                      }}>
-                      {
-                        // Currency.display(parseFloat((this.state.charge + this.state.deliveryFee) * Helper.payhiramShare).toFixed(2), 'PHP')
-                        Currency.display(parseFloat(this.state.charge * Helper.payhiramShare).toFixed(2), 'PHP')
-                      }
-                    </Text>
-                  </View>
-
-
-                  <View style={{
-                    width: '100%',
-                    flexDirection: 'row',
-                    paddingTop: 15,
-                    paddingBottom: 15,
-                    borderBottomWidth: 0.5,
-                    borderTopWidth: 0.5,
-                    borderColor: Color.lightGray,
-                    marginTop: 10
-                  }}>
-                    <Text style={{
-                      width: '50%',
-                      textAlign: 'left',
-                      fontSize: BasicStyles.standardFontSize
-                    }}>
-                      Total
-                    </Text>
-                    <Text style={{
-                        width: '50%',
-                        textAlign: 'right',
-                        fontSize: BasicStyles.standardFontSize,
-                        fontWeight: 'bold',
-                        color: theme ? theme.secondary : Color.secondary
-                      }}>
-                      {
-                        // Currency.display(this.state.charge + this.state.deliveryFee, 'PHP')
-                        Currency.display(this.state.charge, 'PHP')
-                      }
-                    </Text>
-                  </View>
-
+              <View style={{
+                width: '100%',
+                flexDirection: 'row',
+                paddingTop: 15,
+                paddingBottom: 15,
+              }}>
+                <Text style={{
+                  width: '50%',
+                  textAlign: 'left',
+                  fontSize: BasicStyles.standardFontSize
+                }}>
+                  Your share
+                </Text>
+                <Text style={{
+                  width: '50%',
+                  textAlign: 'right',
+                  fontSize: BasicStyles.standardFontSize,
+                  fontWeight: 'bold'
+                }}>
+                  {
+                    // Currency.display(parseFloat((this.state.charge + this.state.deliveryFee) * Helper.partnerShare).toFixed(2), 'PHP')
+                    Currency.display(parseFloat(this.props.state.charge * Helper.partnerShare).toFixed(2), 'PHP')
+                  }
+                </Text>
               </View>
-            </View>
-          </ScrollView>
-          <View
-            style={Style.BottomContainer}>
-            <View style={{
-              flexDirection: 'row',
-              justifyContent: 'center',
-              marginBottom: 5,
-              paddingTop: 5
-            }}>
 
-              <Button 
-                title={'Cancel'}
-                onClick={() => this.props.closeModal()}
-                style={{
-                  width: '45%',
-                  marginRight: '5%',
-                  backgroundColor: Color.danger,
-                }}
-              />
+              <View style={{
+                width: '100%',
+                flexDirection: 'row',
+                paddingTop: 15,
+                paddingBottom: 15,
+              }}>
+                <Text style={{
+                  width: '50%',
+                  textAlign: 'left',
+                  fontSize: BasicStyles.standardFontSize
+                }}>
+                  Payhiram's share
+                </Text>
+                <Text style={{
+                  width: '50%',
+                  textAlign: 'right',
+                  fontSize: BasicStyles.standardFontSize,
+                  fontWeight: 'bold'
+                }}>
+                  {
+                    // Currency.display(parseFloat((this.state.charge + this.state.deliveryFee) * Helper.payhiramShare).toFixed(2), 'PHP')
+                    Currency.display(parseFloat(this.props.state.charge * Helper.payhiramShare).toFixed(2), 'PHP')
+                  }
+                </Text>
+              </View>
 
 
-              <Button 
-                title={data ? 'Update' : 'Submit'}
-                onClick={() => this.submit()}
-                style={{
-                  width: '45%',
-                  marginLeft: '5%',
-                  backgroundColor: theme ? theme.secondary : Color.secondary
-                }}
-              />
+              <View style={{
+                width: '100%',
+                flexDirection: 'row',
+                paddingTop: 15,
+                paddingBottom: 15,
+                borderBottomWidth: 0.5,
+                borderTopWidth: 0.5,
+                borderColor: Color.lightGray,
+                marginTop: 10
+              }}>
+                <Text style={{
+                  width: '50%',
+                  textAlign: 'left',
+                  fontSize: BasicStyles.standardFontSize
+                }}>
+                  Total
+                </Text>
+                <Text style={{
+                  width: '50%',
+                  textAlign: 'right',
+                  fontSize: BasicStyles.standardFontSize,
+                  fontWeight: 'bold',
+                  color: theme ? theme.secondary : Color.secondary
+                }}>
+                  {
+                    // Currency.display(this.state.charge + this.state.deliveryFee, 'PHP')
+                    Currency.display(this.props.state.charge, 'PHP')
+                  }
+                </Text>
+              </View>
 
             </View>
           </View>
+        </ScrollView>
+        <View
+          style={Style.BottomContainer}>
+          <View style={{
+            flexDirection: 'row',
+            justifyContent: 'center',
+            marginBottom: 5,
+            paddingTop: 5
+          }}>
+
+            <Button
+              title={'Cancel'}
+              onClick={() => this.props.closeModal()}
+              style={{
+                width: '45%',
+                marginRight: '5%',
+                backgroundColor: Color.danger,
+              }}
+            />
+
+
+            <Button
+              title={data ? 'Update' : 'Submit'}
+              onClick={() => this.submit()}
+              style={{
+                width: '45%',
+                marginLeft: '5%',
+                backgroundColor: theme ? theme.secondary : Color.secondary
+              }}
+            />
+
+          </View>
+        </View>
       </View >
     );
   }
 
-  renderError(){
-    return(
-       <View style={[Style.CreateRequestContainer, {
+  renderError() {
+    return (
+      <View style={[Style.CreateRequestContainer, {
+        width: '100%',
+        height: '100%',
+        flex: 1
+      }]}>
+        <ScrollView style={{
           width: '100%',
           height: '100%',
-          flex: 1
-      }]}>
-          <ScrollView style={{
-              width: '100%',
-              height: '100%',
-            }}
-            showsVerticalScrollIndicator={false}
-            >
-            <View style={{
-              width: '100%',
-              alignItems: 'center',
-              flex: 1,
-              justifyContent: 'center'
-            }}>
-              <Text>Invalid Accessed, please refresh!</Text>
-              <TouchableHighlight
-                onPress={() => this.retrieveSummaryLedger()}>
-                <FontAwesomeIcon icon={faRedo} size={32}/>
-              </TouchableHighlight>
-            </View>
-          </ScrollView>
-          <View
-            style={Style.BottomContainer}>
-              
-            <Button 
-              title={'Close'}
-              onClick={() => this.props.closeModal()}
-              style={{
-                width: '90%',
-                marginRight: '5%',
-                marginLeft: '5%',
-                backgroundColor: Color.danger,
-              }}
-            />
+        }}
+          showsVerticalScrollIndicator={false}
+        >
+          <View style={{
+            width: '100%',
+            alignItems: 'center',
+            flex: 1,
+            justifyContent: 'center'
+          }}>
+            <Text>Invalid Accessed, please refresh!</Text>
+            <TouchableHighlight
+              onPress={() => this.retrieveSummaryLedger()}>
+              <FontAwesomeIcon icon={faRedo} size={32} />
+            </TouchableHighlight>
           </View>
+        </ScrollView>
+        <View
+          style={Style.BottomContainer}>
+
+          <Button
+            title={'Close'}
+            onClick={() => this.props.closeModal()}
+            style={{
+              width: '90%',
+              marginRight: '5%',
+              marginLeft: '5%',
+              backgroundColor: Color.danger,
+            }}
+          />
+        </View>
       </View>
     )
   }
 
-  render(){
+  render() {
     const { closeModal, visible, request } = this.props;
     const { ledger } = this.props.state;
     const { isLoading, summaryLoading } = this.state;
-    return(
+    return (
       <Modal onBackdropPress={closeModal}
         transparent={true}
         backdropTransitionInTiming={100}
@@ -527,15 +613,15 @@ class ProposalModal extends Component {
         isVisible={visible}
         style={Style.modalContainer}>
         <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'flex-end', flexDirection: 'column' }}
-            style={{ padding: 0 }}>
-            <View style={[Style.container]}>
-                {this.renderContent()}
-                {(isLoading == false && (!ledger || (ledger && ledger.length == 0)) && (request && request.type == 3)) && (
-                  this.renderError()
-                )}
-            </View>
+          style={{ padding: 0 }}>
+          <View style={[Style.container]}>
+            {this.renderContent()}
+            {(isLoading == false && (!ledger || (ledger && ledger.length == 0)) && (request && request.type == 3)) && (
+              this.renderError()
+            )}
+          </View>
 
-        {isLoading ? <Spinner mode="overlay" /> : null}
+          {isLoading ? <Spinner mode="overlay" /> : null}
         </ScrollView>
       </Modal>
     );
@@ -548,6 +634,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     setLedger: (ledger) => dispatch(actions.setLedger(ledger)),
     setDefaultAddress: (address) => dispatch(actions.setDefaultAddress(address)),
+    setConnectModal: (connectModal) => dispatch(actions.setConnectModal(connectModal)),
+    setCharge: (charge) => dispatch(actions.setCharge(charge)),
   };
 };
 
