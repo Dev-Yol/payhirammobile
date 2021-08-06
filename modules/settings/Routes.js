@@ -8,7 +8,9 @@ import {
   faShieldAlt,
   faBookOpen,
   faLock,
-  faMobileAlt
+  faMobileAlt,
+  faMapMarkerAlt,
+  faShippingFast
 } from '@fortawesome/free-solid-svg-icons';
 const navigation = [
   {
@@ -40,6 +42,16 @@ const navigation = [
     title: 'Display',
     route: 'displayStackStack',
     icon: faPalette
+  },
+  {
+    title: 'Table of Charges',
+    route: 'chargesStack',
+    icon: faShippingFast
+  },
+  {
+    title: 'Available Locations',
+    route: 'availableLocationStack',
+    icon: faMapMarkerAlt
   },
   {
     title: 'Terms & Conditions',
