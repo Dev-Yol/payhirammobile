@@ -18,6 +18,7 @@ import Footer from 'modules/generic/Footer'
 import { Pager, PagerProvider } from '@crowdlinker/react-native-pager';
 import Summary from './Summary';
 import History from 'modules/transactions';
+import ScreenshotHandler from 'services/ScreenshotHandler'
 const width = Math.round(Dimensions.get('window').width);
 const height = Math.round(Dimensions.get('window').height);
 
@@ -35,6 +36,7 @@ class Dashboard extends Component {
   }
 
   componentDidMount(){
+    ScreenshotHandler.disableScreenshot();
     this.backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
       this.handleBackPress,

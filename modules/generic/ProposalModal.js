@@ -34,10 +34,10 @@ class ProposalModal extends Component {
   componentDidMount() {
     if (this.props.from == 'update' && this.props.peerRequest != null) {
       const { setDefaultAddress } = this.props;
+      this.props.setCharge(this.props.peerRequest.charge)
       this.setState({
         data: this.props.peerRequest
       })
-      this.props.setCharge(this.props.peerRequest.charge)
       if (this.props.peerRequest.location) {
         setDefaultAddress(this.props.peerRequest.location)
       }
@@ -146,13 +146,13 @@ class ProposalModal extends Component {
 
   submit = () => {
     this.props.setConnectModal(true);
-    const { user, ledger, defaultAddress, charge } = this.props.state;
+    const { defaultAddress, charge, originalCharge } = this.props.state;
     const { request } = this.props;
-    const { currency, data } = this.state;
-    if (charge === null || charge === '' || charge < this.props.scope?.minimum_charge || charge < 0) {
+    const { data } = this.state;
+    if (charge === null || charge === '' || charge < this.props.scope?.minimum_charge || charge <= 0 || charge < originalCharge?.charge) {
       Alert.alert(
         'Error',
-        `Invalid Processing Fee. The minimum charge is ${this.props.scope?.minimum_charge}.`,
+        `Invalid Processing Fee. The minimum charge is ${this.props.scope?.minimum_charge || originalCharge?.charge}.`,
         [
           {
             text: 'Ok', onPress: () => {
@@ -164,7 +164,7 @@ class ProposalModal extends Component {
       )
       return
     }
-    if (defaultAddress === null) {
+    if (request?.shipping === 'pickup' && defaultAddress === null) {
       Alert.alert(
         'Error',
         `Address is required.`,
@@ -179,19 +179,38 @@ class ProposalModal extends Component {
       )
       return
     }
-    this.getDistance(defaultAddress.latitude, defaultAddress.longitude, this.props.data?.location?.latitude, this.props.data?.location?.longitude);
+    if(request?.shipping === 'pickup') {
+      this.getDistance(defaultAddress.latitude, defaultAddress.longitude, this.props.data?.location?.latitude, this.props.data?.location?.longitude);
+    } else {
+      Alert.alert(
+        'Message',
+        `Your final processing fee is ${charge}. Would you like to proceed?`,
+        [
+          {
+            text: 'No', onPress: () => {
+              this.props.setCharge(this.props.state.charge)
+            }, style: 'cancel'
+          },
+          {
+            text: 'Proceed', onPress: () => {
+              this.proceedSubmit(charge)
+            }, style: 'cancel'
+          }
+        ],
+        { cancelable: false }
+      )
+    }
   }
 
   proceedSubmit = (charge) => {
-    const { user, ledger, defaultAddress } = this.props.state;
-    const { request } = this.props;
+    const { user, ledger, defaultAddress, originalCharge, currentRequest } = this.props.state;
+    const { request, peerRequest } = this.props;
     const { currency, data } = this.state;
     console.log('[send proposal] request', request, data, user == null || request == null || (request && request.type == 3 && ledger == null), charge <= 0 || currency == null)
-    if (user == null || request == null || (request && request.type == 3 && ledger == null)) {
-      return
-    }
-
-    if (request.money_type != 'cash' && ledger.available_balance < request.amount) {
+    // if (user == null || request == null || (request && request.type == 3 && ledger == null)) {
+    //   return
+    // }
+    if (request?.money_type != 'cash' && ledger?.available_balance < request?.amount) {
       Alert.alert(
         'Try Again!',
         'You have insufficient balance.',
@@ -207,20 +226,19 @@ class ProposalModal extends Component {
       return
     }
 
-    if (data === null) {
-      console.log('[', data, '[ress]', request)
-      if (request.account == null) {
+    if (originalCharge === null) {
+      if (request?.account == null) {
         return
       }
       let parameter = {
-        request_id: request.id,
+        request_id: request?.id,
         currency: currency,
         charge: charge,
         status: 'requesting',
-        account_id: user.id,
-        to: request.account.code
+        account_id: user?.id,
+        to: request?.account?.code
       }
-      if (request && request.shipping.toLowerCase() == 'pickup' && defaultAddress) {
+      if (request && request?.shipping?.toLowerCase() == 'pickup' && defaultAddress) {
         parameter['location_id'] = defaultAddress.id
       }
       this.setState({
@@ -229,10 +247,11 @@ class ProposalModal extends Component {
       console.log('[Send proposal] sdf', parameter)
       Api.request(Routes.requestPeerCreate, parameter, response => {
         console.log('[Send proposal] Success', response.error, response)
-        if (response.error == null) {
+        if (response.error == null || response?.error?.length === 0) {
           this.setState({
             isLoading: false
           })
+          this.props.setOriginalCharge(null)
           this.props.closeModal();
           this.props.setCharge(0);
           this.props.navigation.navigate('requestItemStack', { data: { ...this.props.data, peer_flag: true }, from: 'request' })
@@ -263,23 +282,26 @@ class ProposalModal extends Component {
     } else {
       console.log('[Update proposal]')
       let parameter = {
-        id: data.id,
-        account_id: data.account_id,
+        id: originalCharge?.id,
+        account_id: originalCharge?.account_id,
         charge: charge,
-        request_id: data.request_id
+        request_id: originalCharge?.request_id
       }
-      if (request && request.shipping.toLowerCase() == 'pickup' && defaultAddress) {
+      if (originalCharge?.shipping?.toLowerCase() == 'pickup' && defaultAddress) {
         parameter['location_id'] = defaultAddress.id
+      } else {
+        parameter['location_id'] = currentRequest?.location?.id
       }
       this.setState({
         isLoading: true
       })
-      console.log('[Update proposal]', parameter)
       Api.request(Routes.requestPeerUpdate, parameter, response => {
+        console.log(response, '----------');
         this.setState({
           isLoading: false
         })
         setTimeout(() => {
+          this.props.setOriginalCharge(null)
           this.props.setCharge(0);
           this.props.closeModal()
           this.props.onRetrieve()
@@ -287,6 +309,7 @@ class ProposalModal extends Component {
 
       },
         error => {
+          console.log(error, '----------');
           this.setState({
             isLoading: false
           })
@@ -297,7 +320,6 @@ class ProposalModal extends Component {
 
   renderContent() {
     const { ledger, theme, defaultAddress, charge } = this.props.state;
-    console.log(charge, '------------------------------------------');
     const { request } = this.props;
     const { data } = this.state;
     return (
@@ -636,6 +658,7 @@ const mapDispatchToProps = (dispatch) => {
     setDefaultAddress: (address) => dispatch(actions.setDefaultAddress(address)),
     setConnectModal: (connectModal) => dispatch(actions.setConnectModal(connectModal)),
     setCharge: (charge) => dispatch(actions.setCharge(charge)),
+    setOriginalCharge: (originalCharge) => dispatch(actions.setOriginalCharge(originalCharge))
   };
 };
 
