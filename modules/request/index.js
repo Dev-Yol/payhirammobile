@@ -71,6 +71,7 @@ class Requests extends Component {
   }
 
   onFocusFunction = () => {
+    this.props.setOriginalCharge(null);
     const { deepLinkRoute } = this.props.state;
     console.log(':::REDIRECTING::: ', deepLinkRoute)
     if (deepLinkRoute !== null) {
@@ -793,7 +794,8 @@ const mapDispatchToProps = (dispatch) => {
     setLedger: (ledger) => dispatch(actions.setLedger(ledger)),
     setRequest: (request) => dispatch(actions.setRequest(request)),
     setParameter: (parameter) => dispatch(actions.setParameter(parameter)),
-    setConnectModal: (connectModal) => dispatch(actions.setConnectModal(connectModal))
+    setConnectModal: (connectModal) => dispatch(actions.setConnectModal(connectModal)),
+    setOriginalCharge: (originalCharge) => dispatch(actions.setOriginalCharge(originalCharge))
   };
 };
 

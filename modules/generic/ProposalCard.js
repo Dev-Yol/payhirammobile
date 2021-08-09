@@ -43,7 +43,8 @@ class ProposalCard extends Component {
   }
 
   change(item){
-    this.props.onChangeTerms(item)
+    this.props.setOriginalCharge(item);
+    this.props.onChangeTerms(item);
   }
 
 
@@ -345,7 +346,6 @@ class ProposalCard extends Component {
 
   render() {
     const { data, request } = this.props;
-    console.log('[proposal card]', data)
     const { user } = this.props.state;
     return (
       <View>
@@ -377,6 +377,7 @@ const mapStateToProps = (state) => ({state: state});
 const mapDispatchToProps = (dispatch) => {
   const {actions} = require('@redux');
   return {
+    setOriginalCharge: (originalCharge) => dispatch(actions.setOriginalCharge(originalCharge))
   };
 };
 
