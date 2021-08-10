@@ -33,12 +33,15 @@ class RequestItem extends Component {
       peers: null,
       peer: null,
       modalStatus: 'create',
-      peerRequest: null
+      peerRequest: null,
+      data: null
     }
   }
   
   componentDidMount() {
     this.retrieve()
+    const { data } = this.props.navigation.state.params;
+    this.setState({data: data});
   }
 
   navigateToScreen = (route) => {
@@ -95,7 +98,7 @@ class RequestItem extends Component {
 
   createThread = (account) => {
     const { user } = this.props.state;
-    const { data } = this.props.navigation.state.params;
+    let data = this.state.data;
     if(user == null || account == null || data == null){
       return
     }
@@ -110,6 +113,8 @@ class RequestItem extends Component {
     Api.request(Routes.customMessengerGroupCreate, parameter, response => {
       this.setState({ isLoading: false })
       if (response.error == null) {
+        data['status'] = 1;
+        this.setState({data: data});
         this.props.navigation.navigate('messagesStack', {
           data: {
             id: response.data,
@@ -124,6 +129,8 @@ class RequestItem extends Component {
           }
         })
       }else{
+        data['status'] = 1;
+        this.setState({data: data});
         this.props.navigation.navigate('messagesStack', {
           data: {
             id: response.data,
@@ -244,8 +251,7 @@ class RequestItem extends Component {
   render() {
     const {user, theme} = this.props.state;
     const { peers, isLoading } = this.state;
-    const { connectModal, modalStatus } = this.state;
-    const { data } = this.props.navigation.state.params;
+    const { connectModal, modalStatus, data } = this.state;
     return (
       <View>
         <ScrollView showsVerticalScrollIndicator={false}>
