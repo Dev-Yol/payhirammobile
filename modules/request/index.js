@@ -25,6 +25,7 @@ import _ from 'lodash';
 import Footer from 'modules/generic/Footer'
 import MessageAlert from 'modules/generic/MessageAlert'
 import BePartner from 'modules/generic/BeAPartner'
+import InvalidEmail from 'modules/generic/InvalidEmail'
 import DeviceInfo from 'react-native-device-info';
 const height = Math.round(Dimensions.get('window').height);
 class Requests extends Component {
@@ -130,7 +131,6 @@ class Requests extends Component {
       if (response.data.length > 0) {
         this.setState({ devices: response.data })
         response.data.map(el => {
-          console.log('[here]', response.data);
           if (el.unique_code != uniqueId) {
             this.setState({ qualifed: 1 })
             this.validateDevice()
@@ -613,6 +613,12 @@ class Requests extends Component {
             (user && Helper.checkStatus(user) == Helper.accountVerified && user?.plan == null) &&
             (
               <BePartner {...this.props} paddingTop={0} />
+            )
+          }
+          {
+            (user && Helper.checkStatus(user) === -1) &&
+            (
+              <InvalidEmail {...this.props} paddingTop={0} />
             )
           }
 

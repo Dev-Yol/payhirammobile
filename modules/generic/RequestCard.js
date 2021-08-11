@@ -160,7 +160,6 @@ class RequestCard extends Component {
   };
 
   _subHeader = (item) => {
-    // console.log('[>>>>>>>>>>>ITEM]', item)
     const {user, theme} = this.props.state;
     return (
       <View>
