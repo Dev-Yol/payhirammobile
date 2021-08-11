@@ -129,7 +129,6 @@ class Requests extends Component {
       if (response.data.length > 0) {
         this.setState({ devices: response.data })
         response.data.map(el => {
-          console.log('[here]', response.data);
           if (el.unique_code != uniqueId) {
             this.setState({ qualifed: 1 })
             this.validateDevice()
