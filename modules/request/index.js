@@ -26,6 +26,7 @@ import Footer from 'modules/generic/Footer'
 import MessageAlert from 'modules/generic/MessageAlert'
 import BePartner from 'modules/generic/BeAPartner'
 import DeviceInfo from 'react-native-device-info';
+import ScreenshotHandler from 'services/ScreenshotHandler';
 const height = Math.round(Dimensions.get('window').height);
 class Requests extends Component {
   constructor(props) {
@@ -90,6 +91,7 @@ class Requests extends Component {
     // }
     const { user, remainingBalancePlan, unReadRequests } = this.props.state;
     console.log('[remaining balance]', remainingBalancePlan, unReadRequests);
+    ScreenshotHandler.disableScreenshot();
     this.backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
       this.handleBackPress,
