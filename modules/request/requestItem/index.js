@@ -18,7 +18,7 @@ import ProposalCard from 'modules/generic/ProposalCard';
 import ProposalModal from 'modules/generic/ProposalModal';
 import {NavigationActions, StackActions} from 'react-navigation';
 import Api from 'services/api/index.js';
-
+import ScreenshotHandler from 'services/ScreenshotHandler';
 const width = Math.round(Dimensions.get('window').width);
 const height = Math.round(Dimensions.get('window').height);
 import {connect} from 'react-redux';
@@ -39,6 +39,7 @@ class RequestItem extends Component {
   }
   
   componentDidMount() {
+    ScreenshotHandler.disableScreenshot();
     this.retrieve()
     const { data } = this.props.navigation.state.params;
     this.setState({data: data});
