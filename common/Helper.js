@@ -468,8 +468,9 @@ export default {
       return false
     }
     switch(user.status.toLowerCase()){
+      case 'invalid_email': return -1; break;
       case 'not_verified': return 0;break
-      case 'verified': return 1;break
+      case 'email_verified': return 1;break
       case 'account_verified': return 2; break;
       case 'basic_verified': return 3; break;
       case 'standard_verified': return 4; break;

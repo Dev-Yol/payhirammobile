@@ -61,7 +61,9 @@ const types = {
   SET_MY_DEVICE: 'SET_MY_DEVICE',
   SET_REMAINING_BALANCE_PLAN: 'SET_REMAINING_BALANCE_PLAN',
   SET_CONNECT_MODAL: 'SET_CONNECT_MODAL',
-  SET_CHARGE: 'SET_CHARGE'
+  SET_CHARGE: 'SET_CHARGE',
+  SET_ORIGINAL_CHARGE: 'SET_ORIGINAL_CHARGE',
+  SET_CURRENT_REQUEST: 'SET_CURRENT_REQUEST'
 };
 
 export const actions = {
@@ -235,6 +237,12 @@ export const actions = {
   },
   setCharge(charge) {
     return { type: types.SET_CHARGE, charge}
+  },
+  setOriginalCharge(originalCharge) {
+    return { type: types.SET_ORIGINAL_CHARGE, originalCharge}
+  },
+  setCurrentRequest(currentRequest) {
+    return { type: types.SET_CURRENT_REQUEST, currentRequest}
   }
 };
 
@@ -303,7 +311,9 @@ const initialState = {
   myDevice: null,
   remainingBalancePlan: 0,
   connectModal: false,
-  charge: 0
+  charge: 0,
+  originalCharge: null,
+  currentRequest: null
 };
 
 storeData = async (key, value) => {
@@ -347,6 +357,8 @@ const reducer = (state = initialState, action) => {
   const { view, flag, device, remainingBalancePlan } = action
   const { connectModal } = action;
   const { charge } = action;
+  const { originalCharge } = action;
+  const { currentRequest } = action;
   switch (type) {
     case types.LOGOUT:
       storeData('token', '');
@@ -791,6 +803,16 @@ const reducer = (state = initialState, action) => {
       return{
         ...state,
         charge
+      }
+    case types.SET_ORIGINAL_CHARGE:
+      return{
+        ...state,
+        originalCharge
+      }
+    case types.SET_CURRENT_REQUEST:
+      return{
+        ...state,
+        currentRequest
       }
     default:
       return { ...state, nav: state.nav };

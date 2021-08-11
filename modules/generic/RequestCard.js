@@ -273,6 +273,7 @@ class RequestCard extends Component {
   };
 
   _footer = (item, peers) => {
+    // console.log('[iteeeeem, Request Card>>>]', item)
     const {user, theme} = this.props.state;
     return (
       <View>
@@ -362,6 +363,7 @@ class RequestCard extends Component {
 
 
   _myFooter = (item) => {
+    // console.log('[status]', item)
     const {user, theme} = this.props.state;
     return (
       <View>
@@ -418,6 +420,7 @@ class RequestCard extends Component {
   };
 
   _footerRequestItem = (item, peers) => {
+    // console.log('[iteeeem Request Card]', item, peers)
     const {user, theme} = this.props.state;
     return (
       <View>
@@ -503,15 +506,17 @@ class RequestCard extends Component {
     const { data, from, peers } = this.props;
     const { user } = this.props.state;
     const { option } = this.state;
+    // console.log('[peersssssss]', peers);
     return (
       <TouchableOpacity
       onPress={() => {
-        from == 'request' && (
+        if(from == 'request') {
+          this.props.setCurrentRequest(data);
           this.props.navigation.navigate('requestItemStack', {
             data: data,
             from: 'request'
           })
-      )}
+      }}
       }
       >
         {this._header(data, 'amount')}
@@ -561,6 +566,7 @@ const mapStateToProps = (state) => ({state: state});
 const mapDispatchToProps = (dispatch) => {
   const {actions} = require('@redux');
   return {
+    setCurrentRequest: (currentRequest) => dispatch(actions.setCurrentRequest(currentRequest))
   };
 };
 
