@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faQrcode, faBars } from '@fortawesome/free-solid-svg-icons';
 import Dashboard from 'modules/dashboard';
 import { NavigationActions } from 'react-navigation';
-import { BasicStyles } from 'common';
+import { BasicStyles, Helper } from 'common';
 
 class HeaderOptions extends Component {
   constructor(props) {
@@ -51,7 +51,7 @@ const DashboardStack = createStackNavigator({
       headerTintColor: '#4c4c4c',
       headerRight: (
         // <View style={{marginRight: 40, paddingRight: 8}}>
-        <FontAwesomeIcon icon={faQrcode} size={20} style={{ color: 'black', marginRight: 40 }}/>
+        <FontAwesomeIcon icon={faQrcode} size={20} style={{ color: 'black', marginRight: 40 }} />
         // </View>
       ),
     }),

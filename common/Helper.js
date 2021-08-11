@@ -494,6 +494,7 @@ export default {
       default: return 'Granted';break
     }
   },
+  invalidEmail: -1,
   notVerified: 0,
   emailVerified: 1,
   accountVerified: 2,
