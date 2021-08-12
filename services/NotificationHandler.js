@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, Alert } from 'react-native';
 import { connect } from 'react-redux';
 import { navigationRef } from 'modules/generic/SecurityAlert';
+import NotificationSounds, { playSampleSound } from 'react-native-notification-sounds';
 
 class NotificationHandler extends Component{
   constructor(props){
@@ -85,6 +86,10 @@ class NotificationHandler extends Component{
                 unReadRequests.push(data)
                 const { setUnReadRequests } = this.props;
                 setUnReadRequests(unReadRequests);
+                NotificationSounds.getNotifications().then(soundsList => {
+                  console.warn('SOUNDS', JSON.stringify(soundsList));
+                  playSampleSound(soundsList[1]); 
+                });
               }else if(user.id === Number(data.account_id)){
                 console.log("[Same Requests]", data)
                 unReadRequests.push(data)
