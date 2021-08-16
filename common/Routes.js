@@ -109,5 +109,6 @@ requestPeerUpdate: apiUrl + 'request_peers/update_peer',
   deviceUpdate: apiUrl + 'device_info/update',
   getKilometer: apiUrl + 'locations/distance_request',
   getRemainingBalancePartner: apiUrl + 'request_peers/retrieve_approved',
-  getDeliveryFee: apiUrl + 'delivery_fees/retrieve'
+  getDeliveryFee: apiUrl + 'delivery_fees/retrieve',
+  getTransferCharge: apiUrl + 'fund_transfer_charges/retrieve_all'
 };
