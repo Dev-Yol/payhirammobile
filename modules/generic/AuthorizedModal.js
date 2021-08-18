@@ -4,6 +4,7 @@ import Button from 'components/Form/Button';
 import { Color, BasicStyles } from 'common';
 import Otp from './Otp.js'
 import { connect } from 'react-redux';
+import { navigationRef } from 'modules/generic/SecurityAlert';
 
 
 class AuthorizedModal extends Component {
@@ -17,7 +18,8 @@ class AuthorizedModal extends Component {
     const { logout } = this.props;
     logout();
     setTimeout(() => {
-      this.props.navigation.navigate('loginStack');
+      // this.props.navigation.navigate('loginStack');
+      navigationRef.current?._navigation.navigate('loginStack')
     }, 100)
   }
 
