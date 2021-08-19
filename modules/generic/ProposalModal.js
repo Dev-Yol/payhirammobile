@@ -127,7 +127,7 @@ class ProposalModal extends Component {
         [
           {
             text: 'No', onPress: () => {
-              this.props.setCharge((parseFloat(charge) + parseFloat(char)).toFixed(2));
+              return;
             }, style: 'cancel'
           },
           {
