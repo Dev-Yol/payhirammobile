@@ -762,8 +762,8 @@ const reducer = (state = initialState, action) => {
         paymentConfirmation: flag
       };
     case types.SET_ENABLE_FINGER_PRINT:
-      console.log('[enable finger print::]', enable == false ? "true" : "false");
-      storeData('fingerprint', enable == false ? "true" : "false");
+      console.log('[enable finger print::]', enable == false ? "false" : "true");
+      storeData('fingerprint', enable == false ? "false" : "true");
       return {
         ...state,
         enableFingerPrint: enable,
