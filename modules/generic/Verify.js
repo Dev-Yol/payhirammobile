@@ -31,7 +31,7 @@ class Verify extends Component {
     this.setState({isLoading: true})
     Api.request(Routes.accountSendEmailVerification, parameter, response => {
       this.setState({isLoading: false})
-      console.log('response', response)
+      console.log('[response]', response)
       if(response.data.length > 0){
         Alert.alert(
           'Message',
@@ -52,6 +52,7 @@ class Verify extends Component {
         )
       }
     }, error => {
+      console.log('[error]', error);
       this.setState({
         isLoading: false
       })

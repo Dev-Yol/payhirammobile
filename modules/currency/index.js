@@ -82,14 +82,25 @@ class Ledgers extends Component {
                 onPress={() => {
                   this.selectHandler(item)
                 }}>
-                <View style={styles.AddressContainer}>
+                <View style={[styles.AddressContainer], {flexDirection: 'row', flexWrap: "wrap"}}>
                   <Text
                     style={{
                         fontWeight: 'bold',
                         fontSize: BasicStyles.standardFontSize,
-                        color: ledger && ledger.currency == item.currency ? Color.white : Color.black
+                        color: ledger && ledger.currency == item.currency ? Color.white : Color.black,
+                        alignContent: 'flex-start',
+                        flex: 1
                       }}>
-                    {Currency.display(item.available_balance, item.currency)}
+                    {item.currency}
+                  </Text>
+                  <Text
+                    style={{
+                        fontWeight: 'bold',
+                        fontSize: BasicStyles.standardFontSize,
+                        color: ledger && ledger.currency == item.currency ? Color.white : Color.black,
+                        alignContent: 'flex-end'
+                      }}>
+                    {item.available_balance}
                   </Text>
                 </View>
               </TouchableOpacity>
