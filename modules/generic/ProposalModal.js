@@ -368,12 +368,13 @@ class ProposalModal extends Component {
         this.setState({
           isLoading: false
         })
-        setTimeout(() => {
+        if(response.data === true){
           this.props.setOriginalCharge(null)
+          this.props.closeModal();
           this.props.setCharge(0);
-          this.props.closeModal()
           this.props.onRetrieve()
-        }, 1000)
+          this.props.setConnectModal(false);
+        }
 
       },
         error => {
