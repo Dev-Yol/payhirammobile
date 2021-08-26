@@ -388,7 +388,7 @@ class ProposalModal extends Component {
   }
 
   renderContent() {
-    const { ledger, theme, defaultAddress, charge } = this.props.state;
+    const { ledger, theme, defaultAddress, charge, originalCharge } = this.props.state;
     const { request } = this.props;
     const { data } = this.state;
     return (
@@ -485,7 +485,7 @@ class ProposalModal extends Component {
                       }}
                     />
                   */}
-
+              <Text style={{fontSize: 13}}>The minimum processing fee for this request is {this.props.scope?.minimum_charge || originalCharge?.charge}. </Text>
               <TextInputWithLabel
                 variable={charge}
                 onChange={(value) => this.props.setCharge(value)}
