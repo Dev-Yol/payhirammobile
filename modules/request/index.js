@@ -353,6 +353,7 @@ class Requests extends Component {
     console.log('parameters', parameters)
     this.setState({ isLoading: (loading == false) ? false : true });
     Api.request(Routes.requestRetrieveMobile, parameters, response => {
+      console.log('[RESPONSE]', response);
       this.setState({
         // size: response.size ? response.size : 0,
         isLoading: false
@@ -390,7 +391,7 @@ class Requests extends Component {
       }
     },
       (error) => {
-        console.log('Request error', error)
+        // console.log('Request error', error)
         this.setState({ isLoading: false });
       });
   };
