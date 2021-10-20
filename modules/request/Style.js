@@ -7,7 +7,7 @@ export default {
     padding: 10
   },
   MainContainer: {
-    flex: 1,
+    flex: 1
   },
   text: {
     color: Color.normalGray
@@ -27,7 +27,7 @@ export default {
   floatingButton: {
     alignItems: 'center',
     justifyContent: 'center',
-    width: 70,
+    width: 50,
     position: 'absolute',
     bottom: 10,
     right: 10,
@@ -42,7 +42,8 @@ export default {
   bottomSheetContent: {
     height: height - (height * 0.2),
     backgroundColor: Color.white,
-    borderRadius: 10,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
   },
   bottomSheet: {
     justifyContent: 'flex-end',

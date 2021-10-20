@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
-import {View, TouchableOpacity, Text} from 'react-native';
+import {View, TouchableOpacity, Text, StyleSheet} from 'react-native';
 import {createStackNavigator} from 'react-navigation-stack';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faChevronLeft} from '@fortawesome/free-solid-svg-icons';
 import Reviews from 'modules/reviews';
+import { BasicStyles } from 'common';
 import {connect} from 'react-redux';
 
 class HeaderOptions extends Component {
@@ -11,32 +12,17 @@ class HeaderOptions extends Component {
     super(props);
   }
   back = () => {
-    this.props.navigationProps.navigate('drawerStack');
+    this.props.navigationProps.pop();
   };
   render() {
     return (
-      <View
-        style={{
-          height: 45,
-          width: 45,
-          justifyContent: 'center',
-          alignItems: 'center',
-          marginLeft: 5,
-        }}>
-        <TouchableOpacity
-          onPress={() => {
-            this.back();
-          }}
-          style={{
-            width: '16.5%',
-            alignItems: 'center',
-            marginLeft: '0.5%',
-          }}>
+      <View style={{flexDirection: 'row'}}>
+        <TouchableOpacity onPress={this.back.bind(this)}>
           {/*Donute Button Image */}
           <FontAwesomeIcon
             icon={faChevronLeft}
-            size={30}
-            style={{color: '#3F0050'}}
+            size={BasicStyles.iconSize}
+            style={styles.iconStyle}
           />
         </TouchableOpacity>
       </View>
@@ -60,16 +46,16 @@ const ReviewsStack = createStackNavigator({
       title: 'Reviews',
       drawerLabel: 'Reviews',
       headerLeft: <HeaderOptions navigationProps={navigation} />,
-      headerStyle: {
-        backgroundColor: 'white',
-        height: 80,
-        elevation: 0,
-      },
-      headerTintColor: '#4c4c4c',
-      headerTitleStyle: {
-        fontSize: 20,
-      },
+      ...BasicStyles.headerDrawerStyle
     }),
+  },
+});
+
+
+const styles = StyleSheet.create({
+  iconStyle: {
+    paddingLeft: 20,
+    paddingRight: 20,
   },
 });
 

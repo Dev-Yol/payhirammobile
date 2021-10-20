@@ -23,6 +23,7 @@ const types = {
   SET_SEARCH_PARAMETER: 'SET_SEARCH_PARAMETER',
   SET_REQUESTS: 'SET_REQUESTS',
   UPDATE_REQUESTS: 'UPDATE_REQUESTS',
+  SET_UNREAD_REQUESTS: 'SET_UNREAD_REQUESTS',
   SET_PIN_FLAG: 'SET_PIN_FLAG',
   SET_SYSTEM_NOTIFICATION: 'SET_SYSTEM_NOTIFICATION',
   SET_SELECTED_PRODUCT_ID: 'SET_SELECTED_PRODUCT_ID',
@@ -32,6 +33,37 @@ const types = {
   SET_THEME: 'SET_THEME',
   SET_REQUEST_INPUT: 'SET_REQUEST_INPUT',
   SET_VALIDATE_OTP: 'SET_VALIDATE_OTP',
+  VIEW_MENU: 'VIEW_MENU',
+  VIEW_SHARE: 'VIEW_SHARE',
+  SET_REQUEST: 'SET_REQUEST',
+  SET_DEFAULT_ADDRESS: 'SET_DEFAULT_ADDRESS',
+  SET_UNREAD_MESSAGES: 'SET_UNREAD_MESSAGES',
+  SET_UNREAD_PEER_REQUEST: 'SET_UNREAD_PEER_REQUEST',
+  SET_CIRCLE_SEARCH: 'SET_CIRCLE_SEARCH',
+  SET_FILTER_DATA: 'SET_FILTER_DATA',
+  SET_DEVICE_LOCATION: 'SET_DEVICE_LOCATION',
+  SET_PARAMETER: 'SET_PARAMETER',
+  SET_DEEPLINK_ROUTE: 'SET_DEEPLINK_ROUTE',
+  SET_CURRENCY_BAL: 'SET_CURRENCY_BAL',
+  SET_ACCEPT_PAYMENT: 'SET_ACCEPT_PAYMENT',
+  SET_COMMENTS: 'SET_COMMENTS',
+  SET_CURRENT_TICKET_ID: 'SET_CURRENT_TICKET_ID',
+  SET_FROM: 'SET_FROM',
+  SET_PAYMENT_CONFIRMATION: 'SET_PAYMENT_CONFIRMATION',
+  SET_ENABLE_FINGER_PRINT: 'SET_ENABLE_FINGER_PRINT',
+  VIEW_CHANGE_PASS: 'VIEW_CHANGE_PASS',
+  SET_PART: 'SET_PART',
+  SET_IMAGE_COUNT: 'SET_IMAGE_COUNT',
+  SET_SCHEDULE_SHOW: 'SET_SCHEDULE_SHOW',
+  SET_TYPE: 'SET_TYPE',
+  SET_VIEW_FIELD: 'VIEW_FIELD',
+  SET_ACTIVITY_MODAL: 'SET_ACTIVITY_MODAL',
+  SET_MY_DEVICE: 'SET_MY_DEVICE',
+  SET_REMAINING_BALANCE_PLAN: 'SET_REMAINING_BALANCE_PLAN',
+  SET_CONNECT_MODAL: 'SET_CONNECT_MODAL',
+  SET_CHARGE: 'SET_CHARGE',
+  SET_ORIGINAL_CHARGE: 'SET_ORIGINAL_CHARGE',
+  SET_CURRENT_REQUEST: 'SET_CURRENT_REQUEST'
 };
 
 export const actions = {
@@ -86,8 +118,11 @@ export const actions = {
   setRequests(requests) {
     return { type: types.SET_REQUESTS, requests };
   },
-  updateRequests(requests) {
-    return { type: types.UPDATE_REQUESTS, requests };
+  setRequest(request) {
+    return { type: types.SET_REQUEST, request };
+  },
+  updateRequests(request) {
+    return { type: types.UPDATE_REQUESTS, request };
   },
   setPinFlag(pinFlag) {
     return { type: types.SET_PIN_FLAG, pinFlag };
@@ -116,10 +151,105 @@ export const actions = {
   setIsValidOtp(isValidOtp) {
     return { type: types.SET_VALIDATE_OTP, isValidOtp };
   },
+  viewMenu(isViewing) {
+    return { type: types.VIEW_MENU, isViewing }
+  },
+  setPart(part){
+    return {type: types.SET_PART, part}
+  },
+  setType(typePlan){
+    return {type: types.SET_TYPE, typePlan}
+  },
+  viewShare(isShow) {
+    return { type: types.VIEW_SHARE, isShow }
+  },
+  setDefaultAddress(defaultAddress) {
+    return { type: types.SET_DEFAULT_ADDRESS, defaultAddress }
+  },
+  setUnReadMessages(messages) {
+    return { type: types.SET_UNREAD_MESSAGES, messages }
+  },
+  setUnReadPeerRequest(message) {
+    return { type: types.SET_UNREAD_PEER_REQUEST, messages }
+  },
+  setUnReadRequests(requests) {
+    return { type: types.SET_UNREAD_REQUESTS, requests }
+  },
+  setCircleSearch(circleSearch) {
+    return { type: types.SET_CIRCLE_SEARCH, circleSearch }
+  },
+  setFilterData(filterData) {
+    return { type: types.SET_FILTER_DATA, filterData }
+  },
+  setDeviceLocation(deviceLocation) {
+    return { type: types.SET_DEVICE_LOCATION, deviceLocation }
+  },
+  setParameter(parameter) {
+    return { type: types.SET_PARAMETER, parameter }
+  },
+  setDeepLinkRoute(deepLinkRoute) {
+    return {type: types.SET_DEEPLINK_ROUTE, deepLinkRoute}
+  },
+  setCurrencyBal(currencyBal) {
+    return { type: types.SET_CURRENCY_BAL, currencyBal }
+  },
+  setAcceptPayment(acceptPayment) {
+    return { type: types.SET_ACCEPT_PAYMENT, acceptPayment }
+  },
+  setComments(comments) {
+    return { type: types.SET_COMMENTS, comments }
+  },
+  setCurrentTicketId(currentTicketId) {
+    return { type: types.SET_CURRENT_TICKET_ID, currentTicketId }
+  },
+  setFrom(location_from) {
+    return { type: types.SET_FROM, location_from }
+  },
+  setPaymentConfirmation(flag) {
+    return { type: types.SET_PAYMENT_CONFIRMATION, flag }
+  },
+  setEnableFingerPrint(enable) {
+    return { type: types.SET_ENABLE_FINGER_PRINT, enable }
+  },
+  viewChangePass(changePassword) {
+    return { type: types.VIEW_CHANGE_PASS, changePassword }
+  },
+  setImageCount(imageCount) {
+    return { type: types.SET_IMAGE_COUNT, imageCount }
+  },
+  setScheduleShow(scheduleShow) {
+    return { type: types.SET_SCHEDULE_SHOW, scheduleShow }
+  },
+  setViewField(view) {
+    return { type: types.SET_VIEW_FIELD, view }
+  },
+  setActivityModal(flag){
+    return { type: types.SET_ACTIVITY_MODAL, flag }
+  },
+  setMyDevice(device){
+    return { type: types.SET_MY_DEVICE, device }
+  },
+  setRemainingBalancePlan(remainingBalancePlan){
+    return { type: types.SET_REMAINING_BALANCE_PLAN, remainingBalancePlan }
+  },
+  setConnectModal(connectModal) {
+    return { type: types.SET_CONNECT_MODAL, connectModal}
+  },
+  setCharge(charge) {
+    return { type: types.SET_CHARGE, charge}
+  },
+  setOriginalCharge(originalCharge) {
+    return { type: types.SET_ORIGINAL_CHARGE, originalCharge}
+  },
+  setCurrentRequest(currentRequest) {
+    return { type: types.SET_CURRENT_REQUEST, currentRequest}
+  }
 };
 
+const date = new Date()
 const initialState = {
   token: null,
+  part: null,
   user: null,
   notifications: null,
   messenger: null,
@@ -130,9 +260,21 @@ const initialState = {
     groupId: null,
     messages: null,
   },
+  unReadMessages: [],
   searchParameter: null,
-  location: null,
-  requests: null,
+  parameter: null,
+  location: {
+    id: 1,
+    account_id: 1,
+    latitude: '10.373264655881858',
+    latitude: '123.94052113182192',
+    route: 'test',
+    locality: 'test',
+    region: 'test',
+    country: 'test'
+  },
+  requests: [],
+  request: null,
   nav: null,
   pinFlag: false,
   systemNotification: null,
@@ -141,6 +283,37 @@ const initialState = {
   qrCodeModal: false,
   requestInput: null,
   isValidOtp: false,
+  isViewing: false,
+  typePlan: null,
+  isShow: false,
+  defaultAddress: null,
+  unReadPeerRequest: [],
+  unReadRequests: [],
+  circleSearch: null,
+  filterData: null,
+  deviceLocation: null,
+  deepLinkRoute: null,
+  currencyBal: null,
+  acceptPayment: null,
+  location_from: null,
+  comments: {
+    id: null,
+    commentList: []
+  },
+  changePassword: 0,
+  currentTicketId: null,
+  paymentConfirmation: false,
+  enableFingerPrint: false,
+  imageCount: 0,
+  scheduleShow: false,
+  viewField: false,
+  activityModal: false,
+  myDevice: null,
+  remainingBalancePlan: 0,
+  connectModal: false,
+  charge: 0,
+  originalCharge: null,
+  currentRequest: null
 };
 
 storeData = async (key, value) => {
@@ -151,6 +324,14 @@ storeData = async (key, value) => {
   }
 };
 
+// removeData = async (item) => {
+//   try{
+//     await AsyncStorage.removeItem(item)
+//   }catch (e){
+
+//   }
+// }
+
 const reducer = (state = initialState, action) => {
   const { type, user, token } = action;
   const { messages, unread, message } = action;
@@ -159,13 +340,35 @@ const reducer = (state = initialState, action) => {
   const { searchParameter, requests } = action;
   const { systemNotification } = action;
   const { product, productId } = action;
-  const { isVisible } = action;
+  const { isVisible, isShow } = action;
   const { theme } = action;
   const { requestInput } = action;
   const { isValidOtp } = action;
+  const { isViewing, request, defaultAddress } = action;
+  const { circleSearch } = action;
+  const { filterData } = action;
+  const { deviceLocation } = action;
+  const { parameter, deepLinkRoute, currencyBal } = action;
+  const { acceptPayment, location_from } = action;
+  const { comments } = action;
+  const { enable } = action;
+  const { changePassword, part } = action;
+  const { currentTicketId, imageCount, scheduleShow, typePlan } = action;
+  const { view, flag, device, remainingBalancePlan } = action
+  const { connectModal } = action;
+  const { charge } = action;
+  const { originalCharge } = action;
+  const { currentRequest } = action;
   switch (type) {
     case types.LOGOUT:
-      AsyncStorage.clear();
+      storeData('token', '');
+      // AsyncStorage.clear()
+      console.log("[LOGOUT]");
+      setTimeout(() => {
+        // this.navigateToLogin('Login')
+        console.log('df', this.props)
+        // this.props.navigation.navigate('loginStack');
+      }, 100)
       return Object.assign({}, initialState);
     case types.LOGIN:
       storeData('token', token);
@@ -175,7 +378,7 @@ const reducer = (state = initialState, action) => {
     case types.UPDATE_USER:
       return {
         ...state,
-        user,
+        user
       };
     case types.SET_NOTIFICATIONS:
       let notifications = {
@@ -278,7 +481,7 @@ const reducer = (state = initialState, action) => {
       let updatedMessagesOnGroup = null;
       if (state.messagesOnGroup != null) {
         let oldMessages = state.messagesOnGroup.messages;
-        if (oldMessages == null) {
+        if (oldMessages == null || oldMessages.length == 0) {
           let temp = [];
           temp.push(message);
           updatedMessagesOnGroup = {
@@ -365,11 +568,34 @@ const reducer = (state = initialState, action) => {
         ...state,
         requests,
       };
-    case types.UPDATE_REQUESTS:
-      state.requests.push(...requests);
+    case types.SET_REQUEST:
       return {
         ...state,
-        requests: state.requests,
+        request
+      };
+    case types.SET_IMAGE_COUNT:
+      return {
+        ...state,
+        imageCount
+      };
+    case types.SET_SCHEDULE_SHOW:
+      return {
+        ...state,
+        scheduleShow
+      };
+    case types.UPDATE_REQUESTS:
+      let newRequests = state.requests.map((item, index) => {
+        if (item.code == request.code) {
+          return {
+            ...item,
+            status: request.status
+          }
+        }
+        return
+      })
+      return {
+        ...state,
+        requests: newRequests,
       };
     case types.SET_PIN_FLAG:
       return {
@@ -397,13 +623,16 @@ const reducer = (state = initialState, action) => {
         qrCodeModal: isVisible.isVisible,
       };
     case types.SET_THEME:
-      console.log('theme:', theme);
+      console.log('[theme store]', theme)
       storeData('primary', theme.primary);
       storeData('secondary', theme.secondary);
       storeData('tertiary', theme.tertiary);
+      storeData('fourth', theme.fourth);
+      storeData('index', '' + theme.index);
       Color.setPrimary(theme.primary);
       Color.setSecondary(theme.secondary);
       Color.setTertiary(theme.tertiary);
+      Color.setFourth(theme.fourth);
       return {
         ...state,
         theme,
@@ -420,8 +649,174 @@ const reducer = (state = initialState, action) => {
         ...state,
         isValidOtp,
       };
+    case types.VIEW_MENU:
+      return {
+        ...state,
+        isViewing,
+      };
+    case types.SET_DEFAULT_ADDRESS:
+      return {
+        ...state,
+        defaultAddress
+      }
+    case types.SET_TYPE:
+      return {
+        ...state,
+        typePlan
+      }
+    case types.SET_UNREAD_MESSAGES:
+      let newUnread = []
+      if (messages.length == null) {
+        newUnread = []
+      } else {
+        newUnread = state.unReadMessages.push(messages)
+      }
+      return {
+        ...state,
+        unReadMessages: newUnread
+      }
+    case types.VIEW_SHARE:
+      return {
+        ...state,
+        isShow,
+      };
+    case types.SET_UNREAD_PEER_REQUEST:
+      let newUnreadPeerRequest = []
+      if (messages == null) {
+        newUnreadPeerRequest = []
+      } else {
+        newUnreadPeerRequest = state.unReadPeerRequest.push(messages)
+      }
+      return {
+        ...state,
+        unReadPeerRequest: newUnreadPeerRequest
+      }
+    case types.SET_UNREAD_REQUESTS:
+      return {
+        ...state,
+        unReadRequests: requests,
+      };
+    case types.SET_CIRCLE_SEARCH:
+      return {
+        ...state,
+        circleSearch
+      };
+    case types.SET_PART:
+      return {
+        ...state,
+        part
+      };
+    case types.SET_FILTER_DATA:
+      return {
+        ...state,
+        filterData,
+      };
+    case types.SET_DEVICE_LOCATION:
+      return {
+        ...state,
+        deviceLocation,
+      };
+    case types.SET_PARAMETER:
+      return {
+        ...state,
+        parameter,
+      };
+    case types.SET_SELECTED_LEDGER:
+      return {
+        ...state,
+        ledger,
+      };
+    case types.SET_DEEPLINK_ROUTE:
+      return {
+        ...state,
+        deepLinkRoute,
+      }
+    case types.SET_CURRENCY_BAL:
+      return {
+        ...state,
+        currencyBal,
+      };
+    case types.SET_ACCEPT_PAYMENT:
+      return {
+        ...state,
+        acceptPayment
+      }
+    case types.SET_COMMENTS:
+      return {
+        ...state,
+        comments,
+      };
+    case types.SET_CURRENT_TICKET_ID:
+      return {
+        ...state,
+        currentTicketId,
+      };
+    case types.SET_FROM:
+      return {
+        ...state,
+        location_from,
+      };
+    case types.SET_PAYMENT_CONFIRMATION:
+      return {
+        ...state,
+        paymentConfirmation: flag
+      };
+    case types.SET_ENABLE_FINGER_PRINT:
+      console.log('[enable finger print::]', enable == false ? "false" : "true");
+      storeData('fingerprint', enable == false ? "false" : "true");
+      return {
+        ...state,
+        enableFingerPrint: enable,
+      };
+    case types.VIEW_CHANGE_PASS:
+      return {
+        ...state,
+        changePassword,
+      };
+    case types.SET_VIEW_FIELD:
+      console.log('[View Filed]', view);
+      return {
+        ...state,
+        viewField: view,
+      };
+    case types.SET_ACTIVITY_MODAL:
+      return{
+        ...state,
+        activityModal: flag
+      }
+    case types.SET_MY_DEVICE:
+      return{
+        ...state,
+        myDevice: device
+      }
+    case types.SET_REMAINING_BALANCE_PLAN:
+      return{
+        ...state,
+        remainingBalancePlan
+      }
+    case types.SET_CONNECT_MODAL:
+      return{
+        ...state,
+        connectModal
+      }
+    case types.SET_CHARGE:
+      return{
+        ...state,
+        charge
+      }
+    case types.SET_ORIGINAL_CHARGE:
+      return{
+        ...state,
+        originalCharge
+      }
+    case types.SET_CURRENT_REQUEST:
+      return{
+        ...state,
+        currentRequest
+      }
     default:
       return { ...state, nav: state.nav };
   }
 };
+
 export default reducer;

@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { View, TouchableOpacity, Text } from 'react-native';
 import { createStackNavigator } from 'react-navigation-stack';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faQrcode } from '@fortawesome/free-solid-svg-icons';
+import { faQrcode, faBars } from '@fortawesome/free-solid-svg-icons';
 import Dashboard from 'modules/dashboard';
 import { NavigationActions } from 'react-navigation';
-import { BasicStyles } from 'common';
+import { BasicStyles, Helper } from 'common';
 
 class HeaderOptions extends Component {
   constructor(props) {
@@ -41,7 +41,7 @@ class HeaderOptions extends Component {
 const DashboardStack = createStackNavigator({
   dashboardScreen: {
     screen: Dashboard,
-    navigationOptions: ({ navigation }) => ({
+    navigationOptions: ({ navigation }) => ({    
       title: 'Dashboard',
       headerLeft: <HeaderOptions navigationProps={navigation} />,
       drawerLabel: 'Dashboard',
@@ -50,7 +50,9 @@ const DashboardStack = createStackNavigator({
       },
       headerTintColor: '#4c4c4c',
       headerRight: (
-        <FontAwesomeIcon icon={faQrcode} size={20} style={{ color: 'black' }} />
+        // <View style={{marginRight: 40, paddingRight: 8}}>
+        <FontAwesomeIcon icon={faQrcode} size={20} style={{ color: 'black', marginRight: 40 }} />
+        // </View>
       ),
     }),
   },

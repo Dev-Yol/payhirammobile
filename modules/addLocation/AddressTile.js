@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import styles from 'modules/addLocation/Style.js';
+import {BasicStyles, Color} from 'common';
+import { faTrashAlt } from '@fortawesome/free-regular-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 
 class AddressTile extends Component {
   constructor(props) {
@@ -11,32 +14,63 @@ class AddressTile extends Component {
       <TouchableOpacity
         style={[
           styles.AddressTileContainer,
-          {backgroundColor: this.props.backgroundColor},
+          {
+            backgroundColor: this.props.backgroundColor,
+            paddingRight: 30
+          },
         ]}
         onPress={() => {
           this.props.onPress(this.props.index);
         }}>
-        <View style={styles.AddressTypeContainer}>
+        {/* <View style={styles.AddressTypeContainer}>
           <Text
             style={[
               styles.AddressTypeTextStyle,
-              {color: this.props.fontColor},
+              {
+                color: this.props.fontColor,
+                fontWeight: 'bold'
+              },
             ]}>
             {this.props.addressType}
           </Text>
-        </View>
+        </View> */}
         <View style={styles.AddressContainer}>
           <Text
-            style={[styles.AddressTextStyle, , {color: this.props.fontColor}]}>
+            style={[styles.AddressTextStyle, {
+                color: this.props.fontColor,
+                fontWeight: 'bold',
+                fontSize: BasicStyles.standardFontSize - 1,
+                marginTop: 5,
+                marginBottom: 5
+              }
+            ]}>
             {this.props.address}
           </Text>
         </View>
         <View style={styles.CountryContainer}>
           <Text
-            style={[styles.CountryTextStyle, , {color: this.props.fontColor}]}>
+            style={[styles.CountryTextStyle, {
+              color: this.props.fontColor,
+              fontSize: BasicStyles.standardFontSize
+            }
+          ]}>
             {this.props.country}
           </Text>
         </View>
+        <TouchableOpacity
+          onPress={this.props.deletingClicked}
+          style={
+            {
+              position: 'absolute',
+              right: 15
+            }
+          }
+        >
+          <FontAwesomeIcon 
+            icon={faTrashAlt}
+            size={BasicStyles.iconSize}
+          />
+        </TouchableOpacity>
       </TouchableOpacity>
     );
   }

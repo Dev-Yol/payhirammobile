@@ -5,8 +5,11 @@ import {
   faCheck,
   faPaperPlane,
 } from '@fortawesome/free-solid-svg-icons';
+import { faMoneyBillWaveAlt, faCog, faHome, faEnvelope, faUsers, faPalette, faShieldAlt, faHandshake, faTachometerAlt, faHeadset } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faCertificate, faBuilding, faCity } from '@fortawesome/free-solid-svg-icons';
+import { faComment } from '@fortawesome/free-regular-svg-icons';
 export default {
-  company: 'Increment Technologies',
+  company: 'Increment Technologies Inc.',
   APP_NAME: '@Payhiram_',
   APP_NAME_BASIC: 'Payhiram',
   APP_EMAIL: 'support@payhiram.ph',
@@ -16,75 +19,167 @@ export default {
     {
       title: 'Requests',
       route: 'Requests',
+      icon: faMoneyBillWaveAlt
     },
     {
       title: 'Dashboard',
       route: 'Dashboard',
+      icon: faTachometerAlt
     },
-    {
-      title: 'Circle',
-      route: 'Circle',
-    },
-    {
-      title: 'Messages',
-      route: 'Messenger'
-    }, 
+    // {
+    //   title: 'Circle',
+    //   route: 'Circle',
+    //   icon: faUsers
+    // },
+    // {
+    //   title: 'Messages',
+    //   route: 'Messenger',
+    //   icon: faComment
+    // }, 
     {
       title: 'Settings',
       route: 'Settings',
+      icon: faCog
     },
     {
-      title: 'Terms and Conditions',
-      route: 'TermsAndConditions',
-    },
-    
+      title: 'Ask for help',
+      route: 'Support',
+      icon: faHeadset
+    }
   ],
-  currency: [
-    {
-      title: 'Philippine Peso',
-      value: 'PHP',
-    },
-  ],
+  currencyBal: [{
+    currency: 'PHP',
+    value: 'PHP'
+  },
+  {
+    currency: 'USD',
+    value: 'USD'
+  }],
   currency: [{
     title: 'Philippine Peso',
     value: 'PHP'
+  }],
+  shipping: [{
+    title: 'Pick-Up',
+    value: 0
+  }, {
+    title: 'Delivery',
+    value: 1
   }],
   request: {
     MINIMUM: 1000,
   },
   MAXIMUM_DEPOSIT: 500000,
   MAXIMUM_WITHDRAWAL: 500000,
-  payhiramCharges: {
-    percentage: 0.2,
-  },
+  MINIMUM: 1000,
+  payhiramShare: 0.2,
+  partnerShare: 0.8,
   fulfillmentTypes: [
     {
-      value: 1,
-      label: 'Send',
-      description:
-        'Allow other peer to process your transaction when you want to send money to your family, friends or to businesses.',
-      money_type: 'Cash',
+      id: 1,
+      type: 'Pera Padala',
+      description: 'Send cash and allow our partners to process or deliver the cash to your receiver.',
+      money_type: 'cash',
     },
     {
-      value: 2,
-      label: 'Withdrawal',
-      description: 'Allow other peer to process your withdrawals.',
-      money_type: 'Cash',
+      id: 2,
+      type: 'Withdrawal',
+      description: 'Withdraw cash from your wallet and let our partners nearby process or deliver the cash to your specified location.',
+      money_type: 'cash',
     },
     {
-      value: 3,
-      label: 'Deposit',
-      description: 'Allow other peer to process your deposits.',
-      money_type: 'Wallet',
+      id: 3,
+      type: 'Cash In',
+      description: 'Cash In to your wallet and let our nearby partners process or pickup the cash from your specified location.',
+      money_type: 'e-wallet',
     },
-    {
-      value: 4,
-      label: 'Bills and Payments',
-      description:
-        "Don't have time and want to pay your bills? Allow other peer to fulfil your bills.",
-      money_type: 'Cash',
-    },
+    // {
+    //   id: 4,
+    //   type: 'Bills and Payments',
+    //   description: "Don't have time and want to pay your bills either online or onsite? Our partners will handle your payments",
+    //   money_type: 'cash',
+    // }
+    // {
+    //   id: 5,
+    //   type: 'Accept Payment',
+    //   description: "Accept Payment with 0% charge",
+    //   money_type: 'cash',
+    // },
   ],
+  partner: [
+    {
+      value: 'BASIC',
+      description: `PHP 10, 000 Limit / Day`,
+      icon: faUser,
+      amount: 10000,
+      currency: 'PHP',
+      items: [{
+        title: 'Service to one location only'
+      }, {
+        title: 'Process Send Cash'
+      }, {
+        title: 'Process Cash Ins'
+      }, {
+        title: 'Process Withdrawals'
+      }]
+    },
+    {
+      value: 'STANDARD',
+      description: 'PHP 50, 000 Limit / Day',
+      icon: faCertificate,
+      amount: 50000,
+      currency: 'PHP',
+      items: [{
+        title: 'Service to one location only'
+      }, {
+        title: 'Process Send Cash'
+      }, {
+        title: 'Process Cash Ins'
+      }, {
+        title: 'Process Withdrawals'
+      }]
+    },
+    {
+      value: 'BUSINESS',
+      description: 'PHP 100, 000 Limit / Day',
+      icon: faBuilding,
+      amount: 100000,
+      currency: 'PHP',
+      items: [{
+        title: 'Service to one location only'
+      }, {
+        title: 'Process Send Cash'
+      }, {
+        title: 'Process Cash Ins'
+      }, {
+        title: 'Process Withdrawals'
+      }]
+    },
+    {
+      value: 'ENTERPRISE',
+      description: 'PHP 500, 000 Limit / Day',
+      icon: faCity,
+      amount: 500000,
+      currency: 'PHP',
+      items: [{
+        title: 'Service to one location only'
+      }, {
+        title: 'Process Send Cash'
+      }, {
+        title: 'Process Cash Ins'
+      }, {
+        title: 'Process Withdrawals'
+      }]
+    }
+  ],
+  getPartner(plan, partners){
+    for (let index = 0; index < partners.length; index++) {
+      let item = partners[index];
+      if(item.value.toLowerCase() == plan?.toLowerCase()){
+        return item
+      }
+    }
+  },
   fulfillmentBorrowTypes: [
     {
       value: 101,
@@ -161,6 +256,69 @@ export default {
       colors: [Color.primary, Color.lightGray],
     },
   ],
+  MessengerMenu: [{
+      title: 'Requirements',
+      payload: 'same_page',
+      payload_value: 'requirements',
+      color: Color.black
+    },
+    {
+      title: 'Details',
+      payload: 'redirect',
+      payload_value: 'requestItemStack',
+      color: Color.black
+    },
+    {
+      title: 'Transfer funds',
+      payload: 'redirect',
+      payload_value: 'transferFundStack',
+      color: Color.black
+    },
+    {
+      title: 'Rate',
+      payload: 'redirect',
+      payload_value: 'reviewsStack',
+      color: Color.black
+    },
+    {
+      title: 'Enable Support',
+      payload: 'redirect',
+      payload_value: 'enableSupport',
+      color: Color.black
+    },
+    {
+      title: 'Close',
+      payload: 'same_page',
+      payload_value: 'close',
+      color: Color.danger
+    }
+  ],
+  requirementsMenu: [
+    {
+      title: 'On App Signature',
+      payload: 'same_page',
+      payload_value: 'signature',
+      color: Color.black
+    },
+    {
+      title: 'Receiver Picture',
+      payload: 'redirect',
+      payload_value: 'receiver_picture',
+      color: Color.black
+    },
+    {
+      title: 'Valid ID',
+      payload: 'redirect',
+      payload_value: 'valid_id',
+      color: Color.black
+    },
+    {
+      title: 'Back',
+      payload: 'redirect',
+      payload_value: 'back',
+      color: Color.danger
+    }
+  ],
   payments: [
     {
       title: 'UnionBank of the Philippines',
@@ -214,20 +372,79 @@ export default {
       payload: 'credit_card',
     },
   ],
+  filter: {
+    targets: [{
+      value: 'All'
+    }, {
+      value: 'Partner'
+    }, {
+      value: 'Public'
+    }, {
+      value: 'Circle'
+    }],
+    ships: [{
+      value: 'All'
+    }, {
+      value: 'Pickup'
+    }, {
+      value: 'Delivery'
+    }],
+    types: [{
+      value: 'All'
+    }, {
+      value: 'Send Cash'
+    }, {
+      value: 'Cash In'
+    }, {
+      value: 'Withdrawals'
+    }]
+  },
   showRequestType(type) {
     switch (parseInt(type)) {
       case 1:
-        return 'Send';
+        return 'Send Cash';
       case 2:
         return 'Withdrawal';
       case 3:
-        return 'Deposit';
+        return 'Cash In';
       case 4:
-        return 'Bills and Paymets';
+        return 'Bills and Payments';
+      case 5:
+        return 'Others';
       case 101:
         return 'Lending';
       case 102:
         return 'Installment';
+    }
+  },
+  getRequestTypeCode(type) {
+    switch (type) {
+      case 'Send Cash':
+        return 1;
+      case 'Withdrawals':
+        return 2;
+      case 'Cash In':
+        return 3;
+      case 'Bills and Payments':
+        return 4;
+      case 'Others':
+        return 5;
+      case 'Lending':
+        return 101;
+      case 'Installment':
+        return 102;
+    }
+  },
+  showStatus(type) {
+    switch (parseInt(type)) {
+      case 0:
+        return 'Pending';
+      case 1: 
+        return 'On Going';
+      case 2:
+        return 'Completed';
+      default:
+        return 'Cancelled';
     }
   },
   validateEmail(email) {
@@ -238,4 +455,51 @@ export default {
       return true;
     }
   },
+  validatePassword(password) {
+    const reg = /^(?=.*[0-9])(?=.*[- ?!@#$%^&*\/\\])(?=.*[A-Z])(?=.*[a-z])[a-zA-Z0-9- ?!@#$%^&*\/\\]{6,16}$/
+    if (reg.test(password) === false) {
+      return false;
+    } else {
+      return true;
+    }
+  },
+  checkStatus(user){
+    if(user == null){
+      return false
+    }
+    switch(user.status.toLowerCase()){
+      case 'invalid_email': return -1; break;
+      case 'not_verified': return 0;break
+      case 'email_verified': return 1;break
+      case 'account_verified': return 2; break;
+      case 'basic_verified': return 3; break;
+      case 'standard_verified': return 4; break;
+      case 'business_verified': return 5; break;
+      case 'enterprise_verified': return 6; break;
+      default: return 7;break
+    }
+  },
+  accountStatus(user){
+    if(user == null){
+      return false
+    }
+    switch(user.status.toLowerCase()){
+      case 'not_verified': return 'Not Verified';break
+      case 'verified': return 'Email Verified';break
+      case 'account_verified': return 'Account Verified'; break;
+      case 'basic_verified': return 'Basic Verified'; break;
+      case 'standard_verified': return 'Standard Verified'; break;
+      case 'business_verified': return 'Business Verified'; break;
+      case 'enterprise_verified': return 'Enterprise Verified'; break;
+      default: return 'Granted';break
+    }
+  },
+  invalidEmail: -1,
+  notVerified: 0,
+  emailVerified: 1,
+  accountVerified: 2,
+  basicVerified: 3,
+  standardVerified: 4,
+  businessVerified: 5,
+  enterpriseVerified: 6
 };

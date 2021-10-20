@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { View, TouchableOpacity, Dimensions } from 'react-native';
+import { View, TouchableOpacity, Dimensions, Share } from 'react-native';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createDrawerNavigator } from 'react-navigation-drawer';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faBars, faQrcode } from '@fortawesome/free-solid-svg-icons';
-import Slider from 'components/Slider';
+import { faBars, faQrcode, faShare } from '@fortawesome/free-solid-svg-icons';
+import Slider from 'modules/slider';
 import { Color, BasicStyles } from 'common';
 import Requests from 'modules/request';
 import Dashboard from 'modules/dashboard';
@@ -16,10 +16,13 @@ import { Product, Marketplace, Checkout } from 'components';
 import Billing from 'modules/profile/Billing.js';
 import Circle from 'modules/circle/index.js';
 import OptionRight from './OptionRight';
+import OptionRightRequest from './OptionRightRequest';
 import TermsAndConditions from 'modules/termsAndConditions';
-
+import Support from 'components/Support';
+import UpdateTicket from 'components/Support/UpdateTicket';
 import Style from './Style.js';
 import { connect } from 'react-redux'
+import HeaderRequest from 'modules/generic/Header.js'
 
 const width = Math.round(Dimensions.get('window').width);
 class MenuDrawerStructure extends Component {
@@ -50,7 +53,45 @@ class QRCode extends Component {
         this.props.setQRCodeModal(true)
       }}>
         <View style={{ paddingRight: 8 }} >
-          <FontAwesomeIcon icon={faQrcode} size={BasicStyles.iconSize + 5} style={{ color: 'black', marginRight: 10 }} />
+          <FontAwesomeIcon icon={faQrcode} size={BasicStyles.iconSize + 5} style={{ color: Color.gray, marginRight: 60, marginTop: 10 }} />
+        </View>
+      </TouchableOpacity>
+    )
+  }
+}
+
+class ShareProfile extends Component {
+  onShare = async () => {
+    const { user } = this.props.state;
+    if(user == null){
+      return
+    }
+    try {
+      const result = await Share.share({
+        message: 'https://payhiram.ph/profile/' + user.code
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  }
+
+  render() {
+    console.log("[PROPS]", this.props.state.isShow);
+    return (
+      <TouchableOpacity onPress={() => {
+        this.onShare()
+      }}>
+        <View style={{ paddingRight: 8, marginRight: 40 }} >
+          <FontAwesomeIcon icon={faShare} size={BasicStyles.iconSize + 5} style={{ color: Color.gray, marginRight: 10 }} />
         </View>
       </TouchableOpacity>
     )
@@ -65,19 +106,26 @@ const mapDispatchToProps = (dispatch) => {
     setQRCodeModal: (isVisible) => {
       dispatch(actions.setQRCodeModal({ isVisible: isVisible }))
     },
+    viewShare: (isShow) => {
+      dispatch(actions.viewShare(isShow))
+    },
   };
 };
 
 const QRCodeButton = connect(mapStateToProps, mapDispatchToProps)(QRCode)
+const ShareButton = connect(mapStateToProps, mapDispatchToProps)(ShareProfile)
 const _StackNavigator = createStackNavigator({
 
   Requests: {
     screen: Requests,
     navigationOptions: ({ navigation }) => ({
-      title: null,
-      headerLeft: <MenuDrawerStructure navigationProps={navigation} />,
-      headerRight: <OptionRight navigationProps={navigation} />,
-      headerTransparent: true
+      title: null ,
+      headerLeft: <HeaderRequest navigation={navigation}/>,
+      headerRight: null,
+      headerTransparent: true,
+      headerStyle: {
+        height: 60
+      }
     }),
   },
 
@@ -103,10 +151,8 @@ const _StackNavigator = createStackNavigator({
     screen: Dashboard,
     navigationOptions: ({ navigation }) => ({
       title: null,
-      headerLeft: <OptionRight navigationProps={navigation} />,
-      headerRight: (
-        <QRCodeButton />
-      ),
+      headerLeft: <MenuDrawerStructure navigationProps={navigation} />,
+      headerRight: <OptionRight navigationProps={navigation} />,
       headerTransparent: true
     }),
   },
@@ -196,6 +242,24 @@ const _StackNavigator = createStackNavigator({
       headerTransparent: true
     }),
   },
+  Support: {
+    screen: Support,
+    navigationOptions: ({ navigation }) => ({
+      title: null,
+      headerLeft: <MenuDrawerStructure navigationProps={navigation} />,
+      headerRight: <OptionRight navigationProps={navigation} />,
+      headerTransparent: true
+    }),
+  },
+  UpdateTicket: {
+    screen: UpdateTicket,
+    navigationOptions: ({ navigation }) => ({
+      title: null,
+      headerLeft: <MenuDrawerStructure navigationProps={navigation} />,
+      headerRight: <OptionRight navigationProps={navigation} />,
+      headerTransparent: true
+    }),
+  },
 });
 
 const Drawer = createDrawerNavigator(
@@ -270,6 +334,18 @@ const Drawer = createDrawerNavigator(
       screen: _StackNavigator,
       navigationOptions: {
         drawerLabel: 'Terms and Condition',
+      },
+    },
+    Support: {
+      screen: _StackNavigator,
+      navigationOptions: {
+        drawerLabel: 'Support',
+      },
+    },
+    UpdateTicketStack: {
+      screen: _StackNavigator,
+      navigationOptions: {
+        drawerLabel: 'Update Ticket',
       },
     },
   },

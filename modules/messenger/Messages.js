@@ -9,14 +9,11 @@ import { connect } from 'react-redux';
 import Config from 'src/config.js';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faImage, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
-import Review from './templates/Review.js';
-import AddRequirements from './templates/AddRequirements.js';
-import Transfer from './templates/Transfer.js';
-import SendRequirements from './templates/SendRequirements.js';
 import ImageModal from 'components/Modal/ImageModal.js';
 import ImagePicker from 'react-native-image-picker';
-import CommonRequest from 'services/CommonRequest.js';
 import { Dimensions } from 'react-native';
+import { faChevronRight, faTimes } from '@fortawesome/free-solid-svg-icons';
+
 const height = Math.round(Dimensions.get('window').height);
 class Messages extends Component{
   constructor(props){
@@ -28,53 +25,53 @@ class Messages extends Component{
       imageModalUrl: null,
       isImageModal: false,
       photo: null,
-      keyRefresh: 0
+      keyRefresh: 0,
+      settingsMenu: [],
+      settingsBreadCrumbs: ['Settings'],
+      offset: 0,
+      limit: 10,
+      isLock: false
     }
   }
 
   componentDidMount(){
-    const { messengerGroup, user } = this.props.state;
+    this.menu(Helper.MessengerMenu);
+    const { user, messengerGroup } = this.props.state;
     if(messengerGroup != null && user != null){
       this.retrieve();
     }
   }
 
   retrieve = () => {
-    const { messengerGroup } = this.props.state;
-    const { setMessagesOnGroup } = this.props;
-    this.setState({isLoading: true});
-    CommonRequest.retrieveMessages(messengerGroup, response => {
-      this.setState({isLoading: false});
-      setMessagesOnGroup({
-        messages: response.data,
-        groupId: messengerGroup.id
-      })
-    })
-  }
-
-  retrieveGroup = (flag = null) => {
-    const { user, messengerGroup } = this.props.state;
-    const { setMessengerGroup } = this.props;
-    if(messengerGroup == null || user == null){
+    const { data } = this.props.navigation.state.params;
+    const { offset, limit } = this.state
+    const  { user } = this.props.state;
+    if(data == null || user == null){
       return
     }
     let parameter = {
       condition: [{
-        value: messengerGroup.id,
-        column: 'id',
-        clause: '='
+        column: 'messenger_group_id',
+        clause: '=',
+        value: data.id
       }],
-      account_id: user.id
+      sort: {
+        'created_at': 'DESC'
+      },
+      limit,
+      offset,
     }
-    CommonRequest.retrieveMessengerGroup(messengerGroup, user, response => {
-      if(response.data != null){
-        setMessengerGroup(response.data);
-        setTimeout(() => {
-          this.retrieve(response.data)
-          this.setState({keyRefresh: this.state.keyRefresh + 1})
-        }, 500)
-      }
-    })
+    Api.request(Routes.messengerMessagesRetrieve, parameter, response => {
+      this.setState({ isLoading: false, offset: offset + limit });
+      const {setMessagesOnGroup, messengerGroup} = this.props;
+        setMessagesOnGroup({
+        messages: response.data.reverse(),
+        groupId: messengerGroup.id
+      })
+    }, error => {
+      this.setState({ isLoading: false });
+      console.log({ retrieveMessagesError: error })
+    });
   }
 
   sendNewMessage = () => {
@@ -90,7 +87,7 @@ class Messages extends Component{
       status: 0,
       payload: 'text',
       payload_value: null,
-      code: messagesOnGroup.messages.length + 1
+      // code: messagesOnGroup?.messages?.length + 1
     }
     let newMessageTemp = {
       ...parameter,
@@ -119,60 +116,60 @@ class Messages extends Component{
     })
   }
 
-  handleChoosePhoto = () => {
-    const { user, messengerGroup, messagesOnGroup } = this.props.state;
-    const options = {
-      noData: true,
-    }
-    ImagePicker.launchImageLibrary(options, response => {
-      if (response.uri) {
-        this.setState({ photo: response })
-        let formData = new FormData();
-        let uri = Platform.OS == "android" ? response.uri : response.uri.replace("file://", "");
-        let parameter = {
-          messenger_group_id: messengerGroup.id,
-          message: null,
-          account_id: user.id,
-          status: 0,
-          payload: 'image',
-          payload_value: null,
-          url: uri,
-          code: messagesOnGroup.messages.length + 1
-        }
-        let newMessageTemp = {
-          ...parameter,
-          account: user,
-          created_at_human: null,
-          sending_flag: true,
-          files: [{
-            url: uri
-          }],
-          error: null
-        }
-        const { updateMessagesOnGroup } = this.props;
-        updateMessagesOnGroup(newMessageTemp);
-        formData.append("file", {
-          name: response.fileName,
-          type: response.type,
-          uri: uri
-        });
-        formData.append('file_url', response.fileName);
-        formData.append('account_id', user.id);
-        Api.upload(Routes.imageUploadUnLink, formData, imageResponse => {
-          // add message
-          if(imageResponse.data.data != null){
-            parameter = {
-              ...parameter,
-              url: imageResponse.data.data
-            }
-            this.sendImageWithoutPayload(parameter)
-          }
-        })
-      }else{
-        this.setState({ photo: null })
-      }
-    })
-  }
+  // handleChoosePhoto = () => {
+  //   const { user, messengerGroup, messagesOnGroup } = this.props.state;
+  //   const options = {
+  //     noData: true,
+  //   }
+  //   ImagePicker.launchImageLibrary(options, response => {
+  //     if (response.uri) {
+  //       this.setState({ photo: response })
+  //       let formData = new FormData();
+  //       let uri = Platform.OS == "android" ? response.uri : response.uri.replace("file://", "");
+  //       let parameter = {
+  //         messenger_group_id: messengerGroup.id,
+  //         message: null,
+  //         account_id: user.id,
+  //         status: 0,
+  //         payload: 'image',
+  //         payload_value: null,
+  //         url: uri,
+  //         // code: messagesOnGroup.messages.length + 1
+  //       }
+  //       let newMessageTemp = {
+  //         ...parameter,
+  //         account: user,
+  //         created_at_human: null,
+  //         sending_flag: true,
+  //         files: [{
+  //           url: uri
+  //         }],
+  //         error: null
+  //       }
+  //       const { updateMessagesOnGroup } = this.props;
+  //       updateMessagesOnGroup(newMessageTemp);
+  //       formData.append("file", {
+  //         name: response.fileName,
+  //         type: response.type,
+  //         uri: uri
+  //       });
+  //       formData.append('file_url', response.fileName);
+  //       formData.append('account_id', user.id);
+  //       Api.upload(Routes.imageUploadUnLink, formData, imageResponse => {
+  //         // add message
+  //         if(imageResponse.data.data != null){
+  //           parameter = {
+  //             ...parameter,
+  //             url: imageResponse.data.data
+  //           }
+  //           this.sendImageWithoutPayload(parameter)
+  //         }
+  //       })
+  //     }else{
+  //       this.setState({ photo: null })
+  //     }
+  //   })
+  // }
 
   setImage = (url) => {
     this.setState({imageModalUrl: url})
@@ -182,28 +179,28 @@ class Messages extends Component{
   }
 
 
-  updateValidation = (item, status) => {
-    const { messengerGroup, user } = this.props.state;
-    let parameter = {
-      id: item.id,
-      status: status,
-      messages: {
-        messenger_group_id: messengerGroup.id,
-        account_id: user.id
-      }
-    }
-    this.setState({isLoading: true})
-    Api.request(Routes.requestValidationUpdate, parameter, response => {
-      this.setState({isLoading: false})
-      // this.retrieveGroup()
-    })
-  }
+  // updateValidation = (item, status) => {
+  //   const { messengerGroup, user } = this.props.state;
+  //   let parameter = {
+  //     id: item.id,
+  //     status: status,
+  //     messages: {
+  //       messenger_group_id: messengerGroup.id,
+  //       account_id: user.id
+  //     }
+  //   }
+  //   this.setState({isLoading: true})
+  //   Api.request(Routes.requestValidationUpdate, parameter, response => {
+  //     this.setState({isLoading: false})
+  //     // this.retrieveGroup()
+  //   })
+  // }
 
   _image = (item) => {
     const { messengerGroup, user } = this.props.state;
     return (
       <View>
-      {
+      {/* {
         item.payload_value != null && Platform.OS == 'android' && (
           <Text style={[Style.messageTextRight, {
             backgroundColor: item.validations.status == 'approved' ? Color.primary : Color.danger
@@ -220,7 +217,7 @@ class Messages extends Component{
             </Text>
           </View>
         )
-      }
+      } */}
         <View style={{
           flexDirection: 'row',
           marginTop: 10
@@ -251,8 +248,8 @@ class Messages extends Component{
         </View>
         {
           messengerGroup.account_id == user.id &&
-          item != null && item.validations != null &&
-          item.validations.status != 'approved' &&
+          // item != null && item.validations != null &&
+          // item.validations.status != 'approved' &&
           (
             <View style={{
               flexDirection: 'row',
@@ -265,7 +262,7 @@ class Messages extends Component{
                 }}>
                 <TouchableOpacity
                   onPress={() => {
-                    this.updateValidation(item.validations, 'declined')
+                    // this.updateValidation(item.validations, 'declined')
                   }} 
                   style={[Style.templateBtn, {
                     width: '100%',
@@ -285,7 +282,7 @@ class Messages extends Component{
                 }}>
                 <TouchableOpacity
                   onPress={() => {
-                    this.updateValidation(item.validations, 'approved')
+                    // this.updateValidation(item.validations, 'approved')
                   }} 
                   style={[Style.templateBtn, {
                     width: '100%',
@@ -321,9 +318,10 @@ class Messages extends Component{
   }
 
   _headerRight = (item) => {
+    const { theme } = this.props.state;
     return (
       <View style={{flexDirection: 'row', marginTop: 10}}>
-        <UserImage user={item.account}/>
+        {/*<UserImage user={item.account} color={theme ? theme.primary : Color.primary}/>*/}
         <Text style={{
           lineHeight: 30,
           paddingLeft: 10
@@ -333,18 +331,20 @@ class Messages extends Component{
   }
 
   _headerLeft = (item) => {
+    const { theme } = this.props.state;
     return (
       <View style={{flexDirection: 'row', marginTop: 10, justifyContent: 'flex-end' }}>
         <Text style={{
           lineHeight: 30,
           paddingRight: 10
         }}>{item.account.username}</Text>
-        <UserImage user={item.account}/>
+        {/*<UserImage user={item.account} color={theme ? theme.primary : Color.primary}/>*/}
       </View>
     );
   }
 
   _rightTemplate = (item) => {
+    const { theme } = this.props.state;
     return (
       <View>
         {this._headerRight(item)}
@@ -353,13 +353,19 @@ class Messages extends Component{
         }]}>{item.created_at_human}</Text>
         {
           item.message != null && Platform.OS == 'android' && (
-            <Text style={Style.messageTextRight}>{item.message}</Text>
+            <Text style={[Style.messageTextRight, {
+              backgroundColor: theme ? theme.primary : Color.primary
+            }]}>{item.message}</Text>
           )
         }
         {
           item.message != null && Platform.OS == 'ios' && (
-            <View style={Style.messageTextRight}>
-                <Text style={Style.messageTextRightIOS}>{item.message}</Text>
+            <View style={[Style.messageTextRight, {
+              backgroundColor: theme ? theme.primary : Color.primary
+            }]}>
+                <Text style={[Style.messageTextLeftIOS, {
+                  backgroundColor: theme ? theme.primary : Color.primary
+                }]}>{item.message}</Text>
             </View>
           )
         }
@@ -371,6 +377,7 @@ class Messages extends Component{
   }
 
   _leftTemplate = (item) => {
+    const { theme } = this.props.state;
     return (
       <View>
         {this._headerLeft(item)}
@@ -379,13 +386,19 @@ class Messages extends Component{
         }]}>{item.created_at_human}</Text>
         {
           item.message != null && Platform.OS == 'android' && (
-            <Text style={Style.messageTextLeft}>{item.message}</Text>
+            <Text style={[Style.messageTextLeft, {
+              backgroundColor: theme ? theme.primary : Color.primary
+            }]}>{item.message}</Text>
           )
         }
         {
           item.message != null && Platform.OS == 'ios' && (
-            <View style={Style.messageTextLeft}>
-                <Text style={Style.messageTextLeftIOS}>{item.message}</Text>
+            <View style={[Style.messageTextLeft, {
+              backgroundColor: theme ? theme.primary : Color.primary
+            }]}>
+                <Text style={[Style.messageTextLeftIOS, {
+                  backgroundColor: theme ? theme.primary : Color.primary
+                }]}>{item.message}</Text>
             </View>
           )
         }
@@ -426,105 +439,14 @@ class Messages extends Component{
     );
   }
 
-  _templates = () => {
-    const { messengerGroup, user } = this.props.state;
-    return (
-      <View style={{
-        width: '100%'
-      }}>
-        {messengerGroup.request.status == 2 && (
-          <Review 
-            refresh={() => {
-              this.retrieveGroup()
-            }}></Review>
-        )}
-        { 
-          messengerGroup.account_id == user.id &&
-          (messengerGroup.request.type == 1 || messengerGroup.request.type == 4) && 
-          messengerGroup.validations &&
-          messengerGroup.validations.complete_status == false &&
-          messengerGroup.request.status < 2 && (
-            <AddRequirements onFinish={() => this.setState({keyRefresh: this.state.keyRefresh + 1})}></AddRequirements>
-          )
-        }
-        {
-          messengerGroup.account_id == user.id &&
-          (messengerGroup.request.type == 1 || messengerGroup.request.type == 4) &&
-          messengerGroup.request.status < 2 &&
-          messengerGroup.validations.transfer_status === 'approved' && (
-            <Transfer
-              text={
-                'Validations are complete, click transfer to proceed:'
-              }
-              onLoading={(flag) => this.setState({
-                isLoading: flag
-              })}
-              onFinished={() => {
-                this.retrieveGroup()
-              }}
-            ></Transfer>
-          )
-        }
-        {
-          messengerGroup.account_id != user.id &&
-          messengerGroup.request.type == 3 &&
-          messengerGroup.request.status < 2 && (
-            <Transfer
-              onLoading={(flag) => this.setState({
-                isLoading: flag
-              })}
-              onFinished={() => {
-                this.retrieveGroup()
-              }}
-              text={
-                'If you receive the money from other peer already, then you can continue to transfer and complete the thread.'
-              }
-            ></Transfer>
-          )
-        }
-        {
-          messengerGroup.account_id == user.id &&
-          messengerGroup.request.type == 2 &&
-          messengerGroup.request.status < 2 && (
-            <Transfer
-              onLoading={(flag) => this.setState({
-                isLoading: flag
-              })}
-              onFinished={() => {
-                this.retrieveGroup()
-              }}
-              text={
-                'If you receive the money from other peer already, then you can continue to transfer and complete the thread.'
-              }
-            ></Transfer>
-          )
-        }
-        {
-          messengerGroup.account_id != user.id &&
-          (messengerGroup.request.type == 1 || messengerGroup.request.type == 4) &&
-          messengerGroup.request.status < 2 &&
-          parseInt(messengerGroup.validations.validation_status) > 0  && (
-            <SendRequirements 
-              onLoading={(flag) => this.setState({
-                isLoading: flag
-              })}
-              onFinished={() => {
-                this.retrieveGroup()
-              }}
-            ></SendRequirements>
-          )
-        }
-      </View>
-    );
-  }
-
   _footer = () => {
+    const { theme } = this.props.state;
     return (
       <View style={{
         flexDirection: 'row' 
       }}>
         <TouchableOpacity
-          onPress={() => this.handleChoosePhoto()} 
+          // onPress={() => this.handleChoosePhoto()} 
           style={{
             height: 50,
             justifyContent: 'center',
@@ -536,7 +458,7 @@ class Messages extends Component{
             icon={ faImage }
             size={BasicStyles.iconSize}
             style={{
-              color: Color.primary
+              color: theme ? theme.primary : Color.primary
             }}
             />
         </TouchableOpacity>
@@ -559,7 +481,7 @@ class Messages extends Component{
             icon={ faPaperPlane }
             size={BasicStyles.iconSize}
             style={{
-              color: Color.primary
+              color: theme ? theme.primary : Color.primary
             }}
             />
         </TouchableOpacity>
@@ -599,9 +521,129 @@ class Messages extends Component{
     );
   }
 
+  cloneMenu() {
+    const { viewMenu } = this.props // new
+    viewMenu(false) // new
+  }
+
+  menu(data) {
+    /**
+    * returns Settings Menu
+    */
+    this.setState({settingsMenu: data.map((el, ndx) => {
+      return (
+        <View key={'msgmenu'+ndx}>
+          {el.title == 'Close' && <TouchableOpacity onPress={()=>{this.cloneMenu()}}>
+            <View style={Style.settingsTitles}>
+              <Text style={{color: Color.danger}}> Cancel </Text>
+            </View>
+          </TouchableOpacity>}
+          <TouchableOpacity onPress={()=>{this.settingsAction(el)}}>
+            <View style={Style.settingsTitles}>
+              {el.title != 'Close' && <Text style={{color: Color.black}}> {el.title} </Text>}
+              {el.button != undefined && 
+                  <View style={[Style.settingsButton, {backgroundColor: el.button.color}]}> 
+                    <Text style={{fontSize: BasicStyles.standardFontSize, color: 'white'}}> {el.button.title} </Text>
+                  </View>
+              }
+              {(el.button == undefined && el.title != 'Close') &&
+                <FontAwesomeIcon
+                  icon={ faChevronRight }
+                  size={BasicStyles.iconSize}
+                  style={{color: Color.primary}}/>
+              }
+            </View>
+          </TouchableOpacity>
+        </View>
+      )
+    })})
+  }
+
+  settingsRemove() {
+    /**
+    * when x button is click
+    */
+    if(this.state.settingsBreadCrumbs.length > 1){
+      this.state.settingsBreadCrumbs.pop();
+    }else{
+      this.cloneMenu()
+    }
+    switch(this.state.settingsBreadCrumbs.length){
+      case 1:
+        this.menu(Helper.MessengerMenu)
+        break;
+      case 2:
+        this.menu(Helper.requirementsMenu)
+        break;
+    }
+  }
+
+  settingsAction(data) {
+    console.log(data.payload, "=========================");
+    /**
+    * When one of the settings menu is clicked
+    */
+    if(data.payload == 'same_page'){
+      switch(data.payload_value){
+        case 'requirements':
+          let temp = this.state.settingsBreadCrumbs
+          temp.push('Requirements')
+          this.setState({settingsBreadCrumbs: temp})
+          this.menu(Helper.requirementsMenu)
+          break;
+        case 'signature':
+          let sign = this.state.settingsBreadCrumbs
+          sign.push('On App Signature')
+          this.setState({settingsBreadCrumbs: sign})
+
+          let dummyData = [1, 2, 3, 4, 5]
+
+          let frame = [
+            <View>
+              <ScrollView>
+                <View style={Style.signatureFrameContainer}>
+                  {
+                    dummyData.map((ndx, el)=>{
+                      return (
+                        <View style={Style.signatureFrame}>
+                        </View>
+                      )
+                    })
+                  }
+                </View>
+              </ScrollView>
+              <View style={{paddingTop: 50}}>
+                <View style={Style.signatureFrameContainer}>
+                  <TouchableOpacity style={[Style.signatureAction, Style.signatureActionDanger]}>
+                    <Text style={{color: Color.white}}> Decline </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={[Style.signatureAction, Style.signatureActionSuccess]}>
+                    <Text style={{color: Color.white}}> Accept </Text>
+                  </TouchableOpacity>
+                </View>
+                {false && <View style={Style.signatureFrameContainer}>
+                  <TouchableOpacity style={[Style.signatureFullSuccess, Style.signatureActionSuccess]}>
+                    <Text style={{color: Color.white}}> Upload </Text>
+                  </TouchableOpacity>
+                </View>}
+              </View>
+            </View>
+          ]
+          this.setState({settingsMenu: frame})
+      }
+    }else if(data.payload === 'redirect') {
+      if(data.title.toLowerCase() == 'details'){
+        const { request } = this.props.state.messengerGroup
+        this.props.navigation.navigate(data.payload_value, {data: {id: request.id}})
+      }else if(data.title.toLowerCase() == 'rate'){
+        this.props.navigation.navigate(data.payload_value, {data: {data: this.props.state.messengerGroup}})
+      }
+    }
+  }
+
   render() {
     const { isLoading, isImageModal, imageModalUrl, photo, keyRefresh } = this.state;
-    const { messengerGroup, user } = this.props.state;
+    const { messengerGroup, user, isViewing } = this.props.state;
     return (
       <View key={keyRefresh}>
         <ScrollView
@@ -610,7 +652,7 @@ class Messages extends Component{
               this.scrollView.scrollToEnd({animated: true});
           }}
           style={[Style.ScrollView, {
-            height: '100%'
+            height: isViewing ? '40%' : '100%'
           }]}
           onScroll={(event) => {
             if(event.nativeEvent.contentOffset.y <= 0) {
@@ -626,14 +668,34 @@ class Messages extends Component{
           }}>
             {this._flatList()}
           </View>
-          <View style={{
-            flexDirection: 'row',
-            width: '100%'
-          }}>
-            {messengerGroup != null && user !== null && (this._templates())}
-          </View>
           {isLoading ? <Spinner mode="overlay"/> : null }
         </ScrollView>
+        {isViewing &&
+          <View
+            style={
+              {
+                height: '60%', 
+                paddingBottom: 51, 
+                paddingTop: 0, 
+                borderTopWidth: 1, 
+                borderTopColor: Color.gray
+              }
+            }
+          >
+            <View style={Style.settingsTitles}>
+              <Text> {this.state.settingsBreadCrumbs.join(' > ')} </Text>
+              <TouchableOpacity onPress={() => {this.settingsRemove()}}>
+                <FontAwesomeIcon
+                  icon={ faTimes }
+                  size={20}
+                  style={{color: 'red'}}/>
+              </TouchableOpacity>
+            </View>
+              <ScrollView>
+                {this.state.settingsMenu}
+              </ScrollView>
+          </View>
+        }
         <View style={{
           position: 'absolute',
           bottom: 0,
@@ -642,7 +704,7 @@ class Messages extends Component{
           borderTopWidth: 1,
           backgroundColor: Color.white
         }}>
-          {messengerGroup != null && messengerGroup.request.status < 2 && (this._footer())}
+          {messengerGroup != null && messengerGroup.status < 2 && !isViewing && (this._footer())}
         </View>
         <ImageModal
           visible={isImageModal}
@@ -662,6 +724,7 @@ const mapDispatchToProps = dispatch => {
     setMessengerGroup: (messengerGroup) => dispatch(actions.setMessengerGroup(messengerGroup)),
     updateMessagesOnGroup: (message) => dispatch(actions.updateMessagesOnGroup(message)),
     updateMessageByCode: (message) => dispatch(actions.updateMessageByCode(message)),
+    viewMenu: (isViewing) => dispatch(actions.viewMenu(isViewing))
   };
 };
 

@@ -1,135 +1,698 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   View,
   Text,
   ScrollView,
   TextInput,
+  Alert,
+  Image,
   TouchableOpacity,
+  Linking,
   TouchableHighlight,
-  Picker,
 } from 'react-native';
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import { Picker } from '@react-native-community/picker';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import Api from 'services/api/index.js';
 import {
   faCheckCircle,
   faUserCircle,
   faUpload,
+  faEdit
 } from '@fortawesome/free-solid-svg-icons';
-import {BasicStyles, Color} from 'common';
-import {Rating, DateTime} from 'components';
+import { BasicStyles, Color, Routes, Helper } from 'common';
+import { Rating, DateTime } from 'components';
+import { connect } from 'react-redux';
+import UserImage from 'components/User/Image';
+import Button from 'components/Form/Button';
+import ImagePicker from 'react-native-image-picker';
+import { Spinner } from 'components';
+import Skeleton from 'components/Loading/Skeleton';
+import ImageModal from 'components/Modal/ImageModal';
+import ImageResizer from 'react-native-image-resizer';
+import Config from 'src/config.js';
+import MessageAlert from 'modules/generic/MessageAlert'
 
+const gender = [{
+  title: 'Male',
+  value: 'male'
+},
+{
+  title: 'Female',
+  value: 'female'
+}];
 class EditProfile extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      gender: 1,
-      school: 1,
+      email: null,
+      // cellular_number: null,
+      first_name: null,
+      middle_name: null,
+      last_name: null,
+      sex: null,
+      id: null,
+      // address: null,
+      // birthDate: null,
+      profile: null,
+      url: null,
+      photo: null,
+      dataRetrieve: null,
+      isLoading: false,
+      uploadedID: [],
+      imageModal: false,
+      urlID: null,
+      reachMax: false,
+      radioSelected: 'male',
+      rating: null,
+      verifyButton: false,
+      imageId: null
     };
   }
-  onChange(item, type) {
-    if (type == 'gender') {
-      this.setState({gender: item});
-    } else {
-      this.setState({school: item});
+
+  componentDidMount = () => {
+    this.retrieve()
+    this.retrieveUploadedId()
+    this.verifyApplication()
+  }
+
+  retrieve = () => {
+    const { user } = this.props.state;
+    if (user == null) {
+      return
+    }
+    let parameter = {
+      condition: [{
+        value: user.id,
+        clause: '=',
+        column: 'account_id'
+      }]
+    }
+    this.setState({
+      isLoading: true,
+      showDatePicker: false
+    })
+    Api.request(Routes.accountProfileRetrieve, parameter, response => {
+      this.setState({ isLoading: false })
+      if (response.data.length > 0) {
+        const { data } = response
+        this.setState({ dataRetrieve: response.data[0] })
+        this.setState({
+          id: data[0].account_id,
+          first_name: data[0].first_name,
+          middle_name: data[0].middle_name,
+          last_name: data[0].last_name,
+          sex: data[0].sex,
+          rating: data[0].rating,
+          // cellular_number:  data[0].cellular_number,
+          // address: data[0].address,
+          profile: data[0]
+        })
+        this.verifyApplication()
+        // if(data.birth_date != null){
+        //   this.setState({
+        //     dateFlag: true,
+        //     birthDateLabel: data.birth_date
+        //   })
+        // }
+      } else {
+        this.setState({
+          id: null,
+          first_name: null,
+          middle_name: null,
+          last_name: null,
+          sex: null,
+          // cellular_number: null,
+          // address: null
+          // birthDate: new Date(),
+        })
+      }
+    });
+  }
+
+  retrieveUploadedId = () => {
+    this.state.uploadedID = []
+    const { setImageCount } = this.props
+    const { user } = this.props.state
+    let parameter = {
+      account_id: user.id,
+      payload: 'image_upload'
+    }
+    this.setState({ isLoading: true })
+    Api.request(Routes.accountCardsRetrieve, parameter, response => {
+      this.setState({ isLoading: false })
+      let numImage = response.data[0].content.length
+      setImageCount(numImage)
+      response.data[0].content.map(element => {
+        this.state.uploadedID.push(element)
+      })
+      // if(response.data[0].content.length  4){
+      //   this.setState({ reachMax : true })
+      // }
+    })
+    // this.verifyApplication()
+  }
+
+  verifyApplication = () => {
+    const { setScheduleShow } = this.props
+    const { scheduleShow } = this.props.state
+    const { first_name, middle_name, last_name, sex} = this.state
+    if(first_name != null && middle_name != null && last_name != null){
+      setScheduleShow(true)
     }
   }
 
-  render() {
-    const {data} = [
-      {
-        title: 'Male',
-        value: 'male',
+  upload = () => {
+    const { user } = this.props.state
+    const { profile } = this.state
+    const options = {
+      noData: true
+    }
+    ImagePicker.launchImageLibrary(options, response => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+        this.setState({ photo: null })
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+        this.setState({ photo: null })
+      } else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+        this.setState({ photo: null })
+      } else {
+        ImageResizer.createResizedImage(response.uri, response.width * 0.5, response.height * 0.5, 'JPEG', 72, 0)
+          .then(res => {
+            this.setState({ photo: res })
+            let formData = new FormData();
+            let uri = Platform.OS == "android" ? res.uri : res.uri.replace("file://", "");
+            formData.append("file", {
+              name: response.fileName,
+              type: response.type,
+              uri: uri
+            });
+            formData.append('file_url', response.fileName);
+            formData.append('account_id', user.id);
+            this.setState({ isLoading: true })
+            Api.upload(Routes.imageUpload, formData, response => {
+              this.setState({ isLoading: false })
+              let imageData = new FormData()
+              imageData.append('account_id', user.id);
+              imageData.append('url', response.data.data)
+              if (profile.profile == null) {
+                Api.upload(Routes.accountProfileCreate, imageData, response => {
+                  if (response.data !== null) {
+                    this.retrieve();
+                    Alert.alert(
+                      'Message',
+                      'Image successfully uploaded',
+                      [
+                        { text: 'Ok', onPress: () => this.retrieveUploadedId(), style: 'cancel' }
+                      ],
+                      { cancelable: false }
+                    )
+                  }
+                })
+              } else {
+                imageData.append('id', profile.profile.id)
+                this.setState({ isLoading: true })
+                Api.upload(Routes.accountProfileUpdate, imageData, response => {
+                  if (response.data !== null) {
+                    this.retrieve();
+                    Alert.alert(
+                      'Message',
+                      'Image successfully updated',
+                      [
+                        { text: 'Ok', onPress: () => this.retrieveUploadedId(), style: 'cancel' }
+                      ],
+                      { cancelable: false }
+                    )
+                  }
+                })
+              }
+            })
+          })
+          .catch(err => {
+            // Oops, something went wrong. Check that the filename is correct and
+            // inspect err to get more details.
+            console.log(err)
+          });
+      }
+    })
+  }
+
+  uploadMessage = () => {
+    const { reachMax } = this.state
+    // if(reachMax == true){
+    //   Alert.alert(
+    //     'Message',
+    //     `Please upload minimum of four(4) ID's`,
+    //     [
+    //       { text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel' }
+    //     ],
+    //     { cancelable: false }
+    //   )
+    // }else{
+      Alert.alert(
+        'Notice',
+        "Please upload at least two(2) ID's (Back to Back)",
+        [
+          { text: 'Ok', onPress: () => this.uploadId(), style: 'cancel' },
+          { text: 'Cancel', onPress: () => console.log('cancel'), style: 'cancel' }
+        ],
+        { cancelable: false }
+      )
+    // }
+  }
+
+  uploadId = () => {
+    const { user } = this.props.state
+    const options = {
+      noData: true
+    }
+    ImagePicker.launchImageLibrary(options, response => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+        this.setState({ photo: null })
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+        this.setState({ photo: null })
+      } else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+        this.setState({ photo: null })
+      } else {
+        ImageResizer.createResizedImage(response.uri, response.width * 0.5, response.height * 0.5, 'JPEG', 72, 0)
+          .then(res => {
+            this.setState({ photo: res })
+            let formData = new FormData();
+            let uri = Platform.OS == "android" ? res.uri : res.uri.replace("file://", "");
+            formData.append("file", {
+              name: response.fileName,
+              type: response.type,
+              uri: uri
+            });
+            formData.append('file_url', response.fileName);
+            formData.append('account_id', user.id);
+            this.setState({ isLoading: true })
+            Api.upload(Routes.imageUpload, formData, response => {
+              this.setState({ isLoading: false })
+              let imageData = new FormData()
+              imageData.append('account_id', user.id);
+              imageData.append('payload_value', response.data.data)
+              imageData.append('payload', 'upload_image')
+                Api.upload(Routes.accountCardsCreate, imageData, response => {
+                  if (response.data !== null) {
+                    this.retrieveUploadedId();
+                    this.retrieve()
+                    Alert.alert(
+                      'Message',
+                      'ID successfully uploaded',
+                      [
+                        { text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel' }
+                      ],
+                      { cancelable: false }
+                    )
+                  }
+                })
+            })
+          })
+          .catch(err => {
+            // Oops, something went wrong. Check that the filename is correct and
+            // inspect err to get more details.
+            console.log('[ERROR]', err)
+          });
+      }
+    })}
+
+  update = () => {
+    const { user, setScheduleShow } = this.props.state;
+    const { dataRetrieve } = this.state
+    if (user == null) {
+      return
+    } else if (this.state.first_name == null || this.state.middle_name == null || this.state.last_name == null) {
+      Alert.alert(
+        'Try Again',
+        'Please fill in all the fields.',
+        [
+          { text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel' }
+        ],
+        { cancelable: false }
+      )
+      return
+    } else if (this.state.first_name == dataRetrieve.first_name && this.state.middle_name == dataRetrieve.middle_name && this.state.last_name == dataRetrieve.last_name && this.state.sex == dataRetrieve.sex) {
+      Alert.alert(
+        'Message',
+        'Nothing is Updated',
+        [
+          { text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel' }
+        ],
+        { cancelable: false }
+      )
+      return
+    }
+    // }else if(this.state.cellular_number.length != 11 || (this.state.cellular_number.substr(0, 2) != '09')){
+    //   Alert.alert(
+    //     'Try Again',
+    //     'Please input a valid phone number.',
+    //     [
+    //       {text: 'Ok', onPress: () => console.log('Ok'), style: 'cancel'}
+    //     ],
+    //     { cancelable: false }
+    //   )
+    //   return
+    // }
+    let parameters = {
+      id: this.state.id,
+      account_id: user.id,
+      first_name: this.state.first_name,
+      middle_name: this.state.middle_name,
+      last_name: this.state.last_name,
+      sex: this.state.sex,
+      // address: this.state.address,
+      // birth_date: this.state.birthDate,
+      email: this.state.email
+    };
+    this.setState({ isLoading: true });
+    Api.request(
+      Routes.accountInformationUpdate,
+      parameters, (response) => {
+        this.setState({ isLoading: false });
+        this.retrieve()
+        setScheduleShow(true)
+        alert('Updated Successfully');
       },
-      {
-        title: 'Female',
-        value: 'female',
-      },
-    ];
+      (error) => {
+        this.setState({ isLoading: false });
+      }
+    )
+  }
+
+  radioClick(id) {
+    this.setState({
+      sex: id
+    })
+  }
+
+  gender = () => {
+    const { theme } = this.props.state;
     return (
-      <View style={{marginTop: 60}}>
+      gender.map((val) => {
+        return (
+          <TouchableOpacity
+          style={{flexDirection: 'row', width: '80%'}}
+          key={val.value} onPress={this.radioClick.bind(this, val.value)}>
+            <View style={{
+              height: 24,
+              width: 24,
+              borderRadius: 12,
+              borderWidth: 2,
+              borderColor: theme ? theme.primary : Color.primary,
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderWidth: 1,
+              marginTop: '5%'
+            }}>
+              {
+                val.value == (this.state.sex != null ? this.state.sex : this.state.radioSelected) ?
+                <View style={{
+                  height: 12,
+                  width: 12,
+                  borderRadius: 6,
+                  backgroundColor: theme ? theme.primary : Color.primary
+                }} />
+                : null
+              }
+            </View>
+            <Text style={{flexDirection: 'column', 
+              marginTop: '5%', marginLeft: '5%'}}>{val.title}</Text>
+          </TouchableOpacity>
+        )
+      })
+    );
+  }
+ 
+  render() {
+    const { isLoading } = this.state
+    const { user, theme } = this.props.state;
+    return (
+      <View>
         <ScrollView showsHorizontalScrollIndicator={false}>
           <View
             style={{
               alignItems: 'center',
               paddingVertical: 10,
               width: '100%',
-              backgroundColor: Color.primary,
+              backgroundColor: theme ? theme.primary : Color.primary,
             }}>
-            <FontAwesomeIcon
-              icon={faUserCircle}
-              style={{color: Color.white, margin: 15}}
-              size={90}
-            />
-            <Text style={[{fontWeight: 'bold', color: Color.white}]}>
-              Kennette Canales
-            </Text>
-            <Rating ratings={''} style={[{flex: 2}]}></Rating>
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <FontAwesomeIcon
-                icon={faCheckCircle}
-                style={{color: 'blue'}}
-                size={15}
+
+            <TouchableOpacity
+              style={{
+                height: 110,
+                width: 110,
+                borderRadius: 100,
+                borderColor: theme ? theme.primary : Color.primary,
+                borderWidth: 2
+              }}
+              onPress={() => this.upload()}>
+              <UserImage
+                user={this.state.profile}
+                style={{
+                  height: '100%',
+                  width: '100%',
+                  borderRadius: 100
+                }}
+                size={100}
+                color={Color.white}
               />
-              <Text style={{color: Color.white}}>Verified</Text>
+              <View style={{
+                height: 40,
+                width: 40,
+                borderRadius: 100,
+                marginRight: 5,
+                position: 'absolute',
+                right: -5,
+                bottom: 1,
+                backgroundColor: 'white',
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}>
+                <View style={{
+                  height: 35,
+                  width: 35,
+                  borderRadius: 100,
+                  borderWidth: 2,
+                  borderColor: theme ? theme.primary : Color.primary,
+                  backgroundColor: 'white',
+                  justifyContent: 'center',
+                  alignItems: 'center'
+                }}>
+                  <FontAwesomeIcon style={{
+                    borderColor: theme ? theme.primary : Color.primary
+                  }}
+                    icon={faEdit}
+                    size={20}
+                    color={theme ? theme.primary : Color.primary}
+                  />
+                </View>
+              </View>
+            </TouchableOpacity>
+
+            {
+              user?.username && (
+                <Text style={[{ fontWeight: 'bold', color: Color.white }]}>
+                  {user.username}
+                </Text>
+              )
+            }
+
+            {
+              this.state.rating != null && (
+                <Rating ratings={this.state.rating} rating={' '} style={[{ flex: 2 }]}></Rating>
+              )
+            }
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              {Helper.checkStatus(user) >= Helper.emailVerified && (
+                <FontAwesomeIcon
+                  icon={faCheckCircle}
+                  style={{ color: Color.white, marginLeft: 5 }}
+                  size={15}
+                />
+              )}
+              <Text style={{ color: Color.white, marginLeft: '1%', fontStyle: 'italic'}}>{Helper.accountStatus(user)}</Text>
             </View>
           </View>
+
+          {isLoading ? <Spinner mode="overlay" /> : null}
           <View>
+            <MessageAlert />
+
             <Text
               style={{
                 borderBottomWidth: 1,
                 padding: 15,
+                paddingTop: 20,
+                paddingBottom: 20,
                 marginBottom: 10,
                 fontWeight: 'bold',
-                borderColor: Color.gray,
+                borderColor: Color.lightGray,
               }}>
               Basic Settings
             </Text>
-            <Text style={{marginLeft: 20}}>Full Name</Text>
+
+            <Text style={{ marginLeft: 20, paddingTop: 10, paddingBottom: 10 }}>First Name</Text>
             <TextInput
-              style={[BasicStyles.formControl, {alignSelf: 'center'}]}
-              placeholder={'Enter Full Name'}
+              style={[BasicStyles.formControl, { alignSelf: 'center' }]}
+              placeholder={'Enter your First Name'}
+              onChangeText={(first_name) => this.setState({ first_name })}
+              value={this.state.first_name}
+              required={true}
             />
-            <Text style={{marginLeft: 20}}>Phone Number</Text>
+            <Text style={{ marginLeft: 20, paddingTop: 10, paddingBottom: 10 }}>Middle Name</Text>
             <TextInput
-              style={[BasicStyles.formControl, {alignSelf: 'center'}]}
-              placeholder={'Enter Phone Number'}
+              style={[BasicStyles.formControl, { alignSelf: 'center' }]}
+              placeholder={'Enter your Middle Name'}
+              onChangeText={(middle_name) => this.setState({ middle_name })}
+              value={this.state.middle_name}
+              required={true}
             />
-            <Text style={{marginLeft: 20}}>Email</Text>
+            <Text style={{ marginLeft: 20, paddingTop: 10, paddingBottom: 10 }}>Last Name</Text>
             <TextInput
-              style={[BasicStyles.formControl, {alignSelf: 'center'}]}
-              placeholder={'Enter Email'}
+              style={[BasicStyles.formControl, { alignSelf: 'center' }]}
+              placeholder={'Enter your Last Name'}
+              onChangeText={(last_name) => this.setState({ last_name })}
+              value={this.state.last_name}
+              required={true}
             />
-            <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-              <View style={{width: '40%', marginRight: 20}}>
-                <Text>Birthdate</Text>
-                <DateTime type={'date'} style={{marginTop: 0}} />
-              </View>
-              <View style={{width: '40%', marginLeft: 20}}>
-                <Text>Gender</Text>
-                <View
+            <View style={{ width: '90%', marginLeft: '5%' }}>
+              <Text>Gender</Text>
+              {this.gender()}
+            </View>
+
+            <View style={{
+              width: '100%',
+              paddingTop: 20,
+              paddingBottom: 20,
+              paddingLeft: 20,
+              paddingRight: 20,
+              alignItems: 'center'
+            }}>
+              <Button
+                title={'Update'}
+                onClick={() => this.update()}
+                style={{
+                  width: '50%',
+                  borderColor: theme ? theme.secondary : Color.secondary,
+                  backgroundColor: Color.white,
+                  borderWidth: 1
+                }}
+                textStyle={{
+                  fontWeight: 'bold',
+                  color: theme ? theme.secondary : Color.secondary,
+                }}
+              />
+            </View>
+            <View style={{
+            }}>
+              <View style={{
+                flexDirection: 'row',
+                borderTopWidth: 1,
+                borderTopColor: Color.lightGray,
+                justifyContent: 'space-between',
+                width: '100%',
+                alignItems: 'center',
+                paddingBottom: 20,
+                paddingTop: 20,
+                paddingLeft: 20,
+                paddingRight: 20
+              }}>
+                <Text
                   style={{
-                    borderColor: Color.gray,
-                    borderWidth: 1,
-                    paddingLeft: 10,
-                    marginBottom: 20,
-                    borderRadius: 5,
+                    fontWeight: 'bold',
                   }}>
-                  <Picker
-                    selectedValue={this.state.gender}
-                    onValueChange={(input) => this.onChange(input, 'gender')}
-                    style={BasicStyles.pickerStyleCreate}>
-                    <Picker.Item key={1} label={'Male'} value={1} />
-                    <Picker.Item key={2} label={'Female'} value={2} />
-                  </Picker>
+                  Your uploaded IDs
+                </Text>
+                <Button
+                  title={'Upload ID'}
+                  onClick={() => this.uploadMessage()}
+                  style={{
+                    width: '40%',
+                    backgroundColor: theme ? theme.primary : Color.primary
+                  }}
+                />
+                {/*<TouchableOpacity
+                                  style={
+                                    {
+                                      borderWidth: 1,
+                                      backgroundColor: Color.gray,
+                                      borderRadius: 25
+                                    }}
+                                  onPress={() => this.uploadMessage()}>
+                                  <View style={{ flexDirection: 'row' }}>
+                                    <FontAwesomeIcon
+                                      icon={faUpload}
+                                      style={{ marginRight: 18, marginLeft: 10 }}
+                                      size={15}
+                                      />
+                                      <Text>Upload ID</Text>
+                                  </View>
+                                </TouchableOpacity>*/}
+              </View>
+              <View style={{
+                  flexDirection: 'row',
+                  flex: 1,
+                  flexWrap: 'wrap',
+                  alignItems: 'flex-start',
+                  marginBottom: 100
+                }}>
+                {
+                  this.state.uploadedID.map((item, index) => {
+                    if(item.payload == "upload_image"){
+                      return (
+                        <TouchableOpacity style={{
+                          height: 100,
+                          width: '48%',
+                          borderWidth: 1,
+                          borderColor: Color.gray,
+                          margin: 1
+                        }}
+                          onPress={() => { this.setState({ imageModal: true, urlID: item.payload_value, imageId: item.id }) }}
+                          key={index}>
+                          <Image
+                            source={{ uri: Config.BACKEND_URL  + item.payload_value }}
+                            style={{
+                              width: 205,
+                              height: 98
+                            }}
+                          />
+                        </TouchableOpacity>
+                      )
+                    }
+                  })
+                }
+                <ImageModal visible={this.state.imageModal} deleteID={this.state.imageId} url={Config.BACKEND_URL  + this.state.urlID} successDel={() => this.retrieve()} action={() => { this.setState({ imageModal: false }), this.retrieveUploadedId() }}></ImageModal>
+              
+                <View style={{
+                  width: '100%',
+                  alignItems: 'center',
+                  paddingTop: 20
+                }}>
+                  <Button
+                    title={'View all list of valid IDs'}
+                    onClick={() => {
+                        this.props.navigation.navigate('verificationStack', {type: 'PROFILE'})
+                      }
+                    }
+                    style={{
+                      width: '40%',
+                      backgroundColor: Color.white
+                    }}
+                    textStyle={{
+                      color: theme ? theme.primary : Color.primary,
+                      fontWeight: 'bold'
+                    }}
+                  />
                 </View>
               </View>
             </View>
-            <Text style={{marginLeft: 20}}>Address</Text>
-            <TextInput
-              style={[BasicStyles.formControl, {alignSelf: 'center'}]}
-              placeholder={'Enter Address'}
-            />
           </View>
-          <View>
+          {/* <View>
             <Text
               style={{
                 borderBottomWidth: 1,
@@ -194,50 +757,27 @@ class EditProfile extends Component {
                 <DateTime type={'date'} style={{marginTop: 0}} />
               </View>
             </View>
-          </View>
-          <View>
-            <Text
-              style={{
-                borderBottomWidth: 1,
-                padding: 15,
-                marginBottom: 10,
-                fontWeight: 'bold',
-                borderColor: Color.gray,
-              }}>
-              ID's
-            </Text>
-            <TouchableOpacity
-              style={[
-                BasicStyles.formControl,
-                {
-                  alignSelf: 'center',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                },
-              ]}>
-              <View style={{flexDirection: 'row'}}>
-                <Text>Upload Photo</Text>
-                <FontAwesomeIcon
-                  icon={faUpload}
-                  style={{marginLeft: 20}}
-                  size={15}
-                />
-              </View>
-            </TouchableOpacity>
-          </View>
-          <TouchableHighlight
-            style={[
-              BasicStyles.btn,
-              BasicStyles.btnSecondary,
-              {alignSelf: 'center'},
-            ]}
-            underlayColor={Color.gray}>
-            <Text style={BasicStyles.textWhite}>Update</Text>
-          </TouchableHighlight>
+          </View> */}
+
+          
         </ScrollView>
       </View>
     );
   }
 }
 
-export default EditProfile;
+const mapStateToProps = state => ({ state: state });
+
+const mapDispatchToProps = dispatch => {
+  const { actions } = require('@redux');
+  return {
+    setImageCount: (imageCount) => dispatch(actions.setImageCount(imageCount)),
+    setScheduleShow: (scheduleShow) => dispatch(actions.setScheduleShow(scheduleShow))
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(EditProfile);
+

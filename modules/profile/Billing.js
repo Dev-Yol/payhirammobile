@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Style from './Style.js';
-import { View, Image, TouchableHighlight, Text, ScrollView, FlatList, TextInput, Picker, Plat} from 'react-native';
+import { View, Image, TouchableHighlight, Text, ScrollView, FlatList, TextInput, Plat} from 'react-native';
+import { Picker } from '@react-native-community/picker';
 import { Routes, Color, Helper, BasicStyles, Countries } from 'common';
 import { Spinner, ImageUpload } from 'components';
 import {NavigationActions} from 'react-navigation';
